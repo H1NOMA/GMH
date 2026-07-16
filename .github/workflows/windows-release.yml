@@ -11,7 +11,10 @@ permissions:
 jobs:
   build-windows:
     name: Build & Release (Windows x64)
-    runs-on: windows-latest
+    # Pinned: on windows-latest (Server 2025) Flutter's Visual Studio
+    # detection fails ("Visual Studio 16 2019 could not find any instance").
+    # The windows-2022 image ships VS 2022 with the components Flutter needs.
+    runs-on: windows-2022
 
     steps:
       - name: Checkout
