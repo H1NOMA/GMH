@@ -1,0 +1,173 @@
+/// Domain repository contracts. The data layer implements these with drift +
+/// the file vault; presentation code depends only on the abstractions.
+library;
+
+import '../models/document_model.dart';
+import '../models/entity.dart';
+import '../models/entity_kind.dart';
+import '../models/link.dart';
+import '../models/media_item.dart';
+import '../models/search_result.dart';
+import '../models/tag.dart';
+import '../models/world.dart';
+
+abstract interface class WorldRepository {
+  Stream<List<World>> watchWorlds();
+  Future<World?> getWorld(String id);
+  Future<World> createWorld({required String name, String description});
+  Future<void> updateWorld(World world);
+
+  /// Permanently deletes a world and all of its data and media.
+  Future<void> deleteWorld(String id);
+}
+
+/// Filter/sort options for entity list queries.
+enum EntitySort { nameAsc, updatedDesc, createdDesc }
+
+abstract interface class EntityRepository {
+  Stream<List<Entity>> watchEntities(
+    String worldId, {
+    EntityKind? kind,
+    String? tagId,
+    bool favoritesOnly = false,
+    EntitySort sort = EntitySort.updatedDesc,
+    int limit = 500,
+  });
+
+  Stream<Entity?> watchEntity(String id);
+  Future<Entity?> getEntity(String id);
+  Future<List<Entity>> getEntitiesByIds(List<String> ids);
+  Future<List<Entity>> getAllEntities(String worldId);
+
+  Future<Entity> createEntity({
+    required String worldId,
+    required EntityKind kind,
+    required String name,
+    String summary,
+    Map<String, Object?> attributes,
+  });
+
+  Future<void> updateEntity(Entity entity);
+  Future<void> setFavorite(String id, bool favorite);
+
+  /// Soft delete — links remain until purge so the graph stays consistent.
+  Future<void> softDelete(String id);
+  Future<void> restore(String id);
+  Future<void> purge(String id);
+
+  Future<Map<EntityKind, int>> countsByKind(String worldId);
+
+  /// Lightweight name lookup for the mention picker (prefix match).
+  Future<List<Entity>> lookupByName(String worldId, String query,
+      {int limit = 12});
+}
+
+abstract interface class DocumentRepository {
+  /// Returns the entity's document, creating an empty one if missing.
+  Future<DocumentModel> getOrCreate(String entityId);
+  Stream<DocumentModel?> watchByEntity(String entityId);
+
+  /// Saves content and returns the updated document. Also updates the
+  /// search index and (via the link sync service) mention links.
+  Future<DocumentModel> save({
+    required String entityId,
+    required String contentJson,
+    required String plainText,
+  });
+
+  Future<List<DocumentVersion>> versions(String documentId, {int limit = 25});
+  Future<void> saveVersion(String documentId, {String note});
+  Future<DocumentVersion?> getVersion(String versionId);
+}
+
+abstract interface class LinkRepository {
+  Stream<List<Link>> watchOutgoing(String entityId);
+  Stream<List<Link>> watchIncoming(String entityId);
+  Future<List<Link>> outgoing(String entityId);
+  Future<List<Link>> allForWorld(String worldId);
+
+  Future<Link> create({
+    required String worldId,
+    required String sourceId,
+    required String targetId,
+    required String role,
+    required LinkOrigin origin,
+  });
+
+  Future<void> delete(String linkId);
+
+  /// Replaces all links of [origin] from [sourceId] with [targets]
+  /// (targetId -> role). Used by mention sync and attribute mirroring.
+  Future<void> replaceForOrigin({
+    required String worldId,
+    required String sourceId,
+    required LinkOrigin origin,
+    required Map<String, String> targets,
+  });
+}
+
+abstract interface class TagRepository {
+  Stream<List<Tag>> watchTags(String worldId);
+  Future<Tag> getOrCreate(String worldId, String name, {int? color});
+  Future<void> rename(String tagId, String name);
+  Future<void> setColor(String tagId, int color);
+  Future<void> delete(String tagId);
+
+  Stream<List<Tag>> watchEntityTags(String entityId);
+  Future<List<Tag>> entityTags(String entityId);
+  Future<void> tagEntity(String entityId, String tagId);
+  Future<void> untagEntity(String entityId, String tagId);
+}
+
+abstract interface class MediaRepository {
+  /// Imports bytes into the world's content-addressed vault and records
+  /// metadata. Identical content is deduplicated.
+  Future<MediaItem> import({
+    required String worldId,
+    required String fileName,
+    required List<int> bytes,
+  });
+
+  Future<MediaItem?> get(String id);
+
+  /// Absolute path of the media file on disk.
+  Future<String> absolutePath(MediaItem item);
+
+  Stream<List<GalleryEntry>> watchGallery(String entityId);
+  Future<void> addToGallery(String entityId, String mediaId,
+      {String caption});
+  Future<void> removeFromGallery(String entityId, String mediaId);
+  Future<void> setCaption(String entityId, String mediaId, String caption);
+
+  Future<List<MediaItem>> allForWorld(String worldId);
+}
+
+abstract interface class SearchRepository {
+  Future<List<SearchResult>> search(
+    String worldId,
+    String query, {
+    EntityKind? kind,
+    int limit = 40,
+  });
+
+  /// Re-indexes a single entity (called after entity/document/tag writes).
+  Future<void> reindexEntity(String entityId);
+
+  /// Rebuilds the whole index (after import/restore).
+  Future<void> rebuildIndex(String worldId);
+
+  Future<void> recordOpened(String entityId);
+  Future<List<Entity>> recentlyOpened(String worldId, {int limit = 15});
+}
+
+abstract interface class SettingsRepository {
+  Future<String?> get(String key);
+  Future<void> set(String key, String value);
+  Future<void> remove(String key);
+}
+
+/// Well-known settings keys.
+abstract final class SettingsKeys {
+  static const lastOpenedWorld = 'lastOpenedWorld';
+  static const lastAutoBackup = 'lastAutoBackup';
+}
