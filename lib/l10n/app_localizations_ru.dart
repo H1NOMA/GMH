@@ -533,6 +533,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get roleQuestGiver => 'Квестодатель';
 
   @override
+  String get roleAlly => 'Союзник';
+
+  @override
+  String get roleFriend => 'Друг';
+
+  @override
+  String get roleFamily => 'Семья';
+
+  @override
+  String get roleEnemy => 'Враг';
+
+  @override
+  String get roleRival => 'Соперник';
+
+  @override
+  String get tabBiography => 'Биография';
+
+  @override
+  String get tabProfile => 'Профиль';
+
+  @override
   String get attachmentsCaps => 'ВЛОЖЕНИЯ';
 
   @override

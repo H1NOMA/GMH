@@ -18,7 +18,11 @@ import 'entity_picker_dialog.dart';
 class AttributeForm extends ConsumerWidget {
   final Entity entity;
 
-  const AttributeForm({super.key, required this.entity});
+  /// When set, only template sections with these titles are rendered —
+  /// used by the tabbed character profile to split sections across tabs.
+  final List<String>? sectionTitles;
+
+  const AttributeForm({super.key, required this.entity, this.sectionTitles});
 
   Future<void> _setValue(
       WidgetRef ref, String key, Object? value) async {
@@ -38,10 +42,16 @@ class AttributeForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final template = EntityTemplates.of(entity.kind);
+    final sections = sectionTitles == null
+        ? template.sections
+        : [
+            for (final s in template.sections)
+              if (sectionTitles!.contains(s.title)) s
+          ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final section in template.sections) ...[
+        for (final section in sections) ...[
           Padding(
             padding: const EdgeInsets.fromLTRB(2, 14, 2, 8),
             child: Text(

@@ -30,6 +30,9 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Campaigns are always ordered by creation date, newest first. The
+    // order derives from the stored created_at timestamp, so it survives
+    // restarts without any change to the data format.
     final campaigns = ref
             .watch(entityListProvider((
               worldId: widget.worldId,
@@ -37,7 +40,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
               customCategoryId: null,
               tagId: null,
               favoritesOnly: false,
-              sort: EntitySort.updatedDesc,
+              sort: EntitySort.createdDesc,
             )))
             .valueOrNull ??
         [];
@@ -51,16 +54,15 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
       appBar: AppBar(
         title: Text(context.l10n.campaignsTitle),
         actions: [
-          if (campaigns.length > 1)
-            PopupMenuButton<String>(
-              tooltip: context.l10n.switchCampaign,
-              icon: const Icon(Icons.unfold_more),
-              onSelected: (id) => setState(() => _selectedCampaignId = id),
-              itemBuilder: (context) => [
-                for (final campaign in campaigns)
-                  PopupMenuItem(
-                      value: campaign.id, child: Text(campaign.name)),
-              ],
+          if (selected != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: _CampaignDropdown(
+                campaigns: campaigns,
+                selected: selected,
+                onSelected: (id) =>
+                    setState(() => _selectedCampaignId = id),
+              ),
             ),
         ],
       ),
@@ -99,6 +101,99 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
                   worldId: widget.worldId,
                   campaign: selected,
                 ),
+    );
+  }
+}
+
+/// Named campaign switcher: shows the current campaign and expands into a
+/// scrollable list of all campaigns. Replaces the old up/down arrow button.
+class _CampaignDropdown extends StatelessWidget {
+  final List<Entity> campaigns;
+  final Entity selected;
+  final ValueChanged<String> onSelected;
+
+  const _CampaignDropdown({
+    required this.campaigns,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.sizeOf(context).width;
+    return PopupMenuButton<String>(
+      tooltip: context.l10n.switchCampaign,
+      position: PopupMenuPosition.under,
+      constraints: BoxConstraints(
+        minWidth: 220,
+        maxWidth: 320,
+        // Long campaign lists scroll inside the menu.
+        maxHeight: MediaQuery.sizeOf(context).height * 0.6,
+      ),
+      onSelected: onSelected,
+      itemBuilder: (context) => [
+        for (final campaign in campaigns)
+          PopupMenuItem(
+            value: campaign.id,
+            child: Row(
+              children: [
+                Icon(
+                  campaign.id == selected.id
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_off,
+                  size: 16,
+                  color: campaign.id == selected.id
+                      ? GmhColors.ember
+                      : GmhColors.parchmentFaint,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    campaign.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: campaign.id == selected.id
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+      child: Container(
+        constraints:
+            BoxConstraints(maxWidth: (maxWidth * 0.45).clamp(140.0, 280.0)),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: GmhColors.surfaceRaised,
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(color: GmhColors.border),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(EntityKind.campaign.icon,
+                size: 15, color: EntityKind.campaign.color),
+            const SizedBox(width: 7),
+            Flexible(
+              child: Text(
+                selected.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+            ),
+            const SizedBox(width: 5),
+            const Icon(Icons.expand_more,
+                size: 17, color: GmhColors.parchmentDim),
+          ],
+        ),
+      ),
     );
   }
 }

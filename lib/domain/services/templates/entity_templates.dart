@@ -16,29 +16,116 @@ abstract final class EntityTemplates {
 
   static final List<EntityTemplate> _all = [
     EntityTemplate(kind: EntityKind.character, sections: [
-      const FieldSection('Identity', [
+      // Existing field keys (title, race, characterClass, alignment, status,
+      // homeLocation, factions, goals, secrets, voice) are unchanged so all
+      // previously entered character data is preserved. Unknown/legacy keys
+      // survive sanitize() untouched, which also makes room for future
+      // custom fields.
+      const FieldSection('General Information', [
         FieldDef(key: 'title', label: 'Title / Epithet', type: FieldType.text, hint: 'e.g. The Ashen King'),
         FieldDef(key: 'race', label: 'Race / Ancestry', type: FieldType.text),
         FieldDef(key: 'characterClass', label: 'Class / Profession', type: FieldType.text),
-        FieldDef(key: 'alignment', label: 'Alignment', type: FieldType.select, options: [
+        FieldDef(key: 'gender', label: 'Gender', type: FieldType.text),
+        FieldDef(key: 'age', label: 'Age', type: FieldType.text),
+        FieldDef(key: 'occupation', label: 'Occupation', type: FieldType.text),
+        FieldDef(key: 'status', label: 'Status', type: FieldType.select, options: ['Alive', 'Dead', 'Missing', 'Unknown']),
+      ]),
+      const FieldSection('Statistics', [
+        FieldDef(key: 'strength', label: 'STR', type: FieldType.number),
+        FieldDef(key: 'dexterity', label: 'DEX', type: FieldType.number),
+        FieldDef(key: 'constitution', label: 'CON', type: FieldType.number),
+        FieldDef(key: 'intelligence', label: 'INT', type: FieldType.number),
+        FieldDef(key: 'wisdom', label: 'WIS', type: FieldType.number),
+        FieldDef(key: 'charisma', label: 'CHA', type: FieldType.number),
+      ]),
+      const FieldSection('Combat', [
+        FieldDef(key: 'hp', label: 'Hit Points', type: FieldType.text, hint: 'e.g. 34 / 40'),
+        FieldDef(key: 'ac', label: 'Armor Class', type: FieldType.number),
+        FieldDef(key: 'speed', label: 'Speed', type: FieldType.text, hint: 'e.g. 30 ft.'),
+        FieldDef(key: 'initiative', label: 'Initiative', type: FieldType.number),
+        FieldDef(key: 'passivePerception', label: 'Passive Perception', type: FieldType.number),
+        FieldDef(key: 'customStats', label: 'Custom Stats', type: FieldType.stringList, hint: 'e.g. Luck: 12'),
+      ]),
+      FieldSection('Beliefs', [
+        const FieldDef(key: 'religion', label: 'Religion', type: FieldType.text),
+        const FieldDef(
+          key: 'deity', label: 'Deity', type: FieldType.entityRef,
+          refKinds: [EntityKind.character, EntityKind.religion],
+          linkRole: LinkRoles.related),
+        const FieldDef(key: 'alignment', label: 'Alignment', type: FieldType.select, options: [
           'Lawful Good', 'Neutral Good', 'Chaotic Good',
           'Lawful Neutral', 'True Neutral', 'Chaotic Neutral',
           'Lawful Evil', 'Neutral Evil', 'Chaotic Evil',
         ]),
-        FieldDef(key: 'status', label: 'Status', type: FieldType.select, options: ['Alive', 'Dead', 'Missing', 'Unknown']),
-      ]),
-      FieldSection('Connections', [
-        FieldDef(
-          key: 'homeLocation', label: 'Home / Base', type: FieldType.entityRef,
-          refKinds: const [EntityKind.location], linkRole: LinkRoles.locatedAt),
-        FieldDef(
-          key: 'factions', label: 'Factions', type: FieldType.entityRefList,
-          refKinds: const [EntityKind.faction], linkRole: LinkRoles.memberOf),
+        const FieldDef(key: 'personalityTraits', label: 'Personality Traits', type: FieldType.longText),
+        const FieldDef(key: 'ideals', label: 'Ideals', type: FieldType.longText),
+        const FieldDef(key: 'bonds', label: 'Bonds', type: FieldType.longText),
+        const FieldDef(key: 'flaws', label: 'Flaws', type: FieldType.longText),
       ]),
       const FieldSection('Roleplay', [
         FieldDef(key: 'goals', label: 'Goals & Motivation', type: FieldType.longText),
         FieldDef(key: 'secrets', label: 'Secrets (DM only)', type: FieldType.longText),
         FieldDef(key: 'voice', label: 'Voice & Mannerisms', type: FieldType.longText),
+      ]),
+      FieldSection('Relationships', [
+        const FieldDef(
+          key: 'allies', label: 'Allies', type: FieldType.entityRefList,
+          refKinds: [EntityKind.character], linkRole: LinkRoles.ally),
+        const FieldDef(
+          key: 'friends', label: 'Friends', type: FieldType.entityRefList,
+          refKinds: [EntityKind.character], linkRole: LinkRoles.friend),
+        const FieldDef(
+          key: 'family', label: 'Family', type: FieldType.entityRefList,
+          refKinds: [EntityKind.character], linkRole: LinkRoles.family),
+        const FieldDef(
+          key: 'enemies', label: 'Enemies', type: FieldType.entityRefList,
+          refKinds: [EntityKind.character, EntityKind.creature],
+          linkRole: LinkRoles.enemy),
+        const FieldDef(
+          key: 'rivals', label: 'Rivals', type: FieldType.entityRefList,
+          refKinds: [EntityKind.character], linkRole: LinkRoles.rival),
+        const FieldDef(
+          key: 'factions', label: 'Factions', type: FieldType.entityRefList,
+          refKinds: [EntityKind.faction], linkRole: LinkRoles.memberOf),
+        const FieldDef(
+          key: 'organizations', label: 'Organizations', type: FieldType.entityRefList,
+          refKinds: [EntityKind.faction], linkRole: LinkRoles.memberOf),
+        const FieldDef(
+          key: 'homeLocation', label: 'Home / Base', type: FieldType.entityRef,
+          refKinds: [EntityKind.location], linkRole: LinkRoles.locatedAt),
+      ]),
+      FieldSection('Inventory', [
+        const FieldDef(key: 'equipment', label: 'Equipment', type: FieldType.longText),
+        const FieldDef(
+          key: 'weapons', label: 'Weapons', type: FieldType.entityRefList,
+          refKinds: [EntityKind.item], linkRole: LinkRoles.owner),
+        const FieldDef(
+          key: 'armor', label: 'Armor', type: FieldType.entityRefList,
+          refKinds: [EntityKind.item], linkRole: LinkRoles.owner),
+        const FieldDef(
+          key: 'magicItems', label: 'Magic Items', type: FieldType.entityRefList,
+          refKinds: [EntityKind.item], linkRole: LinkRoles.owner),
+        const FieldDef(key: 'currency', label: 'Currency', type: FieldType.text, hint: 'e.g. 120 gp, 34 sp'),
+        const FieldDef(key: 'inventoryNotes', label: 'Inventory Notes', type: FieldType.longText),
+      ]),
+      const FieldSection('Abilities & Magic', [
+        FieldDef(key: 'skills', label: 'Skills', type: FieldType.stringList),
+        FieldDef(key: 'features', label: 'Features', type: FieldType.longText),
+        FieldDef(key: 'spells', label: 'Spells', type: FieldType.stringList),
+        FieldDef(key: 'powers', label: 'Powers', type: FieldType.longText),
+        FieldDef(key: 'customAbilities', label: 'Custom Abilities', type: FieldType.stringList),
+      ]),
+      FieldSection('Timeline', [
+        const FieldDef(
+          key: 'importantEvents', label: 'Important Events', type: FieldType.entityRefList,
+          refKinds: [EntityKind.event], linkRole: LinkRoles.participatedIn),
+        const FieldDef(key: 'development', label: 'Character Development', type: FieldType.longText),
+        const FieldDef(
+          key: 'sessionHistory', label: 'Session History', type: FieldType.entityRefList,
+          refKinds: [EntityKind.session], linkRole: LinkRoles.participatedIn),
+      ]),
+      const FieldSection('Notes', [
+        FieldDef(key: 'notes', label: 'Working Notes', type: FieldType.longText),
       ]),
     ]),
     EntityTemplate(kind: EntityKind.location, sections: [

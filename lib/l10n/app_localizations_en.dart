@@ -530,6 +530,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roleQuestGiver => 'Quest giver';
 
   @override
+  String get roleAlly => 'Ally';
+
+  @override
+  String get roleFriend => 'Friend';
+
+  @override
+  String get roleFamily => 'Family';
+
+  @override
+  String get roleEnemy => 'Enemy';
+
+  @override
+  String get roleRival => 'Rival';
+
+  @override
+  String get tabBiography => 'Biography';
+
+  @override
+  String get tabProfile => 'Profile';
+
+  @override
   String get attachmentsCaps => 'ATTACHMENTS';
 
   @override

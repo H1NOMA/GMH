@@ -50,6 +50,27 @@ void main() {
     expect(sanitized['futureField'], 'kept');
   });
 
+  test('character template keeps all legacy field keys (data preservation)',
+      () {
+    final template = EntityTemplates.of(EntityKind.character);
+    final keys = template.allFields.map((f) => f.key).toSet();
+    // Keys that existed before the profile overhaul must survive so no
+    // previously entered character data is orphaned.
+    for (final legacy in [
+      'title', 'race', 'characterClass', 'alignment', 'status',
+      'homeLocation', 'factions', 'goals', 'secrets', 'voice',
+    ]) {
+      expect(keys, contains(legacy), reason: 'missing legacy key $legacy');
+    }
+    // And the new profile sections are present.
+    for (final section in [
+      'General Information', 'Statistics', 'Combat', 'Beliefs',
+      'Relationships', 'Inventory', 'Abilities & Magic', 'Timeline', 'Notes',
+    ]) {
+      expect(template.sections.map((s) => s.title), contains(section));
+    }
+  });
+
   test('entity ref helpers round-trip', () {
     expect(parseEntityRef(entityRefValue('abc')), 'abc');
     expect(parseEntityRef('not-a-ref'), isNull);

@@ -177,6 +177,14 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
               showCodeBlock: true,
               showIndent: false,
               showDividers: false,
+              // Paragraph alignment: left, center, right and justified.
+              // The choice is stored as a Delta attribute, so it persists
+              // with the document on every platform.
+              showAlignmentButtons: true,
+              showLeftAlignment: true,
+              showCenterAlignment: true,
+              showRightAlignment: true,
+              showJustifyAlignment: true,
               customButtons: [
                 QuillToolbarCustomButtonOptions(
                   icon: const Icon(Icons.alternate_email, size: 18),

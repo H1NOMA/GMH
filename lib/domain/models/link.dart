@@ -28,6 +28,11 @@ abstract final class LinkRoles {
   static const participatedIn = 'participatedIn';
   static const createdAt = 'createdAt';
   static const questGiver = 'questGiver';
+  static const ally = 'ally';
+  static const friend = 'friend';
+  static const family = 'family';
+  static const enemy = 'enemy';
+  static const rival = 'rival';
 
   static const suggestions = [
     related,
@@ -50,6 +55,11 @@ abstract final class LinkRoles {
         participatedIn => 'Participated in',
         createdAt => 'Created at',
         questGiver => 'Quest giver',
+        ally => 'Ally',
+        friend => 'Friend',
+        family => 'Family',
+        enemy => 'Enemy',
+        rival => 'Rival',
         _ => role,
       };
 }
