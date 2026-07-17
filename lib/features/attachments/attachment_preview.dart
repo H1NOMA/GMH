@@ -123,7 +123,7 @@ Future<void> _showInfoSheet(
                           style: Theme.of(context).textTheme.titleMedium),
                       Text(
                         '${fileTypeTag(item)} · ${formatBytes(item.sizeBytes)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 12, color: GmhColors.parchmentDim),
                       ),
                     ],
@@ -133,7 +133,7 @@ Future<void> _showInfoSheet(
             ),
             const SizedBox(height: 12),
             Text(context.l10n.previewUnavailable,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 12.5, color: GmhColors.parchmentDim)),
             const SizedBox(height: 12),
             FilledButton.icon(

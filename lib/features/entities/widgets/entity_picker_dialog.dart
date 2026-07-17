@@ -106,7 +106,7 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
                   : _results.isEmpty
                       ? Center(
                           child: Text(context.l10n.pickerNoMatches,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: GmhColors.parchmentDim)))
                       : ListView.builder(
                           itemCount: _results.length,

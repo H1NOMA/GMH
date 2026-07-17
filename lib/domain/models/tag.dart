@@ -10,11 +10,15 @@ class Tag {
   /// ARGB color value.
   final int color;
 
+  /// Creation time (epoch ms); 0 for tags created before schema v3.
+  final int createdAt;
+
   const Tag({
     required this.id,
     required this.worldId,
     required this.name,
     required this.color,
+    this.createdAt = 0,
   });
 
   @override

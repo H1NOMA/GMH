@@ -90,7 +90,7 @@ class RelationsPanel extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(context.l10n.relationsCaps,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 10.5,
                       letterSpacing: 1.4,
                       fontWeight: FontWeight.w700,
@@ -115,7 +115,7 @@ class RelationsPanel extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Text(context.l10n.noOutgoingRelations,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 12, color: GmhColors.parchmentFaint)),
           )
         else
@@ -127,7 +127,7 @@ class RelationsPanel extends ConsumerWidget {
           ),
         const SizedBox(height: 14),
         Text(context.l10n.backlinksCaps,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 10.5,
                 letterSpacing: 1.4,
                 fontWeight: FontWeight.w700,
@@ -137,7 +137,7 @@ class RelationsPanel extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Text(context.l10n.noBacklinks,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 12, color: GmhColors.parchmentFaint)),
           )
         else
@@ -179,7 +179,7 @@ class _LinkGroupList extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 6, bottom: 2),
             child: Text(roleLabel(entry.key),
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: GmhColors.parchmentDim)),
@@ -231,20 +231,20 @@ class _LinkRow extends ConsumerWidget {
             if (link.origin == LinkOrigin.document)
               Tooltip(
                 message: context.l10n.fromDocumentMention,
-                child: const Icon(Icons.notes,
+                child: Icon(Icons.notes,
                     size: 13, color: GmhColors.parchmentFaint),
               )
             else if (link.origin == LinkOrigin.attribute)
               Tooltip(
                 message: context.l10n.fromStructuredField,
-                child: const Icon(Icons.tune,
+                child: Icon(Icons.tune,
                     size: 13, color: GmhColors.parchmentFaint),
               )
             else if (direction == _Direction.outgoing)
               InkWell(
                 onTap: () =>
                     ref.read(linkRepositoryProvider).delete(link.id),
-                child: const Icon(Icons.close,
+                child: Icon(Icons.close,
                     size: 14, color: GmhColors.parchmentFaint),
               ),
           ],

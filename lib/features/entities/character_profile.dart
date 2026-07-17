@@ -139,7 +139,7 @@ class _ProfileHeader extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: GmhColors.surface,
         border: Border(bottom: BorderSide(color: GmhColors.border)),
       ),
@@ -159,7 +159,7 @@ class _ProfileHeader extends ConsumerWidget {
                   Text(subtitleParts.join(' · '),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 12.5,
                           fontStyle: FontStyle.italic,
                           color: GmhColors.parchmentDim)),
@@ -169,7 +169,7 @@ class _ProfileHeader extends ConsumerWidget {
                     child: Text(entity.summary,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 12, color: GmhColors.parchmentFaint)),
                   ),
               ],
@@ -395,7 +395,7 @@ class _AbilityBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(label,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 10.5,
                     letterSpacing: 1.2,
                     fontWeight: FontWeight.w700,
@@ -420,7 +420,7 @@ class _AbilityBox extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(modifier!,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w600,
                         color: GmhColors.emberBright)),

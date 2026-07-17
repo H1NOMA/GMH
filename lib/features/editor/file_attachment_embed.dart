@@ -118,7 +118,7 @@ class _AttachmentChip extends ConsumerWidget {
                 if (item != null) ...[
                   const SizedBox(width: 4),
                   Text(formatBytes(item.sizeBytes),
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 10.5, color: GmhColors.parchmentFaint)),
                 ],
               ],

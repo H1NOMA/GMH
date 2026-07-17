@@ -56,7 +56,7 @@ class AttributeForm extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(2, 14, 2, 8),
             child: Text(
               trTemplate(context, section.title).toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 10.5,
                 letterSpacing: 1.4,
                 fontWeight: FontWeight.w700,
@@ -447,7 +447,7 @@ class _EntityRefField extends ConsumerWidget {
       child: OutlinedButton.icon(
         style: OutlinedButton.styleFrom(
           alignment: Alignment.centerLeft,
-          side: const BorderSide(color: GmhColors.border),
+          side: BorderSide(color: GmhColors.border),
         ),
         icon: Icon(
           target?.kind.icon ?? Icons.add_link,
@@ -580,7 +580,7 @@ class _LabeledGroup extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(label,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 11.5, color: GmhColors.parchmentDim)),
               ),
               if (trailing != null) trailing!,
@@ -601,7 +601,7 @@ class _EmptyHint extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Text(context.l10n.none,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12, color: GmhColors.parchmentFaint)),
       );
 }

@@ -147,11 +147,11 @@ class _CategoryGrid extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                const Icon(Icons.add, color: GmhColors.parchmentDim),
+                Icon(Icons.add, color: GmhColors.parchmentDim),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(context.l10n.noCategoriesYet,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 12.5, color: GmhColors.parchmentDim)),
                 ),
               ],

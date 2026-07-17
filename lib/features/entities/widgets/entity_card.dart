@@ -62,7 +62,7 @@ class EntityCard extends ConsumerWidget {
                                   Theme.of(context).textTheme.titleMedium),
                         ),
                         if (entity.isFavorite)
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.only(left: 6),
                             child: Icon(Icons.star,
                                 size: 15, color: GmhColors.ember),

@@ -722,6 +722,77 @@ class AppLocalizationsRu extends AppLocalizations {
   String get kindCustomEntry => 'Запись';
 
   @override
+  String get tagManagerTitle => 'Менеджер тегов';
+
+  @override
+  String get searchTagsHint => 'Поиск тегов…';
+
+  @override
+  String get sortByName => 'По алфавиту';
+
+  @override
+  String get sortByCreated => 'По дате создания';
+
+  @override
+  String get sortByUsage => 'По использованию';
+
+  @override
+  String get newTag => 'Новый тег';
+
+  @override
+  String get mergeTagAction => 'Объединить с другим тегом…';
+
+  @override
+  String mergeTagTitle(String name) {
+    return 'Объединение «$name»';
+  }
+
+  @override
+  String mergeTagBody(String name) {
+    return 'Все записи с тегом «$name» получат выбранный ниже тег, а «$name» будет удалён.';
+  }
+
+  @override
+  String get changeColor => 'Изменить цвет';
+
+  @override
+  String deleteTagTitle(String name) {
+    return 'Удалить тег «$name»?';
+  }
+
+  @override
+  String deleteTagBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Тег будет снят с $count записей. Сами записи останутся.',
+      few: 'Тег будет снят с $count записей. Сами записи останутся.',
+      one: 'Тег будет снят с $count записи. Сама запись останется.',
+      zero: 'Этот тег не используется ни одной записью.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noTags =>
+      'Тегов пока нет. Здесь появятся теги, которые вы добавляете к записям.';
+
+  @override
+  String get noTagMatches => 'По запросу ничего не найдено.';
+
+  @override
+  String get appearanceSection => 'Оформление';
+
+  @override
+  String get themeSystem => 'Как в системе';
+
+  @override
+  String get themeLight => 'Светлая тема';
+
+  @override
+  String get themeDark => 'Тёмная тема';
+
+  @override
   String get kindCharacter => 'Персонаж';
 
   @override

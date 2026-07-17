@@ -123,6 +123,9 @@ class Tags extends Table {
   TextColumn get name => text()();
   IntColumn get color => integer()();
 
+  /// Added in schema v3 (0 for tags created before the migration).
+  IntColumn get createdAt => integer().withDefault(const Constant(0))();
+
   @override
   Set<Column> get primaryKey => {id};
 

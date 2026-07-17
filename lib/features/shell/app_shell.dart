@@ -8,6 +8,7 @@ import '../../app/l10n_ext.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
 import '../categories/category_ui.dart';
+import '../tags/tag_manager_sheet.dart';
 import '../categories/manage_categories_sheet.dart';
 import 'ui_providers.dart';
 
@@ -105,7 +106,7 @@ class _Sidebar extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(16, 18, 12, 14),
               child: Row(
                 children: [
-                  const Icon(Icons.public, color: GmhColors.ember, size: 20),
+                  Icon(Icons.public, color: GmhColors.ember, size: 20),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -114,7 +115,7 @@ class _Sidebar extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Icon(Icons.unfold_more,
+                  Icon(Icons.unfold_more,
                       size: 18, color: GmhColors.parchmentDim),
                 ],
               ),
@@ -150,6 +151,12 @@ class _Sidebar extends ConsumerWidget {
                   selected: section == _Section.campaigns,
                   onTap: () => context.go(Routes.campaigns(worldId)),
                 ),
+                _NavTile(
+                  icon: Icons.sell_outlined,
+                  label: context.l10n.tagManagerTitle,
+                  selected: false,
+                  onTap: () => showTagManagerSheet(context, worldId),
+                ),
                 _SectionHeader(context.l10n.sectionWorld),
                 for (final kind in EntityKind.worldKinds)
                   _KindTile(worldId: worldId, kind: kind, count: counts[kind]),
@@ -184,7 +191,7 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10.5,
           letterSpacing: 1.6,
           fontWeight: FontWeight.w700,
@@ -249,7 +256,7 @@ class _KindTile extends StatelessWidget {
       trailing: count == null || count == 0
           ? null
           : Text('$count',
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 12, color: GmhColors.parchmentFaint)),
       selected: selected,
       selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
@@ -281,7 +288,7 @@ class _CategoriesSection extends ConsumerWidget {
               Expanded(
                 child: Text(
                   context.l10n.sectionCategories,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10.5,
                     letterSpacing: 1.6,
                     fontWeight: FontWeight.w700,
@@ -294,7 +301,7 @@ class _CategoriesSection extends ConsumerWidget {
                 onTap: () => showManageCategoriesSheet(context, worldId),
                 child: Tooltip(
                   message: context.l10n.manageCategories,
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.all(4),
                     child: Icon(Icons.tune,
                         size: 15, color: GmhColors.parchmentFaint),
@@ -323,7 +330,7 @@ class _CategoriesSection extends ConsumerWidget {
             trailing: (counts[category.id] ?? 0) == 0
                 ? null
                 : Text('${counts[category.id]}',
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 12, color: GmhColors.parchmentFaint)),
             selected: location.endsWith('/category/${category.id}'),
             selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
@@ -332,10 +339,10 @@ class _CategoriesSection extends ConsumerWidget {
             visualDensity: const VisualDensity(vertical: -3),
           ),
         ListTile(
-          leading: const Icon(Icons.add,
+          leading: Icon(Icons.add,
               size: 18, color: GmhColors.parchmentFaint),
           title: Text(context.l10n.newCategory,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 13, color: GmhColors.parchmentDim)),
           onTap: () => showManageCategoriesSheet(context, worldId),
           visualDensity: const VisualDensity(vertical: -3),
@@ -362,7 +369,7 @@ class _Rail extends StatelessWidget {
       labelType: NavigationRailLabelType.all,
       leading: IconButton(
         tooltip: context.l10n.switchWorld,
-        icon: const Icon(Icons.public, color: GmhColors.ember),
+        icon: Icon(Icons.public, color: GmhColors.ember),
         onPressed: () => context.go(Routes.worlds()),
       ),
       destinations: [

@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../app/l10n_ext.dart';
 import '../../app/locale_provider.dart';
+import '../../app/theme_provider.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -207,6 +208,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final world = ref.watch(worldProvider(widget.worldId)).valueOrNull;
     final locale = ref.watch(localeControllerProvider);
+    final themeMode = ref.watch(themeModeProvider);
     final l = context.l10n;
 
     return Scaffold(
@@ -240,6 +242,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () => ref
                       .read(localeControllerProvider.notifier)
                       .setLocale(const Locale('ru')),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            _SectionCard(
+              title: l.appearanceSection,
+              children: [
+                _LanguageTile(
+                  label: l.themeSystem,
+                  selected: themeMode == ThemeMode.system,
+                  onTap: () => ref
+                      .read(themeModeProvider.notifier)
+                      .setMode(ThemeMode.system),
+                ),
+                _LanguageTile(
+                  label: l.themeLight,
+                  selected: themeMode == ThemeMode.light,
+                  onTap: () => ref
+                      .read(themeModeProvider.notifier)
+                      .setMode(ThemeMode.light),
+                ),
+                _LanguageTile(
+                  label: l.themeDark,
+                  selected: themeMode == ThemeMode.dark,
+                  onTap: () => ref
+                      .read(themeModeProvider.notifier)
+                      .setMode(ThemeMode.dark),
                 ),
               ],
             ),
@@ -291,7 +320,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 ListTile(
                   leading:
-                      const Icon(Icons.save_outlined, color: GmhColors.ember),
+                      Icon(Icons.save_outlined, color: GmhColors.ember),
                   title: Text(l.backupNow),
                   onTap: _backupNow,
                 ),
@@ -299,7 +328,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
                     child: Text(l.noBackups,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 12, color: GmhColors.parchmentFaint)),
                   )
                 else
@@ -395,7 +424,7 @@ class _SectionCard extends StatelessWidget {
                 if (subtitle != null) ...[
                   const SizedBox(height: 3),
                   Text(subtitle!,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 11.5, color: GmhColors.parchmentDim)),
                 ],
               ],

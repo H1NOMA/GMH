@@ -2895,8 +2895,20 @@ class $TagsTable extends Tags with TableInfo<$TagsTable, TagRow> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, worldId, name, color];
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, worldId, name, color, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2938,6 +2950,12 @@ class $TagsTable extends Tags with TableInfo<$TagsTable, TagRow> {
     } else if (isInserting) {
       context.missing(_colorMeta);
     }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
     return context;
   }
 
@@ -2967,6 +2985,10 @@ class $TagsTable extends Tags with TableInfo<$TagsTable, TagRow> {
         DriftSqlType.int,
         data['${effectivePrefix}color'],
       )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
     );
   }
 
@@ -2981,11 +3003,15 @@ class TagRow extends DataClass implements Insertable<TagRow> {
   final String worldId;
   final String name;
   final int color;
+
+  /// Added in schema v3 (0 for tags created before the migration).
+  final int createdAt;
   const TagRow({
     required this.id,
     required this.worldId,
     required this.name,
     required this.color,
+    required this.createdAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2994,6 +3020,7 @@ class TagRow extends DataClass implements Insertable<TagRow> {
     map['world_id'] = Variable<String>(worldId);
     map['name'] = Variable<String>(name);
     map['color'] = Variable<int>(color);
+    map['created_at'] = Variable<int>(createdAt);
     return map;
   }
 
@@ -3003,6 +3030,7 @@ class TagRow extends DataClass implements Insertable<TagRow> {
       worldId: Value(worldId),
       name: Value(name),
       color: Value(color),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -3016,6 +3044,7 @@ class TagRow extends DataClass implements Insertable<TagRow> {
       worldId: serializer.fromJson<String>(json['worldId']),
       name: serializer.fromJson<String>(json['name']),
       color: serializer.fromJson<int>(json['color']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
     );
   }
   @override
@@ -3026,22 +3055,30 @@ class TagRow extends DataClass implements Insertable<TagRow> {
       'worldId': serializer.toJson<String>(worldId),
       'name': serializer.toJson<String>(name),
       'color': serializer.toJson<int>(color),
+      'createdAt': serializer.toJson<int>(createdAt),
     };
   }
 
-  TagRow copyWith({String? id, String? worldId, String? name, int? color}) =>
-      TagRow(
-        id: id ?? this.id,
-        worldId: worldId ?? this.worldId,
-        name: name ?? this.name,
-        color: color ?? this.color,
-      );
+  TagRow copyWith({
+    String? id,
+    String? worldId,
+    String? name,
+    int? color,
+    int? createdAt,
+  }) => TagRow(
+    id: id ?? this.id,
+    worldId: worldId ?? this.worldId,
+    name: name ?? this.name,
+    color: color ?? this.color,
+    createdAt: createdAt ?? this.createdAt,
+  );
   TagRow copyWithCompanion(TagsCompanion data) {
     return TagRow(
       id: data.id.present ? data.id.value : this.id,
       worldId: data.worldId.present ? data.worldId.value : this.worldId,
       name: data.name.present ? data.name.value : this.name,
       color: data.color.present ? data.color.value : this.color,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
@@ -3051,13 +3088,14 @@ class TagRow extends DataClass implements Insertable<TagRow> {
           ..write('id: $id, ')
           ..write('worldId: $worldId, ')
           ..write('name: $name, ')
-          ..write('color: $color')
+          ..write('color: $color, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, worldId, name, color);
+  int get hashCode => Object.hash(id, worldId, name, color, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3065,7 +3103,8 @@ class TagRow extends DataClass implements Insertable<TagRow> {
           other.id == this.id &&
           other.worldId == this.worldId &&
           other.name == this.name &&
-          other.color == this.color);
+          other.color == this.color &&
+          other.createdAt == this.createdAt);
 }
 
 class TagsCompanion extends UpdateCompanion<TagRow> {
@@ -3073,12 +3112,14 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
   final Value<String> worldId;
   final Value<String> name;
   final Value<int> color;
+  final Value<int> createdAt;
   final Value<int> rowid;
   const TagsCompanion({
     this.id = const Value.absent(),
     this.worldId = const Value.absent(),
     this.name = const Value.absent(),
     this.color = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TagsCompanion.insert({
@@ -3086,6 +3127,7 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
     required String worldId,
     required String name,
     required int color,
+    this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        worldId = Value(worldId),
@@ -3096,6 +3138,7 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
     Expression<String>? worldId,
     Expression<String>? name,
     Expression<int>? color,
+    Expression<int>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3103,6 +3146,7 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
       if (worldId != null) 'world_id': worldId,
       if (name != null) 'name': name,
       if (color != null) 'color': color,
+      if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3112,6 +3156,7 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
     Value<String>? worldId,
     Value<String>? name,
     Value<int>? color,
+    Value<int>? createdAt,
     Value<int>? rowid,
   }) {
     return TagsCompanion(
@@ -3119,6 +3164,7 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
       worldId: worldId ?? this.worldId,
       name: name ?? this.name,
       color: color ?? this.color,
+      createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3138,6 +3184,9 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
     if (color.present) {
       map['color'] = Variable<int>(color.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3151,6 +3200,7 @@ class TagsCompanion extends UpdateCompanion<TagRow> {
           ..write('worldId: $worldId, ')
           ..write('name: $name, ')
           ..write('color: $color, ')
+          ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -7944,6 +7994,7 @@ typedef $$TagsTableCreateCompanionBuilder =
       required String worldId,
       required String name,
       required int color,
+      Value<int> createdAt,
       Value<int> rowid,
     });
 typedef $$TagsTableUpdateCompanionBuilder =
@@ -7952,6 +8003,7 @@ typedef $$TagsTableUpdateCompanionBuilder =
       Value<String> worldId,
       Value<String> name,
       Value<int> color,
+      Value<int> createdAt,
       Value<int> rowid,
     });
 
@@ -8016,6 +8068,11 @@ class $$TagsTableFilterComposer extends Composer<_$AppDatabase, $TagsTable> {
 
   ColumnFilters<int> get color => $composableBuilder(
     column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8091,6 +8148,11 @@ class $$TagsTableOrderingComposer extends Composer<_$AppDatabase, $TagsTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$WorldsTableOrderingComposer get worldId {
     final $$WorldsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -8132,6 +8194,9 @@ class $$TagsTableAnnotationComposer
 
   GeneratedColumn<int> get color =>
       $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   $$WorldsTableAnnotationComposer get worldId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -8214,12 +8279,14 @@ class $$TagsTableTableManager
                 Value<String> worldId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<int> color = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TagsCompanion(
                 id: id,
                 worldId: worldId,
                 name: name,
                 color: color,
+                createdAt: createdAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -8228,12 +8295,14 @@ class $$TagsTableTableManager
                 required String worldId,
                 required String name,
                 required int color,
+                Value<int> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TagsCompanion.insert(
                 id: id,
                 worldId: worldId,
                 name: name,
                 color: color,
+                createdAt: createdAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

@@ -44,11 +44,11 @@ class _FakeWorldRepository implements WorldRepository {
   Future<void> deleteWorld(String id) async {}
 }
 
-Widget _app(WorldRepository repository, {Locale? locale}) {
+Widget _app(WorldRepository repository, {Locale? locale, bool light = false}) {
   return ProviderScope(
     overrides: [worldRepositoryProvider.overrideWithValue(repository)],
     child: MaterialApp(
-      theme: GmhTheme.dark(),
+      theme: light ? GmhTheme.light() : GmhTheme.dark(),
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -88,6 +88,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Создание нового мира'), findsOneWidget);
     expect(find.text('Отмена'), findsOneWidget);
+  });
+
+  testWidgets('light theme renders the world picker', (tester) async {
+    await tester.pumpWidget(_app(_FakeWorldRepository([]), light: true));
+    await tester.pumpAndSettle();
+    expect(find.text('Create New World'), findsOneWidget);
   });
 
   testWidgets('existing worlds are listed', (tester) async {

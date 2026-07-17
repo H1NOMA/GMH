@@ -139,7 +139,17 @@ abstract interface class TagRepository {
   Future<Tag> getOrCreate(String worldId, String name, {int? color});
   Future<void> rename(String tagId, String name);
   Future<void> setColor(String tagId, int color);
+
+  /// Deletes the tag and detaches it from every entry (the entries
+  /// themselves are untouched).
   Future<void> delete(String tagId);
+
+  /// How many entries use each tag (tagId -> count).
+  Future<Map<String, int>> usageCounts(String worldId);
+
+  /// Moves every assignment of [fromTagId] onto [intoTagId] (duplicates
+  /// collapse) and deletes [fromTagId] — the merge tool for duplicate tags.
+  Future<void> merge({required String fromTagId, required String intoTagId});
 
   Stream<List<Tag>> watchEntityTags(String entityId);
   Future<List<Tag>> entityTags(String entityId);
@@ -219,4 +229,7 @@ abstract final class SettingsKeys {
 
   /// Explicit UI language ('en'/'ru'); absent = follow the system language.
   static const appLocale = 'appLocale';
+
+  /// Explicit theme ('light'/'dark'); absent = follow the system theme.
+  static const themeMode = 'themeMode';
 }

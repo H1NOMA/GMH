@@ -158,7 +158,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         DecoratedBox(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: GmhColors.surface,
             border: Border(bottom: BorderSide(color: GmhColors.border)),
           ),

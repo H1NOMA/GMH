@@ -73,7 +73,7 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
               child: Text(
                 '${_index + 1}/${widget.images.length}   '
                 '${formatBytes(current.sizeBytes)}',
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 12, color: GmhColors.parchmentDim),
               ),
             ),
@@ -109,7 +109,7 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
                         child: Image.file(
                           File(path),
                           fit: BoxFit.contain,
-                          errorBuilder: (_, _, _) => const Icon(
+                          errorBuilder: (_, _, _) => Icon(
                               Icons.broken_image_outlined,
                               size: 64,
                               color: GmhColors.parchmentFaint),
@@ -128,7 +128,7 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
                 padding: const EdgeInsets.all(12),
                 child: Text(caption,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 13, color: GmhColors.parchmentDim)),
               ),
             ),

@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -42,6 +42,11 @@ class AppDatabase extends _$AppDatabase {
             // v2: user-defined archive categories.
             await m.createTable(customCategories);
             await m.addColumn(entities, entities.customCategoryId);
+          }
+          if (from < 3) {
+            // v3: tag creation timestamps for the Tag Manager. Existing
+            // tags get 0 (sorted as oldest) — no other data changes.
+            await m.addColumn(tags, tags.createdAt);
           }
         },
         beforeOpen: (details) async {
