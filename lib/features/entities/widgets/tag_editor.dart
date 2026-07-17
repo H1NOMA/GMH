@@ -87,7 +87,7 @@ class TagEditor extends ConsumerWidget {
           ),
         ActionChip(
           avatar:
-              const Icon(Icons.add, size: 14, color: GmhColors.parchmentDim),
+              Icon(Icons.add, size: 14, color: GmhColors.parchmentDim),
           label:
               Text(context.l10n.tagChip, style: const TextStyle(fontSize: 11.5)),
           visualDensity: VisualDensity.compact,

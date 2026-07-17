@@ -385,6 +385,52 @@
   "chooseIcon": "Icon",
   "noCategoriesYet": "No custom categories yet. Create one below — it will behave exactly like the built-in sections.",
   "kindCustomEntry": "Entry",
+  "tagManagerTitle": "Tag Manager",
+  "searchTagsHint": "Search tags…",
+  "sortByName": "Alphabetical",
+  "sortByCreated": "By creation date",
+  "sortByUsage": "By usage",
+  "newTag": "New tag",
+  "mergeTagAction": "Merge into another tag…",
+  "mergeTagTitle": "Merge “{name}”",
+  "@mergeTagTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mergeTagBody": "Every entry tagged “{name}” will receive the tag you choose below, and “{name}” will be deleted.",
+  "@mergeTagBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "changeColor": "Change color",
+  "deleteTagTitle": "Delete tag “{name}”?",
+  "@deleteTagTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteTagBody": "{count, plural, =0{No entries use this tag.} one{The tag is removed from {count} entry. The entry itself is kept.} other{The tag is removed from {count} entries. The entries themselves are kept.}}",
+  "@deleteTagBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noTags": "No tags yet. Tags you add to entries appear here.",
+  "noTagMatches": "No tags match your search.",
+  "appearanceSection": "Appearance",
+  "themeSystem": "Match system",
+  "themeLight": "Light",
+  "themeDark": "Dark",
   "kindCharacter": "Character",
   "kindCharacterPlural": "Characters",
   "kindLocation": "Location",

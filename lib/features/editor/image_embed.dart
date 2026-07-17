@@ -59,7 +59,7 @@ class _VaultImage extends ConsumerWidget {
             child: snapshot.connectionState == ConnectionState.waiting
                 ? const SizedBox(
                     width: 22, height: 22, child: CircularProgressIndicator())
-                : const Icon(Icons.broken_image_outlined,
+                : Icon(Icons.broken_image_outlined,
                     color: GmhColors.parchmentFaint),
           );
         }
@@ -70,7 +70,7 @@ class _VaultImage extends ConsumerWidget {
             child: Image.file(
               File(path),
               fit: BoxFit.contain,
-              errorBuilder: (_, _, _) => const Icon(
+              errorBuilder: (_, _, _) => Icon(
                   Icons.broken_image_outlined,
                   color: GmhColors.parchmentFaint),
             ),

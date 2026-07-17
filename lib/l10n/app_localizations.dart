@@ -1316,6 +1316,114 @@ abstract class AppLocalizations {
   /// **'Entry'**
   String get kindCustomEntry;
 
+  /// No description provided for @tagManagerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag Manager'**
+  String get tagManagerTitle;
+
+  /// No description provided for @searchTagsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tags…'**
+  String get searchTagsHint;
+
+  /// No description provided for @sortByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical'**
+  String get sortByName;
+
+  /// No description provided for @sortByCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'By creation date'**
+  String get sortByCreated;
+
+  /// No description provided for @sortByUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'By usage'**
+  String get sortByUsage;
+
+  /// No description provided for @newTag.
+  ///
+  /// In en, this message translates to:
+  /// **'New tag'**
+  String get newTag;
+
+  /// No description provided for @mergeTagAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge into another tag…'**
+  String get mergeTagAction;
+
+  /// No description provided for @mergeTagTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge “{name}”'**
+  String mergeTagTitle(String name);
+
+  /// No description provided for @mergeTagBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every entry tagged “{name}” will receive the tag you choose below, and “{name}” will be deleted.'**
+  String mergeTagBody(String name);
+
+  /// No description provided for @changeColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Change color'**
+  String get changeColor;
+
+  /// No description provided for @deleteTagTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tag “{name}”?'**
+  String deleteTagTitle(String name);
+
+  /// No description provided for @deleteTagBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No entries use this tag.} one{The tag is removed from {count} entry. The entry itself is kept.} other{The tag is removed from {count} entries. The entries themselves are kept.}}'**
+  String deleteTagBody(int count);
+
+  /// No description provided for @noTags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet. Tags you add to entries appear here.'**
+  String get noTags;
+
+  /// No description provided for @noTagMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags match your search.'**
+  String get noTagMatches;
+
+  /// No description provided for @appearanceSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceSection;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Match system'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
   /// No description provided for @kindCharacter.
   ///
   /// In en, this message translates to:

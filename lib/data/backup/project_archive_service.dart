@@ -149,7 +149,12 @@ class ProjectArchiveService {
       ],
       'tags': [
         for (final t in tags)
-          {'id': t.id, 'name': t.name, 'color': t.color}
+          {
+            'id': t.id,
+            'name': t.name,
+            'color': t.color,
+            'createdAt': t.createdAt,
+          }
       ],
       'entityTags': [
         for (final et in entityTags)
@@ -371,6 +376,7 @@ class ProjectArchiveService {
               worldId: worldId,
               name: t['name'] as String,
               color: (t['color'] as num?)?.toInt() ?? 0xFF888888,
+              createdAt: Value((t['createdAt'] as num?)?.toInt() ?? 0),
             ));
       }
 

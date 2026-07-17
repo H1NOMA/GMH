@@ -170,7 +170,7 @@ class _EntityScaffold extends ConsumerWidget {
             PopupMenuItem(
                 value: 'delete',
                 child: Text(context.l10n.delete,
-                    style: const TextStyle(color: GmhColors.danger))),
+                    style: TextStyle(color: GmhColors.danger))),
           ],
         ),
       ],
@@ -268,7 +268,7 @@ class _SidePanel extends StatelessWidget {
       children: [
         if (entity.summary.isNotEmpty) ...[
           Text(entity.summary,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 13,
                   fontStyle: FontStyle.italic,
                   color: GmhColors.parchmentDim)),

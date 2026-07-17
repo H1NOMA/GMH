@@ -73,7 +73,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
           children: [
             Expanded(
               child: Text(context.l10n.attachmentsCaps,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 10.5,
                       letterSpacing: 1.4,
                       fontWeight: FontWeight.w700,
@@ -98,7 +98,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(context.l10n.noAttachments,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 12, color: GmhColors.parchmentFaint)),
           ),
         if (images.isNotEmpty)
@@ -153,7 +153,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
                 padding: const EdgeInsets.all(24),
                 child: Center(
                   child: Text(context.l10n.dropFilesHere,
-                      style: const TextStyle(color: GmhColors.emberBright)),
+                      style: TextStyle(color: GmhColors.emberBright)),
                 ),
               )
             : panel,
@@ -211,10 +211,10 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
               onTap: () => Navigator.pop(context, 'replace'),
             ),
             ListTile(
-              leading: const Icon(Icons.delete_outline,
+              leading: Icon(Icons.delete_outline,
                   size: 20, color: GmhColors.danger),
               title: Text(l.deleteAttachment,
-                  style: const TextStyle(color: GmhColors.danger)),
+                  style: TextStyle(color: GmhColors.danger)),
               onTap: () => Navigator.pop(context, 'delete'),
             ),
           ],
@@ -351,7 +351,7 @@ class _ImageTile extends ConsumerWidget {
                   Image.file(File(path),
                       fit: BoxFit.cover,
                       cacheWidth: 480,
-                      errorBuilder: (_, _, _) => const Icon(
+                      errorBuilder: (_, _, _) => Icon(
                           Icons.broken_image_outlined,
                           color: GmhColors.parchmentFaint)),
                 if (entry.caption.isNotEmpty)
@@ -370,7 +370,7 @@ class _ImageTile extends ConsumerWidget {
                     ),
                   ),
                 if (entity.coverMediaId == entry.media.id)
-                  const Positioned(
+                  Positioned(
                     top: 4,
                     right: 4,
                     child:
@@ -424,7 +424,7 @@ class _FileRow extends StatelessWidget {
                     '${entry.caption.isNotEmpty ? ' · ${entry.caption}' : ''}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 11, color: GmhColors.parchmentFaint),
                   ),
                 ],

@@ -189,7 +189,7 @@ class _CampaignDropdown extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 5),
-            const Icon(Icons.expand_more,
+            Icon(Icons.expand_more,
                 size: 17, color: GmhColors.parchmentDim),
           ],
         ),
@@ -313,7 +313,7 @@ class _CampaignDashboard extends ConsumerWidget {
         const SizedBox(height: 10),
         if (quests.isEmpty)
           Text(context.l10n.noQuestsLinked,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 12.5, color: GmhColors.parchmentDim))
         else
           _QuestBoard(worldId: worldId, quests: quests),
@@ -323,7 +323,7 @@ class _CampaignDashboard extends ConsumerWidget {
         const SizedBox(height: 10),
         if (sessions.isEmpty)
           Text(context.l10n.noSessions,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 12.5, color: GmhColors.parchmentDim))
         else
           for (final session in sessions)
@@ -349,7 +349,7 @@ class _MetaItem extends StatelessWidget {
         Icon(icon, size: 14, color: GmhColors.parchmentDim),
         const SizedBox(width: 4),
         Text(text,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12, color: GmhColors.parchmentDim)),
       ],
     );
@@ -413,7 +413,7 @@ class _QuestBoard extends StatelessWidget {
                         fontSize: 12.5, fontWeight: FontWeight.w600)),
                 const SizedBox(width: 6),
                 Text('${byStatus[status]!.length}',
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 12, color: GmhColors.parchmentFaint)),
               ],
             ),
@@ -466,7 +466,7 @@ class _QuestCard extends ConsumerWidget {
                   ),
                   if (objectives.isNotEmpty)
                     Text('$done/${objectives.length}',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 12, color: GmhColors.parchmentDim)),
                 ],
               ),

@@ -164,7 +164,7 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                         const SizedBox(height: 10),
                         Text(
                           context.l10n.noEntriesOfKind(title),
-                          style: const TextStyle(
+                          style: TextStyle(
                               color: GmhColors.parchmentDim),
                         ),
                       ],

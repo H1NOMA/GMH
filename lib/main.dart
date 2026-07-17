@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'app/app.dart';
 import 'app/locale_provider.dart';
+import 'app/theme_provider.dart';
 import 'app/providers.dart';
 import 'app/router.dart';
 import 'domain/repositories/repositories.dart';
@@ -33,6 +34,11 @@ Future<void> main() async {
       localeFromSetting(await settings.get(SettingsKeys.appLocale));
   if (savedLocale != null) {
     container.read(localeControllerProvider.notifier).seed(savedLocale);
+  }
+  final savedTheme =
+      themeModeFromSetting(await settings.get(SettingsKeys.themeMode));
+  if (savedTheme != ThemeMode.system) {
+    container.read(themeModeProvider.notifier).seed(savedTheme);
   }
   final lastWorldId = await settings.get(SettingsKeys.lastOpenedWorld);
   var initialLocation = Routes.worlds();

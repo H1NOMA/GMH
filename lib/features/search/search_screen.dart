@@ -14,6 +14,7 @@ import '../../domain/models/entity_kind.dart';
 import '../../domain/models/search_result.dart';
 import '../categories/category_ui.dart';
 import '../entities/widgets/new_entity_dialog.dart';
+import '../tags/tag_manager_sheet.dart';
 import '../shell/ui_providers.dart';
 
 /// Global full-text search across every entity — names, summaries, document
@@ -179,7 +180,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     : _results.isEmpty
                         ? Center(
                             child: Text(context.l10n.searchNoMatches,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: GmhColors.parchmentDim)))
                         : ListView.builder(
                             padding:
@@ -225,7 +226,7 @@ class _IdleView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: Text(context.l10n.quickActions,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 10.5,
                   letterSpacing: 1.4,
                   fontWeight: FontWeight.w700,
@@ -251,6 +252,11 @@ class _IdleView extends ConsumerWidget {
               onPressed: () => context.go(Routes.campaigns(worldId)),
             ),
             ActionChip(
+              avatar: const Icon(Icons.sell_outlined, size: 15),
+              label: Text(context.l10n.tagManagerTitle),
+              onPressed: () => showTagManagerSheet(context, worldId),
+            ),
+            ActionChip(
               avatar: const Icon(Icons.save_outlined, size: 15),
               label: Text(context.l10n.quickBackupExport),
               onPressed: () => context.go(Routes.settings(worldId)),
@@ -261,7 +267,7 @@ class _IdleView extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 8),
             child: Text(context.l10n.recentlyOpenedCaps,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 10.5,
                     letterSpacing: 1.4,
                     fontWeight: FontWeight.w700,
@@ -320,7 +326,7 @@ class _SnippetText extends StatelessWidget {
       spans.add(TextSpan(
         text: remaining.substring(
             start + SearchResult.snippetMarkerStart.length, end),
-        style: const TextStyle(
+        style: TextStyle(
             color: GmhColors.emberBright, fontWeight: FontWeight.w600),
       ));
       remaining =
@@ -329,7 +335,7 @@ class _SnippetText extends StatelessWidget {
 
     return Text.rich(
       TextSpan(
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 11.5, color: GmhColors.parchmentDim),
           children: spans),
       maxLines: 2,

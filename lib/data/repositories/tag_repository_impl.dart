@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/utils/dates.dart';
 import '../../core/utils/ids.dart';
 import '../../domain/models/tag.dart' as domain;
 import '../../domain/repositories/repositories.dart';
@@ -21,6 +22,7 @@ class TagRepositoryImpl implements TagRepository {
         worldId: row.worldId,
         name: row.name,
         color: row.color,
+        createdAt: row.createdAt,
       );
 
   @override
@@ -52,12 +54,14 @@ class TagRepositoryImpl implements TagRepository {
       worldId: worldId,
       name: normalized,
       color: color ?? _tagPalette[count % _tagPalette.length],
+      createdAt: nowMs(),
     );
     await _db.into(_db.tags).insert(TagsCompanion.insert(
           id: tag.id,
           worldId: worldId,
           name: normalized,
           color: tag.color,
+          createdAt: Value(tag.createdAt),
         ));
     return tag;
   }
@@ -76,7 +80,42 @@ class TagRepositoryImpl implements TagRepository {
 
   @override
   Future<void> delete(String tagId) async {
+    // entity_tags rows cascade away with the tag; entries are untouched.
     await (_db.delete(_db.tags)..where((t) => t.id.equals(tagId))).go();
+  }
+
+  @override
+  Future<Map<String, int>> usageCounts(String worldId) async {
+    final rows = await _db.customSelect(
+      'SELECT et.tag_id AS tid, COUNT(*) AS n FROM entity_tags et '
+      'JOIN tags t ON t.id = et.tag_id '
+      'JOIN entities e ON e.id = et.entity_id '
+      'WHERE t.world_id = ? AND e.deleted_at IS NULL '
+      'GROUP BY et.tag_id',
+      variables: [Variable.withString(worldId)],
+      readsFrom: {_db.entityTags, _db.tags, _db.entities},
+    ).get();
+    return {
+      for (final row in rows) row.read<String>('tid'): row.read<int>('n')
+    };
+  }
+
+  @override
+  Future<void> merge(
+      {required String fromTagId, required String intoTagId}) async {
+    if (fromTagId == intoTagId) return;
+    await _db.transaction(() async {
+      // Re-point assignments; entries already carrying the target tag would
+      // violate the (entity_id, tag_id) primary key, so insert-or-ignore
+      // copies then the source rows are removed with the tag itself.
+      await _db.customStatement(
+        'INSERT OR IGNORE INTO entity_tags (entity_id, tag_id) '
+        'SELECT entity_id, ? FROM entity_tags WHERE tag_id = ?',
+        [intoTagId, fromTagId],
+      );
+      await (_db.delete(_db.tags)..where((t) => t.id.equals(fromTagId)))
+          .go();
+    });
   }
 
   @override

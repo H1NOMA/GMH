@@ -241,7 +241,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                       context.l10n.graphEmpty,
                       textAlign: TextAlign.center,
                       style:
-                          const TextStyle(color: GmhColors.parchmentDim),
+                          TextStyle(color: GmhColors.parchmentDim),
                     ),
                   ),
                 )
@@ -286,7 +286,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                           ),
                           child: Text(
                             context.l10n.graphTruncated(_maxGraphNodes),
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 11.5,
                                 color: GmhColors.parchmentDim),
                           ),

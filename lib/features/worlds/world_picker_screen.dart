@@ -125,7 +125,7 @@ class WorldPickerScreen extends ConsumerWidget {
                                   contentPadding:
                                       const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 6),
-                                  leading: const Icon(Icons.public,
+                                  leading: Icon(Icons.public,
                                       color: GmhColors.ember),
                                   title: Text(world.name,
                                       style: Theme.of(context)

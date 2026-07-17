@@ -718,6 +718,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kindCustomEntry => 'Entry';
 
   @override
+  String get tagManagerTitle => 'Tag Manager';
+
+  @override
+  String get searchTagsHint => 'Search tags…';
+
+  @override
+  String get sortByName => 'Alphabetical';
+
+  @override
+  String get sortByCreated => 'By creation date';
+
+  @override
+  String get sortByUsage => 'By usage';
+
+  @override
+  String get newTag => 'New tag';
+
+  @override
+  String get mergeTagAction => 'Merge into another tag…';
+
+  @override
+  String mergeTagTitle(String name) {
+    return 'Merge “$name”';
+  }
+
+  @override
+  String mergeTagBody(String name) {
+    return 'Every entry tagged “$name” will receive the tag you choose below, and “$name” will be deleted.';
+  }
+
+  @override
+  String get changeColor => 'Change color';
+
+  @override
+  String deleteTagTitle(String name) {
+    return 'Delete tag “$name”?';
+  }
+
+  @override
+  String deleteTagBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'The tag is removed from $count entries. The entries themselves are kept.',
+      one: 'The tag is removed from $count entry. The entry itself is kept.',
+      zero: 'No entries use this tag.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noTags => 'No tags yet. Tags you add to entries appear here.';
+
+  @override
+  String get noTagMatches => 'No tags match your search.';
+
+  @override
+  String get appearanceSection => 'Appearance';
+
+  @override
+  String get themeSystem => 'Match system';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
   String get kindCharacter => 'Character';
 
   @override

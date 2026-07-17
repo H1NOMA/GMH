@@ -60,7 +60,7 @@ class _ManageCategories extends ConsumerWidget {
                   child: Text(context.l10n.noCategoriesYet,
                       textAlign: TextAlign.center,
                       style:
-                          const TextStyle(color: GmhColors.parchmentDim)),
+                          TextStyle(color: GmhColors.parchmentDim)),
                 )
               : ReorderableListView.builder(
                   shrinkWrap: true,
@@ -84,7 +84,7 @@ class _ManageCategories extends ConsumerWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.drag_indicator,
+                            Icon(Icons.drag_indicator,
                                 size: 18, color: GmhColors.parchmentFaint),
                             const SizedBox(width: 8),
                             Icon(categoryIconFor(category.icon),
@@ -109,7 +109,7 @@ class _ManageCategories extends ConsumerWidget {
                           ),
                           IconButton(
                             tooltip: context.l10n.deleteCategory,
-                            icon: const Icon(Icons.delete_outline,
+                            icon: Icon(Icons.delete_outline,
                                 size: 17, color: GmhColors.danger),
                             onPressed: () => _confirmDelete(
                                 context, ref, category,
@@ -196,7 +196,7 @@ Future<String?> showCategoryEditorDialog(
               ),
               const SizedBox(height: 14),
               Text(context.l10n.chooseIcon,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 11.5, color: GmhColors.parchmentDim)),
               const SizedBox(height: 8),
               Wrap(
