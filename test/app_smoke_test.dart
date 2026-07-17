@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gmh/app/providers.dart';
+import 'package:gmh/l10n/app_localizations.dart';
 import 'package:gmh/app/theme/gmh_theme.dart';
 import 'package:gmh/core/utils/dates.dart';
 import 'package:gmh/core/utils/ids.dart';
@@ -43,11 +44,14 @@ class _FakeWorldRepository implements WorldRepository {
   Future<void> deleteWorld(String id) async {}
 }
 
-Widget _app(WorldRepository repository) {
+Widget _app(WorldRepository repository, {Locale? locale}) {
   return ProviderScope(
     overrides: [worldRepositoryProvider.overrideWithValue(repository)],
     child: MaterialApp(
       theme: GmhTheme.dark(),
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const WorldPickerScreen(),
     ),
   );
@@ -69,6 +73,21 @@ void main() {
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
     expect(find.text('Create a New World'), findsNothing);
+  });
+
+  testWidgets('Russian locale renders a fully translated world picker',
+      (tester) async {
+    await tester.pumpWidget(
+        _app(_FakeWorldRepository([]), locale: const Locale('ru')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Создать новый мир'), findsOneWidget);
+    expect(find.textContaining('Создайте свой первый мир'), findsOneWidget);
+
+    await tester.tap(find.text('Создать новый мир'));
+    await tester.pumpAndSettle();
+    expect(find.text('Создание нового мира'), findsOneWidget);
+    expect(find.text('Отмена'), findsOneWidget);
   });
 
   testWidgets('existing worlds are listed', (tester) async {

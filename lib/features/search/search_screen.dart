@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -71,7 +72,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         ref.watch(recentEntitiesProvider(widget.worldId)).valueOrNull ?? [];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Search')),
+      appBar: AppBar(title: Text(context.l10n.navSearch)),
       body: Column(
         children: [
           Padding(
@@ -80,7 +81,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               controller: _controller,
               autofocus: true,
               decoration: InputDecoration(
-                hintText: 'Search names, lore, tags…',
+                hintText: context.l10n.searchHint,
                 prefixIcon: const Icon(Icons.search, size: 19),
                 suffixIcon: hasQuery
                     ? IconButton(
@@ -107,8 +108,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 6),
                   child: FilterChip(
-                    label:
-                        const Text('All', style: TextStyle(fontSize: 11.5)),
+                    label: Text(context.l10n.searchAll,
+                        style: const TextStyle(fontSize: 11.5)),
                     selected: _kindFilter == null,
                     onSelected: (_) {
                       setState(() => _kindFilter = null);
@@ -121,7 +122,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     padding: const EdgeInsets.only(right: 6),
                     child: FilterChip(
                       avatar: Icon(kind.icon, size: 13, color: kind.color),
-                      label: Text(kind.pluralLabel,
+                      label: Text(kind.localizedPlural(context),
                           style: const TextStyle(fontSize: 11.5)),
                       selected: _kindFilter == kind,
                       onSelected: (selected) {
@@ -145,9 +146,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 : _searching && _results.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : _results.isEmpty
-                        ? const Center(
-                            child: Text('No matches',
-                                style: TextStyle(
+                        ? Center(
+                            child: Text(context.l10n.searchNoMatches,
+                                style: const TextStyle(
                                     color: GmhColors.parchmentDim)))
                         : ListView.builder(
                             padding:
@@ -190,10 +191,10 @@ class _IdleView extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 40),
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 8),
-          child: Text('QUICK ACTIONS',
-              style: TextStyle(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(context.l10n.quickActions,
+              style: const TextStyle(
                   fontSize: 10.5,
                   letterSpacing: 1.4,
                   fontWeight: FontWeight.w700,
@@ -205,31 +206,31 @@ class _IdleView extends ConsumerWidget {
           children: [
             ActionChip(
               avatar: const Icon(Icons.add, size: 15),
-              label: const Text('New entry'),
+              label: Text(context.l10n.quickNewEntry),
               onPressed: () => showNewEntityDialog(context, ref, worldId),
             ),
             ActionChip(
               avatar: const Icon(Icons.hub_outlined, size: 15),
-              label: const Text('Open graph'),
+              label: Text(context.l10n.quickOpenGraph),
               onPressed: () => context.go(Routes.graph(worldId)),
             ),
             ActionChip(
               avatar: const Icon(Icons.map_outlined, size: 15),
-              label: const Text('Campaigns'),
+              label: Text(context.l10n.navCampaigns),
               onPressed: () => context.go(Routes.campaigns(worldId)),
             ),
             ActionChip(
               avatar: const Icon(Icons.save_outlined, size: 15),
-              label: const Text('Backup & export'),
+              label: Text(context.l10n.quickBackupExport),
               onPressed: () => context.go(Routes.settings(worldId)),
             ),
           ],
         ),
         if (recents.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 8),
-            child: Text('RECENTLY OPENED',
-                style: TextStyle(
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 8),
+            child: Text(context.l10n.recentlyOpenedCaps,
+                style: const TextStyle(
                     fontSize: 10.5,
                     letterSpacing: 1.4,
                     fontWeight: FontWeight.w700,
@@ -264,7 +265,8 @@ class _SnippetText extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = result.snippet.isEmpty ? result.summary : result.snippet;
     if (text.isEmpty) {
-      return Text(result.kind.label, style: const TextStyle(fontSize: 11.5));
+      return Text(result.kind.localizedLabel(context),
+          style: const TextStyle(fontSize: 11.5));
     }
 
     final spans = <TextSpan>[];

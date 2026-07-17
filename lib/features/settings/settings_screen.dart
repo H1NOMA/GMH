@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 
+import '../../app/l10n_ext.dart';
+import '../../app/locale_provider.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -15,8 +17,8 @@ import '../../core/utils/dates.dart';
 import '../../data/backup/backup_service.dart';
 import '../shell/ui_providers.dart';
 
-/// Settings: manual/automatic backups, full-project export (.gmhw ZIP),
-/// JSON export, PDF world book, and restore/import.
+/// Settings: language, manual/automatic backups, full-project export
+/// (.gmhw ZIP), JSON export, PDF world book, and restore/import.
 class SettingsScreen extends ConsumerStatefulWidget {
   final String worldId;
   const SettingsScreen({super.key, required this.worldId});
@@ -61,12 +63,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _backupNow() => _run(() async {
         final result =
             await ref.read(backupServiceProvider).backupNow(widget.worldId);
+        if (!mounted) return;
         result.fold(
           (path) {
-            _notify('Backup saved.');
+            _notify(context.l10n.backupSaved);
             _refreshBackups();
           },
-          (error) => _notify(error.userMessage),
+          (error) => _notify(localizedError(context, error)),
         );
       });
 
@@ -77,7 +80,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       );
     } catch (_) {
       // Sharing is unavailable on some desktops; the file path is shown.
-      _notify('Saved to: $path');
+      if (mounted) _notify(context.l10n.savedTo(path));
     }
   }
 
@@ -86,14 +89,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
         final name = _safeName(world?.name ?? 'world');
-        final path = p.join(dir,
-            '$name.${GmhConstants.projectArchiveExtension}');
+        final path =
+            p.join(dir, '$name.${GmhConstants.projectArchiveExtension}');
         final result = await ref
             .read(projectArchiveServiceProvider)
             .exportArchive(widget.worldId, path);
+        if (!mounted) return;
         await result.fold(
-          (path) => _shareFile(path, 'GMH world archive'),
-          (error) async => _notify(error.userMessage),
+          (path) => _shareFile(path, context.l10n.shareArchiveText),
+          (error) async => _notify(localizedError(context, error)),
         );
       });
 
@@ -105,9 +109,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final result = await ref
             .read(projectArchiveServiceProvider)
             .exportJson(widget.worldId, path);
+        if (!mounted) return;
         await result.fold(
-          (path) => _shareFile(path, 'GMH world data (JSON)'),
-          (error) async => _notify(error.userMessage),
+          (path) => _shareFile(path, context.l10n.shareJsonText),
+          (error) async => _notify(localizedError(context, error)),
         );
       });
 
@@ -121,9 +126,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               worldName: world?.name ?? 'World',
               outputPath: path,
             );
+        if (!mounted) return;
         await result.fold(
-          (path) => _shareFile(path, 'GMH world book (PDF)'),
-          (error) async => _notify(error.userMessage),
+          (path) => _shareFile(path, context.l10n.sharePdfText),
+          (error) async => _notify(localizedError(context, error)),
         );
       });
 
@@ -134,29 +140,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return dir.path;
   }
 
-  String _safeName(String name) => name
-      .replaceAll(RegExp(r'[^\w\s-]'), '')
-      .trim()
-      .replaceAll(RegExp(r'\s+'), '-')
-      .toLowerCase();
+  String _safeName(String name) {
+    final cleaned = name
+        .replaceAll(RegExp(r'''[<>:"/\\|?*]'''), '')
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '-')
+        .toLowerCase();
+    return cleaned.isEmpty ? 'world' : cleaned;
+  }
 
   Future<void> _importArchive() => _run(() async {
         final picked = await FilePicker.platform.pickFiles(
-          dialogTitle: 'Choose a .gmhw archive',
+          dialogTitle: context.l10n.importPickArchive,
           type: FileType.any,
         );
         final path = picked?.files.firstOrNull?.path;
-        if (path == null) return;
+        if (path == null || !mounted) return;
 
         final result =
             await ref.read(projectArchiveServiceProvider).importArchive(path);
+        if (!mounted) return;
         result.fold(
           (worldId) {
-            _notify('World imported.');
+            _notify(context.l10n.worldImported);
             ref.read(searchRepositoryProvider).rebuildIndex(worldId);
             if (mounted) context.go(Routes.home(worldId));
           },
-          (error) => _notify(error.userMessage),
+          (error) => _notify(localizedError(context, error)),
         );
       });
 
@@ -164,18 +174,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final confirmed = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Restore this backup?'),
-            content: Text(
-                'The world will be replaced with the contents of '
-                '"${backup.fileName}". A safety backup of the current state '
-                'is taken first.'),
+            title: Text(context.l10n.restoreBackupTitle),
+            content: Text(context.l10n.restoreBackupBody(backup.fileName)),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel')),
+                  child: Text(context.l10n.cancel)),
               FilledButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Restore')),
+                  child: Text(context.l10n.restore)),
             ],
           ),
         );
@@ -185,22 +192,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         await ref.read(backupServiceProvider).backupNow(widget.worldId);
         final result =
             await ref.read(backupServiceProvider).restore(backup.path);
+        if (!mounted) return;
         result.fold(
           (worldId) {
             ref.read(searchRepositoryProvider).rebuildIndex(worldId);
-            _notify('Backup restored.');
+            _notify(context.l10n.backupRestored);
             _refreshBackups();
           },
-          (error) => _notify(error.userMessage),
+          (error) => _notify(localizedError(context, error)),
         );
       });
 
   @override
   Widget build(BuildContext context) {
     final world = ref.watch(worldProvider(widget.worldId)).valueOrNull;
+    final locale = ref.watch(localeControllerProvider);
+    final l = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings & Backup')),
+      appBar: AppBar(title: Text(l.settingsTitle)),
       body: AbsorbPointer(
         absorbing: _busy,
         child: ListView(
@@ -208,69 +218,88 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           children: [
             if (_busy) const LinearProgressIndicator(minHeight: 2),
             _SectionCard(
-              title: 'Export "${world?.name ?? '…'}"',
-              subtitle:
-                  'Everything stays on this device until you share it.',
+              title: l.languageSection,
+              children: [
+                _LanguageTile(
+                  label: l.languageSystem,
+                  selected: locale == null,
+                  onTap: () => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(null),
+                ),
+                _LanguageTile(
+                  label: l.languageEnglish,
+                  selected: locale?.languageCode == 'en',
+                  onTap: () => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(const Locale('en')),
+                ),
+                _LanguageTile(
+                  label: l.languageRussian,
+                  selected: locale?.languageCode == 'ru',
+                  onTap: () => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(const Locale('ru')),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            _SectionCard(
+              title: l.exportSection(world?.name ?? '…'),
+              subtitle: l.exportSubtitle,
               children: [
                 ListTile(
                   leading: const Icon(Icons.inventory_2_outlined),
-                  title: const Text('Full project archive (.gmhw)'),
-                  subtitle: const Text(
-                      'Database + all media in one file. Use it to move '
-                      'between devices.',
-                      style: TextStyle(fontSize: 11.5)),
+                  title: Text(l.exportArchiveTitle),
+                  subtitle: Text(l.exportArchiveSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
                   onTap: _exportArchive,
                 ),
                 ListTile(
                   leading: const Icon(Icons.data_object),
-                  title: const Text('JSON data export'),
-                  subtitle: const Text(
-                      'All entries, links and metadata as readable JSON.',
-                      style: TextStyle(fontSize: 11.5)),
+                  title: Text(l.exportJsonTitle),
+                  subtitle: Text(l.exportJsonSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
                   onTap: _exportJson,
                 ),
                 ListTile(
                   leading: const Icon(Icons.picture_as_pdf_outlined),
-                  title: const Text('PDF world book'),
-                  subtitle: const Text(
-                      'A printable book of your world, chapter per category.',
-                      style: TextStyle(fontSize: 11.5)),
+                  title: Text(l.exportPdfTitle),
+                  subtitle: Text(l.exportPdfSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
                   onTap: _exportPdf,
                 ),
               ],
             ),
             const SizedBox(height: 14),
             _SectionCard(
-              title: 'Import',
+              title: l.importSection,
               children: [
                 ListTile(
                   leading: const Icon(Icons.unarchive_outlined),
-                  title: const Text('Import project archive'),
-                  subtitle: const Text(
-                      'Restores a .gmhw file, including all media.',
-                      style: TextStyle(fontSize: 11.5)),
+                  title: Text(l.importArchiveTitle),
+                  subtitle: Text(l.importArchiveSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
                   onTap: _importArchive,
                 ),
               ],
             ),
             const SizedBox(height: 14),
             _SectionCard(
-              title: 'Backups',
-              subtitle: 'A backup is taken automatically once a day when '
-                  'you open the app. The last ${GmhConstants.maxAutoBackups} '
-                  'are kept.',
+              title: l.backupsSection,
+              subtitle: l.backupsSubtitle(GmhConstants.maxAutoBackups),
               children: [
                 ListTile(
-                  leading: const Icon(Icons.save_outlined,
-                      color: GmhColors.ember),
-                  title: const Text('Back up now'),
+                  leading:
+                      const Icon(Icons.save_outlined, color: GmhColors.ember),
+                  title: Text(l.backupNow),
                   onTap: _backupNow,
                 ),
                 if (_backups.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 4, 16, 12),
-                    child: Text('No backups yet.',
-                        style: TextStyle(
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                    child: Text(l.noBackups,
+                        style: const TextStyle(
                             fontSize: 12, color: GmhColors.parchmentFaint)),
                   )
                 else
@@ -286,26 +315,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           style: const TextStyle(fontSize: 11)),
                       trailing: TextButton(
                         onPressed: () => _restoreBackup(backup),
-                        child: const Text('Restore'),
+                        child: Text(l.restore),
                       ),
                     ),
               ],
             ),
             const SizedBox(height: 14),
             _SectionCard(
-              title: 'About',
+              title: l.aboutSection,
               children: [
-                const ListTile(
-                  leading: Icon(Icons.shield_outlined),
-                  title: Text('Local-first'),
-                  subtitle: Text(
-                      'All data is stored on this device. No account, no '
-                      'cloud, fully offline.',
-                      style: TextStyle(fontSize: 11.5)),
+                ListTile(
+                  leading: const Icon(Icons.shield_outlined),
+                  title: Text(l.aboutLocalFirst),
+                  subtitle: Text(l.aboutLocalFirstBody,
+                      style: const TextStyle(fontSize: 11.5)),
                 ),
                 ListTile(
                   leading: const Icon(Icons.public),
-                  title: const Text('Switch world'),
+                  title: Text(l.switchWorld),
                   onTap: () => context.go(Routes.worlds()),
                 ),
               ],
@@ -313,6 +340,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LanguageTile extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _LanguageTile({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(
+        selected ? Icons.radio_button_checked : Icons.radio_button_off,
+        size: 19,
+        color: selected ? GmhColors.ember : GmhColors.parchmentDim,
+      ),
+      title: Text(label, style: const TextStyle(fontSize: 13.5)),
+      onTap: onTap,
     );
   }
 }

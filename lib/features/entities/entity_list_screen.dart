@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
@@ -44,37 +45,40 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
           children: [
             Icon(widget.kind.icon, color: widget.kind.color, size: 22),
             const SizedBox(width: 10),
-            Text(widget.kind.pluralLabel),
+            Text(widget.kind.localizedPlural(context)),
           ],
         ),
         actions: [
           IconButton(
-            tooltip: _favoritesOnly ? 'Show all' : 'Favorites only',
+            tooltip: _favoritesOnly
+                ? context.l10n.showAll
+                : context.l10n.favoritesOnly,
             icon: Icon(_favoritesOnly ? Icons.star : Icons.star_border,
                 color: _favoritesOnly ? GmhColors.ember : null),
             onPressed: () =>
                 setState(() => _favoritesOnly = !_favoritesOnly),
           ),
           PopupMenuButton<EntitySort>(
-            tooltip: 'Sort',
+            tooltip: context.l10n.sortTooltip,
             icon: const Icon(Icons.sort),
             onSelected: (sort) => setState(() => _sort = sort),
-            itemBuilder: (context) => const [
+            itemBuilder: (context) => [
               PopupMenuItem(
                   value: EntitySort.updatedDesc,
-                  child: Text('Recently edited')),
+                  child: Text(context.l10n.sortRecentlyEdited)),
               PopupMenuItem(
-                  value: EntitySort.nameAsc, child: Text('Name (A–Z)')),
+                  value: EntitySort.nameAsc,
+                  child: Text(context.l10n.sortNameAz)),
               PopupMenuItem(
                   value: EntitySort.createdDesc,
-                  child: Text('Newest first')),
+                  child: Text(context.l10n.sortNewestFirst)),
             ],
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'newOfKind',
-        tooltip: 'New ${widget.kind.label}',
+        tooltip: context.l10n.newOfKind(widget.kind.localizedLabel(context)),
         onPressed: () => showNewEntityDialog(context, ref, widget.worldId,
             initialKind: widget.kind),
         child: const Icon(Icons.add),
@@ -85,7 +89,8 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Filter ${widget.kind.pluralLabel.toLowerCase()}…',
+                hintText: context.l10n.filterHint(
+                    widget.kind.localizedPlural(context).toLowerCase()),
                 prefixIcon: const Icon(Icons.filter_alt_outlined, size: 18),
               ),
               onChanged: (text) =>
@@ -119,7 +124,8 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
           Expanded(
             child: entities.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('Error: $e')),
+              error: (e, _) =>
+                  Center(child: Text(context.l10n.errorGeneric('$e'))),
               data: (list) {
                 final visible = _filter.isEmpty
                     ? list
@@ -138,7 +144,8 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                             color: widget.kind.color.withValues(alpha: 0.4)),
                         const SizedBox(height: 10),
                         Text(
-                          'No ${widget.kind.pluralLabel.toLowerCase()} yet',
+                          context.l10n.noEntriesOfKind(
+                              widget.kind.localizedPlural(context)),
                           style: const TextStyle(
                               color: GmhColors.parchmentDim),
                         ),

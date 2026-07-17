@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme/gmh_theme.dart';
@@ -21,22 +22,23 @@ class RelationsPanel extends ConsumerWidget {
 
   Future<void> _addManualLink(BuildContext context, WidgetRef ref) async {
     final target = await showEntityPickerDialog(context,
-        worldId: entity.worldId, title: 'Add relation');
+        worldId: entity.worldId, title: context.l10n.addRelation);
     if (target == null || !context.mounted) return;
 
     final roleController = TextEditingController(text: LinkRoles.related);
     final role = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Relation to "${target.name}"'),
+        title: Text(context.l10n.relationToTitle(target.name)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: roleController,
-              decoration: const InputDecoration(
-                  labelText: 'Role', hintText: 'e.g. owner, ally, rival'),
+              decoration: InputDecoration(
+                  labelText: context.l10n.roleLabel,
+                  hintText: context.l10n.roleHint),
             ),
             const SizedBox(height: 10),
             Wrap(
@@ -44,7 +46,7 @@ class RelationsPanel extends ConsumerWidget {
               children: [
                 for (final suggestion in LinkRoles.suggestions)
                   ActionChip(
-                    label: Text(LinkRoles.label(suggestion),
+                    label: Text(localizedRoleLabel(context, suggestion),
                         style: const TextStyle(fontSize: 11.5)),
                     onPressed: () => roleController.text = suggestion,
                   ),
@@ -55,11 +57,11 @@ class RelationsPanel extends ConsumerWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () =>
                   Navigator.pop(context, roleController.text.trim()),
-              child: const Text('Add')),
+              child: Text(context.l10n.add)),
         ],
       ),
     );
@@ -87,7 +89,7 @@ class RelationsPanel extends ConsumerWidget {
         Row(
           children: [
             Expanded(
-              child: Text('RELATIONS',
+              child: Text(context.l10n.relationsCaps,
                   style: const TextStyle(
                       fontSize: 10.5,
                       letterSpacing: 1.4,
@@ -95,13 +97,13 @@ class RelationsPanel extends ConsumerWidget {
                       color: GmhColors.parchmentFaint)),
             ),
             IconButton(
-              tooltip: 'Add relation',
+              tooltip: context.l10n.addRelation,
               icon: const Icon(Icons.add, size: 17),
               visualDensity: VisualDensity.compact,
               onPressed: () => _addManualLink(context, ref),
             ),
             IconButton(
-              tooltip: 'Open in graph',
+              tooltip: context.l10n.openInGraph,
               icon: const Icon(Icons.hub_outlined, size: 16),
               visualDensity: VisualDensity.compact,
               onPressed: () => context.go(
@@ -110,33 +112,33 @@ class RelationsPanel extends ConsumerWidget {
           ],
         ),
         if (outgoing.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 6),
-            child: Text('No outgoing relations yet.',
-                style:
-                    TextStyle(fontSize: 12, color: GmhColors.parchmentFaint)),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(context.l10n.noOutgoingRelations,
+                style: const TextStyle(
+                    fontSize: 12, color: GmhColors.parchmentFaint)),
           )
         else
           _LinkGroupList(
             links: outgoing,
             worldId: entity.worldId,
             direction: _Direction.outgoing,
-            roleLabel: (role) => LinkRoles.label(role),
+            roleLabel: (role) => localizedRoleLabel(context, role),
           ),
         const SizedBox(height: 14),
-        const Text('BACKLINKS',
-            style: TextStyle(
+        Text(context.l10n.backlinksCaps,
+            style: const TextStyle(
                 fontSize: 10.5,
                 letterSpacing: 1.4,
                 fontWeight: FontWeight.w700,
                 color: GmhColors.parchmentFaint)),
         const SizedBox(height: 4),
         if (incoming.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 6),
-            child: Text('Nothing links here yet.',
-                style:
-                    TextStyle(fontSize: 12, color: GmhColors.parchmentFaint)),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(context.l10n.noBacklinks,
+                style: const TextStyle(
+                    fontSize: 12, color: GmhColors.parchmentFaint)),
           )
         else
           _LinkGroupList(
@@ -144,8 +146,8 @@ class RelationsPanel extends ConsumerWidget {
             worldId: entity.worldId,
             direction: _Direction.incoming,
             roleLabel: (role) => role == LinkRoles.mention
-                ? 'Mentioned in'
-                : '${LinkRoles.label(role)} ←',
+                ? localizedRoleLabel(context, LinkRoles.mention)
+                : '${localizedRoleLabel(context, role)} ←',
           ),
       ],
     );
@@ -227,16 +229,16 @@ class _LinkRow extends ConsumerWidget {
                   style: const TextStyle(fontSize: 13)),
             ),
             if (link.origin == LinkOrigin.document)
-              const Tooltip(
-                message: 'From a document mention',
-                child: Icon(Icons.notes, size: 13,
-                    color: GmhColors.parchmentFaint),
+              Tooltip(
+                message: context.l10n.fromDocumentMention,
+                child: const Icon(Icons.notes,
+                    size: 13, color: GmhColors.parchmentFaint),
               )
             else if (link.origin == LinkOrigin.attribute)
-              const Tooltip(
-                message: 'From a structured field',
-                child: Icon(Icons.tune, size: 13,
-                    color: GmhColors.parchmentFaint),
+              Tooltip(
+                message: context.l10n.fromStructuredField,
+                child: const Icon(Icons.tune,
+                    size: 13, color: GmhColors.parchmentFaint),
               )
             else if (direction == _Direction.outgoing)
               InkWell(

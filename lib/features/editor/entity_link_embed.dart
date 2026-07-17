@@ -5,6 +5,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -66,7 +67,7 @@ class EntityLinkEmbedBuilder extends EmbedBuilder {
   Widget build(BuildContext context, EmbedContext embedContext) {
     final payload = _decode(embedContext.node);
     final id = payload?['id'] as String?;
-    final label = payload?['label'] as String? ?? 'unknown';
+    final label = payload?['label'] as String? ?? '';
     return _EntityLinkChip(worldId: worldId, entityId: id, fallback: label);
   }
 }
@@ -87,7 +88,8 @@ class _EntityLinkChip extends ConsumerWidget {
     final entity = entityId == null
         ? null
         : ref.watch(entityProvider(entityId!)).valueOrNull;
-    final label = entity?.name ?? fallback;
+    final label = entity?.name ??
+        (fallback.isEmpty ? context.l10n.missingLink : fallback);
     final color = entity?.kind.color ?? GmhColors.parchmentDim;
     final broken = entityId == null || (entity?.isDeleted ?? false);
 

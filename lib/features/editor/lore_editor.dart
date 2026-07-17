@@ -1,23 +1,29 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:cross_file/cross_file.dart';
+import 'package:flutter/foundation.dart' show Uint8List;
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/debouncer.dart';
+import '../attachments/attachment_utils.dart';
 import '../entities/widgets/entity_picker_dialog.dart';
 import 'entity_link_embed.dart';
+import 'file_attachment_embed.dart';
 import 'image_embed.dart';
 import 'version_history_sheet.dart';
 
-/// The rich-text lore editor: Quill with entity-link and vault-image embeds,
-/// debounced autosave (mention links and the search index update on every
-/// save) and version checkpoints on close.
+/// The rich-text lore editor: Quill with entity-link, vault-image and
+/// file-attachment embeds; image paste from the clipboard; drag & drop of
+/// files straight into the text; debounced autosave (mention links and the
+/// search index update on every save); version checkpoints on close.
 class LoreEditor extends ConsumerStatefulWidget {
   final String worldId;
   final String entityId;
@@ -43,14 +49,15 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   final _autosave = Debouncer(GmhConstants.autosaveDebounce);
   String _lastSavedJson = '';
   StreamSubscription? _changes;
+  bool _dragging = false;
 
   @override
   void initState() {
     super.initState();
     Document document;
     try {
-      document = Document.fromJson(
-          jsonDecode(widget.initialContentJson) as List);
+      document =
+          Document.fromJson(jsonDecode(widget.initialContentJson) as List);
     } catch (_) {
       document = Document();
     }
@@ -58,6 +65,13 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     _controller = QuillController(
       document: document,
       selection: const TextSelection.collapsed(offset: 0),
+      config: QuillControllerConfig(
+        clipboardConfig: QuillClipboardConfig(
+          // Pasted/copied images land in the vault and embed as media: ids,
+          // so documents stay portable across devices.
+          onImagePaste: _importPastedImage,
+        ),
+      ),
     );
     _changes = _controller.document.changes.listen((_) {
       _autosave(_save);
@@ -91,33 +105,51 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
         .save(entityId: widget.entityId, contentJson: json);
     if (result.isErr && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.error.userMessage)));
+          SnackBar(content: Text(localizedError(context, result.error))));
     }
+  }
+
+  Future<String?> _importPastedImage(Uint8List bytes) async {
+    if (bytes.isEmpty) return null;
+    final media = await ref.read(mediaRepositoryProvider).import(
+          worldId: widget.worldId,
+          fileName: 'pasted-${DateTime.now().millisecondsSinceEpoch}.png',
+          bytes: bytes,
+        );
+    return '$mediaImagePrefix${media.id}';
   }
 
   Future<void> _linkEntity() async {
     final entity = await showEntityPickerDialog(context,
-        worldId: widget.worldId, title: 'Insert link to entry');
+        worldId: widget.worldId, title: context.l10n.insertLinkTitle);
     if (entity == null) return;
     insertEntityLink(_controller, entity);
     _focusNode.requestFocus();
   }
 
   Future<void> _insertImage() async {
-    final picked = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-    );
-    final file = picked?.files.firstOrNull;
-    final bytes = file?.bytes;
-    if (file == null || bytes == null) return;
+    final files = await pickAnyFiles(dialogTitle: context.l10n.editorInsertImage);
+    await _embedFiles(files, imagesOnly: true);
+  }
 
-    final media = await ref.read(mediaRepositoryProvider).import(
-          worldId: widget.worldId,
-          fileName: file.name,
-          bytes: bytes,
-        );
-    insertVaultImage(_controller, media.id);
+  Future<void> _attachFile() async {
+    final files = await pickAnyFiles(dialogTitle: context.l10n.editorAttachFile);
+    await _embedFiles(files);
+  }
+
+  /// Imports files into the vault and embeds them at the cursor —
+  /// images inline, everything else as attachment chips.
+  Future<void> _embedFiles(List<XFile> files, {bool imagesOnly = false}) async {
+    if (files.isEmpty) return;
+    final imported = await importXFiles(ref,
+        worldId: widget.worldId, files: files);
+    for (final item in imported) {
+      if (isImageMime(item.mimeType)) {
+        insertVaultImage(_controller, item.id);
+      } else if (!imagesOnly) {
+        insertFileAttachment(_controller, item);
+      }
+    }
   }
 
   @override
@@ -138,27 +170,32 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
               showFontSize: false,
               showSubscript: false,
               showSuperscript: false,
-              showInlineCode: false,
+              showInlineCode: true,
               showColorButton: false,
               showBackgroundColorButton: false,
               showSearchButton: false,
-              showCodeBlock: false,
+              showCodeBlock: true,
               showIndent: false,
               showDividers: false,
               customButtons: [
                 QuillToolbarCustomButtonOptions(
                   icon: const Icon(Icons.alternate_email, size: 18),
-                  tooltip: 'Link an entry (mention)',
+                  tooltip: context.l10n.editorLinkEntity,
                   onPressed: _linkEntity,
                 ),
                 QuillToolbarCustomButtonOptions(
                   icon: const Icon(Icons.image_outlined, size: 18),
-                  tooltip: 'Insert image',
+                  tooltip: context.l10n.editorInsertImage,
                   onPressed: _insertImage,
                 ),
                 QuillToolbarCustomButtonOptions(
+                  icon: const Icon(Icons.attach_file, size: 18),
+                  tooltip: context.l10n.editorAttachFile,
+                  onPressed: _attachFile,
+                ),
+                QuillToolbarCustomButtonOptions(
                   icon: const Icon(Icons.history, size: 18),
-                  tooltip: 'Version history',
+                  tooltip: context.l10n.editorVersionHistory,
                   onPressed: () => showVersionHistorySheet(
                     context,
                     ref,
@@ -178,17 +215,34 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
           ),
         ),
         Expanded(
-          child: QuillEditor.basic(
-            controller: _controller,
-            focusNode: _focusNode,
-            scrollController: _scrollController,
-            config: QuillEditorConfig(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 48),
-              placeholder: 'Write the lore… Use @ button to link entries.',
-              embedBuilders: [
-                EntityLinkEmbedBuilder(worldId: widget.worldId),
-                VaultImageEmbedBuilder(),
-              ],
+          child: DropTarget(
+            onDragEntered: (_) => setState(() => _dragging = true),
+            onDragExited: (_) => setState(() => _dragging = false),
+            onDragDone: (details) {
+              setState(() => _dragging = false);
+              _embedFiles(details.files);
+            },
+            child: Container(
+              decoration: _dragging
+                  ? BoxDecoration(
+                      border: Border.all(color: GmhColors.ember, width: 1.5),
+                      color: GmhColors.ember.withValues(alpha: 0.05),
+                    )
+                  : null,
+              child: QuillEditor.basic(
+                controller: _controller,
+                focusNode: _focusNode,
+                scrollController: _scrollController,
+                config: QuillEditorConfig(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 48),
+                  placeholder: context.l10n.editorPlaceholder,
+                  embedBuilders: [
+                    EntityLinkEmbedBuilder(worldId: widget.worldId),
+                    VaultImageEmbedBuilder(),
+                    FileAttachmentEmbedBuilder(),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

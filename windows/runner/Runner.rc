@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.gmh" "\0"
-            VALUE "FileDescription", "gmh" "\0"
+            VALUE "FileDescription", "Game Master's Hub" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "gmh" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.gmh. All rights reserved." "\0"
             VALUE "OriginalFilename", "gmh.exe" "\0"
-            VALUE "ProductName", "gmh" "\0"
+            VALUE "ProductName", "Game Master's Hub" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

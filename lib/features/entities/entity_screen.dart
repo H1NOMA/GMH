@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -9,8 +10,8 @@ import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
 import '../editor/lore_editor.dart';
 import '../shell/ui_providers.dart';
+import '../attachments/attachments_panel.dart';
 import 'widgets/attribute_form.dart';
-import 'widgets/gallery_panel.dart';
 import 'widgets/relations_panel.dart';
 import 'widgets/tag_editor.dart';
 
@@ -35,7 +36,7 @@ class EntityScreen extends ConsumerWidget {
     if (entity == null || entity.isDeleted) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(child: Text('This entry no longer exists.')),
+        body: Center(child: Text(context.l10n.entryGone)),
       );
     }
 
@@ -55,7 +56,7 @@ class _EntityScaffold extends ConsumerWidget {
     final saved = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Edit Entry'),
+        title: Text(context.l10n.editEntryTitle),
         content: SizedBox(
           width: 420,
           child: Column(
@@ -64,15 +65,15 @@ class _EntityScaffold extends ConsumerWidget {
               TextField(
                 controller: nameController,
                 autofocus: true,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: context.l10n.nameLabel),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: summaryController,
                 maxLines: 2,
-                decoration: const InputDecoration(
-                    labelText: 'Summary',
-                    hintText: 'One line shown in lists and search'),
+                decoration: InputDecoration(
+                    labelText: context.l10n.summaryLabel,
+                    hintText: context.l10n.summaryHint),
               ),
             ],
           ),
@@ -80,10 +81,10 @@ class _EntityScaffold extends ConsumerWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Save')),
+              child: Text(context.l10n.save)),
         ],
       ),
     );
@@ -98,18 +99,16 @@ class _EntityScaffold extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete "${entity.name}"?'),
-        content: const Text(
-            'The entry is moved to trash; links to it are kept until it is '
-            'purged. You can restore it from search later.'),
+        title: Text(context.l10n.deleteEntryTitle(entity.name)),
+        content: Text(context.l10n.deleteEntryBody),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: GmhColors.danger),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(context.l10n.delete),
           ),
         ],
       ),
@@ -139,8 +138,9 @@ class _EntityScaffold extends ConsumerWidget {
       ),
       actions: [
         IconButton(
-          tooltip:
-              entity.isFavorite ? 'Remove from favorites' : 'Add to favorites',
+          tooltip: entity.isFavorite
+              ? context.l10n.removeFromFavorites
+              : context.l10n.addToFavorites,
           icon: Icon(entity.isFavorite ? Icons.star : Icons.star_border,
               color: entity.isFavorite ? GmhColors.ember : null),
           onPressed: () => ref
@@ -159,14 +159,16 @@ class _EntityScaffold extends ConsumerWidget {
                 _delete(context, ref);
             }
           },
-          itemBuilder: (context) => const [
+          itemBuilder: (context) => [
             PopupMenuItem(
-                value: 'edit', child: Text('Edit name & summary')),
-            PopupMenuItem(value: 'graph', child: Text('Show in graph')),
+                value: 'edit',
+                child: Text(context.l10n.menuEditNameSummary)),
+            PopupMenuItem(
+                value: 'graph', child: Text(context.l10n.menuShowInGraph)),
             PopupMenuItem(
                 value: 'delete',
-                child: Text('Delete',
-                    style: TextStyle(color: GmhColors.danger))),
+                child: Text(context.l10n.delete,
+                    style: const TextStyle(color: GmhColors.danger))),
           ],
         ),
       ],
@@ -198,9 +200,9 @@ class _EntityScaffold extends ConsumerWidget {
         appBar: appBar,
         body: Column(
           children: [
-            const TabBar(tabs: [
-              Tab(text: 'Document'),
-              Tab(text: 'Details'),
+            TabBar(tabs: [
+              Tab(text: context.l10n.tabDocument),
+              Tab(text: context.l10n.tabDetails),
             ]),
             Expanded(
               child: TabBarView(
@@ -267,7 +269,7 @@ class _SidePanel extends StatelessWidget {
         const SizedBox(height: 16),
         RelationsPanel(entity: entity),
         const SizedBox(height: 16),
-        GalleryPanel(entity: entity),
+        AttachmentsPanel(entity: entity),
       ],
     );
   }

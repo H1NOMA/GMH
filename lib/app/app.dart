@@ -3,7 +3,8 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/constants.dart';
+import 'l10n_ext.dart';
+import 'locale_provider.dart';
 import 'router.dart';
 import 'theme/gmh_theme.dart';
 
@@ -30,14 +31,19 @@ class _GmhAppState extends ConsumerState<GmhApp> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeControllerProvider);
     return MaterialApp.router(
-      title: GmhConstants.appName,
+      onGenerateTitle: (context) => context.l10n.appTitle,
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.dark(),
       darkTheme: GmhTheme.dark(),
       routerConfig: _router,
-      localizationsDelegates: FlutterQuillLocalizations.localizationsDelegates,
-      supportedLocales: FlutterQuillLocalizations.supportedLocales,
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        ...FlutterQuillLocalizations.localizationsDelegates,
+      ],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/models/entity.dart';
@@ -19,7 +20,7 @@ class TagEditor extends ConsumerWidget {
     final name = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Add Tag'),
+        title: Text(context.l10n.addTagTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,7 +28,8 @@ class TagEditor extends ConsumerWidget {
             TextField(
               controller: controller,
               autofocus: true,
-              decoration: const InputDecoration(hintText: 'Tag name'),
+              decoration:
+                  InputDecoration(hintText: context.l10n.tagNameHint),
               onSubmitted: (text) => Navigator.pop(context, text),
             ),
             if (existing.isNotEmpty) ...[
@@ -51,10 +53,10 @@ class TagEditor extends ConsumerWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(context, controller.text),
-              child: const Text('Add')),
+              child: Text(context.l10n.add)),
         ],
       ),
     );
@@ -86,7 +88,8 @@ class TagEditor extends ConsumerWidget {
         ActionChip(
           avatar:
               const Icon(Icons.add, size: 14, color: GmhColors.parchmentDim),
-          label: const Text('Tag', style: TextStyle(fontSize: 11.5)),
+          label:
+              Text(context.l10n.tagChip, style: const TextStyle(fontSize: 11.5)),
           visualDensity: VisualDensity.compact,
           onPressed: () => _addTag(context, ref),
         ),

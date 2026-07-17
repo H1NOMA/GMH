@@ -1,0 +1,196 @@
+import 'package:flutter/widgets.dart';
+
+/// Russian translations for template-defined strings (section titles, field
+/// labels, hints and select options).
+///
+/// Templates are pure domain data with stable English strings — those strings
+/// double as storage values for select fields, so the database stays
+/// language-neutral and worlds survive language switches. The UI translates
+/// them at render time via [trTemplate].
+String trTemplate(BuildContext context, String source) {
+  if (Localizations.localeOf(context).languageCode != 'ru') return source;
+  return _ru[source] ?? source;
+}
+
+const _ru = <String, String>{
+  // ------------------------------------------------------- section titles
+  'Identity': 'Личность',
+  'Connections': 'Связи',
+  'Roleplay': 'Отыгрыш',
+  'Overview': 'Обзор',
+  'Detail': 'Подробности',
+  'Provenance': 'Происхождение',
+  'Ecology': 'Экология',
+  'When & Where': 'Когда и где',
+  'Who & What': 'Кто и что',
+  'Timeline': 'Хронология',
+  'Archive': 'Архив',
+  'Book': 'Книга',
+  'Table': 'Игровой стол',
+  'Quest': 'Квест',
+  'Cast & Stage': 'Действующие лица и сцена',
+  'Session': 'Сессия',
+  'Outcome': 'Итоги',
+
+  // --------------------------------------------------------- field labels
+  'Title / Epithet': 'Титул / Прозвище',
+  'Race / Ancestry': 'Раса / Происхождение',
+  'Class / Profession': 'Класс / Профессия',
+  'Alignment': 'Мировоззрение',
+  'Status': 'Статус',
+  'Home / Base': 'Дом / База',
+  'Factions': 'Фракции',
+  'Goals & Motivation': 'Цели и мотивация',
+  'Secrets (DM only)': 'Секреты (только для мастера)',
+  'Voice & Mannerisms': 'Голос и манеры',
+  'Type': 'Тип',
+  'Population': 'Население',
+  'Government': 'Форма правления',
+  'Within': 'Находится в',
+  'Ruler': 'Правитель',
+  'Notable Sights': 'Достопримечательности',
+  'Adventure Hooks': 'Зацепки для приключений',
+  'Rarity': 'Редкость',
+  'Attunement': 'Настройка',
+  'Properties / Damage': 'Свойства / Урон',
+  'Current Owner': 'Текущий владелец',
+  'Created / Forged at': 'Создано / Выковано в',
+  'Related Events': 'Связанные события',
+  'Challenge Rating': 'Уровень опасности',
+  'Size': 'Размер',
+  'Habitat': 'Среда обитания',
+  'Behavior & Tactics': 'Поведение и тактика',
+  'Abilities': 'Способности',
+  'Leader': 'Лидер',
+  'Headquarters': 'Штаб-квартира',
+  'Ideology & Goals': 'Идеология и цели',
+  'Resources & Assets': 'Ресурсы и активы',
+  'In-world Date': 'Дата в мире',
+  'Era': 'Эпоха',
+  'Locations': 'Локации',
+  'Participants': 'Участники',
+  'Outcome & Consequences': 'Итог и последствия',
+  'Begins': 'Начало',
+  'Ends': 'Конец',
+  'Defining Traits': 'Отличительные черты',
+  'Deities': 'Божества',
+  'Domains': 'Домены',
+  'Tenets & Rites': 'Догматы и обряды',
+  'Source of Power': 'Источник силы',
+  'Rules & Limits': 'Правила и ограничения',
+  'Costs & Risks': 'Цена и риски',
+  'Tech Level': 'Уровень технологий',
+  'How It Works': 'Как это работает',
+  'Category': 'Категория',
+  'Inspiration / Sources': 'Вдохновение / Источники',
+  'Working Notes': 'Рабочие заметки',
+  'Part of': 'Часть',
+  'Chapter #': 'Номер главы',
+  'Players': 'Игроки',
+  'Current Chapter': 'Текущая глава',
+  'Objectives': 'Цели',
+  'Rewards': 'Награды',
+  'Campaign': 'Кампания',
+  'Quest Giver': 'Квестодатель',
+  'Involved NPCs': 'Участвующие NPC',
+  'Session Date': 'Дата сессии',
+  'Agenda / Planned Beats': 'План / Ключевые сцены',
+  'Player Decisions': 'Решения игроков',
+  'Consequences': 'Последствия',
+
+  // ---------------------------------------------------------------- hints
+  'e.g. The Ashen King': 'например, Пепельный Король',
+  'The larger location containing this one':
+      'Более крупная локация, в которую входит эта',
+  'e.g. 3rd Age, Year 412': 'например, 3-я Эпоха, 412 год',
+  'e.g. Legendary Weapon': 'например, Легендарное оружие',
+  'Parent book or volume this chapter belongs to':
+      'Книга или том, к которому относится эта глава',
+
+  // --------------------------------------------------------- alignments
+  'Lawful Good': 'Законно-добрый',
+  'Neutral Good': 'Нейтрально-добрый',
+  'Chaotic Good': 'Хаотично-добрый',
+  'Lawful Neutral': 'Законно-нейтральный',
+  'True Neutral': 'Истинно нейтральный',
+  'Chaotic Neutral': 'Хаотично-нейтральный',
+  'Lawful Evil': 'Законно-злой',
+  'Neutral Evil': 'Нейтрально-злой',
+  'Chaotic Evil': 'Хаотично-злой',
+
+  // ---------------------------------------------------- character status
+  'Alive': 'Жив',
+  'Dead': 'Мёртв',
+  'Missing': 'Пропал',
+  'Unknown': 'Неизвестно',
+
+  // -------------------------------------------------------- location type
+  'Continent': 'Континент',
+  'Country': 'Страна',
+  'Region': 'Регион',
+  'City': 'Город',
+  'Town': 'Городок',
+  'Village': 'Деревня',
+  'Dungeon': 'Подземелье',
+  'Castle': 'Замок',
+  'Landmark': 'Достопримечательность',
+  'Plane': 'План бытия',
+  'Other': 'Другое',
+
+  // ------------------------------------------------------------ item type
+  'Weapon': 'Оружие',
+  'Armor': 'Броня',
+  'Artifact': 'Артефакт',
+  'Magical Item': 'Магический предмет',
+  'Technology': 'Технология',
+  'Treasure': 'Сокровище',
+  'Tool': 'Инструмент',
+
+  // --------------------------------------------------------------- rarity
+  'Common': 'Обычный',
+  'Uncommon': 'Необычный',
+  'Rare': 'Редкий',
+  'Very Rare': 'Очень редкий',
+  'Legendary': 'Легендарный',
+
+  // -------------------------------------------------------- creature type
+  'Monster': 'Монстр',
+  'Beast': 'Зверь',
+  'Species': 'Вид',
+  'Animal': 'Животное',
+  'Undead': 'Нежить',
+  'Fiend': 'Исчадие',
+  'Celestial': 'Небожитель',
+  'Dragon': 'Дракон',
+  'Elemental': 'Элементаль',
+  'Fey': 'Фейри',
+  'Unique Entity': 'Уникальная сущность',
+
+  // ----------------------------------------------------------------- size
+  'Tiny': 'Крошечный',
+  'Small': 'Маленький',
+  'Medium': 'Средний',
+  'Large': 'Большой',
+  'Huge': 'Огромный',
+  'Gargantuan': 'Исполинский',
+
+  // --------------------------------------------------------- faction type
+  'Kingdom': 'Королевство',
+  'Guild': 'Гильдия',
+  'Cult': 'Культ',
+  'Order': 'Орден',
+  'Tribe': 'Племя',
+  'Company': 'Компания',
+  'Family': 'Семья',
+  'Civilization': 'Цивилизация',
+
+  // ------------------------------------- campaign & quest statuses (shared)
+  'Planning': 'Планирование',
+  'Active': 'Идёт',
+  'On Hold': 'Приостановлено',
+  'Completed': 'Завершено',
+  'Abandoned': 'Заброшено',
+  'Idea': 'Идея',
+  'Available': 'Доступен',
+  'Failed': 'Провалено',
+};

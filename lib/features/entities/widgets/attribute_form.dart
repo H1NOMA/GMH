@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
+import '../../../app/template_l10n.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../core/utils/ids.dart';
 import '../../../domain/models/entity.dart';
@@ -43,7 +45,7 @@ class AttributeForm extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(2, 14, 2, 8),
             child: Text(
-              section.title.toUpperCase(),
+              trTemplate(context, section.title).toUpperCase(),
               style: const TextStyle(
                 fontSize: 10.5,
                 letterSpacing: 1.4,
@@ -87,23 +89,23 @@ class _FieldEditor extends ConsumerWidget {
       case FieldType.text:
       case FieldType.date:
         return _TextValueField(
-          label: field.label,
-          hint: field.hint,
+          label: trTemplate(context, field.label),
+          hint: trTemplate(context, field.hint),
           initialValue: value?.toString() ?? '',
           onCommitted: onChanged,
         );
       case FieldType.longText:
         return _TextValueField(
-          label: field.label,
-          hint: field.hint,
+          label: trTemplate(context, field.label),
+          hint: trTemplate(context, field.hint),
           initialValue: value?.toString() ?? '',
           maxLines: 4,
           onCommitted: onChanged,
         );
       case FieldType.number:
         return _TextValueField(
-          label: field.label,
-          hint: field.hint,
+          label: trTemplate(context, field.label),
+          hint: trTemplate(context, field.hint),
           initialValue: value?.toString() ?? '',
           keyboardType: TextInputType.number,
           onCommitted: (text) =>
@@ -112,28 +114,29 @@ class _FieldEditor extends ConsumerWidget {
       case FieldType.select:
         return DropdownButtonFormField<String>(
           value: field.options.contains(value) ? value as String : null,
-          decoration: InputDecoration(labelText: field.label),
+          decoration: InputDecoration(
+              labelText: trTemplate(context, field.label)),
           items: [
             const DropdownMenuItem<String>(
                 value: '', child: Text('—', style: TextStyle(fontSize: 13))),
             for (final option in field.options)
               DropdownMenuItem(
                   value: option,
-                  child:
-                      Text(option, style: const TextStyle(fontSize: 13))),
+                  child: Text(trTemplate(context, option),
+                      style: const TextStyle(fontSize: 13))),
           ],
           onChanged: (selected) =>
               onChanged(selected == null || selected.isEmpty ? null : selected),
         );
       case FieldType.stringList:
         return _StringListField(
-          label: field.label,
+          label: trTemplate(context, field.label),
           values: value is List ? value.map((v) => v.toString()).toList() : [],
           onChanged: onChanged,
         );
       case FieldType.checklist:
         return _ChecklistField(
-          label: field.label,
+          label: trTemplate(context, field.label),
           items: value is List
               ? [
                   for (final item in value)
@@ -254,7 +257,7 @@ class _StringListField extends StatelessWidget {
     final added = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add to $label'),
+        title: Text(context.l10n.addToList(label)),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -263,10 +266,10 @@ class _StringListField extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(context, controller.text),
-              child: const Text('Add')),
+              child: Text(context.l10n.add)),
         ],
       ),
     );
@@ -327,7 +330,7 @@ class _ChecklistField extends StatelessWidget {
     final added = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add to $label'),
+        title: Text(context.l10n.addToList(label)),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -336,10 +339,10 @@ class _ChecklistField extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(context, controller.text),
-              child: const Text('Add')),
+              child: Text(context.l10n.add)),
         ],
       ),
     );
@@ -422,13 +425,13 @@ class _EntityRefField extends ConsumerWidget {
         ? null
         : ref.watch(entityProvider(entityId!)).valueOrNull;
     return _LabeledGroup(
-      label: field.label,
+      label: trTemplate(context, field.label),
       trailing: entityId == null
           ? null
           : IconButton(
               icon: const Icon(Icons.close, size: 15),
               visualDensity: VisualDensity.compact,
-              tooltip: 'Clear',
+              tooltip: context.l10n.clear,
               onPressed: () => onChanged(null),
             ),
       child: OutlinedButton.icon(
@@ -442,7 +445,7 @@ class _EntityRefField extends ConsumerWidget {
           color: target?.kind.color ?? GmhColors.parchmentDim,
         ),
         label: Text(
-          target?.name ?? 'Choose…',
+          target?.name ?? context.l10n.choose,
           style: TextStyle(
             fontSize: 13,
             color: target == null
@@ -456,7 +459,7 @@ class _EntityRefField extends ConsumerWidget {
             context,
             worldId: worldId,
             kinds: field.refKinds,
-            title: field.label,
+            title: trTemplate(context, field.label),
           );
           if (picked != null) onChanged(entityRefValue(picked.id));
         },
@@ -481,7 +484,7 @@ class _EntityRefListField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _LabeledGroup(
-      label: field.label,
+      label: trTemplate(context, field.label),
       trailing: IconButton(
         icon: const Icon(Icons.add, size: 17),
         visualDensity: VisualDensity.compact,
@@ -490,7 +493,7 @@ class _EntityRefListField extends ConsumerWidget {
             context,
             worldId: worldId,
             kinds: field.refKinds,
-            title: field.label,
+            title: trTemplate(context, field.label),
           );
           if (picked != null && !entityIds.contains(picked.id)) {
             onChanged(
@@ -532,7 +535,7 @@ class _EntityRefChip extends ConsumerWidget {
         size: 14,
         color: entity?.kind.color ?? GmhColors.parchmentDim,
       ),
-      label: Text(entity?.name ?? 'missing'),
+      label: Text(entity?.name ?? context.l10n.missingLink),
       onDeleted: onDeleted,
     );
   }
@@ -585,10 +588,10 @@ class _EmptyHint extends StatelessWidget {
   const _EmptyHint();
 
   @override
-  Widget build(BuildContext context) => const Padding(
-        padding: EdgeInsets.symmetric(vertical: 4),
-        child: Text('None',
-            style:
-                TextStyle(fontSize: 12, color: GmhColors.parchmentFaint)),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Text(context.l10n.none,
+            style: const TextStyle(
+                fontSize: 12, color: GmhColors.parchmentFaint)),
       );
 }

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
-import '../../core/constants.dart';
-import '../../core/utils/dates.dart';
+
 import '../../domain/models/world.dart';
 import '../../domain/repositories/repositories.dart';
 import '../shell/ui_providers.dart';
@@ -29,7 +29,7 @@ class WorldPickerScreen extends ConsumerWidget {
     final created = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Create a New World'),
+        title: Text(context.l10n.createWorldTitle),
         content: SizedBox(
           width: 420,
           child: Column(
@@ -38,15 +38,16 @@ class WorldPickerScreen extends ConsumerWidget {
               TextField(
                 controller: nameController,
                 autofocus: true,
-                decoration: const InputDecoration(
-                    labelText: 'World name', hintText: 'e.g. The Aurion Realms'),
+                decoration: InputDecoration(
+                    labelText: context.l10n.worldNameLabel,
+                    hintText: context.l10n.worldNameHint),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: descriptionController,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                    labelText: 'Description (optional)'),
+                decoration: InputDecoration(
+                    labelText: context.l10n.worldDescriptionLabel),
               ),
             ],
           ),
@@ -54,10 +55,10 @@ class WorldPickerScreen extends ConsumerWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Create')),
+              child: Text(context.l10n.create)),
         ],
       ),
     );
@@ -87,11 +88,11 @@ class WorldPickerScreen extends ConsumerWidget {
                 Icon(Icons.auto_stories,
                     size: 56, color: GmhColors.ember.withValues(alpha: 0.9)),
                 const SizedBox(height: 12),
-                Text(GmhConstants.appName,
+                Text(context.l10n.appTitle,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displaySmall),
                 const SizedBox(height: 4),
-                Text('Your worlds, entirely yours — stored on this device.',
+                Text(context.l10n.worldsTagline,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 28),
@@ -99,13 +100,14 @@ class WorldPickerScreen extends ConsumerWidget {
                   child: worlds.when(
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
-                    error: (e, _) => Text('Could not load worlds: $e'),
+                    error: (e, _) =>
+                        Text(context.l10n.worldsLoadError('$e')),
                     data: (list) => list.isEmpty
                         ? Card(
                             child: Padding(
                               padding: const EdgeInsets.all(24),
                               child: Text(
-                                'No worlds yet. Forge your first one below.',
+                                context.l10n.worldsEmpty,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
@@ -131,7 +133,9 @@ class WorldPickerScreen extends ConsumerWidget {
                                           .titleMedium),
                                   subtitle: Text(
                                     world.description.isEmpty
-                                        ? 'Edited ${timeAgo(world.updatedAt)}'
+                                        ? context.l10n.worldEdited(
+                                            localizedTimeAgo(
+                                                context, world.updatedAt))
                                         : world.description,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -149,7 +153,7 @@ class WorldPickerScreen extends ConsumerWidget {
                 FilledButton.icon(
                   onPressed: () => _createWorld(context, ref),
                   icon: const Icon(Icons.add),
-                  label: const Text('Create New World'),
+                  label: Text(context.l10n.createNewWorld),
                 ),
               ],
             ),

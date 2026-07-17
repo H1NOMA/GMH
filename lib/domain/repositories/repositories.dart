@@ -133,6 +133,23 @@ abstract interface class MediaRepository {
   /// Absolute path of the media file on disk.
   Future<String> absolutePath(MediaItem item);
 
+  /// Renames the display name of an attachment (the vault file itself is
+  /// content-addressed and never renamed, so links stay valid).
+  Future<void> rename(String mediaId, String newFileName);
+
+  /// Replaces the bytes behind an attachment. Every entry referencing this
+  /// media id sees the new content; the old vault file is removed when no
+  /// other media row shares it.
+  Future<MediaItem> replaceBytes({
+    required String mediaId,
+    required String fileName,
+    required List<int> bytes,
+  });
+
+  /// Deletes the media row and its vault file if nothing references it
+  /// anymore (galleries, covers, or inline document embeds).
+  Future<void> deleteIfUnreferenced(String mediaId);
+
   Stream<List<GalleryEntry>> watchGallery(String entityId);
   Future<void> addToGallery(String entityId, String mediaId,
       {String caption});
@@ -170,4 +187,7 @@ abstract interface class SettingsRepository {
 abstract final class SettingsKeys {
   static const lastOpenedWorld = 'lastOpenedWorld';
   static const lastAutoBackup = 'lastAutoBackup';
+
+  /// Explicit UI language ('en'/'ru'); absent = follow the system language.
+  static const appLocale = 'appLocale';
 }
