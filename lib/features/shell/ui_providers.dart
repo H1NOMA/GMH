@@ -28,6 +28,7 @@ final worldProvider = FutureProvider.family<World?, String>(
 typedef EntityListArgs = ({
   String worldId,
   EntityKind? kind,
+  String? customCategoryId,
   String? tagId,
   bool favoritesOnly,
   EntitySort sort,
@@ -38,6 +39,7 @@ final entityListProvider =
   return ref.watch(entityRepositoryProvider).watchEntities(
         args.worldId,
         kind: args.kind,
+        customCategoryId: args.customCategoryId,
         tagId: args.tagId,
         favoritesOnly: args.favoritesOnly,
         sort: args.sort,
@@ -79,6 +81,7 @@ final entityCountsProvider =
   ref.watch(entityListProvider((
     worldId: worldId,
     kind: null,
+    customCategoryId: null,
     tagId: null,
     favoritesOnly: false,
     sort: EntitySort.updatedDesc,
@@ -91,6 +94,7 @@ final recentEntitiesProvider =
   ref.watch(entityListProvider((
     worldId: worldId,
     kind: null,
+    customCategoryId: null,
     tagId: null,
     favoritesOnly: false,
     sort: EntitySort.updatedDesc,

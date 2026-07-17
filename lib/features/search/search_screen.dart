@@ -12,6 +12,7 @@ import '../../core/constants.dart';
 import '../../core/utils/debouncer.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/models/search_result.dart';
+import '../categories/category_ui.dart';
 import '../entities/widgets/new_entity_dialog.dart';
 import '../shell/ui_providers.dart';
 
@@ -31,6 +32,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   final _debouncer = Debouncer(GmhConstants.searchDebounce);
   List<SearchResult> _results = const [];
   EntityKind? _kindFilter;
+  String? _categoryFilter;
   bool _searching = false;
 
   @override
@@ -50,9 +52,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       return;
     }
     setState(() => _searching = true);
-    final results = await ref
-        .read(searchRepositoryProvider)
-        .search(widget.worldId, query, kind: _kindFilter);
+    final results = await ref.read(searchRepositoryProvider).search(
+        widget.worldId, query,
+        kind: _kindFilter, customCategoryId: _categoryFilter);
     if (!mounted) return;
     setState(() {
       _results = results;
@@ -110,24 +112,53 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   child: FilterChip(
                     label: Text(context.l10n.searchAll,
                         style: const TextStyle(fontSize: 11.5)),
-                    selected: _kindFilter == null,
+                    selected: _kindFilter == null && _categoryFilter == null,
                     onSelected: (_) {
-                      setState(() => _kindFilter = null);
+                      setState(() {
+                        _kindFilter = null;
+                        _categoryFilter = null;
+                      });
                       unawaited(_search());
                     },
                   ),
                 ),
                 for (final kind in EntityKind.values)
+                  if (kind != EntityKind.custom)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: FilterChip(
+                        avatar: Icon(kind.icon, size: 13, color: kind.color),
+                        label: Text(kind.localizedPlural(context),
+                            style: const TextStyle(fontSize: 11.5)),
+                        selected: _kindFilter == kind,
+                        onSelected: (selected) {
+                          setState(() {
+                            _kindFilter = selected ? kind : null;
+                            _categoryFilter = null;
+                          });
+                          unawaited(_search());
+                        },
+                      ),
+                    ),
+                for (final category in ref
+                        .watch(worldCategoriesProvider(widget.worldId))
+                        .valueOrNull ??
+                    [])
                   Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: FilterChip(
-                      avatar: Icon(kind.icon, size: 13, color: kind.color),
-                      label: Text(kind.localizedPlural(context),
+                      avatar: Icon(categoryIconFor(category.icon),
+                          size: 13, color: Color(category.color)),
+                      label: Text(category.name,
                           style: const TextStyle(fontSize: 11.5)),
-                      selected: _kindFilter == kind,
+                      selected: _categoryFilter == category.id,
                       onSelected: (selected) {
-                        setState(
-                            () => _kindFilter = selected ? kind : null);
+                        setState(() {
+                          _categoryFilter =
+                              selected ? category.id : null;
+                          _kindFilter =
+                              selected ? EntityKind.custom : null;
+                        });
                         unawaited(_search());
                       },
                     ),

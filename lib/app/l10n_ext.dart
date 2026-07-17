@@ -33,6 +33,9 @@ extension EntityKindL10n on EntityKind {
       EntityKind.campaign => l.kindCampaign,
       EntityKind.quest => l.kindQuest,
       EntityKind.session => l.kindSession,
+      // Custom entries take their category's name at call sites; this is
+      // only the generic fallback.
+      EntityKind.custom => l.kindCustomEntry,
     };
   }
 
@@ -54,6 +57,7 @@ extension EntityKindL10n on EntityKind {
       EntityKind.campaign => l.kindCampaignPlural,
       EntityKind.quest => l.kindQuestPlural,
       EntityKind.session => l.kindSessionPlural,
+      EntityKind.custom => l.kindCustomEntry,
     };
   }
 }

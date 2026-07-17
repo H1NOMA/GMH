@@ -13,6 +13,11 @@ class Entity {
   final String id;
   final String worldId;
   final EntityKind kind;
+
+  /// Set when [kind] == [EntityKind.custom]: the user-defined category this
+  /// entry belongs to.
+  final String? customCategoryId;
+
   final String name;
 
   /// One-line description shown in lists, search results and link previews.
@@ -31,6 +36,7 @@ class Entity {
     required this.id,
     required this.worldId,
     required this.kind,
+    this.customCategoryId,
     required this.name,
     this.summary = '',
     this.attributes = const {},
@@ -59,11 +65,15 @@ class Entity {
     bool? isFavorite,
     int? updatedAt,
     int? Function()? deletedAt,
+    String? Function()? customCategoryId,
   }) {
     return Entity(
       id: id,
       worldId: worldId,
       kind: kind,
+      customCategoryId: customCategoryId != null
+          ? customCategoryId()
+          : this.customCategoryId,
       name: name ?? this.name,
       summary: summary ?? this.summary,
       attributes: attributes ?? this.attributes,

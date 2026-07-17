@@ -41,6 +41,10 @@ class ProjectArchiveService {
       throw const NotFoundException('World not found.');
     }
 
+    final categories = await (_db.select(_db.customCategories)
+          ..where((c) => c.worldId.equals(worldId)))
+        .get();
+
     final entities = await (_db.select(_db.entities)
           ..where((e) => e.worldId.equals(worldId)))
         .get();
@@ -84,11 +88,23 @@ class ProjectArchiveService {
         'createdAt': world.createdAt,
         'updatedAt': world.updatedAt,
       },
+      'customCategories': [
+        for (final c in categories)
+          {
+            'id': c.id,
+            'name': c.name,
+            'icon': c.icon,
+            'color': c.color,
+            'sortOrder': c.sortOrder,
+            'createdAt': c.createdAt,
+          }
+      ],
       'entities': [
         for (final e in entities)
           {
             'id': e.id,
             'kind': e.kind,
+            'customCategoryId': e.customCategoryId,
             'name': e.name,
             'summary': e.summary,
             'attributes': jsonDecode(e.attributesJson),
@@ -295,11 +311,26 @@ class ProjectArchiveService {
             updatedAt: nowMs(),
           ));
 
+      for (final c in rows('customCategories')) {
+        await _db.into(_db.customCategories).insert(
+              CustomCategoriesCompanion.insert(
+                id: c['id'] as String,
+                worldId: worldId,
+                name: c['name'] as String? ?? 'Category',
+                icon: Value(c['icon'] as String? ?? 'folder'),
+                color: (c['color'] as num?)?.toInt() ?? 0xFFB98BC9,
+                sortOrder: Value((c['sortOrder'] as num?)?.toInt() ?? 0),
+                createdAt: (c['createdAt'] as num?)?.toInt() ?? nowMs(),
+              ),
+            );
+      }
+
       for (final e in rows('entities')) {
         await _db.into(_db.entities).insert(EntitiesCompanion.insert(
               id: e['id'] as String,
               worldId: worldId,
               kind: e['kind'] as String,
+              customCategoryId: Value(e['customCategoryId'] as String?),
               name: e['name'] as String? ?? 'Unnamed',
               summary: Value(e['summary'] as String? ?? ''),
               attributesJson: Value(jsonEncode(e['attributes'] ?? {})),

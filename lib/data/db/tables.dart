@@ -16,12 +16,38 @@ class Worlds extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// User-defined archive categories. Entities of kind `custom` reference one
+/// via `entities.custom_category_id` and otherwise behave exactly like
+/// built-in kinds (documents, links, tags, attachments, search, export).
+@DataClassName('CustomCategoryRow')
+class CustomCategories extends Table {
+  TextColumn get id => text()();
+  TextColumn get worldId =>
+      text().references(Worlds, #id, onDelete: KeyAction.cascade)();
+  TextColumn get name => text()();
+
+  /// Key into the UI icon set (see `categoryIcons`).
+  TextColumn get icon => text().withDefault(const Constant('folder'))();
+
+  /// ARGB color value.
+  IntColumn get color => integer()();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+  IntColumn get createdAt => integer()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DataClassName('EntityRow')
 class Entities extends Table {
   TextColumn get id => text()();
   TextColumn get worldId =>
       text().references(Worlds, #id, onDelete: KeyAction.cascade)();
   TextColumn get kind => text()();
+
+  /// Set when [kind] == 'custom': the user-defined category this entry
+  /// belongs to.
+  TextColumn get customCategoryId => text().nullable()();
   TextColumn get name => text()();
   TextColumn get summary => text().withDefault(const Constant(''))();
   TextColumn get attributesJson => text().withDefault(const Constant('{}'))();

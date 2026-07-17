@@ -33,12 +33,15 @@ class SearchRepositoryImpl implements SearchRepository {
     String worldId,
     String query, {
     EntityKind? kind,
+    String? customCategoryId,
     int limit = 40,
   }) async {
     final match = buildMatchQuery(query);
     if (match.isEmpty) return [];
 
     final kindFilter = kind == null ? '' : 'AND e.kind = ? ';
+    final categoryFilter =
+        customCategoryId == null ? '' : 'AND e.custom_category_id = ? ';
     final rows = await _db.customSelect(
       '''
       SELECT e.id, e.kind, e.name, e.summary,
@@ -51,6 +54,7 @@ class SearchRepositoryImpl implements SearchRepository {
         AND e.world_id = ?
         AND e.deleted_at IS NULL
         $kindFilter
+        $categoryFilter
       ORDER BY rank
       LIMIT ?
       ''',
@@ -58,6 +62,7 @@ class SearchRepositoryImpl implements SearchRepository {
         Variable.withString(match),
         Variable.withString(worldId),
         if (kind != null) Variable.withString(kind.name),
+        if (customCategoryId != null) Variable.withString(customCategoryId),
         Variable.withInt(limit),
       ],
       readsFrom: {_db.entities},

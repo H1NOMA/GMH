@@ -1,7 +1,7 @@
 name: gmh
 description: "GMH - Game Master's Hub. An offline-first world-building and campaign management workspace for Dungeon Masters."
 publish_to: 'none'
-version: 0.2.0
+version: 0.3.0
 
 environment:
   sdk: ^3.8.1

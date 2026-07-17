@@ -1196,6 +1196,84 @@ abstract class AppLocalizations {
   /// **'{count}d ago'**
   String daysAgo(int count);
 
+  /// No description provided for @sectionCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'MY CATEGORIES'**
+  String get sectionCategories;
+
+  /// No description provided for @manageCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Categories'**
+  String get manageCategories;
+
+  /// No description provided for @newCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'New category'**
+  String get newCategory;
+
+  /// No description provided for @renameCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit category'**
+  String get renameCategory;
+
+  /// No description provided for @deleteCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete category'**
+  String get deleteCategory;
+
+  /// No description provided for @deleteCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete category “{name}”?'**
+  String deleteCategoryTitle(String name);
+
+  /// No description provided for @deleteCategoryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{Its {count} entry is preserved and moved to the Concept Archive.} other{Its {count} entries are preserved and moved to the Concept Archive.}}'**
+  String deleteCategoryBody(int count);
+
+  /// No description provided for @deleteCategoryBodyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The category is empty; nothing else changes.'**
+  String get deleteCategoryBodyEmpty;
+
+  /// No description provided for @categoryNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name'**
+  String get categoryNameLabel;
+
+  /// No description provided for @categoryNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Guilds, Kingdoms, Rituals…'**
+  String get categoryNameHint;
+
+  /// No description provided for @chooseIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get chooseIcon;
+
+  /// No description provided for @noCategoriesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No custom categories yet. Create one below — it will behave exactly like the built-in sections.'**
+  String get noCategoriesYet;
+
+  /// No description provided for @kindCustomEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry'**
+  String get kindCustomEntry;
+
   /// No description provided for @kindCharacter.
   ///
   /// In en, this message translates to:

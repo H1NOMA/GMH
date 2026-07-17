@@ -5,6 +5,7 @@ import '../data/backup/pdf_exporter.dart';
 import '../data/backup/project_archive_service.dart';
 import '../data/db/app_database.dart';
 import '../data/db/connection.dart';
+import '../data/repositories/category_repository_impl.dart';
 import '../data/repositories/document_repository_impl.dart';
 import '../data/repositories/entity_repository_impl.dart';
 import '../data/repositories/link_repository_impl.dart';
@@ -46,6 +47,10 @@ final worldRepositoryProvider = Provider<WorldRepository>(
 
 final entityRepositoryProvider = Provider<EntityRepository>(
   (ref) => EntityRepositoryImpl(ref.watch(databaseProvider)),
+);
+
+final categoryRepositoryProvider = Provider<CategoryRepository>(
+  (ref) => CategoryRepositoryImpl(ref.watch(databaseProvider)),
 );
 
 final documentRepositoryProvider = Provider<DocumentRepository>(
@@ -113,7 +118,10 @@ final backupServiceProvider = Provider<BackupService>(
 
 final pdfExporterProvider = Provider<PdfExporter>(
   (ref) => PdfExporter(
-      ref.watch(entityRepositoryProvider), ref.watch(documentRepositoryProvider)),
+    ref.watch(entityRepositoryProvider),
+    ref.watch(documentRepositoryProvider),
+    ref.watch(categoryRepositoryProvider),
+  ),
 );
 
 // ---------------------------------------------------------------- AI-ready

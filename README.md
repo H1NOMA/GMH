@@ -34,6 +34,11 @@ Flutter codebase).
   image galleries with a full-screen viewer, PDFs, documents, audio, video,
   archives; drag & drop on desktop, photo gallery import on mobile; rename,
   replace, captions and safe deletion with vault garbage collection.
+- **Custom categories** — create unlimited archive categories of your own
+  (Guilds, Kingdoms, Rituals…), with icons and colors; rename, reorder and
+  delete them freely. They behave exactly like built-in sections — browsing,
+  search, graph, attachments and export included — and deleting one preserves
+  its entries in the Concept Archive.
 - **Bilingual UI** — full English and Russian localization with a language
   switcher in Settings; the system language is detected on first launch.
 - **AI-ready** — grounding/context-building contracts are in place

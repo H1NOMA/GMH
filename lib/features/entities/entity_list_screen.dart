@@ -5,17 +5,25 @@ import '../../app/l10n_ext.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
+import '../categories/category_ui.dart';
 import '../shell/ui_providers.dart';
 import 'widgets/entity_card.dart';
 import 'widgets/new_entity_dialog.dart';
 
-/// Browsable, filterable list of all entities of one kind.
+/// Browsable, filterable list of all entities of one kind — or, when
+/// [customCategoryId] is set, of one user-defined category (which behaves
+/// exactly like a built-in kind).
 class EntityListScreen extends ConsumerStatefulWidget {
   final String worldId;
   final EntityKind kind;
+  final String? customCategoryId;
 
-  const EntityListScreen(
-      {super.key, required this.worldId, required this.kind});
+  const EntityListScreen({
+    super.key,
+    required this.worldId,
+    required this.kind,
+    this.customCategoryId,
+  });
 
   @override
   ConsumerState<EntityListScreen> createState() => _EntityListScreenState();
@@ -32,20 +40,31 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
     final entities = ref.watch(entityListProvider((
       worldId: widget.worldId,
       kind: widget.kind,
+      customCategoryId: widget.customCategoryId,
       tagId: _tagId,
       favoritesOnly: _favoritesOnly,
       sort: _sort,
     )));
     final tags =
         ref.watch(worldTagsProvider(widget.worldId)).valueOrNull ?? [];
+    final category = widget.customCategoryId == null
+        ? null
+        : ref.watch(categoryMapProvider(widget.worldId))[
+            widget.customCategoryId];
+    final title =
+        category?.name ?? widget.kind.localizedPlural(context);
+    final icon =
+        category == null ? widget.kind.icon : categoryIconFor(category.icon);
+    final color =
+        category == null ? widget.kind.color : Color(category.color);
 
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(widget.kind.icon, color: widget.kind.color, size: 22),
+            Icon(icon, color: color, size: 22),
             const SizedBox(width: 10),
-            Text(widget.kind.localizedPlural(context)),
+            Flexible(child: Text(title, overflow: TextOverflow.ellipsis)),
           ],
         ),
         actions: [
@@ -78,9 +97,11 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'newOfKind',
-        tooltip: context.l10n.newOfKind(widget.kind.localizedLabel(context)),
+        tooltip: context.l10n.newOfKind(
+            category?.name ?? widget.kind.localizedLabel(context)),
         onPressed: () => showNewEntityDialog(context, ref, widget.worldId,
-            initialKind: widget.kind),
+            initialKind: widget.kind,
+            initialCategoryId: widget.customCategoryId),
         child: const Icon(Icons.add),
       ),
       body: Column(
@@ -89,8 +110,7 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               decoration: InputDecoration(
-                hintText: context.l10n.filterHint(
-                    widget.kind.localizedPlural(context).toLowerCase()),
+                hintText: context.l10n.filterHint(title.toLowerCase()),
                 prefixIcon: const Icon(Icons.filter_alt_outlined, size: 18),
               ),
               onChanged: (text) =>
@@ -139,13 +159,11 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(widget.kind.icon,
-                            size: 44,
-                            color: widget.kind.color.withValues(alpha: 0.4)),
+                        Icon(icon,
+                            size: 44, color: color.withValues(alpha: 0.4)),
                         const SizedBox(height: 10),
                         Text(
-                          context.l10n.noEntriesOfKind(
-                              widget.kind.localizedPlural(context)),
+                          context.l10n.noEntriesOfKind(title),
                           style: const TextStyle(
                               color: GmhColors.parchmentDim),
                         ),

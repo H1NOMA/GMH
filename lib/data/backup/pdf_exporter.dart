@@ -13,8 +13,9 @@ import '../../domain/repositories/repositories.dart';
 class PdfExporter {
   final EntityRepository _entities;
   final DocumentRepository _documents;
+  final CategoryRepository _categories;
 
-  PdfExporter(this._entities, this._documents);
+  PdfExporter(this._entities, this._documents, this._categories);
 
   Future<Result<String>> exportWorldBook({
     required String worldId,
@@ -53,13 +54,31 @@ class PdfExporter {
         ),
       ));
 
-      for (final kind in selectedKinds) {
-        final entities = all.where((e) => e.kind == kind).toList()
+      final customCategories = await _categories.categories(worldId);
+      final chapterGroups = <(String, List<Entity>)>[
+        for (final kind in selectedKinds)
+          (
+            kind.pluralLabel,
+            all.where((e) => e.kind == kind).toList(),
+          ),
+        for (final category in customCategories)
+          (
+            category.name,
+            all
+                .where((e) =>
+                    e.kind == EntityKind.custom &&
+                    e.customCategoryId == category.id)
+                .toList(),
+          ),
+      ];
+
+      for (final (chapterTitle, group) in chapterGroups) {
+        final entities = group
           ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         if (entities.isEmpty) continue;
 
         final sections = <pw.Widget>[
-          pw.Header(level: 0, text: kind.pluralLabel),
+          pw.Header(level: 0, text: chapterTitle),
         ];
         for (final entity in entities) {
           sections.add(await _entitySection(entity));

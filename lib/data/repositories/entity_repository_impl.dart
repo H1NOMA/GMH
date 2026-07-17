@@ -22,6 +22,7 @@ class EntityRepositoryImpl implements EntityRepository {
       id: row.id,
       worldId: row.worldId,
       kind: kind,
+      customCategoryId: row.customCategoryId,
       name: row.name,
       summary: row.summary,
       attributes: Entity.decodeAttributes(row.attributesJson),
@@ -43,6 +44,7 @@ class EntityRepositoryImpl implements EntityRepository {
   Stream<List<Entity>> watchEntities(
     String worldId, {
     EntityKind? kind,
+    String? customCategoryId,
     String? tagId,
     bool favoritesOnly = false,
     EntitySort sort = EntitySort.updatedDesc,
@@ -61,6 +63,9 @@ class EntityRepositoryImpl implements EntityRepository {
       if (kind != null) {
         join.where(_db.entities.kind.equals(kind.name));
       }
+      if (customCategoryId != null) {
+        join.where(_db.entities.customCategoryId.equals(customCategoryId));
+      }
       if (favoritesOnly) {
         join.where(_db.entities.isFavorite.equals(true));
       }
@@ -76,6 +81,9 @@ class EntityRepositoryImpl implements EntityRepository {
       ..limit(limit);
     if (kind != null) {
       query.where((e) => e.kind.equals(kind.name));
+    }
+    if (customCategoryId != null) {
+      query.where((e) => e.customCategoryId.equals(customCategoryId));
     }
     if (favoritesOnly) {
       query.where((e) => e.isFavorite.equals(true));
@@ -118,6 +126,7 @@ class EntityRepositoryImpl implements EntityRepository {
   Future<Entity> createEntity({
     required String worldId,
     required EntityKind kind,
+    String? customCategoryId,
     required String name,
     String summary = '',
     Map<String, Object?> attributes = const {},
@@ -127,6 +136,7 @@ class EntityRepositoryImpl implements EntityRepository {
       id: newId(),
       worldId: worldId,
       kind: kind,
+      customCategoryId: customCategoryId,
       name: name,
       summary: summary,
       attributes: attributes,
@@ -137,6 +147,7 @@ class EntityRepositoryImpl implements EntityRepository {
           id: entity.id,
           worldId: worldId,
           kind: kind.name,
+          customCategoryId: Value(customCategoryId),
           name: name,
           summary: Value(summary),
           attributesJson: Value(entity.attributesJson),
@@ -150,6 +161,7 @@ class EntityRepositoryImpl implements EntityRepository {
   Future<void> updateEntity(Entity entity) async {
     await (_db.update(_db.entities)..where((e) => e.id.equals(entity.id)))
         .write(EntitiesCompanion(
+      customCategoryId: Value(entity.customCategoryId),
       name: Value(entity.name),
       summary: Value(entity.summary),
       attributesJson: Value(entity.attributesJson),

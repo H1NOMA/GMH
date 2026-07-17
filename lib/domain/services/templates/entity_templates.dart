@@ -219,6 +219,17 @@ abstract final class EntityTemplates {
           refKinds: [EntityKind.location], linkRole: LinkRoles.locatedAt),
       ]),
     ]),
+    EntityTemplate(kind: EntityKind.custom, sections: [
+      const FieldSection('Overview', [
+        FieldDef(key: 'subtype', label: 'Type / Subtype', type: FieldType.text),
+        FieldDef(key: 'notes', label: 'Working Notes', type: FieldType.longText),
+      ]),
+      FieldSection('Connections', [
+        const FieldDef(
+          key: 'relatedEntries', label: 'Related Entries',
+          type: FieldType.entityRefList, linkRole: LinkRoles.related),
+      ]),
+    ]),
     EntityTemplate(kind: EntityKind.session, sections: [
       FieldSection('Session', [
         const FieldDef(

@@ -8,8 +8,10 @@ import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity.dart';
 import '../../domain/models/entity_kind.dart';
+import '../categories/category_ui.dart';
 import 'graph_simulation.dart';
 
 /// Obsidian-style relationship graph. World mode shows every linked entity
@@ -205,7 +207,8 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
               _build();
             },
             itemBuilder: (context) => [
-              for (final kind in EntityKind.values)
+              for (final kind in EntityKind.values.where(
+                  (k) => k != EntityKind.custom))
                 PopupMenuItem(
                   value: kind,
                   child: Row(
@@ -259,6 +262,8 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                               painter: _GraphPainter(
                                 simulation: simulation,
                                 entitiesById: _entitiesById,
+                                categories: ref.watch(
+                                    categoryMapProvider(widget.worldId)),
                                 focusId: _focusId,
                               ),
                             ),
@@ -296,11 +301,13 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
 class _GraphPainter extends CustomPainter {
   final GraphSimulation simulation;
   final Map<String, Entity> entitiesById;
+  final Map<String, CustomCategory> categories;
   final String? focusId;
 
   _GraphPainter({
     required this.simulation,
     required this.entitiesById,
+    required this.categories,
     required this.focusId,
   });
 
@@ -338,7 +345,7 @@ class _GraphPainter extends CustomPainter {
       canvas.drawCircle(
         node.position,
         radius,
-        Paint()..color = entity.kind.color,
+        Paint()..color = entityColor(entity, categories),
       );
       canvas.drawCircle(
         node.position,

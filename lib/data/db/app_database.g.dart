@@ -419,6 +419,461 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
   }
 }
 
+class $CustomCategoriesTable extends CustomCategories
+    with TableInfo<$CustomCategoriesTable, CustomCategoryRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CustomCategoriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _worldIdMeta = const VerificationMeta(
+    'worldId',
+  );
+  @override
+  late final GeneratedColumn<String> worldId = GeneratedColumn<String>(
+    'world_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES worlds (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+    'icon',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('folder'),
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    worldId,
+    name,
+    icon,
+    color,
+    sortOrder,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'custom_categories';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CustomCategoryRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('world_id')) {
+      context.handle(
+        _worldIdMeta,
+        worldId.isAcceptableOrUnknown(data['world_id']!, _worldIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_worldIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+        _iconMeta,
+        icon.isAcceptableOrUnknown(data['icon']!, _iconMeta),
+      );
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_colorMeta);
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CustomCategoryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CustomCategoryRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      worldId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}world_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      icon: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}icon'],
+      )!,
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}color'],
+      )!,
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CustomCategoriesTable createAlias(String alias) {
+    return $CustomCategoriesTable(attachedDatabase, alias);
+  }
+}
+
+class CustomCategoryRow extends DataClass
+    implements Insertable<CustomCategoryRow> {
+  final String id;
+  final String worldId;
+  final String name;
+
+  /// Key into the UI icon set (see `categoryIcons`).
+  final String icon;
+
+  /// ARGB color value.
+  final int color;
+  final int sortOrder;
+  final int createdAt;
+  const CustomCategoryRow({
+    required this.id,
+    required this.worldId,
+    required this.name,
+    required this.icon,
+    required this.color,
+    required this.sortOrder,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['world_id'] = Variable<String>(worldId);
+    map['name'] = Variable<String>(name);
+    map['icon'] = Variable<String>(icon);
+    map['color'] = Variable<int>(color);
+    map['sort_order'] = Variable<int>(sortOrder);
+    map['created_at'] = Variable<int>(createdAt);
+    return map;
+  }
+
+  CustomCategoriesCompanion toCompanion(bool nullToAbsent) {
+    return CustomCategoriesCompanion(
+      id: Value(id),
+      worldId: Value(worldId),
+      name: Value(name),
+      icon: Value(icon),
+      color: Value(color),
+      sortOrder: Value(sortOrder),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory CustomCategoryRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CustomCategoryRow(
+      id: serializer.fromJson<String>(json['id']),
+      worldId: serializer.fromJson<String>(json['worldId']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String>(json['icon']),
+      color: serializer.fromJson<int>(json['color']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'worldId': serializer.toJson<String>(worldId),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String>(icon),
+      'color': serializer.toJson<int>(color),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'createdAt': serializer.toJson<int>(createdAt),
+    };
+  }
+
+  CustomCategoryRow copyWith({
+    String? id,
+    String? worldId,
+    String? name,
+    String? icon,
+    int? color,
+    int? sortOrder,
+    int? createdAt,
+  }) => CustomCategoryRow(
+    id: id ?? this.id,
+    worldId: worldId ?? this.worldId,
+    name: name ?? this.name,
+    icon: icon ?? this.icon,
+    color: color ?? this.color,
+    sortOrder: sortOrder ?? this.sortOrder,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  CustomCategoryRow copyWithCompanion(CustomCategoriesCompanion data) {
+    return CustomCategoryRow(
+      id: data.id.present ? data.id.value : this.id,
+      worldId: data.worldId.present ? data.worldId.value : this.worldId,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      color: data.color.present ? data.color.value : this.color,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CustomCategoryRow(')
+          ..write('id: $id, ')
+          ..write('worldId: $worldId, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('color: $color, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, worldId, name, icon, color, sortOrder, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CustomCategoryRow &&
+          other.id == this.id &&
+          other.worldId == this.worldId &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.color == this.color &&
+          other.sortOrder == this.sortOrder &&
+          other.createdAt == this.createdAt);
+}
+
+class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
+  final Value<String> id;
+  final Value<String> worldId;
+  final Value<String> name;
+  final Value<String> icon;
+  final Value<int> color;
+  final Value<int> sortOrder;
+  final Value<int> createdAt;
+  final Value<int> rowid;
+  const CustomCategoriesCompanion({
+    this.id = const Value.absent(),
+    this.worldId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.color = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CustomCategoriesCompanion.insert({
+    required String id,
+    required String worldId,
+    required String name,
+    this.icon = const Value.absent(),
+    required int color,
+    this.sortOrder = const Value.absent(),
+    required int createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       worldId = Value(worldId),
+       name = Value(name),
+       color = Value(color),
+       createdAt = Value(createdAt);
+  static Insertable<CustomCategoryRow> custom({
+    Expression<String>? id,
+    Expression<String>? worldId,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<int>? color,
+    Expression<int>? sortOrder,
+    Expression<int>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (worldId != null) 'world_id': worldId,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (color != null) 'color': color,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CustomCategoriesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? worldId,
+    Value<String>? name,
+    Value<String>? icon,
+    Value<int>? color,
+    Value<int>? sortOrder,
+    Value<int>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return CustomCategoriesCompanion(
+      id: id ?? this.id,
+      worldId: worldId ?? this.worldId,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      color: color ?? this.color,
+      sortOrder: sortOrder ?? this.sortOrder,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (worldId.present) {
+      map['world_id'] = Variable<String>(worldId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CustomCategoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('worldId: $worldId, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('color: $color, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $EntitiesTable extends Entities
     with TableInfo<$EntitiesTable, EntityRow> {
   @override
@@ -456,6 +911,17 @@ class $EntitiesTable extends Entities
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
+  );
+  static const VerificationMeta _customCategoryIdMeta = const VerificationMeta(
+    'customCategoryId',
+  );
+  @override
+  late final GeneratedColumn<String> customCategoryId = GeneratedColumn<String>(
+    'custom_category_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -554,6 +1020,7 @@ class $EntitiesTable extends Entities
     id,
     worldId,
     kind,
+    customCategoryId,
     name,
     summary,
     attributesJson,
@@ -595,6 +1062,15 @@ class $EntitiesTable extends Entities
       );
     } else if (isInserting) {
       context.missing(_kindMeta);
+    }
+    if (data.containsKey('custom_category_id')) {
+      context.handle(
+        _customCategoryIdMeta,
+        customCategoryId.isAcceptableOrUnknown(
+          data['custom_category_id']!,
+          _customCategoryIdMeta,
+        ),
+      );
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -677,6 +1153,10 @@ class $EntitiesTable extends Entities
         DriftSqlType.string,
         data['${effectivePrefix}kind'],
       )!,
+      customCategoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}custom_category_id'],
+      ),
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
@@ -722,6 +1202,10 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   final String id;
   final String worldId;
   final String kind;
+
+  /// Set when [kind] == 'custom': the user-defined category this entry
+  /// belongs to.
+  final String? customCategoryId;
   final String name;
   final String summary;
   final String attributesJson;
@@ -734,6 +1218,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     required this.id,
     required this.worldId,
     required this.kind,
+    this.customCategoryId,
     required this.name,
     required this.summary,
     required this.attributesJson,
@@ -749,6 +1234,9 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     map['id'] = Variable<String>(id);
     map['world_id'] = Variable<String>(worldId);
     map['kind'] = Variable<String>(kind);
+    if (!nullToAbsent || customCategoryId != null) {
+      map['custom_category_id'] = Variable<String>(customCategoryId);
+    }
     map['name'] = Variable<String>(name);
     map['summary'] = Variable<String>(summary);
     map['attributes_json'] = Variable<String>(attributesJson);
@@ -769,6 +1257,9 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       id: Value(id),
       worldId: Value(worldId),
       kind: Value(kind),
+      customCategoryId: customCategoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customCategoryId),
       name: Value(name),
       summary: Value(summary),
       attributesJson: Value(attributesJson),
@@ -793,6 +1284,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       id: serializer.fromJson<String>(json['id']),
       worldId: serializer.fromJson<String>(json['worldId']),
       kind: serializer.fromJson<String>(json['kind']),
+      customCategoryId: serializer.fromJson<String?>(json['customCategoryId']),
       name: serializer.fromJson<String>(json['name']),
       summary: serializer.fromJson<String>(json['summary']),
       attributesJson: serializer.fromJson<String>(json['attributesJson']),
@@ -810,6 +1302,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       'id': serializer.toJson<String>(id),
       'worldId': serializer.toJson<String>(worldId),
       'kind': serializer.toJson<String>(kind),
+      'customCategoryId': serializer.toJson<String?>(customCategoryId),
       'name': serializer.toJson<String>(name),
       'summary': serializer.toJson<String>(summary),
       'attributesJson': serializer.toJson<String>(attributesJson),
@@ -825,6 +1318,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     String? id,
     String? worldId,
     String? kind,
+    Value<String?> customCategoryId = const Value.absent(),
     String? name,
     String? summary,
     String? attributesJson,
@@ -837,6 +1331,9 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     id: id ?? this.id,
     worldId: worldId ?? this.worldId,
     kind: kind ?? this.kind,
+    customCategoryId: customCategoryId.present
+        ? customCategoryId.value
+        : this.customCategoryId,
     name: name ?? this.name,
     summary: summary ?? this.summary,
     attributesJson: attributesJson ?? this.attributesJson,
@@ -851,6 +1348,9 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       id: data.id.present ? data.id.value : this.id,
       worldId: data.worldId.present ? data.worldId.value : this.worldId,
       kind: data.kind.present ? data.kind.value : this.kind,
+      customCategoryId: data.customCategoryId.present
+          ? data.customCategoryId.value
+          : this.customCategoryId,
       name: data.name.present ? data.name.value : this.name,
       summary: data.summary.present ? data.summary.value : this.summary,
       attributesJson: data.attributesJson.present
@@ -874,6 +1374,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
           ..write('id: $id, ')
           ..write('worldId: $worldId, ')
           ..write('kind: $kind, ')
+          ..write('customCategoryId: $customCategoryId, ')
           ..write('name: $name, ')
           ..write('summary: $summary, ')
           ..write('attributesJson: $attributesJson, ')
@@ -891,6 +1392,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     id,
     worldId,
     kind,
+    customCategoryId,
     name,
     summary,
     attributesJson,
@@ -907,6 +1409,7 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
           other.id == this.id &&
           other.worldId == this.worldId &&
           other.kind == this.kind &&
+          other.customCategoryId == this.customCategoryId &&
           other.name == this.name &&
           other.summary == this.summary &&
           other.attributesJson == this.attributesJson &&
@@ -921,6 +1424,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
   final Value<String> id;
   final Value<String> worldId;
   final Value<String> kind;
+  final Value<String?> customCategoryId;
   final Value<String> name;
   final Value<String> summary;
   final Value<String> attributesJson;
@@ -934,6 +1438,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     this.id = const Value.absent(),
     this.worldId = const Value.absent(),
     this.kind = const Value.absent(),
+    this.customCategoryId = const Value.absent(),
     this.name = const Value.absent(),
     this.summary = const Value.absent(),
     this.attributesJson = const Value.absent(),
@@ -948,6 +1453,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     required String id,
     required String worldId,
     required String kind,
+    this.customCategoryId = const Value.absent(),
     required String name,
     this.summary = const Value.absent(),
     this.attributesJson = const Value.absent(),
@@ -967,6 +1473,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     Expression<String>? id,
     Expression<String>? worldId,
     Expression<String>? kind,
+    Expression<String>? customCategoryId,
     Expression<String>? name,
     Expression<String>? summary,
     Expression<String>? attributesJson,
@@ -981,6 +1488,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
       if (id != null) 'id': id,
       if (worldId != null) 'world_id': worldId,
       if (kind != null) 'kind': kind,
+      if (customCategoryId != null) 'custom_category_id': customCategoryId,
       if (name != null) 'name': name,
       if (summary != null) 'summary': summary,
       if (attributesJson != null) 'attributes_json': attributesJson,
@@ -997,6 +1505,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     Value<String>? id,
     Value<String>? worldId,
     Value<String>? kind,
+    Value<String?>? customCategoryId,
     Value<String>? name,
     Value<String>? summary,
     Value<String>? attributesJson,
@@ -1011,6 +1520,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
       id: id ?? this.id,
       worldId: worldId ?? this.worldId,
       kind: kind ?? this.kind,
+      customCategoryId: customCategoryId ?? this.customCategoryId,
       name: name ?? this.name,
       summary: summary ?? this.summary,
       attributesJson: attributesJson ?? this.attributesJson,
@@ -1034,6 +1544,9 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     }
     if (kind.present) {
       map['kind'] = Variable<String>(kind.value);
+    }
+    if (customCategoryId.present) {
+      map['custom_category_id'] = Variable<String>(customCategoryId.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1071,6 +1584,7 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
           ..write('id: $id, ')
           ..write('worldId: $worldId, ')
           ..write('kind: $kind, ')
+          ..write('customCategoryId: $customCategoryId, ')
           ..write('name: $name, ')
           ..write('summary: $summary, ')
           ..write('attributesJson: $attributesJson, ')
@@ -4082,6 +4596,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $WorldsTable worlds = $WorldsTable(this);
+  late final $CustomCategoriesTable customCategories = $CustomCategoriesTable(
+    this,
+  );
   late final $EntitiesTable entities = $EntitiesTable(this);
   late final $DocumentsTable documents = $DocumentsTable(this);
   late final $DocumentVersionsTable documentVersions = $DocumentVersionsTable(
@@ -4100,6 +4617,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     worlds,
+    customCategories,
     entities,
     documents,
     documentVersions,
@@ -4113,6 +4631,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'worlds',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('custom_categories', kind: UpdateKind.delete)],
+    ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'worlds',
@@ -4232,6 +4757,26 @@ final class $$WorldsTableReferences
     extends BaseReferences<_$AppDatabase, $WorldsTable, WorldRow> {
   $$WorldsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
+  static MultiTypedResultKey<$CustomCategoriesTable, List<CustomCategoryRow>>
+  _customCategoriesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.customCategories,
+    aliasName: $_aliasNameGenerator(db.worlds.id, db.customCategories.worldId),
+  );
+
+  $$CustomCategoriesTableProcessedTableManager get customCategoriesRefs {
+    final manager = $$CustomCategoriesTableTableManager(
+      $_db,
+      $_db.customCategories,
+    ).filter((f) => f.worldId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _customCategoriesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<$EntitiesTable, List<EntityRow>>
   _entitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.entities,
@@ -4345,6 +4890,31 @@ class $$WorldsTableFilterComposer
     column: $table.updatedAt,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> customCategoriesRefs(
+    Expression<bool> Function($$CustomCategoriesTableFilterComposer f) f,
+  ) {
+    final $$CustomCategoriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.customCategories,
+      getReferencedColumn: (t) => t.worldId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CustomCategoriesTableFilterComposer(
+            $db: $db,
+            $table: $db.customCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 
   Expression<bool> entitiesRefs(
     Expression<bool> Function($$EntitiesTableFilterComposer f) f,
@@ -4518,6 +5088,31 @@ class $$WorldsTableAnnotationComposer
   GeneratedColumn<int> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
+  Expression<T> customCategoriesRefs<T extends Object>(
+    Expression<T> Function($$CustomCategoriesTableAnnotationComposer a) f,
+  ) {
+    final $$CustomCategoriesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.customCategories,
+      getReferencedColumn: (t) => t.worldId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CustomCategoriesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.customCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> entitiesRefs<T extends Object>(
     Expression<T> Function($$EntitiesTableAnnotationComposer a) f,
   ) {
@@ -4633,6 +5228,7 @@ class $$WorldsTableTableManager
           (WorldRow, $$WorldsTableReferences),
           WorldRow,
           PrefetchHooks Function({
+            bool customCategoriesRefs,
             bool entitiesRefs,
             bool linksRefs,
             bool tagsRefs,
@@ -4694,6 +5290,7 @@ class $$WorldsTableTableManager
               .toList(),
           prefetchHooksCallback:
               ({
+                customCategoriesRefs = false,
                 entitiesRefs = false,
                 linksRefs = false,
                 tagsRefs = false,
@@ -4702,6 +5299,7 @@ class $$WorldsTableTableManager
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
+                    if (customCategoriesRefs) db.customCategories,
                     if (entitiesRefs) db.entities,
                     if (linksRefs) db.links,
                     if (tagsRefs) db.tags,
@@ -4710,6 +5308,27 @@ class $$WorldsTableTableManager
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
                     return [
+                      if (customCategoriesRefs)
+                        await $_getPrefetchedData<
+                          WorldRow,
+                          $WorldsTable,
+                          CustomCategoryRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$WorldsTableReferences
+                              ._customCategoriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$WorldsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).customCategoriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.worldId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (entitiesRefs)
                         await $_getPrefetchedData<
                           WorldRow,
@@ -4807,17 +5426,388 @@ typedef $$WorldsTableProcessedTableManager =
       (WorldRow, $$WorldsTableReferences),
       WorldRow,
       PrefetchHooks Function({
+        bool customCategoriesRefs,
         bool entitiesRefs,
         bool linksRefs,
         bool tagsRefs,
         bool mediaFilesRefs,
       })
     >;
+typedef $$CustomCategoriesTableCreateCompanionBuilder =
+    CustomCategoriesCompanion Function({
+      required String id,
+      required String worldId,
+      required String name,
+      Value<String> icon,
+      required int color,
+      Value<int> sortOrder,
+      required int createdAt,
+      Value<int> rowid,
+    });
+typedef $$CustomCategoriesTableUpdateCompanionBuilder =
+    CustomCategoriesCompanion Function({
+      Value<String> id,
+      Value<String> worldId,
+      Value<String> name,
+      Value<String> icon,
+      Value<int> color,
+      Value<int> sortOrder,
+      Value<int> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$CustomCategoriesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $CustomCategoriesTable,
+          CustomCategoryRow
+        > {
+  $$CustomCategoriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $WorldsTable _worldIdTable(_$AppDatabase db) => db.worlds.createAlias(
+    $_aliasNameGenerator(db.customCategories.worldId, db.worlds.id),
+  );
+
+  $$WorldsTableProcessedTableManager get worldId {
+    final $_column = $_itemColumn<String>('world_id')!;
+
+    final manager = $$WorldsTableTableManager(
+      $_db,
+      $_db.worlds,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_worldIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$CustomCategoriesTableFilterComposer
+    extends Composer<_$AppDatabase, $CustomCategoriesTable> {
+  $$CustomCategoriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get icon => $composableBuilder(
+    column: $table.icon,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$WorldsTableFilterComposer get worldId {
+    final $$WorldsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableFilterComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CustomCategoriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CustomCategoriesTable> {
+  $$CustomCategoriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+    column: $table.icon,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WorldsTableOrderingComposer get worldId {
+    final $$WorldsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableOrderingComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CustomCategoriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CustomCategoriesTable> {
+  $$CustomCategoriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$WorldsTableAnnotationComposer get worldId {
+    final $$WorldsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CustomCategoriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CustomCategoriesTable,
+          CustomCategoryRow,
+          $$CustomCategoriesTableFilterComposer,
+          $$CustomCategoriesTableOrderingComposer,
+          $$CustomCategoriesTableAnnotationComposer,
+          $$CustomCategoriesTableCreateCompanionBuilder,
+          $$CustomCategoriesTableUpdateCompanionBuilder,
+          (CustomCategoryRow, $$CustomCategoriesTableReferences),
+          CustomCategoryRow,
+          PrefetchHooks Function({bool worldId})
+        > {
+  $$CustomCategoriesTableTableManager(
+    _$AppDatabase db,
+    $CustomCategoriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CustomCategoriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CustomCategoriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CustomCategoriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> worldId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> icon = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CustomCategoriesCompanion(
+                id: id,
+                worldId: worldId,
+                name: name,
+                icon: icon,
+                color: color,
+                sortOrder: sortOrder,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String worldId,
+                required String name,
+                Value<String> icon = const Value.absent(),
+                required int color,
+                Value<int> sortOrder = const Value.absent(),
+                required int createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CustomCategoriesCompanion.insert(
+                id: id,
+                worldId: worldId,
+                name: name,
+                icon: icon,
+                color: color,
+                sortOrder: sortOrder,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$CustomCategoriesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({worldId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (worldId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.worldId,
+                                referencedTable:
+                                    $$CustomCategoriesTableReferences
+                                        ._worldIdTable(db),
+                                referencedColumn:
+                                    $$CustomCategoriesTableReferences
+                                        ._worldIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$CustomCategoriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CustomCategoriesTable,
+      CustomCategoryRow,
+      $$CustomCategoriesTableFilterComposer,
+      $$CustomCategoriesTableOrderingComposer,
+      $$CustomCategoriesTableAnnotationComposer,
+      $$CustomCategoriesTableCreateCompanionBuilder,
+      $$CustomCategoriesTableUpdateCompanionBuilder,
+      (CustomCategoryRow, $$CustomCategoriesTableReferences),
+      CustomCategoryRow,
+      PrefetchHooks Function({bool worldId})
+    >;
 typedef $$EntitiesTableCreateCompanionBuilder =
     EntitiesCompanion Function({
       required String id,
       required String worldId,
       required String kind,
+      Value<String?> customCategoryId,
       required String name,
       Value<String> summary,
       Value<String> attributesJson,
@@ -4833,6 +5823,7 @@ typedef $$EntitiesTableUpdateCompanionBuilder =
       Value<String> id,
       Value<String> worldId,
       Value<String> kind,
+      Value<String?> customCategoryId,
       Value<String> name,
       Value<String> summary,
       Value<String> attributesJson,
@@ -4955,6 +5946,11 @@ class $$EntitiesTableFilterComposer
 
   ColumnFilters<String> get kind => $composableBuilder(
     column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get customCategoryId => $composableBuilder(
+    column: $table.customCategoryId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5141,6 +6137,11 @@ class $$EntitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get customCategoryId => $composableBuilder(
+    column: $table.customCategoryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get name => $composableBuilder(
     column: $table.name,
     builder: (column) => ColumnOrderings(column),
@@ -5219,6 +6220,11 @@ class $$EntitiesTableAnnotationComposer
 
   GeneratedColumn<String> get kind =>
       $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get customCategoryId => $composableBuilder(
+    column: $table.customCategoryId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -5411,6 +6417,7 @@ class $$EntitiesTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> worldId = const Value.absent(),
                 Value<String> kind = const Value.absent(),
+                Value<String?> customCategoryId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> summary = const Value.absent(),
                 Value<String> attributesJson = const Value.absent(),
@@ -5424,6 +6431,7 @@ class $$EntitiesTableTableManager
                 id: id,
                 worldId: worldId,
                 kind: kind,
+                customCategoryId: customCategoryId,
                 name: name,
                 summary: summary,
                 attributesJson: attributesJson,
@@ -5439,6 +6447,7 @@ class $$EntitiesTableTableManager
                 required String id,
                 required String worldId,
                 required String kind,
+                Value<String?> customCategoryId = const Value.absent(),
                 required String name,
                 Value<String> summary = const Value.absent(),
                 Value<String> attributesJson = const Value.absent(),
@@ -5452,6 +6461,7 @@ class $$EntitiesTableTableManager
                 id: id,
                 worldId: worldId,
                 kind: kind,
+                customCategoryId: customCategoryId,
                 name: name,
                 summary: summary,
                 attributesJson: attributesJson,
@@ -8890,6 +9900,8 @@ class $AppDatabaseManager {
   $AppDatabaseManager(this._db);
   $$WorldsTableTableManager get worlds =>
       $$WorldsTableTableManager(_db, _db.worlds);
+  $$CustomCategoriesTableTableManager get customCategories =>
+      $$CustomCategoriesTableTableManager(_db, _db.customCategories);
   $$EntitiesTableTableManager get entities =>
       $$EntitiesTableTableManager(_db, _db.entities);
   $$DocumentsTableTableManager get documents =>

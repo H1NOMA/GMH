@@ -21,6 +21,7 @@ class EntityService {
   Future<Result<Entity>> create({
     required String worldId,
     required EntityKind kind,
+    String? customCategoryId,
     required String name,
     String summary = '',
     Map<String, Object?> attributes = const {},
@@ -34,6 +35,7 @@ class EntityService {
       final entity = await _entities.createEntity(
         worldId: worldId,
         kind: kind,
+        customCategoryId: kind == EntityKind.custom ? customCategoryId : null,
         name: trimmed,
         summary: summary.trim(),
         attributes: template.sanitize(attributes),

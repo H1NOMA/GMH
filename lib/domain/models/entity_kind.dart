@@ -19,7 +19,11 @@ enum EntityKind {
   loreDocument('Lore Document', 'Lore Documents', Icons.menu_book_outlined),
   campaign('Campaign', 'Campaigns', Icons.map_outlined),
   quest('Quest', 'Quests', Icons.flag_outlined),
-  session('Session', 'Sessions', Icons.event_note_outlined);
+  session('Session', 'Sessions', Icons.event_note_outlined),
+
+  /// Entries in a user-defined category (`entities.custom_category_id`).
+  /// Name, icon and color come from the category, not from this enum.
+  custom('Custom', 'Custom', Icons.category_outlined);
 
   final String label;
   final String pluralLabel;
@@ -73,5 +77,6 @@ enum EntityKind {
         campaign => const Color(0xFF6AA84F),
         quest => const Color(0xFFF6B26B),
         session => const Color(0xFF9FC5E8),
+        custom => const Color(0xFFB98BC9),
       };
 }
