@@ -8,6 +8,8 @@ import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
+import '../categories/category_ui.dart';
+import '../categories/manage_categories_sheet.dart';
 import '../entities/widgets/entity_card.dart';
 import '../entities/widgets/new_entity_dialog.dart';
 import '../shell/ui_providers.dart';
@@ -28,6 +30,7 @@ class HomeScreen extends ConsumerWidget {
         .watch(entityListProvider((
           worldId: worldId,
           kind: null,
+          customCategoryId: null,
           tagId: null,
           favoritesOnly: true,
           sort: EntitySort.updatedDesc,
@@ -74,6 +77,22 @@ class HomeScreen extends ConsumerWidget {
               worldId: worldId,
               kinds: [...EntityKind.libraryKinds, ...EntityKind.campaignKinds],
               counts: counts),
+          const SizedBox(height: 22),
+          Row(
+            children: [
+              Expanded(
+                  child:
+                      _SectionTitle(context.l10n.manageCategories)),
+              IconButton(
+                tooltip: context.l10n.manageCategories,
+                icon: const Icon(Icons.tune, size: 18),
+                onPressed: () =>
+                    showManageCategoriesSheet(context, worldId),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          _CategoryGrid(worldId: worldId),
           if (favorites != null && favorites.isNotEmpty) ...[
             const SizedBox(height: 22),
             _SectionTitle(context.l10n.homeFavorites),
@@ -107,6 +126,96 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Text(label, style: Theme.of(context).textTheme.headlineSmall);
+}
+
+class _CategoryGrid extends ConsumerWidget {
+  final String worldId;
+  const _CategoryGrid({required this.worldId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories =
+        ref.watch(worldCategoriesProvider(worldId)).valueOrNull ?? [];
+    final counts =
+        ref.watch(categoryCountsProvider(worldId)).valueOrNull ?? const {};
+    if (categories.isEmpty) {
+      return Card(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => showManageCategoriesSheet(context, worldId),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                const Icon(Icons.add, color: GmhColors.parchmentDim),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(context.l10n.noCategoriesYet,
+                      style: const TextStyle(
+                          fontSize: 12.5, color: GmhColors.parchmentDim)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    final width = MediaQuery.sizeOf(context).width;
+    final columns = width > 1400
+        ? 5
+        : width > 1000
+            ? 4
+            : width > 640
+                ? 3
+                : 2;
+    return GridView.count(
+      crossAxisCount: columns,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      childAspectRatio: 2.4,
+      children: [
+        for (final category in categories)
+          Card(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () =>
+                  context.go(Routes.browseCategory(worldId, category.id)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: Row(
+                  children: [
+                    Icon(categoryIconFor(category.icon),
+                        color: Color(category.color), size: 22),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(category.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  Theme.of(context).textTheme.titleMedium),
+                          Text(
+                              context.l10n
+                                  .entriesCount(counts[category.id] ?? 0),
+                              style:
+                                  Theme.of(context).textTheme.bodySmall),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class _KindGrid extends StatelessWidget {

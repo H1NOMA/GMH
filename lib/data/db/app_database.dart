@@ -12,6 +12,7 @@ part 'app_database.g.dart';
 /// like prefix indexes.
 @DriftDatabase(tables: [
   Worlds,
+  CustomCategories,
   Entities,
   Documents,
   DocumentVersions,
@@ -27,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -37,7 +38,11 @@ class AppDatabase extends _$AppDatabase {
           await _createIndexes();
         },
         onUpgrade: (m, from, to) async {
-          // Stepwise migrations land here from schemaVersion 2 onwards.
+          if (from < 2) {
+            // v2: user-defined archive categories.
+            await m.createTable(customCategories);
+            await m.addColumn(entities, entities.customCategoryId);
+          }
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');

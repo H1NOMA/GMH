@@ -649,6 +649,58 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get sectionCategories => 'МОИ КАТЕГОРИИ';
+
+  @override
+  String get manageCategories => 'Управление категориями';
+
+  @override
+  String get newCategory => 'Новая категория';
+
+  @override
+  String get renameCategory => 'Изменить категорию';
+
+  @override
+  String get deleteCategory => 'Удалить категорию';
+
+  @override
+  String deleteCategoryTitle(String name) {
+    return 'Удалить категорию «$name»?';
+  }
+
+  @override
+  String deleteCategoryBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Её $count записей сохранятся и переместятся в Архив концептов.',
+      few: 'Её $count записи сохранятся и переместятся в Архив концептов.',
+      one: 'Её $count запись сохранится и переместится в Архив концептов.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteCategoryBodyEmpty =>
+      'Категория пуста; больше ничего не изменится.';
+
+  @override
+  String get categoryNameLabel => 'Название категории';
+
+  @override
+  String get categoryNameHint => 'например: Гильдии, Королевства, Ритуалы…';
+
+  @override
+  String get chooseIcon => 'Иконка';
+
+  @override
+  String get noCategoriesYet =>
+      'Своих категорий пока нет. Создайте первую — она будет работать так же, как встроенные разделы.';
+
+  @override
+  String get kindCustomEntry => 'Запись';
+
+  @override
   String get kindCharacter => 'Персонаж';
 
   @override

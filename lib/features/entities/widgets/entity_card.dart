@@ -9,6 +9,7 @@ import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/models/entity.dart';
+import '../../categories/category_ui.dart';
 import '../../shell/ui_providers.dart';
 
 /// Card representation of an entity used in lists, dashboards and search.
@@ -29,6 +30,7 @@ class EntityCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tags = ref.watch(entityTagsProvider(entity.id)).valueOrNull ?? [];
+    final categories = ref.watch(categoryMapProvider(worldId));
 
     return Card(
       child: InkWell(
@@ -41,7 +43,10 @@ class EntityCard extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Row(
             children: [
-              _CoverThumb(entity: entity),
+              _CoverThumb(
+                  entity: entity,
+                  icon: entityIcon(entity, categories),
+                  color: entityColor(entity, categories)),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -68,7 +73,8 @@ class EntityCard extends ConsumerWidget {
                     subtitleOverride ??
                         Text(
                           entity.summary.isEmpty
-                              ? entity.kind.localizedLabel(context)
+                              ? (categories[entity.customCategoryId]?.name ??
+                                  entity.kind.localizedLabel(context))
                               : entity.summary,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -113,7 +119,11 @@ class EntityCard extends ConsumerWidget {
 
 class _CoverThumb extends ConsumerWidget {
   final Entity entity;
-  const _CoverThumb({required this.entity});
+  final IconData icon;
+  final Color color;
+
+  const _CoverThumb(
+      {required this.entity, required this.icon, required this.color});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -122,14 +132,13 @@ class _CoverThumb extends ConsumerWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: entity.kind.color.withValues(alpha: 0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(8),
-        border:
-            Border.all(color: entity.kind.color.withValues(alpha: 0.35)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
       clipBehavior: Clip.antiAlias,
       child: coverId == null
-          ? Icon(entity.kind.icon, color: entity.kind.color, size: 22)
+          ? Icon(icon, color: color, size: 22)
           : FutureBuilder<String?>(
               future: () async {
                 final media =
@@ -140,13 +149,12 @@ class _CoverThumb extends ConsumerWidget {
               builder: (context, snapshot) {
                 final path = snapshot.data;
                 if (path == null) {
-                  return Icon(entity.kind.icon,
-                      color: entity.kind.color, size: 22);
+                  return Icon(icon, color: color, size: 22);
                 }
                 return Image.file(File(path),
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Icon(entity.kind.icon,
-                        color: entity.kind.color, size: 22));
+                    errorBuilder: (_, _, _) =>
+                        Icon(icon, color: color, size: 22));
               },
             ),
     );

@@ -17,6 +17,8 @@ abstract final class Routes {
   static String home(String worldId) => '/w/$worldId/home';
   static String browse(String worldId, EntityKind kind) =>
       '/w/$worldId/browse/${kind.name}';
+  static String browseCategory(String worldId, String categoryId) =>
+      '/w/$worldId/category/$categoryId';
   static String entity(String worldId, String entityId) =>
       '/w/$worldId/e/$entityId';
   static String search(String worldId) => '/w/$worldId/search';
@@ -63,6 +65,16 @@ GoRouter createRouter({required String initialLocation}) {
                 ),
               );
             },
+          ),
+          GoRoute(
+            path: '/w/:worldId/category/:categoryId',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: EntityListScreen(
+                worldId: state.pathParameters['worldId']!,
+                kind: EntityKind.custom,
+                customCategoryId: state.pathParameters['categoryId'],
+              ),
+            ),
           ),
           GoRoute(
             path: '/w/:worldId/e/:entityId',

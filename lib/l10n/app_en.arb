@@ -1,7 +1,6 @@
 {
   "@@locale": "en",
   "appTitle": "Game Master's Hub",
-
   "navDashboard": "Dashboard",
   "navSearch": "Search",
   "navGraph": "Graph View",
@@ -13,19 +12,29 @@
   "sectionWorld": "WORLD",
   "sectionLibrary": "LIBRARY",
   "switchWorld": "Switch world",
-
   "worldsTagline": "Your worlds, entirely yours — stored on this device.",
   "worldsLoadError": "Could not load worlds: {error}",
-  "@worldsLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "@worldsLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "worldsEmpty": "No worlds yet. Forge your first one below.",
   "worldEdited": "Edited {when}",
-  "@worldEdited": {"placeholders": {"when": {"type": "String"}}},
+  "@worldEdited": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "createNewWorld": "Create New World",
   "createWorldTitle": "Create a New World",
   "worldNameLabel": "World name",
   "worldNameHint": "e.g. The Aurion Realms",
   "worldDescriptionLabel": "Description (optional)",
-
   "cancel": "Cancel",
   "create": "Create",
   "add": "Add",
@@ -36,19 +45,35 @@
   "rename": "Rename",
   "newButton": "New",
   "errorGeneric": "Error: {error}",
-  "@errorGeneric": {"placeholders": {"error": {"type": "String"}}},
+  "@errorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "errorNameEmpty": "Name cannot be empty.",
   "errorUnexpected": "Something went wrong. Please try again.",
-
   "homeTheWorld": "The World",
   "homeLibrary": "Library",
   "homeFavorites": "Favorites",
   "homeRecentlyOpened": "Recently Opened",
   "entriesCount": "{count, plural, =0{No entries} one{1 entry} other{{count} entries}}",
-  "@entriesCount": {"placeholders": {"count": {"type": "int"}}},
-
+  "@entriesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "filterHint": "Filter {plural}…",
-  "@filterHint": {"placeholders": {"plural": {"type": "String"}}},
+  "@filterHint": {
+    "placeholders": {
+      "plural": {
+        "type": "String"
+      }
+    }
+  },
   "favoritesOnly": "Favorites only",
   "showAll": "Show all",
   "sortTooltip": "Sort",
@@ -56,19 +81,35 @@
   "sortNameAz": "Name (A–Z)",
   "sortNewestFirst": "Newest first",
   "noEntriesOfKind": "No {plural} yet",
-  "@noEntriesOfKind": {"placeholders": {"plural": {"type": "String"}}},
+  "@noEntriesOfKind": {
+    "placeholders": {
+      "plural": {
+        "type": "String"
+      }
+    }
+  },
   "newOfKind": "New {label}",
-  "@newOfKind": {"placeholders": {"label": {"type": "String"}}},
-
+  "@newOfKind": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "newEntryTitle": "New Entry",
   "typeLabel": "Type",
   "nameLabel": "Name",
-
   "editEntryTitle": "Edit Entry",
   "summaryLabel": "Summary",
   "summaryHint": "One line shown in lists and search",
   "deleteEntryTitle": "Delete \"{name}\"?",
-  "@deleteEntryTitle": {"placeholders": {"name": {"type": "String"}}},
+  "@deleteEntryTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "deleteEntryBody": "The entry is moved to trash; links to it are kept until it is purged.",
   "addToFavorites": "Add to favorites",
   "removeFromFavorites": "Remove from favorites",
@@ -77,7 +118,6 @@
   "entryGone": "This entry no longer exists.",
   "tabDocument": "Document",
   "tabDetails": "Details",
-
   "editorPlaceholder": "Write the lore… Use the @ button to link entries.",
   "editorLinkEntity": "Link an entry (mention)",
   "editorInsertImage": "Insert image",
@@ -85,12 +125,10 @@
   "editorVersionHistory": "Version history",
   "insertLinkTitle": "Insert link to entry",
   "missingLink": "missing",
-
   "versionHistoryTitle": "Version History",
   "versionHistoryEmpty": "No snapshots yet. Versions are saved when you leave the editor or restore.",
   "versionEmptyPreview": "(empty)",
   "versionBeforeRestore": "Before restore",
-
   "searchHint": "Search names, lore, tags…",
   "searchAll": "All",
   "searchNoMatches": "No matches",
@@ -99,15 +137,19 @@
   "quickOpenGraph": "Open graph",
   "quickBackupExport": "Backup & export",
   "recentlyOpenedCaps": "RECENTLY OPENED",
-
   "graphTitle": "Graph View",
   "graphLocalTitle": "Local Graph",
   "graphWholeWorld": "Whole world",
   "graphFilterKinds": "Filter kinds",
   "graphEmpty": "No connections yet.\nLink entries with @ mentions, relations or structured fields, and the web of your world will appear here.",
   "graphTruncated": "Showing the {count} most connected entries. Focus an entry for its local graph.",
-  "@graphTruncated": {"placeholders": {"count": {"type": "int"}}},
-
+  "@graphTruncated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "campaignsTitle": "Campaigns",
   "switchCampaign": "Switch campaign",
   "noCampaigns": "No campaigns yet",
@@ -117,20 +159,43 @@
   "noQuestsLinked": "No quests linked to this campaign yet. Create a quest and set its Campaign field.",
   "noSessions": "No sessions recorded yet.",
   "chapterLabel": "Chapter: {chapter}",
-  "@chapterLabel": {"placeholders": {"chapter": {"type": "String"}}},
+  "@chapterLabel": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      }
+    }
+  },
   "noPlayers": "No players yet",
   "questsCount": "{count, plural, one{1 quest} other{{count} quests}}",
-  "@questsCount": {"placeholders": {"count": {"type": "int"}}},
+  "@questsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "sessionsCount": "{count, plural, one{1 session} other{{count} sessions}}",
-  "@sessionsCount": {"placeholders": {"count": {"type": "int"}}},
-
+  "@sessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsTitle": "Settings & Backup",
   "languageSection": "Language",
   "languageSystem": "System language",
   "languageEnglish": "English",
   "languageRussian": "Русский",
   "exportSection": "Export \"{world}\"",
-  "@exportSection": {"placeholders": {"world": {"type": "String"}}},
+  "@exportSection": {
+    "placeholders": {
+      "world": {
+        "type": "String"
+      }
+    }
+  },
   "exportSubtitle": "Everything stays on this device until you share it.",
   "exportArchiveTitle": "Full project archive (.gmhw)",
   "exportArchiveSubtitle": "Database + all media in one file. Use it to move between devices.",
@@ -144,12 +209,24 @@
   "importPickArchive": "Choose a .gmhw archive",
   "backupsSection": "Backups",
   "backupsSubtitle": "A backup is taken automatically once a day when you open the app. The last {count} are kept.",
-  "@backupsSubtitle": {"placeholders": {"count": {"type": "int"}}},
+  "@backupsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "backupNow": "Back up now",
   "noBackups": "No backups yet.",
   "restoreBackupTitle": "Restore this backup?",
   "restoreBackupBody": "The world will be replaced with the contents of \"{file}\". A safety backup of the current state is taken first.",
-  "@restoreBackupBody": {"placeholders": {"file": {"type": "String"}}},
+  "@restoreBackupBody": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      }
+    }
+  },
   "aboutSection": "About",
   "aboutLocalFirst": "Local-first",
   "aboutLocalFirstBody": "All data is stored on this device. No account, no cloud, fully offline.",
@@ -157,11 +234,16 @@
   "worldImported": "World imported.",
   "backupRestored": "Backup restored.",
   "savedTo": "Saved to: {path}",
-  "@savedTo": {"placeholders": {"path": {"type": "String"}}},
+  "@savedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
   "shareArchiveText": "GMH world archive",
   "shareJsonText": "GMH world data (JSON)",
   "sharePdfText": "GMH world book (PDF)",
-
   "relationsCaps": "RELATIONS",
   "backlinksCaps": "BACKLINKS",
   "addRelation": "Add relation",
@@ -169,12 +251,17 @@
   "noOutgoingRelations": "No outgoing relations yet.",
   "noBacklinks": "Nothing links here yet.",
   "relationToTitle": "Relation to \"{name}\"",
-  "@relationToTitle": {"placeholders": {"name": {"type": "String"}}},
+  "@relationToTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "roleLabel": "Role",
   "roleHint": "e.g. owner, ally, rival",
   "fromDocumentMention": "From a document mention",
   "fromStructuredField": "From a structured field",
-
   "roleMention": "Mentioned in",
   "roleRelated": "Related to",
   "roleOwner": "Owner",
@@ -184,7 +271,6 @@
   "roleParticipatedIn": "Participated in",
   "roleCreatedAt": "Created at",
   "roleQuestGiver": "Quest giver",
-
   "attachmentsCaps": "ATTACHMENTS",
   "addFiles": "Add files",
   "fromGallery": "From photo gallery",
@@ -196,37 +282,102 @@
   "replaceFile": "Replace file",
   "deleteAttachment": "Remove attachment",
   "deleteAttachmentTitle": "Remove \"{name}\"?",
-  "@deleteAttachmentTitle": {"placeholders": {"name": {"type": "String"}}},
+  "@deleteAttachmentTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "deleteAttachmentBody": "The attachment is removed from this entry. The file is deleted from the vault when no other entry uses it.",
   "renameAttachmentTitle": "Rename attachment",
   "previewUnavailable": "Preview is not available for this file type. Open it with another app.",
   "openExternally": "Open with another app",
   "attachmentsAdded": "{count, plural, one{1 file attached} other{{count} files attached}}",
-  "@attachmentsAdded": {"placeholders": {"count": {"type": "int"}}},
-
+  "@attachmentsAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tagChip": "Tag",
   "addTagTitle": "Add Tag",
   "tagNameHint": "Tag name",
   "none": "None",
   "choose": "Choose…",
   "addToList": "Add to {label}",
-  "@addToList": {"placeholders": {"label": {"type": "String"}}},
+  "@addToList": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "clear": "Clear",
-
   "pickerTitleDefault": "Link an entry",
   "pickerSearchAll": "Search all entries…",
   "pickerSearchKinds": "Search {kinds}…",
-  "@pickerSearchKinds": {"placeholders": {"kinds": {"type": "String"}}},
+  "@pickerSearchKinds": {
+    "placeholders": {
+      "kinds": {
+        "type": "String"
+      }
+    }
+  },
   "pickerNoMatches": "No matching entries",
-
   "justNow": "just now",
   "minutesAgo": "{count}m ago",
-  "@minutesAgo": {"placeholders": {"count": {"type": "int"}}},
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "hoursAgo": "{count}h ago",
-  "@hoursAgo": {"placeholders": {"count": {"type": "int"}}},
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "daysAgo": "{count}d ago",
-  "@daysAgo": {"placeholders": {"count": {"type": "int"}}},
-
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sectionCategories": "MY CATEGORIES",
+  "manageCategories": "Manage Categories",
+  "newCategory": "New category",
+  "renameCategory": "Edit category",
+  "deleteCategory": "Delete category",
+  "deleteCategoryTitle": "Delete category “{name}”?",
+  "@deleteCategoryTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteCategoryBody": "{count, plural, one{Its {count} entry is preserved and moved to the Concept Archive.} other{Its {count} entries are preserved and moved to the Concept Archive.}}",
+  "@deleteCategoryBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteCategoryBodyEmpty": "The category is empty; nothing else changes.",
+  "categoryNameLabel": "Category name",
+  "categoryNameHint": "e.g. Guilds, Kingdoms, Rituals…",
+  "chooseIcon": "Icon",
+  "noCategoriesYet": "No custom categories yet. Create one below — it will behave exactly like the built-in sections.",
+  "kindCustomEntry": "Entry",
   "kindCharacter": "Character",
   "kindCharacterPlural": "Characters",
   "kindLocation": "Location",

@@ -1,7 +1,6 @@
 {
   "@@locale": "ru",
   "appTitle": "Game Master's Hub",
-
   "navDashboard": "Обзор мира",
   "navSearch": "Поиск",
   "navGraph": "Граф связей",
@@ -13,7 +12,6 @@
   "sectionWorld": "МИР",
   "sectionLibrary": "БИБЛИОТЕКА",
   "switchWorld": "Сменить мир",
-
   "worldsTagline": "Ваши миры принадлежат только вам — всё хранится на этом устройстве.",
   "worldsLoadError": "Не удалось загрузить миры: {error}",
   "worldsEmpty": "Миров пока нет. Создайте свой первый мир ниже.",
@@ -23,7 +21,6 @@
   "worldNameLabel": "Название мира",
   "worldNameHint": "например, Королевства Ауриона",
   "worldDescriptionLabel": "Описание (необязательно)",
-
   "cancel": "Отмена",
   "create": "Создать",
   "add": "Добавить",
@@ -36,13 +33,11 @@
   "errorGeneric": "Ошибка: {error}",
   "errorNameEmpty": "Название не может быть пустым.",
   "errorUnexpected": "Что-то пошло не так. Попробуйте ещё раз.",
-
   "homeTheWorld": "Мир",
   "homeLibrary": "Библиотека",
   "homeFavorites": "Избранное",
   "homeRecentlyOpened": "Недавно открытые",
   "entriesCount": "{count, plural, =0{Нет записей} one{{count} запись} few{{count} записи} other{{count} записей}}",
-
   "filterHint": "Фильтр: {plural}…",
   "favoritesOnly": "Только избранное",
   "showAll": "Показать все",
@@ -52,11 +47,9 @@
   "sortNewestFirst": "Сначала новые",
   "noEntriesOfKind": "Раздел «{plural}» пока пуст",
   "newOfKind": "Создать: {label}",
-
   "newEntryTitle": "Новая запись",
   "typeLabel": "Тип",
   "nameLabel": "Название",
-
   "editEntryTitle": "Изменить запись",
   "summaryLabel": "Краткое описание",
   "summaryHint": "Одна строка для списков и поиска",
@@ -69,7 +62,6 @@
   "entryGone": "Эта запись больше не существует.",
   "tabDocument": "Документ",
   "tabDetails": "Свойства",
-
   "editorPlaceholder": "Пишите историю… Кнопка @ вставляет ссылку на запись.",
   "editorLinkEntity": "Ссылка на запись (упоминание)",
   "editorInsertImage": "Вставить изображение",
@@ -77,12 +69,10 @@
   "editorVersionHistory": "История версий",
   "insertLinkTitle": "Вставить ссылку на запись",
   "missingLink": "не найдено",
-
   "versionHistoryTitle": "История версий",
   "versionHistoryEmpty": "Снимков пока нет. Версии сохраняются при выходе из редактора и при восстановлении.",
   "versionEmptyPreview": "(пусто)",
   "versionBeforeRestore": "Перед восстановлением",
-
   "searchHint": "Поиск по названиям, текстам, тегам…",
   "searchAll": "Все",
   "searchNoMatches": "Ничего не найдено",
@@ -91,14 +81,12 @@
   "quickOpenGraph": "Открыть граф",
   "quickBackupExport": "Резервные копии и экспорт",
   "recentlyOpenedCaps": "НЕДАВНО ОТКРЫТЫЕ",
-
   "graphTitle": "Граф связей",
   "graphLocalTitle": "Локальный граф",
   "graphWholeWorld": "Весь мир",
   "graphFilterKinds": "Фильтр по типам",
   "graphEmpty": "Связей пока нет.\nСвязывайте записи через @-упоминания, отношения и структурные поля — и здесь появится паутина вашего мира.",
   "graphTruncated": "Показаны {count} самых связанных записей. Откройте запись, чтобы увидеть её локальный граф.",
-
   "campaignsTitle": "Кампании",
   "switchCampaign": "Сменить кампанию",
   "noCampaigns": "Кампаний пока нет",
@@ -111,7 +99,6 @@
   "noPlayers": "Игроков пока нет",
   "questsCount": "{count, plural, one{{count} квест} few{{count} квеста} other{{count} квестов}}",
   "sessionsCount": "{count, plural, one{{count} сессия} few{{count} сессии} other{{count} сессий}}",
-
   "settingsTitle": "Настройки и резервные копии",
   "languageSection": "Язык",
   "languageSystem": "Язык системы",
@@ -145,7 +132,6 @@
   "shareArchiveText": "Архив мира GMH",
   "shareJsonText": "Данные мира GMH (JSON)",
   "sharePdfText": "Книга мира GMH (PDF)",
-
   "relationsCaps": "СВЯЗИ",
   "backlinksCaps": "ОБРАТНЫЕ ССЫЛКИ",
   "addRelation": "Добавить связь",
@@ -157,7 +143,6 @@
   "roleHint": "например: владелец, союзник, соперник",
   "fromDocumentMention": "Из упоминания в документе",
   "fromStructuredField": "Из структурного поля",
-
   "roleMention": "Упоминается в",
   "roleRelated": "Связано с",
   "roleOwner": "Владелец",
@@ -167,7 +152,6 @@
   "roleParticipatedIn": "Участвует в",
   "roleCreatedAt": "Создано в",
   "roleQuestGiver": "Квестодатель",
-
   "attachmentsCaps": "ВЛОЖЕНИЯ",
   "addFiles": "Добавить файлы",
   "fromGallery": "Из фотогалереи",
@@ -184,7 +168,6 @@
   "previewUnavailable": "Предпросмотр для этого типа файлов недоступен. Откройте его в другом приложении.",
   "openExternally": "Открыть в другом приложении",
   "attachmentsAdded": "{count, plural, one{Прикреплён {count} файл} few{Прикреплено {count} файла} other{Прикреплено {count} файлов}}",
-
   "tagChip": "Тег",
   "addTagTitle": "Добавить тег",
   "tagNameHint": "Название тега",
@@ -192,17 +175,27 @@
   "choose": "Выбрать…",
   "addToList": "Добавить в «{label}»",
   "clear": "Очистить",
-
   "pickerTitleDefault": "Ссылка на запись",
   "pickerSearchAll": "Поиск по всем записям…",
   "pickerSearchKinds": "Поиск: {kinds}…",
   "pickerNoMatches": "Подходящих записей нет",
-
   "justNow": "только что",
   "minutesAgo": "{count} мин назад",
   "hoursAgo": "{count} ч назад",
   "daysAgo": "{count} дн назад",
-
+  "sectionCategories": "МОИ КАТЕГОРИИ",
+  "manageCategories": "Управление категориями",
+  "newCategory": "Новая категория",
+  "renameCategory": "Изменить категорию",
+  "deleteCategory": "Удалить категорию",
+  "deleteCategoryTitle": "Удалить категорию «{name}»?",
+  "deleteCategoryBody": "{count, plural, one{Её {count} запись сохранится и переместится в Архив концептов.} few{Её {count} записи сохранятся и переместятся в Архив концептов.} other{Её {count} записей сохранятся и переместятся в Архив концептов.}}",
+  "deleteCategoryBodyEmpty": "Категория пуста; больше ничего не изменится.",
+  "categoryNameLabel": "Название категории",
+  "categoryNameHint": "например: Гильдии, Королевства, Ритуалы…",
+  "chooseIcon": "Иконка",
+  "noCategoriesYet": "Своих категорий пока нет. Создайте первую — она будет работать так же, как встроенные разделы.",
+  "kindCustomEntry": "Запись",
   "kindCharacter": "Персонаж",
   "kindCharacterPlural": "Персонажи",
   "kindLocation": "Локация",

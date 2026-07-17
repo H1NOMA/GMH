@@ -2,6 +2,7 @@
 /// the file vault; presentation code depends only on the abstractions.
 library;
 
+import '../models/custom_category.dart';
 import '../models/document_model.dart';
 import '../models/entity.dart';
 import '../models/entity_kind.dart';
@@ -24,10 +25,36 @@ abstract interface class WorldRepository {
 /// Filter/sort options for entity list queries.
 enum EntitySort { nameAsc, updatedDesc, createdDesc }
 
+/// User-defined archive categories: unlimited, renameable, reorderable.
+abstract interface class CategoryRepository {
+  Stream<List<CustomCategory>> watchCategories(String worldId);
+  Future<List<CustomCategory>> categories(String worldId);
+  Future<CustomCategory?> get(String id);
+
+  Future<CustomCategory> create({
+    required String worldId,
+    required String name,
+    String icon,
+    int? color,
+  });
+
+  Future<void> update(CustomCategory category);
+
+  /// Persists a new manual order (list of category ids, first = top).
+  Future<void> reorder(String worldId, List<String> orderedIds);
+
+  /// Deletes the category. Its entries are preserved: they are converted to
+  /// the Concept Archive so no data is ever lost.
+  Future<void> delete(String categoryId);
+
+  Future<Map<String, int>> countsByCategory(String worldId);
+}
+
 abstract interface class EntityRepository {
   Stream<List<Entity>> watchEntities(
     String worldId, {
     EntityKind? kind,
+    String? customCategoryId,
     String? tagId,
     bool favoritesOnly = false,
     EntitySort sort = EntitySort.updatedDesc,
@@ -42,6 +69,7 @@ abstract interface class EntityRepository {
   Future<Entity> createEntity({
     required String worldId,
     required EntityKind kind,
+    String? customCategoryId,
     required String name,
     String summary,
     Map<String, Object?> attributes,
@@ -164,6 +192,7 @@ abstract interface class SearchRepository {
     String worldId,
     String query, {
     EntityKind? kind,
+    String? customCategoryId,
     int limit = 40,
   });
 

@@ -645,6 +645,58 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get sectionCategories => 'MY CATEGORIES';
+
+  @override
+  String get manageCategories => 'Manage Categories';
+
+  @override
+  String get newCategory => 'New category';
+
+  @override
+  String get renameCategory => 'Edit category';
+
+  @override
+  String get deleteCategory => 'Delete category';
+
+  @override
+  String deleteCategoryTitle(String name) {
+    return 'Delete category “$name”?';
+  }
+
+  @override
+  String deleteCategoryBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Its $count entries are preserved and moved to the Concept Archive.',
+      one: 'Its $count entry is preserved and moved to the Concept Archive.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteCategoryBodyEmpty =>
+      'The category is empty; nothing else changes.';
+
+  @override
+  String get categoryNameLabel => 'Category name';
+
+  @override
+  String get categoryNameHint => 'e.g. Guilds, Kingdoms, Rituals…';
+
+  @override
+  String get chooseIcon => 'Icon';
+
+  @override
+  String get noCategoriesYet =>
+      'No custom categories yet. Create one below — it will behave exactly like the built-in sections.';
+
+  @override
+  String get kindCustomEntry => 'Entry';
+
+  @override
   String get kindCharacter => 'Character';
 
   @override

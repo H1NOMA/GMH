@@ -34,6 +34,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
             .watch(entityListProvider((
               worldId: widget.worldId,
               kind: EntityKind.campaign,
+              customCategoryId: null,
               tagId: null,
               favoritesOnly: false,
               sort: EntitySort.updatedDesc,
@@ -124,6 +125,7 @@ class _CampaignDashboard extends ConsumerWidget {
             .watch(entityListProvider((
               worldId: worldId,
               kind: EntityKind.quest,
+              customCategoryId: null,
               tagId: null,
               favoritesOnly: false,
               sort: EntitySort.updatedDesc,
@@ -136,6 +138,7 @@ class _CampaignDashboard extends ConsumerWidget {
             .watch(entityListProvider((
               worldId: worldId,
               kind: EntityKind.session,
+              customCategoryId: null,
               tagId: null,
               favoritesOnly: false,
               sort: EntitySort.createdDesc,

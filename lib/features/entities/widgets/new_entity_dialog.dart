@@ -6,17 +6,54 @@ import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../domain/models/entity_kind.dart';
+import '../../categories/category_ui.dart';
+
+/// What the "Type" dropdown selects: a built-in kind or a custom category.
+sealed class _TypeChoice {
+  const _TypeChoice();
+}
+
+class _KindChoice extends _TypeChoice {
+  final EntityKind kind;
+  const _KindChoice(this.kind);
+
+  @override
+  bool operator ==(Object other) =>
+      other is _KindChoice && other.kind == kind;
+
+  @override
+  int get hashCode => kind.hashCode;
+}
+
+class _CategoryChoice extends _TypeChoice {
+  final String categoryId;
+  const _CategoryChoice(this.categoryId);
+
+  @override
+  bool operator ==(Object other) =>
+      other is _CategoryChoice && other.categoryId == categoryId;
+
+  @override
+  int get hashCode => categoryId.hashCode;
+}
 
 /// Creation dialog used from the dashboard FAB, list screens and the
-/// command palette. Returns the new entity's id (and navigates to it).
+/// command palette. Custom categories appear alongside built-in kinds and
+/// behave exactly the same. Returns the new entity's id (and navigates).
 Future<String?> showNewEntityDialog(
   BuildContext context,
   WidgetRef ref,
   String worldId, {
   EntityKind? initialKind,
+  String? initialCategoryId,
 }) async {
   final nameController = TextEditingController();
-  var kind = initialKind ?? EntityKind.character;
+  final categories =
+      ref.read(worldCategoriesProvider(worldId)).valueOrNull ?? [];
+
+  _TypeChoice choice = initialCategoryId != null
+      ? _CategoryChoice(initialCategoryId)
+      : _KindChoice(initialKind ?? EntityKind.character);
 
   final confirmed = await showDialog<bool>(
     context: context,
@@ -28,30 +65,48 @@ Future<String?> showNewEntityDialog(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DropdownButtonFormField<EntityKind>(
-                value: kind,
-                decoration: InputDecoration(labelText: context.l10n.typeLabel),
+              DropdownButtonFormField<_TypeChoice>(
+                value: choice,
+                decoration:
+                    InputDecoration(labelText: context.l10n.typeLabel),
                 items: [
                   for (final k in EntityKind.values)
-                    DropdownMenuItem(
-                      value: k,
+                    if (k != EntityKind.custom)
+                      DropdownMenuItem<_TypeChoice>(
+                        value: _KindChoice(k),
+                        child: Row(
+                          children: [
+                            Icon(k.icon, size: 17, color: k.color),
+                            const SizedBox(width: 8),
+                            Text(k.localizedLabel(context)),
+                          ],
+                        ),
+                      ),
+                  for (final category in categories)
+                    DropdownMenuItem<_TypeChoice>(
+                      value: _CategoryChoice(category.id),
                       child: Row(
                         children: [
-                          Icon(k.icon, size: 17, color: k.color),
+                          Icon(categoryIconFor(category.icon),
+                              size: 17, color: Color(category.color)),
                           const SizedBox(width: 8),
-                          Text(k.localizedLabel(context)),
+                          Flexible(
+                            child: Text(category.name,
+                                overflow: TextOverflow.ellipsis),
+                          ),
                         ],
                       ),
                     ),
                 ],
-                onChanged: (value) =>
-                    setState(() => kind = value ?? EntityKind.character),
+                onChanged: (value) => setState(
+                    () => choice = value ?? _KindChoice(EntityKind.character)),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: nameController,
                 autofocus: true,
-                decoration: InputDecoration(labelText: context.l10n.nameLabel),
+                decoration:
+                    InputDecoration(labelText: context.l10n.nameLabel),
                 onSubmitted: (_) => Navigator.pop(context, true),
               ),
             ],
@@ -72,9 +127,14 @@ Future<String?> showNewEntityDialog(
   final name = nameController.text.trim();
   if (confirmed != true || name.isEmpty) return null;
 
-  final result = await ref
-      .read(entityServiceProvider)
-      .create(worldId: worldId, kind: kind, name: name);
+  final selected = choice;
+  final result = await ref.read(entityServiceProvider).create(
+        worldId: worldId,
+        kind: selected is _KindChoice ? selected.kind : EntityKind.custom,
+        customCategoryId:
+            selected is _CategoryChoice ? selected.categoryId : null,
+        name: name,
+      );
 
   return result.fold(
     (entity) {
@@ -85,8 +145,8 @@ Future<String?> showNewEntityDialog(
     },
     (error) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(localizedError(context, error))));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(localizedError(context, error))));
       }
       return null;
     },

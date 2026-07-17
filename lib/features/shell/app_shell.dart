@@ -7,6 +7,8 @@ import '../../app/theme/gmh_theme.dart';
 import '../../app/l10n_ext.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
+import '../categories/category_ui.dart';
+import '../categories/manage_categories_sheet.dart';
 import 'ui_providers.dart';
 
 /// Adaptive navigation shell:
@@ -154,6 +156,7 @@ class _Sidebar extends ConsumerWidget {
                 _SectionHeader(context.l10n.sectionLibrary),
                 for (final kind in EntityKind.libraryKinds)
                   _KindTile(worldId: worldId, kind: kind, count: counts[kind]),
+                _CategoriesSection(worldId: worldId),
               ],
             ),
           ),
@@ -252,6 +255,92 @@ class _KindTile extends StatelessWidget {
       selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
       onTap: () => context.go(Routes.browse(worldId, kind)),
       visualDensity: const VisualDensity(vertical: -3),
+    );
+  }
+}
+
+class _CategoriesSection extends ConsumerWidget {
+  final String worldId;
+  const _CategoriesSection({required this.worldId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories =
+        ref.watch(worldCategoriesProvider(worldId)).valueOrNull ?? [];
+    final counts =
+        ref.watch(categoryCountsProvider(worldId)).valueOrNull ?? const {};
+    final location = GoRouterState.of(context).uri.path;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 18, 6, 0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  context.l10n.sectionCategories,
+                  style: const TextStyle(
+                    fontSize: 10.5,
+                    letterSpacing: 1.6,
+                    fontWeight: FontWeight.w700,
+                    color: GmhColors.parchmentFaint,
+                  ),
+                ),
+              ),
+              InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () => showManageCategoriesSheet(context, worldId),
+                child: Tooltip(
+                  message: context.l10n.manageCategories,
+                  child: const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Icon(Icons.tune,
+                        size: 15, color: GmhColors.parchmentFaint),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        for (final category in categories)
+          ListTile(
+            leading: Icon(categoryIconFor(category.icon),
+                size: 19,
+                color: location.endsWith('/category/${category.id}')
+                    ? Color(category.color)
+                    : GmhColors.parchmentDim),
+            title: Text(category.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13.5,
+                  color: location.endsWith('/category/${category.id}')
+                      ? GmhColors.emberBright
+                      : GmhColors.parchment,
+                )),
+            trailing: (counts[category.id] ?? 0) == 0
+                ? null
+                : Text('${counts[category.id]}',
+                    style: const TextStyle(
+                        fontSize: 12, color: GmhColors.parchmentFaint)),
+            selected: location.endsWith('/category/${category.id}'),
+            selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
+            onTap: () =>
+                context.go(Routes.browseCategory(worldId, category.id)),
+            visualDensity: const VisualDensity(vertical: -3),
+          ),
+        ListTile(
+          leading: const Icon(Icons.add,
+              size: 18, color: GmhColors.parchmentFaint),
+          title: Text(context.l10n.newCategory,
+              style: const TextStyle(
+                  fontSize: 13, color: GmhColors.parchmentDim)),
+          onTap: () => showManageCategoriesSheet(context, worldId),
+          visualDensity: const VisualDensity(vertical: -3),
+        ),
+      ],
     );
   }
 }
