@@ -1010,6 +1010,48 @@ abstract class AppLocalizations {
   /// **'Quest giver'**
   String get roleQuestGiver;
 
+  /// No description provided for @roleAlly.
+  ///
+  /// In en, this message translates to:
+  /// **'Ally'**
+  String get roleAlly;
+
+  /// No description provided for @roleFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend'**
+  String get roleFriend;
+
+  /// No description provided for @roleFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get roleFamily;
+
+  /// No description provided for @roleEnemy.
+  ///
+  /// In en, this message translates to:
+  /// **'Enemy'**
+  String get roleEnemy;
+
+  /// No description provided for @roleRival.
+  ///
+  /// In en, this message translates to:
+  /// **'Rival'**
+  String get roleRival;
+
+  /// No description provided for @tabBiography.
+  ///
+  /// In en, this message translates to:
+  /// **'Biography'**
+  String get tabBiography;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get tabProfile;
+
   /// No description provided for @attachmentsCaps.
   ///
   /// In en, this message translates to:

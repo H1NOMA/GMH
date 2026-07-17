@@ -75,6 +75,11 @@ String localizedRoleLabel(BuildContext context, String role) {
     LinkRoles.participatedIn => l.roleParticipatedIn,
     LinkRoles.createdAt => l.roleCreatedAt,
     LinkRoles.questGiver => l.roleQuestGiver,
+    LinkRoles.ally => l.roleAlly,
+    LinkRoles.friend => l.roleFriend,
+    LinkRoles.family => l.roleFamily,
+    LinkRoles.enemy => l.roleEnemy,
+    LinkRoles.rival => l.roleRival,
     _ => role,
   };
 }

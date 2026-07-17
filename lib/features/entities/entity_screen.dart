@@ -11,6 +11,8 @@ import '../../domain/models/entity.dart';
 import '../editor/lore_editor.dart';
 import '../shell/ui_providers.dart';
 import '../attachments/attachments_panel.dart';
+import '../../domain/models/entity_kind.dart';
+import 'character_profile.dart';
 import 'widgets/attribute_form.dart';
 import 'widgets/relations_panel.dart';
 import 'widgets/tag_editor.dart';
@@ -173,6 +175,15 @@ class _EntityScaffold extends ConsumerWidget {
         ),
       ],
     );
+
+    // Characters get the full tabbed profile instead of the generic
+    // document + side panel layout (same data, richer presentation).
+    if (entity.kind == EntityKind.character) {
+      return Scaffold(
+        appBar: appBar,
+        body: CharacterProfile(worldId: worldId, entity: entity),
+      );
+    }
 
     final document = _DocumentPane(worldId: worldId, entity: entity);
     final sidePanel = _SidePanel(entity: entity);
