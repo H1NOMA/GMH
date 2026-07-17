@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -181,19 +182,21 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     final simulation = _simulation;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_focusId == null ? 'Graph View' : 'Local Graph'),
+        title: Text(_focusId == null
+            ? context.l10n.graphTitle
+            : context.l10n.graphLocalTitle),
         actions: [
           if (_focusId != null)
             TextButton.icon(
               icon: const Icon(Icons.public, size: 16),
-              label: const Text('Whole world'),
+              label: Text(context.l10n.graphWholeWorld),
               onPressed: () {
                 setState(() => _focusId = null);
                 _build();
               },
             ),
           PopupMenuButton<EntityKind>(
-            tooltip: 'Filter kinds',
+            tooltip: context.l10n.graphFilterKinds,
             icon: const Icon(Icons.filter_list),
             onSelected: (kind) {
               setState(() {
@@ -217,7 +220,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                             : kind.color,
                       ),
                       const SizedBox(width: 8),
-                      Text(kind.pluralLabel),
+                      Text(kind.localizedPlural(context)),
                     ],
                   ),
                 ),
@@ -228,15 +231,14 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : simulation == null || simulation.nodes.isEmpty
-              ? const Center(
+              ? Center(
                   child: Padding(
-                    padding: EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(32),
                     child: Text(
-                      'No connections yet.\nLink entries with @ mentions, '
-                      'relations or structured fields, and the web of your '
-                      'world will appear here.',
+                      context.l10n.graphEmpty,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: GmhColors.parchmentDim),
+                      style:
+                          const TextStyle(color: GmhColors.parchmentDim),
                     ),
                   ),
                 )
@@ -278,8 +280,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                                 Border.all(color: GmhColors.border),
                           ),
                           child: Text(
-                            'Showing the $_maxGraphNodes most connected '
-                            'entries. Focus an entry for its local graph.',
+                            context.l10n.graphTruncated(_maxGraphNodes),
                             style: const TextStyle(
                                 fontSize: 11.5,
                                 color: GmhColors.parchmentDim),

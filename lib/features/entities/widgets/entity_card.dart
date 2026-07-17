@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme/gmh_theme.dart';
@@ -67,7 +68,7 @@ class EntityCard extends ConsumerWidget {
                     subtitleOverride ??
                         Text(
                           entity.summary.isEmpty
-                              ? entity.kind.label
+                              ? entity.kind.localizedLabel(context)
                               : entity.summary,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

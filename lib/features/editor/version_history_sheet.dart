@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/utils/dates.dart';
@@ -20,7 +21,9 @@ Future<void> showVersionHistorySheet(
   final service = ref.read(documentServiceProvider);
 
   // Checkpoint current state so restoring can always be undone.
-  await service.checkpoint(entityId, note: 'Before restore');
+  if (!context.mounted) return;
+  await service.checkpoint(entityId,
+      note: context.l10n.versionBeforeRestore);
   final doc = await documents.getOrCreate(entityId);
   final versions = await documents.versions(doc.id);
 
@@ -36,14 +39,13 @@ Future<void> showVersionHistorySheet(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              child: Text('Version History',
+              child: Text(context.l10n.versionHistoryTitle,
                   style: Theme.of(context).textTheme.titleLarge),
             ),
             if (versions.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(24),
-                child: Text('No snapshots yet. Versions are saved when you '
-                    'leave the editor or restore.'),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(context.l10n.versionHistoryEmpty),
               )
             else
               Flexible(
@@ -65,7 +67,7 @@ Future<void> showVersionHistorySheet(
                       ),
                       subtitle: Text(
                         preview.isEmpty
-                            ? '(empty)'
+                            ? context.l10n.versionEmptyPreview
                             : preview.length > 120
                                 ? '${preview.substring(0, 120)}…'
                                 : preview,
@@ -74,7 +76,7 @@ Future<void> showVersionHistorySheet(
                         style: const TextStyle(fontSize: 11.5),
                       ),
                       trailing: TextButton(
-                        child: const Text('Restore'),
+                        child: Text(context.l10n.restore),
                         onPressed: () {
                           Navigator.pop(context);
                           onRestore(version.contentJson);

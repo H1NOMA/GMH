@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../domain/models/entity_kind.dart';
@@ -21,7 +22,7 @@ Future<String?> showNewEntityDialog(
     context: context,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) => AlertDialog(
-        title: const Text('New Entry'),
+        title: Text(context.l10n.newEntryTitle),
         content: SizedBox(
           width: 420,
           child: Column(
@@ -29,7 +30,7 @@ Future<String?> showNewEntityDialog(
             children: [
               DropdownButtonFormField<EntityKind>(
                 value: kind,
-                decoration: const InputDecoration(labelText: 'Type'),
+                decoration: InputDecoration(labelText: context.l10n.typeLabel),
                 items: [
                   for (final k in EntityKind.values)
                     DropdownMenuItem(
@@ -38,7 +39,7 @@ Future<String?> showNewEntityDialog(
                         children: [
                           Icon(k.icon, size: 17, color: k.color),
                           const SizedBox(width: 8),
-                          Text(k.label),
+                          Text(k.localizedLabel(context)),
                         ],
                       ),
                     ),
@@ -50,7 +51,7 @@ Future<String?> showNewEntityDialog(
               TextField(
                 controller: nameController,
                 autofocus: true,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: context.l10n.nameLabel),
                 onSubmitted: (_) => Navigator.pop(context, true),
               ),
             ],
@@ -59,10 +60,10 @@ Future<String?> showNewEntityDialog(
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Create')),
+              child: Text(context.l10n.create)),
         ],
       ),
     ),
@@ -85,7 +86,7 @@ Future<String?> showNewEntityDialog(
     (error) {
       if (context.mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error.userMessage)));
+            .showSnackBar(SnackBar(content: Text(localizedError(context, error))));
       }
       return null;
     },

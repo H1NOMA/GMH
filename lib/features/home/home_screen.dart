@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
@@ -41,7 +42,7 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           if (isPhone)
             IconButton(
-              tooltip: 'Switch world',
+              tooltip: context.l10n.switchWorld,
               icon: const Icon(Icons.public),
               onPressed: () => context.go(Routes.worlds()),
             ),
@@ -51,7 +52,7 @@ class HomeScreen extends ConsumerWidget {
         heroTag: 'newEntity',
         onPressed: () => showNewEntityDialog(context, ref, worldId),
         icon: const Icon(Icons.add),
-        label: const Text('New'),
+        label: Text(context.l10n.newButton),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 96),
@@ -63,11 +64,11 @@ class HomeScreen extends ConsumerWidget {
                     fontStyle: FontStyle.italic)),
             const SizedBox(height: 16),
           ],
-          _SectionTitle('The World'),
+          _SectionTitle(context.l10n.homeTheWorld),
           const SizedBox(height: 10),
           _KindGrid(worldId: worldId, kinds: EntityKind.worldKinds, counts: counts),
           const SizedBox(height: 22),
-          _SectionTitle('Library'),
+          _SectionTitle(context.l10n.homeLibrary),
           const SizedBox(height: 10),
           _KindGrid(
               worldId: worldId,
@@ -75,7 +76,7 @@ class HomeScreen extends ConsumerWidget {
               counts: counts),
           if (favorites != null && favorites.isNotEmpty) ...[
             const SizedBox(height: 22),
-            _SectionTitle('Favorites'),
+            _SectionTitle(context.l10n.homeFavorites),
             const SizedBox(height: 10),
             for (final entity in favorites.take(8))
               Padding(
@@ -85,7 +86,7 @@ class HomeScreen extends ConsumerWidget {
           ],
           if (recents != null && recents.isNotEmpty) ...[
             const SizedBox(height: 22),
-            _SectionTitle('Recently Opened'),
+            _SectionTitle(context.l10n.homeRecentlyOpened),
             const SizedBox(height: 10),
             for (final entity in recents.take(10))
               Padding(
@@ -150,11 +151,11 @@ class _KindGrid extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(kind.pluralLabel,
+                          Text(kind.localizedPlural(context),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium),
-                          Text('${counts[kind] ?? 0} entries',
+                          Text(context.l10n.entriesCount(counts[kind] ?? 0),
                               style: Theme.of(context).textTheme.bodySmall),
                         ],
                       ),

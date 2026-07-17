@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../../app/l10n_ext.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
 import 'ui_providers.dart';
@@ -124,33 +125,33 @@ class _Sidebar extends ConsumerWidget {
               children: [
                 _NavTile(
                   icon: Icons.dashboard_outlined,
-                  label: 'Dashboard',
+                  label: context.l10n.navDashboard,
                   selected: section == _Section.home &&
                       location.endsWith('/home'),
                   onTap: () => context.go(Routes.home(worldId)),
                 ),
                 _NavTile(
                   icon: Icons.search,
-                  label: 'Search',
+                  label: context.l10n.navSearch,
                   selected: section == _Section.search,
                   onTap: () => context.go(Routes.search(worldId)),
                 ),
                 _NavTile(
                   icon: Icons.hub_outlined,
-                  label: 'Graph View',
+                  label: context.l10n.navGraph,
                   selected: section == _Section.graph,
                   onTap: () => context.go(Routes.graph(worldId)),
                 ),
                 _NavTile(
                   icon: Icons.map_outlined,
-                  label: 'Campaigns',
+                  label: context.l10n.navCampaigns,
                   selected: section == _Section.campaigns,
                   onTap: () => context.go(Routes.campaigns(worldId)),
                 ),
-                const _SectionHeader('WORLD'),
+                _SectionHeader(context.l10n.sectionWorld),
                 for (final kind in EntityKind.worldKinds)
                   _KindTile(worldId: worldId, kind: kind, count: counts[kind]),
-                const _SectionHeader('LIBRARY'),
+                _SectionHeader(context.l10n.sectionLibrary),
                 for (final kind in EntityKind.libraryKinds)
                   _KindTile(worldId: worldId, kind: kind, count: counts[kind]),
               ],
@@ -159,7 +160,7 @@ class _Sidebar extends ConsumerWidget {
           const Divider(),
           _NavTile(
             icon: Icons.settings_outlined,
-            label: 'Settings & Backup',
+            label: context.l10n.navSettings,
             selected: section == _Section.settings,
             onTap: () => context.go(Routes.settings(worldId)),
           ),
@@ -237,7 +238,7 @@ class _KindTile extends StatelessWidget {
     return ListTile(
       leading: Icon(kind.icon,
           size: 19, color: selected ? kind.color : GmhColors.parchmentDim),
-      title: Text(kind.pluralLabel,
+      title: Text(kind.localizedPlural(context),
           style: TextStyle(
             fontSize: 13.5,
             color: selected ? GmhColors.emberBright : GmhColors.parchment,
@@ -271,21 +272,26 @@ class _Rail extends StatelessWidget {
           _goToSection(context, worldId, _Section.values[index]),
       labelType: NavigationRailLabelType.all,
       leading: IconButton(
-        tooltip: 'Switch world',
+        tooltip: context.l10n.switchWorld,
         icon: const Icon(Icons.public, color: GmhColors.ember),
         onPressed: () => context.go(Routes.worlds()),
       ),
-      destinations: const [
+      destinations: [
         NavigationRailDestination(
-            icon: Icon(Icons.dashboard_outlined), label: Text('Home')),
+            icon: const Icon(Icons.dashboard_outlined),
+            label: Text(context.l10n.navHome)),
         NavigationRailDestination(
-            icon: Icon(Icons.search), label: Text('Search')),
+            icon: const Icon(Icons.search),
+            label: Text(context.l10n.navSearch)),
         NavigationRailDestination(
-            icon: Icon(Icons.hub_outlined), label: Text('Graph')),
+            icon: const Icon(Icons.hub_outlined),
+            label: Text(context.l10n.navGraphShort)),
         NavigationRailDestination(
-            icon: Icon(Icons.map_outlined), label: Text('Campaigns')),
+            icon: const Icon(Icons.map_outlined),
+            label: Text(context.l10n.navCampaigns)),
         NavigationRailDestination(
-            icon: Icon(Icons.settings_outlined), label: Text('Settings')),
+            icon: const Icon(Icons.settings_outlined),
+            label: Text(context.l10n.navSettingsShort)),
       ],
     );
   }
@@ -305,15 +311,21 @@ class _BottomNav extends StatelessWidget {
       height: 64,
       onDestinationSelected: (index) =>
           _goToSection(context, worldId, _Section.values[index]),
-      destinations: const [
+      destinations: [
         NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined), label: 'Home'),
-        NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
-        NavigationDestination(icon: Icon(Icons.hub_outlined), label: 'Graph'),
+            icon: const Icon(Icons.dashboard_outlined),
+            label: context.l10n.navHome),
         NavigationDestination(
-            icon: Icon(Icons.map_outlined), label: 'Campaigns'),
+            icon: const Icon(Icons.search), label: context.l10n.navSearch),
         NavigationDestination(
-            icon: Icon(Icons.settings_outlined), label: 'Settings'),
+            icon: const Icon(Icons.hub_outlined),
+            label: context.l10n.navGraphShort),
+        NavigationDestination(
+            icon: const Icon(Icons.map_outlined),
+            label: context.l10n.navCampaigns),
+        NavigationDestination(
+            icon: const Icon(Icons.settings_outlined),
+            label: context.l10n.navSettingsShort),
       ],
     );
   }

@@ -1,13 +1,15 @@
 name: gmh
 description: "GMH - Game Master's Hub. An offline-first world-building and campaign management workspace for Dungeon Masters."
 publish_to: 'none'
-version: 0.1.0
+version: 0.2.0
 
 environment:
   sdk: ^3.8.1
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 
   # State management & DI
@@ -29,6 +31,9 @@ dependencies:
   path: ^1.9.1
   file_picker: ^10.1.9
   image_picker: ^1.1.2
+  desktop_drop: ^0.6.1
+  cross_file: ^0.3.4
+  url_launcher: ^6.3.1
 
   # Export / backup
   archive: ^4.0.7
@@ -48,6 +53,22 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.26.0
   build_runner: ^2.4.15
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
+  generate: true
+
+flutter_launcher_icons:
+  image_path: "assets/icon/gmh_icon_1024.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#14100B"
+  windows:
+    generate: true
+    image_path: "assets/icon/gmh_icon_1024.png"
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: "assets/icon/gmh_icon_macos_1024.png"

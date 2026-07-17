@@ -30,6 +30,12 @@ Flutter codebase).
 - **Backups & portability** — rotating automatic backups, one-file `.gmhw`
   project archives (database + media) for device migration, JSON export, and
   printable PDF world books.
+- **Attachments everywhere** — unlimited files of any type on every entry:
+  image galleries with a full-screen viewer, PDFs, documents, audio, video,
+  archives; drag & drop on desktop, photo gallery import on mobile; rename,
+  replace, captions and safe deletion with vault garbage collection.
+- **Bilingual UI** — full English and Russian localization with a language
+  switcher in Settings; the system language is detected on first launch.
 - **AI-ready** — grounding/context-building contracts are in place
   (`domain/services/ai/`); no AI is implemented or required.
 

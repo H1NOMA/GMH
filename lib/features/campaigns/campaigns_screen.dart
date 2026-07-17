@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
+import '../../app/template_l10n.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity.dart';
@@ -46,11 +48,11 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Campaigns'),
+        title: Text(context.l10n.campaignsTitle),
         actions: [
           if (campaigns.length > 1)
             PopupMenuButton<String>(
-              tooltip: 'Switch campaign',
+              tooltip: context.l10n.switchCampaign,
               icon: const Icon(Icons.unfold_more),
               onSelected: (id) => setState(() => _selectedCampaignId = id),
               itemBuilder: (context) => [
@@ -64,7 +66,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'newCampaignItem',
         icon: const Icon(Icons.add),
-        label: const Text('New'),
+        label: Text(context.l10n.newButton),
         onPressed: () => showNewEntityDialog(context, ref, widget.worldId,
             initialKind:
                 selected == null ? EntityKind.campaign : EntityKind.quest),
@@ -78,13 +80,13 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
                       size: 48,
                       color: GmhColors.ember.withValues(alpha: 0.5)),
                   const SizedBox(height: 12),
-                  const Text('No campaigns yet'),
+                  Text(context.l10n.noCampaigns),
                   const SizedBox(height: 8),
                   FilledButton(
                     onPressed: () => showNewEntityDialog(
                         context, ref, widget.worldId,
                         initialKind: EntityKind.campaign),
-                    child: const Text('Start a Campaign'),
+                    child: Text(context.l10n.startCampaign),
                   ),
                 ],
               ),
@@ -168,7 +170,7 @@ class _CampaignDashboard extends ConsumerWidget {
                                 Theme.of(context).textTheme.headlineSmall),
                       ),
                       Chip(
-                        label: Text(status,
+                        label: Text(trTemplate(context, status),
                             style: const TextStyle(fontSize: 11.5)),
                         visualDensity: VisualDensity.compact,
                       ),
@@ -187,18 +189,19 @@ class _CampaignDashboard extends ConsumerWidget {
                       if (chapter.isNotEmpty)
                         _MetaItem(
                             icon: Icons.bookmark_outline,
-                            text: 'Chapter: $chapter'),
+                            text: context.l10n.chapterLabel(chapter)),
                       _MetaItem(
                           icon: Icons.group_outlined,
                           text: players.isEmpty
-                              ? 'No players yet'
+                              ? context.l10n.noPlayers
                               : players.join(', ')),
                       _MetaItem(
                           icon: Icons.flag_outlined,
-                          text: '${quests.length} quests'),
+                          text: context.l10n.questsCount(quests.length)),
                       _MetaItem(
                           icon: Icons.event_note_outlined,
-                          text: '${sessions.length} sessions'),
+                          text:
+                              context.l10n.sessionsCount(sessions.length)),
                     ],
                   ),
                 ],
@@ -207,20 +210,23 @@ class _CampaignDashboard extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 20),
-        Text('Quest Board', style: Theme.of(context).textTheme.titleLarge),
+        Text(context.l10n.questBoard,
+            style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 10),
         if (quests.isEmpty)
-          const Text('No quests linked to this campaign yet. Create a quest '
-              'and set its Campaign field.',
-              style: TextStyle(fontSize: 12.5, color: GmhColors.parchmentDim))
+          Text(context.l10n.noQuestsLinked,
+              style: const TextStyle(
+                  fontSize: 12.5, color: GmhColors.parchmentDim))
         else
           _QuestBoard(worldId: worldId, quests: quests),
         const SizedBox(height: 24),
-        Text('Session Log', style: Theme.of(context).textTheme.titleLarge),
+        Text(context.l10n.sessionLog,
+            style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 10),
         if (sessions.isEmpty)
-          const Text('No sessions recorded yet.',
-              style: TextStyle(fontSize: 12.5, color: GmhColors.parchmentDim))
+          Text(context.l10n.noSessions,
+              style: const TextStyle(
+                  fontSize: 12.5, color: GmhColors.parchmentDim))
         else
           for (final session in sessions)
             Padding(
@@ -304,7 +310,7 @@ class _QuestBoard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 7),
-                Text(status,
+                Text(trTemplate(context, status),
                     style: const TextStyle(
                         fontSize: 12.5, fontWeight: FontWeight.w600)),
                 const SizedBox(width: 6),

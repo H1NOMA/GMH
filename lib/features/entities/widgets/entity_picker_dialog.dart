@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../core/constants.dart';
@@ -16,12 +17,14 @@ Future<Entity?> showEntityPickerDialog(
   BuildContext context, {
   required String worldId,
   List<EntityKind> kinds = const [],
-  String title = 'Link an entry',
+  String? title,
 }) {
   return showDialog<Entity>(
     context: context,
-    builder: (context) =>
-        _EntityPickerDialog(worldId: worldId, kinds: kinds, title: title),
+    builder: (context) => _EntityPickerDialog(
+        worldId: worldId,
+        kinds: kinds,
+        title: title ?? context.l10n.pickerTitleDefault),
   );
 }
 
@@ -87,8 +90,11 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
               autofocus: true,
               decoration: InputDecoration(
                 hintText: widget.kinds.isEmpty
-                    ? 'Search all entries…'
-                    : 'Search ${widget.kinds.map((k) => k.pluralLabel.toLowerCase()).join(', ')}…',
+                    ? context.l10n.pickerSearchAll
+                    : context.l10n.pickerSearchKinds(widget.kinds
+                        .map((k) =>
+                            k.localizedPlural(context).toLowerCase())
+                        .join(', ')),
                 prefixIcon: const Icon(Icons.search, size: 18),
               ),
               onChanged: (text) => _debouncer(() => _query(text)),
@@ -98,10 +104,10 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
               child: _loading
                   ? const Center(child: CircularProgressIndicator())
                   : _results.isEmpty
-                      ? const Center(
-                          child: Text('No matching entries',
-                              style:
-                                  TextStyle(color: GmhColors.parchmentDim)))
+                      ? Center(
+                          child: Text(context.l10n.pickerNoMatches,
+                              style: const TextStyle(
+                                  color: GmhColors.parchmentDim)))
                       : ListView.builder(
                           itemCount: _results.length,
                           itemBuilder: (context, index) {
@@ -111,7 +117,8 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
                                   size: 19, color: entity.kind.color),
                               title: Text(entity.name),
                               subtitle: entity.summary.isEmpty
-                                  ? Text(entity.kind.label,
+                                  ? Text(
+                                      entity.kind.localizedLabel(context),
                                       style: const TextStyle(fontSize: 11))
                                   : Text(entity.summary,
                                       maxLines: 1,
@@ -128,7 +135,7 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
       actions: [
         TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel')),
+            child: Text(context.l10n.cancel)),
       ],
     );
   }

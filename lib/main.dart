@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'app/app.dart';
+import 'app/locale_provider.dart';
 import 'app/providers.dart';
 import 'app/router.dart';
 import 'domain/repositories/repositories.dart';
@@ -24,9 +25,15 @@ Future<void> main() async {
     overrides: [appRootDirProvider.overrideWithValue(rootDir)],
   );
 
-  // Resolve the start location and kick off an automatic backup for the
-  // last opened world (throttled inside the service).
+  // Load the persisted language before the first frame. Absent = follow the
+  // system language, so a Russian system gets Russian automatically on
+  // first launch (resolved by Flutter against supportedLocales).
   final settings = container.read(settingsRepositoryProvider);
+  final savedLocale =
+      localeFromSetting(await settings.get(SettingsKeys.appLocale));
+  if (savedLocale != null) {
+    container.read(localeControllerProvider.notifier).seed(savedLocale);
+  }
   final lastWorldId = await settings.get(SettingsKeys.lastOpenedWorld);
   var initialLocation = Routes.worlds();
   if (lastWorldId != null) {
