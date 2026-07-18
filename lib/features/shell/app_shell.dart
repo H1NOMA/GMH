@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../app/l10n_ext.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
+import '../../domain/models/world.dart';
 import '../../app/nav_state.dart';
 import '../categories/category_ui.dart';
 import '../tags/tag_manager_sheet.dart';
@@ -26,11 +28,21 @@ class AppShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = MediaQuery.sizeOf(context).width;
+
+    // The open world's flavor drives the whole shell: palette facade,
+    // ThemeData override and the slang used for kind labels.
+    final style = ref.watch(worldProvider(worldId)).valueOrNull?.style ??
+        WorldStyle.fantasy;
+    final brightness = Theme.of(context).brightness;
+    GmhStyle.current = style;
+    GmhColors.palette = GmhStyle.paletteFor(style, brightness);
+
     // One shared bucket for all pages: scroll positions (and other
     // PageStorage values) survive navigating between sections.
     final content = PageStorage(bucket: appPageBucket, child: child);
+    final Widget scaffold;
     if (width >= GmhConstants.desktopMinWidth) {
-      return Scaffold(
+      scaffold = Scaffold(
         body: Row(
           children: [
             SizedBox(width: 264, child: _Sidebar(worldId: worldId)),
@@ -39,9 +51,8 @@ class AppShell extends ConsumerWidget {
           ],
         ),
       );
-    }
-    if (width >= GmhConstants.phoneMaxWidth) {
-      return Scaffold(
+    } else if (width >= GmhConstants.phoneMaxWidth) {
+      scaffold = Scaffold(
         body: Row(
           children: [
             _Rail(worldId: worldId),
@@ -50,11 +61,16 @@ class AppShell extends ConsumerWidget {
           ],
         ),
       );
+    } else {
+      scaffold = Scaffold(
+        body: content,
+        bottomNavigationBar: _BottomNav(worldId: worldId),
+      );
     }
-    return Scaffold(
-      body: content,
-      bottomNavigationBar: _BottomNav(worldId: worldId),
-    );
+    return style == WorldStyle.fantasy
+        ? scaffold
+        : Theme(
+            data: GmhStyle.themeFor(style, brightness), child: scaffold);
   }
 }
 
@@ -166,43 +182,25 @@ class _Sidebar extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                _NavTile(
-                  icon: Icons.dashboard_outlined,
-                  label: context.l10n.navDashboard,
-                  selected: section == _Section.home &&
-                      location.endsWith('/home'),
-                  onTap: () => context.go(Routes.home(worldId)),
-                ),
-                _NavTile(
-                  icon: Icons.search,
-                  label: context.l10n.navSearch,
-                  selected: section == _Section.search,
-                  onTap: () => context.go(Routes.search(worldId)),
-                ),
-                _NavTile(
-                  icon: Icons.hub_outlined,
-                  label: context.l10n.navGraph,
-                  selected: section == _Section.graph,
-                  onTap: () => context.go(Routes.graph(worldId)),
-                ),
-                _NavTile(
-                  icon: Icons.map_outlined,
-                  label: context.l10n.navCampaigns,
-                  selected: section == _Section.campaigns,
-                  onTap: () => context.go(Routes.campaigns(worldId)),
-                ),
-                _NavTile(
-                  icon: Icons.sell_outlined,
-                  label: context.l10n.tagManagerTitle,
-                  selected: false,
-                  onTap: () => showTagManagerSheet(context, worldId),
+                // Every group below reorders by press-and-hold drag; the
+                // custom order persists per world.
+                _DraggableGroup(
+                  ids: applySidebarOrder(
+                    const ['dashboard', 'search', 'graph', 'campaigns',
+                        'tags'],
+                    ref.watch(sidebarOrderProvider('$worldId|nav')),
+                  ),
+                  itemBuilder: (id) =>
+                      _mainNavTile(context, id, section, location),
+                  onReorder: (order) => ref
+                      .read(sidebarOrderProvider('$worldId|nav').notifier)
+                      .setOrder(order),
                 ),
                 _SectionHeader(context.l10n.sectionWorld),
-                for (final kind in EntityKind.worldKinds)
-                  _KindTile(worldId: worldId, kind: kind, count: counts[kind]),
+                _kindGroup(ref, 'worldKinds', EntityKind.worldKinds, counts),
                 _SectionHeader(context.l10n.sectionLibrary),
-                for (final kind in EntityKind.libraryKinds)
-                  _KindTile(worldId: worldId, kind: kind, count: counts[kind]),
+                _kindGroup(
+                    ref, 'libraryKinds', EntityKind.libraryKinds, counts),
                 _CategoriesSection(worldId: worldId),
               ],
             ),
@@ -217,6 +215,114 @@ class _Sidebar extends ConsumerWidget {
           const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+}
+
+extension on _Sidebar {
+  Widget _mainNavTile(
+      BuildContext context, String id, _Section section, String location) {
+    switch (id) {
+      case 'dashboard':
+        return _NavTile(
+          icon: Icons.dashboard_outlined,
+          label: context.l10n.navDashboard,
+          selected: section == _Section.home && location.endsWith('/home'),
+          onTap: () => context.go(Routes.home(worldId)),
+        );
+      case 'search':
+        return _NavTile(
+          icon: Icons.search,
+          label: context.l10n.navSearch,
+          selected: section == _Section.search,
+          onTap: () => context.go(Routes.search(worldId)),
+        );
+      case 'graph':
+        return _NavTile(
+          icon: Icons.hub_outlined,
+          label: context.l10n.navGraph,
+          selected: section == _Section.graph,
+          onTap: () => context.go(Routes.graph(worldId)),
+        );
+      case 'campaigns':
+        return _NavTile(
+          icon: Icons.map_outlined,
+          label: context.l10n.navCampaigns,
+          selected: section == _Section.campaigns,
+          onTap: () => context.go(Routes.campaigns(worldId)),
+        );
+      case 'tags':
+      default:
+        return _NavTile(
+          icon: Icons.sell_outlined,
+          label: context.l10n.tagManagerTitle,
+          selected: false,
+          onTap: () => showTagManagerSheet(context, worldId),
+        );
+    }
+  }
+
+  Widget _kindGroup(WidgetRef ref, String group, List<EntityKind> kinds,
+      Map<EntityKind, int> counts) {
+    final byName = {for (final k in kinds) k.name: k};
+    return _DraggableGroup(
+      ids: applySidebarOrder(
+        [for (final k in kinds) k.name],
+        ref.watch(sidebarOrderProvider('$worldId|$group')),
+      ),
+      itemBuilder: (name) {
+        final kind = byName[name]!;
+        return _KindTile(worldId: worldId, kind: kind, count: counts[kind]);
+      },
+      onReorder: (order) => ref
+          .read(sidebarOrderProvider('$worldId|$group').notifier)
+          .setOrder(order),
+    );
+  }
+}
+
+/// A vertical group whose children reorder by press-and-hold drag
+/// (mouse and touch), like browser tabs.
+class _DraggableGroup extends StatelessWidget {
+  final List<String> ids;
+  final Widget Function(String id) itemBuilder;
+  final void Function(List<String> newOrder) onReorder;
+
+  const _DraggableGroup({
+    required this.ids,
+    required this.itemBuilder,
+    required this.onReorder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      buildDefaultDragHandles: false,
+      onReorder: (oldIndex, newIndex) {
+        final order = [...ids];
+        if (newIndex > oldIndex) newIndex--;
+        order.insert(newIndex, order.removeAt(oldIndex));
+        onReorder(order);
+      },
+      proxyDecorator: (child, index, animation) => Material(
+        color: Colors.transparent,
+        elevation: 4,
+        borderRadius: BorderRadius.circular(10),
+        child: ColoredBox(
+          color: GmhColors.surfaceHigh,
+          child: child,
+        ),
+      ),
+      children: [
+        for (var i = 0; i < ids.length; i++)
+          ReorderableDelayedDragStartListener(
+            key: ValueKey(ids[i]),
+            index: i,
+            child: itemBuilder(ids[i]),
+          ),
+      ],
     );
   }
 }
@@ -351,33 +457,43 @@ class _CategoriesSection extends ConsumerWidget {
             ],
           ),
         ),
-        for (final category in categories)
-          ListTile(
-            leading: Icon(categoryIconFor(category.icon),
-                size: 19,
-                color: location.endsWith('/category/${category.id}')
-                    ? Color(category.color)
-                    : GmhColors.parchmentDim),
-            title: Text(category.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 13.5,
-                  color: location.endsWith('/category/${category.id}')
-                      ? GmhColors.emberBright
-                      : GmhColors.parchment,
-                )),
-            trailing: (counts[category.id] ?? 0) == 0
-                ? null
-                : Text('${counts[category.id]}',
-                    style: TextStyle(
-                        fontSize: 12, color: GmhColors.parchmentFaint)),
-            selected: location.endsWith('/category/${category.id}'),
-            selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
-            onTap: () =>
-                context.go(Routes.browseCategory(worldId, category.id)),
-            visualDensity: const VisualDensity(vertical: -3),
-          ),
+        _DraggableGroup(
+          ids: [for (final c in categories) c.id],
+          itemBuilder: (id) {
+            final category = categories.firstWhere((c) => c.id == id);
+            final selected = location.endsWith('/category/${category.id}');
+            return ListTile(
+              leading: Icon(categoryIconFor(category.icon),
+                  size: 19,
+                  color: selected
+                      ? Color(category.color)
+                      : GmhColors.parchmentDim),
+              title: Text(category.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13.5,
+                    color: selected
+                        ? GmhColors.emberBright
+                        : GmhColors.parchment,
+                  )),
+              trailing: (counts[category.id] ?? 0) == 0
+                  ? null
+                  : Text('${counts[category.id]}',
+                      style: TextStyle(
+                          fontSize: 12, color: GmhColors.parchmentFaint)),
+              selected: selected,
+              selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
+              onTap: () =>
+                  context.go(Routes.browseCategory(worldId, category.id)),
+              visualDensity: const VisualDensity(vertical: -3),
+            );
+          },
+          // Category order is already a first-class concept — persist the
+          // drag result straight into the repository.
+          onReorder: (order) =>
+              ref.read(categoryRepositoryProvider).reorder(worldId, order),
+        ),
         ListTile(
           leading: Icon(Icons.add,
               size: 18, color: GmhColors.parchmentFaint),

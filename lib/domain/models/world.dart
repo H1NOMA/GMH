@@ -1,5 +1,16 @@
 import 'package:flutter/foundation.dart';
 
+/// Visual & terminology flavor of a world, chosen at creation time.
+/// Fantasy keeps the classic candle-lit design; cyberpunk switches the whole
+/// app to a neon palette and slang labels (Runners, Sectors, Gigs…).
+enum WorldStyle {
+  fantasy,
+  cyberpunk;
+
+  static WorldStyle parse(String? name) =>
+      values.firstWhere((s) => s.name == name, orElse: () => fantasy);
+}
+
 /// The root container of a universe. Everything else (entities, documents,
 /// links, tags, media) belongs to exactly one world.
 @immutable
@@ -8,6 +19,7 @@ class World {
   final String name;
   final String description;
   final String? coverMediaId;
+  final WorldStyle style;
   final int createdAt;
   final int updatedAt;
 
@@ -16,6 +28,7 @@ class World {
     required this.name,
     this.description = '',
     this.coverMediaId,
+    this.style = WorldStyle.fantasy,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -24,6 +37,7 @@ class World {
     String? name,
     String? description,
     String? Function()? coverMediaId,
+    WorldStyle? style,
     int? updatedAt,
   }) {
     return World(
@@ -31,6 +45,7 @@ class World {
       name: name ?? this.name,
       description: description ?? this.description,
       coverMediaId: coverMediaId != null ? coverMediaId() : this.coverMediaId,
+      style: style ?? this.style,
       createdAt: createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

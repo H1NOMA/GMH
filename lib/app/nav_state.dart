@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -243,6 +245,55 @@ class SearchStateController extends FamilyNotifier<SearchState, String> {
 final searchStateProvider =
     NotifierProvider.family<SearchStateController, SearchState, String>(
         SearchStateController.new);
+
+// ------------------------------------------------- sidebar tab order
+
+/// User-defined order of the sidebar tabs, one list per group
+/// (`'<worldId>|nav'`, `'<worldId>|worldKinds'`, `'<worldId>|libraryKinds'`).
+/// Reordered by long-press drag; persisted so it survives restarts.
+class SidebarOrderController extends FamilyNotifier<List<String>, String> {
+  String get _key =>
+      '${SettingsKeys.sidebarOrder}.${arg.replaceAll('|', '.')}';
+
+  @override
+  List<String> build(String key) {
+    Future.microtask(() async {
+      final saved = await ref.read(settingsRepositoryProvider).get(_key);
+      if (saved == null) return;
+      try {
+        final ids = (jsonDecode(saved) as List).cast<String>();
+        if (ids.isNotEmpty) state = ids;
+      } catch (_) {}
+    });
+    return const [];
+  }
+
+  void setOrder(List<String> ids) {
+    state = ids;
+    ref.read(settingsRepositoryProvider).set(_key, jsonEncode(ids));
+  }
+}
+
+final sidebarOrderProvider =
+    NotifierProvider.family<SidebarOrderController, List<String>, String>(
+        SidebarOrderController.new);
+
+/// Applies a saved order to the canonical id list: unknown saved ids are
+/// dropped, new canonical ids are appended — so app updates that add tabs
+/// keep working with an old saved order.
+List<String> applySidebarOrder(
+    List<String> canonical, List<String> saved) {
+  if (saved.isEmpty) return canonical;
+  final available = canonical.toSet();
+  final ordered = [
+    for (final id in saved)
+      if (available.contains(id)) id
+  ];
+  for (final id in canonical) {
+    if (!ordered.contains(id)) ordered.add(id);
+  }
+  return ordered;
+}
 
 // -------------------------------------------------- profile active tab
 

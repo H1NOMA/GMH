@@ -15,7 +15,11 @@ import '../models/world.dart';
 abstract interface class WorldRepository {
   Stream<List<World>> watchWorlds();
   Future<World?> getWorld(String id);
-  Future<World> createWorld({required String name, String description});
+  Future<World> createWorld({
+    required String name,
+    String description,
+    WorldStyle style,
+  });
   Future<void> updateWorld(World world);
 
   /// Permanently deletes a world and all of its data and media.
@@ -244,4 +248,7 @@ abstract final class SettingsKeys {
 
   /// Checkpoint of an interrupted TTG migration (JSON), enabling resume.
   static const ttgImportState = 'ttgImportState';
+
+  /// User-defined sidebar tab order (`sidebarOrder.<worldId>.<group>`).
+  static const sidebarOrder = 'sidebarOrder';
 }

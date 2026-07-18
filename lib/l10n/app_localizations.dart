@@ -1837,6 +1837,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Migrate a complete TTG D&D database into a new world: all records, relationships, formatting and media'**
   String get ttgSettingsSubtitle;
+
+  /// No description provided for @cyberKindCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'Runner'**
+  String get cyberKindCharacter;
+
+  /// No description provided for @cyberKindCharacterPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Runners'**
+  String get cyberKindCharacterPlural;
+
+  /// No description provided for @cyberKindLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Sector'**
+  String get cyberKindLocation;
+
+  /// No description provided for @cyberKindLocationPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Sectors'**
+  String get cyberKindLocationPlural;
+
+  /// No description provided for @cyberKindItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Gear'**
+  String get cyberKindItem;
+
+  /// No description provided for @cyberKindItemPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Gear & Tech'**
+  String get cyberKindItemPlural;
+
+  /// No description provided for @cyberKindCreature.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyberform'**
+  String get cyberKindCreature;
+
+  /// No description provided for @cyberKindCreaturePlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyberforms'**
+  String get cyberKindCreaturePlural;
+
+  /// No description provided for @cyberKindFaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Syndicate'**
+  String get cyberKindFaction;
+
+  /// No description provided for @cyberKindFactionPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Corps & Gangs'**
+  String get cyberKindFactionPlural;
+
+  /// No description provided for @cyberKindEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident'**
+  String get cyberKindEvent;
+
+  /// No description provided for @cyberKindEventPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Incidents'**
+  String get cyberKindEventPlural;
+
+  /// No description provided for @cyberKindEra.
+  ///
+  /// In en, this message translates to:
+  /// **'Epoch'**
+  String get cyberKindEra;
+
+  /// No description provided for @cyberKindEraPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Epochs'**
+  String get cyberKindEraPlural;
+
+  /// No description provided for @cyberKindReligion.
+  ///
+  /// In en, this message translates to:
+  /// **'Cult'**
+  String get cyberKindReligion;
+
+  /// No description provided for @cyberKindReligionPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Cults'**
+  String get cyberKindReligionPlural;
+
+  /// No description provided for @cyberKindMagicSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol'**
+  String get cyberKindMagicSystem;
+
+  /// No description provided for @cyberKindMagicSystemPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocols'**
+  String get cyberKindMagicSystemPlural;
+
+  /// No description provided for @cyberKindTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyberware'**
+  String get cyberKindTechnology;
+
+  /// No description provided for @cyberKindTechnologyPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyberware'**
+  String get cyberKindTechnologyPlural;
+
+  /// No description provided for @cyberKindConcept.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Fragment'**
+  String get cyberKindConcept;
+
+  /// No description provided for @cyberKindConceptPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Vault'**
+  String get cyberKindConceptPlural;
+
+  /// No description provided for @cyberKindLoreDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Shard'**
+  String get cyberKindLoreDocument;
+
+  /// No description provided for @cyberKindLoreDocumentPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Shards'**
+  String get cyberKindLoreDocumentPlural;
+
+  /// No description provided for @cyberKindCampaign.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation'**
+  String get cyberKindCampaign;
+
+  /// No description provided for @cyberKindCampaignPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations'**
+  String get cyberKindCampaignPlural;
+
+  /// No description provided for @cyberKindQuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Gig'**
+  String get cyberKindQuest;
+
+  /// No description provided for @cyberKindQuestPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Gigs'**
+  String get cyberKindQuestPlural;
+
+  /// No description provided for @cyberKindSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Run'**
+  String get cyberKindSession;
+
+  /// No description provided for @cyberKindSessionPlural.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs'**
+  String get cyberKindSessionPlural;
+
+  /// No description provided for @worldStyleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'World style'**
+  String get worldStyleLabel;
+
+  /// No description provided for @worldStyleFantasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Fantasy'**
+  String get worldStyleFantasy;
+
+  /// No description provided for @worldStyleFantasyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Candle-lit parchment, classic vocabulary: Characters, Locations, Quests'**
+  String get worldStyleFantasyHint;
+
+  /// No description provided for @worldStyleCyberpunk.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyberpunk'**
+  String get worldStyleCyberpunk;
+
+  /// No description provided for @worldStyleCyberpunkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Neon chrome and street slang: Runners, Sectors, Gigs'**
+  String get worldStyleCyberpunkHint;
 }
 
 class _AppLocalizationsDelegate

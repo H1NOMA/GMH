@@ -25,12 +25,16 @@ class _FakeWorldRepository implements WorldRepository {
       worlds.where((w) => w.id == id).firstOrNull;
 
   @override
-  Future<World> createWorld(
-      {required String name, String description = ''}) async {
+  Future<World> createWorld({
+    required String name,
+    String description = '',
+    WorldStyle style = WorldStyle.fantasy,
+  }) async {
     final world = World(
         id: newId(),
         name: name,
         description: description,
+        style: style,
         createdAt: nowMs(),
         updatedAt: nowMs());
     worlds.add(world);

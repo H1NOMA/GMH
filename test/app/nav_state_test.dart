@@ -177,6 +177,46 @@ void main() {
     });
   });
 
+  group('SidebarOrder', () {
+    test('drag order persists per group and survives restart', () async {
+      const canonical = ['dashboard', 'search', 'graph', 'campaigns', 'tags'];
+      final controller =
+          container.read(sidebarOrderProvider('w1|nav').notifier);
+      controller.setOrder(
+          const ['search', 'dashboard', 'graph', 'campaigns', 'tags']);
+
+      expect(
+        applySidebarOrder(
+            canonical, container.read(sidebarOrderProvider('w1|nav'))),
+        ['search', 'dashboard', 'graph', 'campaigns', 'tags'],
+      );
+
+      // Restart: order loads back from settings.
+      final restarted = ProviderContainer(overrides: [
+        settingsRepositoryProvider.overrideWithValue(h.settings),
+      ]);
+      restarted.read(sidebarOrderProvider('w1|nav'));
+      final deadline = DateTime.now().add(const Duration(seconds: 2));
+      while (restarted.read(sidebarOrderProvider('w1|nav')).isEmpty &&
+          DateTime.now().isBefore(deadline)) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(restarted.read(sidebarOrderProvider('w1|nav')).first, 'search');
+      restarted.dispose();
+    });
+
+    test('saved order tolerates added and removed tabs', () {
+      // A tab was removed ('x') and a new one shipped ('new').
+      expect(
+        applySidebarOrder(
+            ['a', 'b', 'new'], ['b', 'x', 'a']),
+        ['b', 'a', 'new'],
+      );
+      // No saved order -> canonical.
+      expect(applySidebarOrder(['a', 'b'], []), ['a', 'b']);
+    });
+  });
+
   group('Last location', () {
     test('is persisted under the well-known key', () async {
       await h.settings.set(SettingsKeys.lastLocation, '/w/1/campaigns');

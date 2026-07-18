@@ -49,6 +49,16 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldRow> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _styleMeta = const VerificationMeta('style');
+  @override
+  late final GeneratedColumn<String> style = GeneratedColumn<String>(
+    'style',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('fantasy'),
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -77,6 +87,7 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldRow> {
     name,
     description,
     coverMediaId,
+    style,
     createdAt,
     updatedAt,
   ];
@@ -123,6 +134,12 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldRow> {
         ),
       );
     }
+    if (data.containsKey('style')) {
+      context.handle(
+        _styleMeta,
+        style.isAcceptableOrUnknown(data['style']!, _styleMeta),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -164,6 +181,10 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldRow> {
         DriftSqlType.string,
         data['${effectivePrefix}cover_media_id'],
       ),
+      style: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}style'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}created_at'],
@@ -186,6 +207,9 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
   final String name;
   final String description;
   final String? coverMediaId;
+
+  /// Visual & terminology flavor: 'fantasy' (default) or 'cyberpunk'.
+  final String style;
   final int createdAt;
   final int updatedAt;
   const WorldRow({
@@ -193,6 +217,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
     required this.name,
     required this.description,
     this.coverMediaId,
+    required this.style,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -205,6 +230,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
     if (!nullToAbsent || coverMediaId != null) {
       map['cover_media_id'] = Variable<String>(coverMediaId);
     }
+    map['style'] = Variable<String>(style);
     map['created_at'] = Variable<int>(createdAt);
     map['updated_at'] = Variable<int>(updatedAt);
     return map;
@@ -218,6 +244,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
       coverMediaId: coverMediaId == null && nullToAbsent
           ? const Value.absent()
           : Value(coverMediaId),
+      style: Value(style),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -233,6 +260,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String>(json['description']),
       coverMediaId: serializer.fromJson<String?>(json['coverMediaId']),
+      style: serializer.fromJson<String>(json['style']),
       createdAt: serializer.fromJson<int>(json['createdAt']),
       updatedAt: serializer.fromJson<int>(json['updatedAt']),
     );
@@ -245,6 +273,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
       'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String>(description),
       'coverMediaId': serializer.toJson<String?>(coverMediaId),
+      'style': serializer.toJson<String>(style),
       'createdAt': serializer.toJson<int>(createdAt),
       'updatedAt': serializer.toJson<int>(updatedAt),
     };
@@ -255,6 +284,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
     String? name,
     String? description,
     Value<String?> coverMediaId = const Value.absent(),
+    String? style,
     int? createdAt,
     int? updatedAt,
   }) => WorldRow(
@@ -262,6 +292,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
     name: name ?? this.name,
     description: description ?? this.description,
     coverMediaId: coverMediaId.present ? coverMediaId.value : this.coverMediaId,
+    style: style ?? this.style,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -275,6 +306,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
       coverMediaId: data.coverMediaId.present
           ? data.coverMediaId.value
           : this.coverMediaId,
+      style: data.style.present ? data.style.value : this.style,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -287,6 +319,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('coverMediaId: $coverMediaId, ')
+          ..write('style: $style, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -294,8 +327,15 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, description, coverMediaId, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    coverMediaId,
+    style,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -304,6 +344,7 @@ class WorldRow extends DataClass implements Insertable<WorldRow> {
           other.name == this.name &&
           other.description == this.description &&
           other.coverMediaId == this.coverMediaId &&
+          other.style == this.style &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -313,6 +354,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
   final Value<String> name;
   final Value<String> description;
   final Value<String?> coverMediaId;
+  final Value<String> style;
   final Value<int> createdAt;
   final Value<int> updatedAt;
   final Value<int> rowid;
@@ -321,6 +363,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
     this.name = const Value.absent(),
     this.description = const Value.absent(),
     this.coverMediaId = const Value.absent(),
+    this.style = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -330,6 +373,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
     required String name,
     this.description = const Value.absent(),
     this.coverMediaId = const Value.absent(),
+    this.style = const Value.absent(),
     required int createdAt,
     required int updatedAt,
     this.rowid = const Value.absent(),
@@ -342,6 +386,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
     Expression<String>? name,
     Expression<String>? description,
     Expression<String>? coverMediaId,
+    Expression<String>? style,
     Expression<int>? createdAt,
     Expression<int>? updatedAt,
     Expression<int>? rowid,
@@ -351,6 +396,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
       if (name != null) 'name': name,
       if (description != null) 'description': description,
       if (coverMediaId != null) 'cover_media_id': coverMediaId,
+      if (style != null) 'style': style,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
@@ -362,6 +408,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
     Value<String>? name,
     Value<String>? description,
     Value<String?>? coverMediaId,
+    Value<String>? style,
     Value<int>? createdAt,
     Value<int>? updatedAt,
     Value<int>? rowid,
@@ -371,6 +418,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
       name: name ?? this.name,
       description: description ?? this.description,
       coverMediaId: coverMediaId ?? this.coverMediaId,
+      style: style ?? this.style,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
@@ -392,6 +440,9 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
     if (coverMediaId.present) {
       map['cover_media_id'] = Variable<String>(coverMediaId.value);
     }
+    if (style.present) {
+      map['style'] = Variable<String>(style.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<int>(createdAt.value);
     }
@@ -411,6 +462,7 @@ class WorldsCompanion extends UpdateCompanion<WorldRow> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('coverMediaId: $coverMediaId, ')
+          ..write('style: $style, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
@@ -4788,6 +4840,7 @@ typedef $$WorldsTableCreateCompanionBuilder =
       required String name,
       Value<String> description,
       Value<String?> coverMediaId,
+      Value<String> style,
       required int createdAt,
       required int updatedAt,
       Value<int> rowid,
@@ -4798,6 +4851,7 @@ typedef $$WorldsTableUpdateCompanionBuilder =
       Value<String> name,
       Value<String> description,
       Value<String?> coverMediaId,
+      Value<String> style,
       Value<int> createdAt,
       Value<int> updatedAt,
       Value<int> rowid,
@@ -4928,6 +4982,11 @@ class $$WorldsTableFilterComposer
 
   ColumnFilters<String> get coverMediaId => $composableBuilder(
     column: $table.coverMediaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get style => $composableBuilder(
+    column: $table.style,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5096,6 +5155,11 @@ class $$WorldsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get style => $composableBuilder(
+    column: $table.style,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -5131,6 +5195,9 @@ class $$WorldsTableAnnotationComposer
     column: $table.coverMediaId,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get style =>
+      $composableBuilder(column: $table.style, builder: (column) => column);
 
   GeneratedColumn<int> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -5302,6 +5369,7 @@ class $$WorldsTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<String?> coverMediaId = const Value.absent(),
+                Value<String> style = const Value.absent(),
                 Value<int> createdAt = const Value.absent(),
                 Value<int> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -5310,6 +5378,7 @@ class $$WorldsTableTableManager
                 name: name,
                 description: description,
                 coverMediaId: coverMediaId,
+                style: style,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -5320,6 +5389,7 @@ class $$WorldsTableTableManager
                 required String name,
                 Value<String> description = const Value.absent(),
                 Value<String?> coverMediaId = const Value.absent(),
+                Value<String> style = const Value.absent(),
                 required int createdAt,
                 required int updatedAt,
                 Value<int> rowid = const Value.absent(),
@@ -5328,6 +5398,7 @@ class $$WorldsTableTableManager
                 name: name,
                 description: description,
                 coverMediaId: coverMediaId,
+                style: style,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
