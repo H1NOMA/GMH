@@ -324,5 +324,7 @@
   "worldStyleFantasy": "Фэнтези",
   "worldStyleFantasyHint": "Пергамент при свечах, классические термины: Персонажи, Локации, Квесты",
   "worldStyleCyberpunk": "Киберпанк",
-  "worldStyleCyberpunkHint": "Неон, хром и уличный сленг: Раннеры, Сектора, Заказы"
+  "worldStyleCyberpunkHint": "Неон, хром и уличный сленг: Раннеры, Сектора, Заказы",
+  "viewAsGrid": "Вид сеткой",
+  "viewAsList": "Вид списком"
 }

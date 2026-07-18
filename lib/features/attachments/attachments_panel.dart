@@ -122,12 +122,23 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
           ),
         if (files.isNotEmpty) ...[
           const SizedBox(height: 8),
-          for (final entry in files)
-            _FileRow(
-              entry: entry,
-              onTap: () => previewAttachment(context, ref, entry.media),
-              onMenu: () => _showActions(entry),
-            ),
+          // Files use the same gallery-style grid as images.
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 1.55,
+            children: [
+              for (final entry in files)
+                _FileTile(
+                  entry: entry,
+                  onTap: () => previewAttachment(context, ref, entry.media),
+                  onMenu: () => _showActions(entry),
+                ),
+            ],
+          ),
         ],
       ],
     );
@@ -385,12 +396,14 @@ class _ImageTile extends ConsumerWidget {
   }
 }
 
-class _FileRow extends StatelessWidget {
+/// Grid tile for a non-image attachment: big type icon, file type badge,
+/// name and size — visually consistent with the image grid above it.
+class _FileTile extends StatelessWidget {
   final GalleryEntry entry;
   final VoidCallback onTap;
   final VoidCallback onMenu;
 
-  const _FileRow({
+  const _FileTile({
     required this.entry,
     required this.onTap,
     required this.onMenu,
@@ -404,36 +417,45 @@ class _FileRow extends StatelessWidget {
       onLongPress: onMenu,
       onSecondaryTap: onMenu,
       borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-        child: Row(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: GmhColors.border),
+          color: GmhColors.surfaceHigh,
+        ),
+        padding: const EdgeInsets.fromLTRB(10, 8, 6, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(attachmentIcon(item),
-                size: 20, color: GmhColors.parchmentDim),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.fileName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13)),
-                  Text(
-                    '${fileTypeTag(item)} · ${formatBytes(item.sizeBytes)}'
-                    '${entry.caption.isNotEmpty ? ' · ${entry.caption}' : ''}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 11, color: GmhColors.parchmentFaint),
+            Row(
+              children: [
+                Icon(attachmentIcon(item),
+                    size: 22, color: GmhColors.ember),
+                const Spacer(),
+                InkWell(
+                  borderRadius: BorderRadius.circular(99),
+                  onTap: onMenu,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Icon(Icons.more_vert,
+                        size: 15, color: GmhColors.parchmentDim),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.more_vert, size: 16),
-              visualDensity: VisualDensity.compact,
-              onPressed: onMenu,
+            const Spacer(),
+            Text(item.fileName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12, height: 1.2)),
+            const SizedBox(height: 2),
+            Text(
+              '${fileTypeTag(item)} · ${formatBytes(item.sizeBytes)}'
+              '${entry.caption.isNotEmpty ? ' · ${entry.caption}' : ''}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: 10.5, color: GmhColors.parchmentFaint),
             ),
           ],
         ),

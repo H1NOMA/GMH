@@ -2047,6 +2047,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Neon chrome and street slang: Runners, Sectors, Gigs'**
   String get worldStyleCyberpunkHint;
+
+  /// No description provided for @viewAsGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid view'**
+  String get viewAsGrid;
+
+  /// No description provided for @viewAsList.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get viewAsList;
 }
 
 class _AppLocalizationsDelegate

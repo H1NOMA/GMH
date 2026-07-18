@@ -9,6 +9,7 @@ import '../../domain/repositories/repositories.dart';
 import '../categories/category_ui.dart';
 import '../shell/ui_providers.dart';
 import 'widgets/entity_card.dart';
+import 'widgets/entity_grid_card.dart';
 import 'widgets/new_entity_dialog.dart';
 
 /// Browsable, filterable list of all entities of one kind — or, when
@@ -64,6 +65,11 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
         ? null
         : ref.watch(categoryMapProvider(widget.worldId))[
             widget.customCategoryId];
+    // The Concept Archive opens as a photo grid by default (like a
+    // gallery); every section can be switched and the choice persists.
+    final grid = prefs.gridView ??
+        (widget.kind == EntityKind.concept &&
+            widget.customCategoryId == null);
     final title =
         category?.name ?? widget.kind.localizedPlural(context);
     final icon =
@@ -81,6 +87,11 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
           ],
         ),
         actions: [
+          IconButton(
+            tooltip: grid ? context.l10n.viewAsList : context.l10n.viewAsGrid,
+            icon: Icon(grid ? Icons.view_list_outlined : Icons.grid_view),
+            onPressed: () => prefsController.setGridView(!grid),
+          ),
           IconButton(
             tooltip: prefs.favoritesOnly
                 ? context.l10n.showAll
@@ -183,6 +194,22 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                         ),
                       ],
                     ),
+                  );
+                }
+                if (grid) {
+                  return GridView.builder(
+                    key: PageStorageKey('entity-grid-$_prefsKey'),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 210,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.82,
+                    ),
+                    itemCount: visible.length,
+                    itemBuilder: (context, index) => EntityGridCard(
+                        entity: visible[index], worldId: widget.worldId),
                   );
                 }
                 return ListView.separated(
