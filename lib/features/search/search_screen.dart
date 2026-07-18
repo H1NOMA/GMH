@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/l10n_ext.dart';
+import '../../app/nav_state.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -29,12 +30,26 @@ class SearchScreen extends ConsumerStatefulWidget {
 }
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
-  final _controller = TextEditingController();
+  // Query and filters live in a per-world session provider, so leaving the
+  // search screen and coming back restores the exact search.
+  late final _controller = TextEditingController(
+      text: ref.read(searchStateProvider(widget.worldId)).query);
   final _debouncer = Debouncer(GmhConstants.searchDebounce);
   List<SearchResult> _results = const [];
-  EntityKind? _kindFilter;
-  String? _categoryFilter;
   bool _searching = false;
+
+  EntityKind? get _kindFilter =>
+      ref.read(searchStateProvider(widget.worldId)).kind;
+  String? get _categoryFilter =>
+      ref.read(searchStateProvider(widget.worldId)).categoryId;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_controller.text.trim().isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _search());
+    }
+  }
 
   @override
   void dispose() {
@@ -45,6 +60,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   Future<void> _search() async {
     final query = _controller.text.trim();
+    ref
+        .read(searchStateProvider(widget.worldId).notifier)
+        .update(query: query);
     if (query.isEmpty) {
       setState(() {
         _results = const [];
@@ -115,10 +133,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         style: const TextStyle(fontSize: 11.5)),
                     selected: _kindFilter == null && _categoryFilter == null,
                     onSelected: (_) {
-                      setState(() {
-                        _kindFilter = null;
-                        _categoryFilter = null;
-                      });
+                      ref
+                          .read(searchStateProvider(widget.worldId).notifier)
+                          .update(clearKind: true, clearCategory: true);
+                      setState(() {});
                       unawaited(_search());
                     },
                   ),
@@ -133,10 +151,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             style: const TextStyle(fontSize: 11.5)),
                         selected: _kindFilter == kind,
                         onSelected: (selected) {
-                          setState(() {
-                            _kindFilter = selected ? kind : null;
-                            _categoryFilter = null;
-                          });
+                          ref
+                              .read(searchStateProvider(widget.worldId)
+                                  .notifier)
+                              .update(
+                                  kind: selected ? kind : null,
+                                  clearKind: !selected,
+                                  clearCategory: true);
+                          setState(() {});
                           unawaited(_search());
                         },
                       ),
@@ -154,12 +176,17 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           style: const TextStyle(fontSize: 11.5)),
                       selected: _categoryFilter == category.id,
                       onSelected: (selected) {
-                        setState(() {
-                          _categoryFilter =
-                              selected ? category.id : null;
-                          _kindFilter =
-                              selected ? EntityKind.custom : null;
-                        });
+                        ref
+                            .read(searchStateProvider(widget.worldId)
+                                .notifier)
+                            .update(
+                                categoryId:
+                                    selected ? category.id : null,
+                                clearCategory: !selected,
+                                kind:
+                                    selected ? EntityKind.custom : null,
+                                clearKind: !selected);
+                        setState(() {});
                         unawaited(_search());
                       },
                     ),

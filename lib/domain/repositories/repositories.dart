@@ -232,4 +232,13 @@ abstract final class SettingsKeys {
 
   /// Explicit theme ('light'/'dark'); absent = follow the system theme.
   static const themeMode = 'themeMode';
+
+  /// Selected campaign per world (`selectedCampaign.<worldId>`).
+  static const selectedCampaign = 'selectedCampaign';
+
+  /// Last visited route, restored on startup.
+  static const lastLocation = 'lastLocation';
+
+  /// Entity list sort order per world (`entitySort.<worldId>`).
+  static const entitySort = 'entitySort';
 }

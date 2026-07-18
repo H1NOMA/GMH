@@ -793,6 +793,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get themeDark => 'Тёмная тема';
 
   @override
+  String get navBack => 'Назад';
+
+  @override
+  String get navForward => 'Вперёд';
+
+  @override
   String get kindCharacter => 'Персонаж';
 
   @override

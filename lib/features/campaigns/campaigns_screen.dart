@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/l10n_ext.dart';
+import '../../app/nav_state.dart';
 import '../../app/providers.dart';
 import '../../app/template_l10n.dart';
 import '../../app/router.dart';
@@ -26,10 +27,13 @@ class CampaignsScreen extends ConsumerStatefulWidget {
 }
 
 class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
-  String? _selectedCampaignId;
-
   @override
   Widget build(BuildContext context) {
+    // The selection is a persisted per-world provider: it survives moving
+    // to other sections and app restarts, and only changes when the user
+    // explicitly picks another campaign.
+    final selectedId =
+        ref.watch(selectedCampaignProvider(widget.worldId)).valueOrNull;
     // Campaigns are always ordered by creation date, newest first. The
     // order derives from the stored created_at timestamp, so it survives
     // restarts without any change to the data format.
@@ -46,7 +50,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
         [];
 
     final selected = campaigns
-            .where((c) => c.id == _selectedCampaignId)
+            .where((c) => c.id == selectedId)
             .firstOrNull ??
         campaigns.firstOrNull;
 
@@ -60,8 +64,9 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
               child: _CampaignDropdown(
                 campaigns: campaigns,
                 selected: selected,
-                onSelected: (id) =>
-                    setState(() => _selectedCampaignId = id),
+                onSelected: (id) => ref
+                    .read(selectedCampaignProvider(widget.worldId).notifier)
+                    .select(id),
               ),
             ),
         ],

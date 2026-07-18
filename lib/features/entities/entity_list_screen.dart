@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n_ext.dart';
+import '../../app/nav_state.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
@@ -30,20 +31,32 @@ class EntityListScreen extends ConsumerStatefulWidget {
 }
 
 class _EntityListScreenState extends ConsumerState<EntityListScreen> {
-  EntitySort _sort = EntitySort.updatedDesc;
-  String? _tagId;
-  bool _favoritesOnly = false;
-  String _filter = '';
+  String get _prefsKey => listPrefsKey(widget.worldId,
+      kind: widget.kind, categoryId: widget.customCategoryId);
+
+  late final TextEditingController _filterController = TextEditingController(
+      text: ref.read(listPrefsProvider(_prefsKey)).filterText);
+
+  @override
+  void dispose() {
+    _filterController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Filters, search text and sort live in a session-scoped provider so
+    // they survive navigating away; the sort order also persists across
+    // restarts.
+    final prefs = ref.watch(listPrefsProvider(_prefsKey));
+    final prefsController = ref.read(listPrefsProvider(_prefsKey).notifier);
     final entities = ref.watch(entityListProvider((
       worldId: widget.worldId,
       kind: widget.kind,
       customCategoryId: widget.customCategoryId,
-      tagId: _tagId,
-      favoritesOnly: _favoritesOnly,
-      sort: _sort,
+      tagId: prefs.tagId,
+      favoritesOnly: prefs.favoritesOnly,
+      sort: prefs.sort,
     )));
     final tags =
         ref.watch(worldTagsProvider(widget.worldId)).valueOrNull ?? [];
@@ -69,18 +82,18 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
         ),
         actions: [
           IconButton(
-            tooltip: _favoritesOnly
+            tooltip: prefs.favoritesOnly
                 ? context.l10n.showAll
                 : context.l10n.favoritesOnly,
-            icon: Icon(_favoritesOnly ? Icons.star : Icons.star_border,
-                color: _favoritesOnly ? GmhColors.ember : null),
+            icon: Icon(prefs.favoritesOnly ? Icons.star : Icons.star_border,
+                color: prefs.favoritesOnly ? GmhColors.ember : null),
             onPressed: () =>
-                setState(() => _favoritesOnly = !_favoritesOnly),
+                prefsController.setFavoritesOnly(!prefs.favoritesOnly),
           ),
           PopupMenuButton<EntitySort>(
             tooltip: context.l10n.sortTooltip,
             icon: const Icon(Icons.sort),
-            onSelected: (sort) => setState(() => _sort = sort),
+            onSelected: prefsController.setSort,
             itemBuilder: (context) => [
               PopupMenuItem(
                   value: EntitySort.updatedDesc,
@@ -109,12 +122,12 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
+              controller: _filterController,
               decoration: InputDecoration(
                 hintText: context.l10n.filterHint(title.toLowerCase()),
                 prefixIcon: const Icon(Icons.filter_alt_outlined, size: 18),
               ),
-              onChanged: (text) =>
-                  setState(() => _filter = text.toLowerCase()),
+              onChanged: prefsController.setFilterText,
             ),
           ),
           if (tags.isNotEmpty)
@@ -131,9 +144,9 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                         label: Text(tag.name,
                             style: TextStyle(
                                 fontSize: 11.5, color: Color(tag.color))),
-                        selected: _tagId == tag.id,
-                        onSelected: (selected) => setState(
-                            () => _tagId = selected ? tag.id : null),
+                        selected: prefs.tagId == tag.id,
+                        onSelected: (selected) => prefsController
+                            .setTag(selected ? tag.id : null),
                         selectedColor:
                             Color(tag.color).withValues(alpha: 0.2),
                       ),
@@ -147,12 +160,13 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
               error: (e, _) =>
                   Center(child: Text(context.l10n.errorGeneric('$e'))),
               data: (list) {
-                final visible = _filter.isEmpty
+                final filter = prefs.filterText.toLowerCase();
+                final visible = filter.isEmpty
                     ? list
                     : list
                         .where((e) =>
-                            e.name.toLowerCase().contains(_filter) ||
-                            e.summary.toLowerCase().contains(_filter))
+                            e.name.toLowerCase().contains(filter) ||
+                            e.summary.toLowerCase().contains(filter))
                         .toList();
                 if (visible.isEmpty) {
                   return Center(
@@ -172,6 +186,7 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                   );
                 }
                 return ListView.separated(
+                  key: PageStorageKey('entity-list-$_prefsKey'),
                   padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
                   itemCount: visible.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 8),

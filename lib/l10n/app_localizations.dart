@@ -1424,6 +1424,18 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get themeDark;
 
+  /// No description provided for @navBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get navBack;
+
+  /// No description provided for @navForward.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward'**
+  String get navForward;
+
   /// No description provided for @kindCharacter.
   ///
   /// In en, this message translates to:

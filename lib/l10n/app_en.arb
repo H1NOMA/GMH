@@ -431,6 +431,8 @@
   "themeSystem": "Match system",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "navBack": "Back",
+  "navForward": "Forward",
   "kindCharacter": "Character",
   "kindCharacterPlural": "Characters",
   "kindLocation": "Location",

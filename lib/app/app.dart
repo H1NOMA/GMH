@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'l10n_ext.dart';
 import 'locale_provider.dart';
+import 'nav_state.dart';
 import 'theme_provider.dart';
 import 'router.dart';
 import 'theme/gmh_theme.dart';
@@ -20,9 +22,34 @@ class GmhApp extends ConsumerStatefulWidget {
   ConsumerState<GmhApp> createState() => _GmhAppState();
 }
 
+class _BackIntent extends Intent {
+  const _BackIntent();
+}
+
+class _ForwardIntent extends Intent {
+  const _ForwardIntent();
+}
+
 class _GmhAppState extends ConsumerState<GmhApp> {
   late final GoRouter _router =
       createRouter(initialLocation: widget.initialLocation);
+
+  @override
+  void initState() {
+    super.initState();
+    // Feed every location change into the browser-style history and persist
+    // it so the app can reopen exactly where the user left off.
+    final history = ref.read(navHistoryProvider.notifier);
+    history.navigate = (location) => _router.go(location);
+    String location() =>
+        _router.routerDelegate.currentConfiguration.uri.toString();
+    history.onLocationChanged(location());
+    _router.routerDelegate.addListener(() {
+      final current = location();
+      history.onLocationChanged(current);
+      persistLastLocation(ref, current);
+    });
+  }
 
   @override
   void dispose() {
@@ -36,6 +63,23 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     final themeMode = ref.watch(themeModeProvider);
     return MaterialApp.router(
       onGenerateTitle: (context) => context.l10n.appTitle,
+      // Browser-style history shortcuts, active app-wide.
+      shortcuts: {
+        ...WidgetsApp.defaultShortcuts,
+        LogicalKeySet(LogicalKeyboardKey.alt, LogicalKeyboardKey.arrowLeft):
+            const _BackIntent(),
+        LogicalKeySet(LogicalKeyboardKey.alt, LogicalKeyboardKey.arrowRight):
+            const _ForwardIntent(),
+      },
+      actions: {
+        ...WidgetsApp.defaultActions,
+        _BackIntent: CallbackAction<_BackIntent>(
+            onInvoke: (_) =>
+                ref.read(navHistoryProvider.notifier).goBack()),
+        _ForwardIntent: CallbackAction<_ForwardIntent>(
+            onInvoke: (_) =>
+                ref.read(navHistoryProvider.notifier).goForward()),
+      },
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.light(),
       darkTheme: GmhTheme.dark(),
