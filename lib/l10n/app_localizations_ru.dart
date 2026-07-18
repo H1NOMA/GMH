@@ -1121,4 +1121,103 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get viewAsList => 'Вид списком';
+
+  @override
+  String get blueprintFieldsSection => 'Поля';
+
+  @override
+  String get constructorTitleNew => 'Конструктор раздела';
+
+  @override
+  String get constructorTitleEdit => 'Настройка раздела';
+
+  @override
+  String get constructorModules => 'Модули';
+
+  @override
+  String get constructorModulesHint =>
+      'Добавляйте и убирайте блоки, из которых будут состоять записи этого раздела.';
+
+  @override
+  String get moduleFields => 'Структурные поля';
+
+  @override
+  String get moduleFieldsHint => 'Форма из полей, которые вы зададите ниже';
+
+  @override
+  String get moduleDocument => 'Документ';
+
+  @override
+  String get moduleDocumentHint =>
+      'Редактор текста со ссылками и изображениями';
+
+  @override
+  String get moduleGallery => 'Галерея';
+
+  @override
+  String get moduleGalleryHint => 'Сетка изображений у каждой записи';
+
+  @override
+  String get moduleAttachments => 'Файлы';
+
+  @override
+  String get moduleAttachmentsHint => 'Прикреплённые файлы любого типа';
+
+  @override
+  String get moduleTags => 'Теги';
+
+  @override
+  String get moduleTagsHint => 'Теги и фильтры по ним';
+
+  @override
+  String get moduleRelations => 'Связи';
+
+  @override
+  String get moduleRelationsHint => 'Ссылки на другие записи и обратные ссылки';
+
+  @override
+  String get constructorFields => 'Свои поля';
+
+  @override
+  String get constructorFieldsEmpty =>
+      'Полей пока нет — добавьте нужные разделу, например «Уровень», «Школа», «Цена».';
+
+  @override
+  String get addField => 'Добавить поле';
+
+  @override
+  String get editField => 'Изменить поле';
+
+  @override
+  String get fieldNameLabel => 'Название поля';
+
+  @override
+  String get fieldTypeLabel => 'Тип поля';
+
+  @override
+  String get fieldOptionsLabel => 'Варианты (через запятую)';
+
+  @override
+  String get fieldOptionsHint => 'напр. Обычный, Редкий, Легендарный';
+
+  @override
+  String get fieldTypeText => 'Текст';
+
+  @override
+  String get fieldTypeLongText => 'Длинный текст';
+
+  @override
+  String get fieldTypeNumber => 'Число';
+
+  @override
+  String get fieldTypeSelect => 'Список вариантов';
+
+  @override
+  String get fieldTypeDate => 'Дата';
+
+  @override
+  String get fieldTypeChecklist => 'Чек-лист';
+
+  @override
+  String get fieldTypeStringList => 'Список значений';
 }

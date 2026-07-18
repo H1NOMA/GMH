@@ -20,7 +20,16 @@ import 'attachment_utils.dart';
 class AttachmentsPanel extends ConsumerStatefulWidget {
   final Entity entity;
 
-  const AttachmentsPanel({super.key, required this.entity});
+  /// Custom sections can disable either half via their blueprint.
+  final bool showImages;
+  final bool showFiles;
+
+  const AttachmentsPanel({
+    super.key,
+    required this.entity,
+    this.showImages = true,
+    this.showFiles = true,
+  });
 
   @override
   ConsumerState<AttachmentsPanel> createState() => _AttachmentsPanelState();
@@ -94,14 +103,17 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
             ),
           ],
         ),
-        if (gallery.isEmpty)
+        if (gallery.where((e) =>
+                (widget.showImages && isImageMime(e.media.mimeType)) ||
+                (widget.showFiles && !isImageMime(e.media.mimeType)))
+            .isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(context.l10n.noAttachments,
                 style: TextStyle(
                     fontSize: 12, color: GmhColors.parchmentFaint)),
           ),
-        if (images.isNotEmpty)
+        if (widget.showImages && images.isNotEmpty)
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
@@ -120,7 +132,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
                 ),
             ],
           ),
-        if (files.isNotEmpty) ...[
+        if (widget.showFiles && files.isNotEmpty) ...[
           const SizedBox(height: 8),
           // Files use the same gallery-style grid as images.
           GridView.count(

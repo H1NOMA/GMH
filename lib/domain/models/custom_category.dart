@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'category_blueprint.dart';
+
 /// A user-defined archive category. Entities of [kind == EntityKind.custom]
 /// reference one and otherwise behave exactly like built-in kinds:
 /// documents, attachments, links, tags, search, graph and export are all
@@ -16,6 +18,9 @@ class CustomCategory {
   /// ARGB color value.
   final int color;
   final int sortOrder;
+
+  /// The section's construction plan: enabled modules + custom fields.
+  final CategoryBlueprint blueprint;
   final int createdAt;
 
   const CustomCategory({
@@ -25,10 +30,16 @@ class CustomCategory {
     required this.icon,
     required this.color,
     required this.sortOrder,
+    this.blueprint = CategoryBlueprint.standard,
     required this.createdAt,
   });
 
-  CustomCategory copyWith({String? name, String? icon, int? color}) {
+  CustomCategory copyWith({
+    String? name,
+    String? icon,
+    int? color,
+    CategoryBlueprint? blueprint,
+  }) {
     return CustomCategory(
       id: id,
       worldId: worldId,
@@ -36,6 +47,7 @@ class CustomCategory {
       icon: icon ?? this.icon,
       color: color ?? this.color,
       sortOrder: sortOrder,
+      blueprint: blueprint ?? this.blueprint,
       createdAt: createdAt,
     );
   }
@@ -47,8 +59,10 @@ class CustomCategory {
       other.name == name &&
       other.icon == icon &&
       other.color == color &&
-      other.sortOrder == sortOrder;
+      other.sortOrder == sortOrder &&
+      other.blueprint.toJson() == blueprint.toJson();
 
   @override
-  int get hashCode => Object.hash(id, name, icon, color, sortOrder);
+  int get hashCode =>
+      Object.hash(id, name, icon, color, sortOrder, blueprint.toJson());
 }

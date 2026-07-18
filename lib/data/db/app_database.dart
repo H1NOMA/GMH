@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -51,6 +51,11 @@ class AppDatabase extends _$AppDatabase {
           if (from < 4) {
             // v4: per-world visual style. Existing worlds stay 'fantasy'.
             await m.addColumn(worlds, worlds.style);
+          }
+          if (from < 5) {
+            // v5: category blueprints (section constructor). Existing
+            // categories get '{}' = the standard layout, nothing changes.
+            await m.addColumn(customCategories, customCategories.blueprintJson);
           }
         },
         beforeOpen: (details) async {

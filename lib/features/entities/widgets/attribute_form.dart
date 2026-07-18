@@ -22,7 +22,16 @@ class AttributeForm extends ConsumerWidget {
   /// used by the tabbed character profile to split sections across tabs.
   final List<String>? sectionTitles;
 
-  const AttributeForm({super.key, required this.entity, this.sectionTitles});
+  /// Replaces the kind's template sections entirely — used by custom
+  /// sections whose fields come from the category's blueprint.
+  final List<FieldSection>? sectionsOverride;
+
+  const AttributeForm({
+    super.key,
+    required this.entity,
+    this.sectionTitles,
+    this.sectionsOverride,
+  });
 
   Future<void> _setValue(
       WidgetRef ref, String key, Object? value) async {
@@ -42,12 +51,13 @@ class AttributeForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final template = EntityTemplates.of(entity.kind);
-    final sections = sectionTitles == null
-        ? template.sections
-        : [
-            for (final s in template.sections)
-              if (sectionTitles!.contains(s.title)) s
-          ];
+    final sections = sectionsOverride ??
+        (sectionTitles == null
+            ? template.sections
+            : [
+                for (final s in template.sections)
+                  if (sectionTitles!.contains(s.title)) s
+              ]);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

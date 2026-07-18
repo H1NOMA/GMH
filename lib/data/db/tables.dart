@@ -35,6 +35,10 @@ class CustomCategories extends Table {
   /// ARGB color value.
   IntColumn get color => integer()();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+
+  /// Section blueprint JSON: enabled modules + user-defined fields
+  /// (see `CategoryBlueprint`). '{}' = the standard everything-on layout.
+  TextColumn get blueprintJson => text().withDefault(const Constant('{}'))();
   IntColumn get createdAt => integer()();
 
   @override

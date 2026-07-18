@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../../core/utils/dates.dart';
 import '../../core/utils/ids.dart';
+import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
@@ -26,6 +27,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
         icon: row.icon,
         color: row.color,
         sortOrder: row.sortOrder,
+        blueprint: CategoryBlueprint.parse(row.blueprintJson),
         createdAt: row.createdAt,
       );
 
@@ -67,6 +69,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
     required String name,
     String icon = 'folder',
     int? color,
+    CategoryBlueprint blueprint = CategoryBlueprint.standard,
   }) async {
     final count = await (_db.selectOnly(_db.customCategories)
           ..addColumns([_db.customCategories.id.count()])
@@ -81,6 +84,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       icon: icon,
       color: color ?? _categoryPalette[count % _categoryPalette.length],
       sortOrder: count,
+      blueprint: blueprint,
       createdAt: nowMs(),
     );
     await _db.into(_db.customCategories).insert(
@@ -91,6 +95,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
             icon: Value(category.icon),
             color: category.color,
             sortOrder: Value(category.sortOrder),
+            blueprintJson: Value(category.blueprint.toJson()),
             createdAt: category.createdAt,
           ),
         );
@@ -105,6 +110,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       name: Value(category.name.trim()),
       icon: Value(category.icon),
       color: Value(category.color),
+      blueprintJson: Value(category.blueprint.toJson()),
     ));
   }
 

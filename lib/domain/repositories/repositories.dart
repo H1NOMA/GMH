@@ -2,6 +2,7 @@
 /// the file vault; presentation code depends only on the abstractions.
 library;
 
+import '../models/category_blueprint.dart';
 import '../models/custom_category.dart';
 import '../models/document_model.dart';
 import '../models/entity.dart';
@@ -40,6 +41,7 @@ abstract interface class CategoryRepository {
     required String name,
     String icon,
     int? color,
+    CategoryBlueprint blueprint,
   });
 
   Future<void> update(CustomCategory category);
