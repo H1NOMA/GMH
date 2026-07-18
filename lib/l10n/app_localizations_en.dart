@@ -882,4 +882,125 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kindSessionPlural => 'Sessions';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get ttgImportTitle => 'Import TTG database';
+
+  @override
+  String get ttgImportIntro =>
+      'Migrate a complete TTG D&D database — campaigns, NPCs, monsters, spells, items, locations, factions, quests, media and every relationship — into a GMH world. Supported sources: SQLite databases (.db, .sqlite, .ttg), JSON exports and ZIP exports with media.';
+
+  @override
+  String get ttgPickFile => 'Select TTG database…';
+
+  @override
+  String ttgPreviewCount(int count) {
+    return '$count records detected';
+  }
+
+  @override
+  String get ttgResumeBanner =>
+      'An interrupted import of this file was found. It will resume — records already imported are skipped.';
+
+  @override
+  String get ttgWorldName => 'World name';
+
+  @override
+  String get ttgDuplicatesLabel => 'If a record already exists';
+
+  @override
+  String get ttgSkip => 'Skip';
+
+  @override
+  String get ttgMerge => 'Merge';
+
+  @override
+  String get ttgReplace => 'Replace';
+
+  @override
+  String get ttgAsk => 'Ask every time';
+
+  @override
+  String get ttgBack => 'Back';
+
+  @override
+  String get ttgStart => 'Start import';
+
+  @override
+  String get ttgResume => 'Resume import';
+
+  @override
+  String get ttgPhaseReading => 'Reading source';
+
+  @override
+  String get ttgPhaseEntities => 'Importing records';
+
+  @override
+  String get ttgPhaseLinks => 'Rebuilding relationships';
+
+  @override
+  String get ttgPhaseValidating => 'Validating';
+
+  @override
+  String get ttgPhaseIndexing => 'Building search index';
+
+  @override
+  String ttgEta(int seconds) {
+    return '~${seconds}s left';
+  }
+
+  @override
+  String get ttgErrorLog => 'Issues';
+
+  @override
+  String get ttgDoneTitle => 'Migration complete';
+
+  @override
+  String get ttgInterruptedTitle =>
+      'Import interrupted — you can resume it later';
+
+  @override
+  String get ttgStatImported => 'Records imported';
+
+  @override
+  String get ttgStatLinks => 'Links created';
+
+  @override
+  String get ttgStatMedia => 'Media files imported';
+
+  @override
+  String get ttgStatDocuments => 'Documents created';
+
+  @override
+  String get ttgStatTags => 'Tags created';
+
+  @override
+  String get ttgStatRepaired => 'References repaired';
+
+  @override
+  String get ttgStatSkipped => 'Duplicates skipped';
+
+  @override
+  String get ttgOpenWorld => 'Open world';
+
+  @override
+  String get ttgDuplicateTitle => 'Duplicate found';
+
+  @override
+  String ttgDuplicateBody(String name, String collection) {
+    return '“$name” ($collection) already exists in this world. What should happen?';
+  }
+
+  @override
+  String get ttgApplyToAll => 'Apply to all remaining duplicates';
+
+  @override
+  String get ttgSettingsTitle => 'Import TTG database';
+
+  @override
+  String get ttgSettingsSubtitle =>
+      'Migrate a complete TTG D&D database into a new world: all records, relationships, formatting and media';
 }

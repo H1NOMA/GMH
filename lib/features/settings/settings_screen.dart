@@ -16,6 +16,7 @@ import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/dates.dart';
 import '../../data/backup/backup_service.dart';
+import '../import/ttg_import_wizard.dart';
 import '../shell/ui_providers.dart';
 
 /// Settings: language, manual/automatic backups, full-project export
@@ -310,6 +311,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   subtitle: Text(l.importArchiveSubtitle,
                       style: const TextStyle(fontSize: 11.5)),
                   onTap: _importArchive,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.move_down_outlined),
+                  title: Text(l.ttgSettingsTitle),
+                  subtitle: Text(l.ttgSettingsSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
+                  onTap: () => showTtgImportWizard(context),
                 ),
               ],
             ),

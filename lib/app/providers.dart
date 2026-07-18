@@ -5,6 +5,7 @@ import '../data/backup/pdf_exporter.dart';
 import '../data/backup/project_archive_service.dart';
 import '../data/db/app_database.dart';
 import '../data/db/connection.dart';
+import '../data/import/ttg/ttg_migration_service.dart';
 import '../data/repositories/category_repository_impl.dart';
 import '../data/repositories/document_repository_impl.dart';
 import '../data/repositories/entity_repository_impl.dart';
@@ -106,6 +107,15 @@ final documentServiceProvider = Provider<DocumentService>(
 final projectArchiveServiceProvider = Provider<ProjectArchiveService>(
   (ref) => ProjectArchiveService(
       ref.watch(databaseProvider), ref.watch(mediaVaultProvider)),
+);
+
+final ttgMigrationServiceProvider = Provider<TtgMigrationService>(
+  (ref) => TtgMigrationService(
+    ref.watch(databaseProvider),
+    ref.watch(mediaVaultProvider),
+    ref.watch(searchRepositoryProvider),
+    ref.watch(settingsRepositoryProvider),
+  ),
 );
 
 final backupServiceProvider = Provider<BackupService>(

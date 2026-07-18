@@ -1615,6 +1615,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sessions'**
   String get kindSessionPlural;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @ttgImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import TTG database'**
+  String get ttgImportTitle;
+
+  /// No description provided for @ttgImportIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Migrate a complete TTG D&D database — campaigns, NPCs, monsters, spells, items, locations, factions, quests, media and every relationship — into a GMH world. Supported sources: SQLite databases (.db, .sqlite, .ttg), JSON exports and ZIP exports with media.'**
+  String get ttgImportIntro;
+
+  /// No description provided for @ttgPickFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select TTG database…'**
+  String get ttgPickFile;
+
+  /// No description provided for @ttgPreviewCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} records detected'**
+  String ttgPreviewCount(int count);
+
+  /// No description provided for @ttgResumeBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'An interrupted import of this file was found. It will resume — records already imported are skipped.'**
+  String get ttgResumeBanner;
+
+  /// No description provided for @ttgWorldName.
+  ///
+  /// In en, this message translates to:
+  /// **'World name'**
+  String get ttgWorldName;
+
+  /// No description provided for @ttgDuplicatesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'If a record already exists'**
+  String get ttgDuplicatesLabel;
+
+  /// No description provided for @ttgSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get ttgSkip;
+
+  /// No description provided for @ttgMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge'**
+  String get ttgMerge;
+
+  /// No description provided for @ttgReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get ttgReplace;
+
+  /// No description provided for @ttgAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask every time'**
+  String get ttgAsk;
+
+  /// No description provided for @ttgBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get ttgBack;
+
+  /// No description provided for @ttgStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start import'**
+  String get ttgStart;
+
+  /// No description provided for @ttgResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume import'**
+  String get ttgResume;
+
+  /// No description provided for @ttgPhaseReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading source'**
+  String get ttgPhaseReading;
+
+  /// No description provided for @ttgPhaseEntities.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing records'**
+  String get ttgPhaseEntities;
+
+  /// No description provided for @ttgPhaseLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Rebuilding relationships'**
+  String get ttgPhaseLinks;
+
+  /// No description provided for @ttgPhaseValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating'**
+  String get ttgPhaseValidating;
+
+  /// No description provided for @ttgPhaseIndexing.
+  ///
+  /// In en, this message translates to:
+  /// **'Building search index'**
+  String get ttgPhaseIndexing;
+
+  /// No description provided for @ttgEta.
+  ///
+  /// In en, this message translates to:
+  /// **'~{seconds}s left'**
+  String ttgEta(int seconds);
+
+  /// No description provided for @ttgErrorLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Issues'**
+  String get ttgErrorLog;
+
+  /// No description provided for @ttgDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Migration complete'**
+  String get ttgDoneTitle;
+
+  /// No description provided for @ttgInterruptedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import interrupted — you can resume it later'**
+  String get ttgInterruptedTitle;
+
+  /// No description provided for @ttgStatImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Records imported'**
+  String get ttgStatImported;
+
+  /// No description provided for @ttgStatLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Links created'**
+  String get ttgStatLinks;
+
+  /// No description provided for @ttgStatMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Media files imported'**
+  String get ttgStatMedia;
+
+  /// No description provided for @ttgStatDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents created'**
+  String get ttgStatDocuments;
+
+  /// No description provided for @ttgStatTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags created'**
+  String get ttgStatTags;
+
+  /// No description provided for @ttgStatRepaired.
+  ///
+  /// In en, this message translates to:
+  /// **'References repaired'**
+  String get ttgStatRepaired;
+
+  /// No description provided for @ttgStatSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicates skipped'**
+  String get ttgStatSkipped;
+
+  /// No description provided for @ttgOpenWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'Open world'**
+  String get ttgOpenWorld;
+
+  /// No description provided for @ttgDuplicateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate found'**
+  String get ttgDuplicateTitle;
+
+  /// No description provided for @ttgDuplicateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” ({collection}) already exists in this world. What should happen?'**
+  String ttgDuplicateBody(String name, String collection);
+
+  /// No description provided for @ttgApplyToAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply to all remaining duplicates'**
+  String get ttgApplyToAll;
+
+  /// No description provided for @ttgSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import TTG database'**
+  String get ttgSettingsTitle;
+
+  /// No description provided for @ttgSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Migrate a complete TTG D&D database into a new world: all records, relationships, formatting and media'**
+  String get ttgSettingsSubtitle;
 }
 
 class _AppLocalizationsDelegate
