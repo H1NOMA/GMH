@@ -462,5 +462,66 @@
   "kindQuest": "Quest",
   "kindQuestPlural": "Quests",
   "kindSession": "Session",
-  "kindSessionPlural": "Sessions"
+  "kindSessionPlural": "Sessions",
+  "close": "Close",
+  "ttgImportTitle": "Import TTG database",
+  "ttgImportIntro": "Migrate a complete TTG D&D database — campaigns, NPCs, monsters, spells, items, locations, factions, quests, media and every relationship — into a GMH world. Supported sources: SQLite databases (.db, .sqlite, .ttg), JSON exports and ZIP exports with media.",
+  "ttgPickFile": "Select TTG database…",
+  "ttgPreviewCount": "{count} records detected",
+  "@ttgPreviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ttgResumeBanner": "An interrupted import of this file was found. It will resume — records already imported are skipped.",
+  "ttgWorldName": "World name",
+  "ttgDuplicatesLabel": "If a record already exists",
+  "ttgSkip": "Skip",
+  "ttgMerge": "Merge",
+  "ttgReplace": "Replace",
+  "ttgAsk": "Ask every time",
+  "ttgBack": "Back",
+  "ttgStart": "Start import",
+  "ttgResume": "Resume import",
+  "ttgPhaseReading": "Reading source",
+  "ttgPhaseEntities": "Importing records",
+  "ttgPhaseLinks": "Rebuilding relationships",
+  "ttgPhaseValidating": "Validating",
+  "ttgPhaseIndexing": "Building search index",
+  "ttgEta": "~{seconds}s left",
+  "@ttgEta": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "ttgErrorLog": "Issues",
+  "ttgDoneTitle": "Migration complete",
+  "ttgInterruptedTitle": "Import interrupted — you can resume it later",
+  "ttgStatImported": "Records imported",
+  "ttgStatLinks": "Links created",
+  "ttgStatMedia": "Media files imported",
+  "ttgStatDocuments": "Documents created",
+  "ttgStatTags": "Tags created",
+  "ttgStatRepaired": "References repaired",
+  "ttgStatSkipped": "Duplicates skipped",
+  "ttgOpenWorld": "Open world",
+  "ttgDuplicateTitle": "Duplicate found",
+  "ttgDuplicateBody": "“{name}” ({collection}) already exists in this world. What should happen?",
+  "@ttgDuplicateBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "collection": {
+        "type": "String"
+      }
+    }
+  },
+  "ttgApplyToAll": "Apply to all remaining duplicates",
+  "ttgSettingsTitle": "Import TTG database",
+  "ttgSettingsSubtitle": "Migrate a complete TTG D&D database into a new world: all records, relationships, formatting and media"
 }
