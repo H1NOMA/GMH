@@ -221,6 +221,8 @@
   "themeSystem": "Как в системе",
   "themeLight": "Светлая тема",
   "themeDark": "Тёмная тема",
+  "navBack": "Назад",
+  "navForward": "Вперёд",
   "kindCharacter": "Персонаж",
   "kindCharacterPlural": "Персонажи",
   "kindLocation": "Локация",

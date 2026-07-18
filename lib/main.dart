@@ -47,6 +47,13 @@ Future<void> main() async {
         await container.read(worldRepositoryProvider).getWorld(lastWorldId);
     if (world != null) {
       initialLocation = Routes.home(world.id);
+      // Reopen exactly where the user left off (section, campaign, entry)
+      // as long as the route belongs to a world that still exists.
+      final lastLocation = await settings.get(SettingsKeys.lastLocation);
+      if (lastLocation != null &&
+          lastLocation.startsWith('/w/${world.id}/')) {
+        initialLocation = lastLocation;
+      }
       // Fire-and-forget; must never block startup.
       unawaited(
           container.read(backupServiceProvider).autoBackupIfDue(world.id));

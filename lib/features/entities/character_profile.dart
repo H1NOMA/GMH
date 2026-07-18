@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n_ext.dart';
+import '../../app/nav_state.dart';
 import '../../app/providers.dart';
 import '../../app/template_l10n.dart';
 import '../../app/theme/gmh_theme.dart';
@@ -20,7 +21,7 @@ import 'widgets/tag_editor.dart';
 /// Abilities & Magic, Timeline, Notes). Every section is optional — empty
 /// ones simply stay empty — and all data lives in the same entity
 /// attributes/document as before, so existing characters open unchanged.
-class CharacterProfile extends ConsumerWidget {
+class CharacterProfile extends ConsumerStatefulWidget {
   final String worldId;
   final Entity entity;
 
@@ -28,7 +29,35 @@ class CharacterProfile extends ConsumerWidget {
       {super.key, required this.worldId, required this.entity});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CharacterProfile> createState() => _CharacterProfileState();
+}
+
+class _CharacterProfileState extends ConsumerState<CharacterProfile>
+    with SingleTickerProviderStateMixin {
+  static const _tabCount = 9;
+
+  late final TabController _tabController = TabController(
+    length: _tabCount,
+    vsync: this,
+    // Restore the tab that was active when this profile was last open.
+    initialIndex:
+        ref.read(profileTabProvider(widget.entity.id)).clamp(0, _tabCount - 1),
+  )..addListener(() {
+      ref
+          .read(profileTabProvider(widget.entity.id).notifier)
+          .set(_tabController.index);
+    });
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final worldId = widget.worldId;
+    final entity = widget.entity;
     final tabs = <(String, Widget)>[
       (
         trTemplate(context, 'General Information'),
@@ -96,23 +125,23 @@ class CharacterProfile extends ConsumerWidget {
       ),
     ];
 
-    return DefaultTabController(
-      length: tabs.length,
-      child: Column(
-        children: [
-          _ProfileHeader(entity: entity),
-          TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: [for (final (label, _) in tabs) Tab(text: label)],
+    assert(tabs.length == _tabCount);
+    return Column(
+      children: [
+        _ProfileHeader(entity: entity),
+        TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          tabs: [for (final (label, _) in tabs) Tab(text: label)],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [for (final (_, view) in tabs) view],
           ),
-          Expanded(
-            child: TabBarView(
-              children: [for (final (_, view) in tabs) view],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

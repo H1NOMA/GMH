@@ -7,6 +7,7 @@ import '../../app/theme/gmh_theme.dart';
 import '../../app/l10n_ext.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
+import '../../app/nav_state.dart';
 import '../categories/category_ui.dart';
 import '../tags/tag_manager_sheet.dart';
 import '../categories/manage_categories_sheet.dart';
@@ -25,13 +26,16 @@ class AppShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = MediaQuery.sizeOf(context).width;
+    // One shared bucket for all pages: scroll positions (and other
+    // PageStorage values) survive navigating between sections.
+    final content = PageStorage(bucket: appPageBucket, child: child);
     if (width >= GmhConstants.desktopMinWidth) {
       return Scaffold(
         body: Row(
           children: [
             SizedBox(width: 264, child: _Sidebar(worldId: worldId)),
             const VerticalDivider(width: 1),
-            Expanded(child: child),
+            Expanded(child: content),
           ],
         ),
       );
@@ -42,14 +46,46 @@ class AppShell extends ConsumerWidget {
           children: [
             _Rail(worldId: worldId),
             const VerticalDivider(width: 1),
-            Expanded(child: child),
+            Expanded(child: content),
           ],
         ),
       );
     }
     return Scaffold(
-      body: child,
+      body: content,
       bottomNavigationBar: _BottomNav(worldId: worldId),
+    );
+  }
+}
+
+/// Browser-style back/forward controls fed by the navigation history.
+class _HistoryButtons extends ConsumerWidget {
+  final bool compact;
+  final bool vertical;
+  const _HistoryButtons({this.compact = false, this.vertical = false});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final history = ref.watch(navHistoryProvider);
+    final controller = ref.read(navHistoryProvider.notifier);
+    final size = compact ? 18.0 : 19.0;
+    return Flex(
+      direction: vertical ? Axis.vertical : Axis.horizontal,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          tooltip: '${context.l10n.navBack} (Alt+←)',
+          icon: Icon(Icons.arrow_back, size: size),
+          onPressed: history.canGoBack ? controller.goBack : null,
+          visualDensity: VisualDensity.compact,
+        ),
+        IconButton(
+          tooltip: '${context.l10n.navForward} (Alt+→)',
+          icon: Icon(Icons.arrow_forward, size: size),
+          onPressed: history.canGoForward ? controller.goForward : null,
+          visualDensity: VisualDensity.compact,
+        ),
+      ],
     );
   }
 }
@@ -120,6 +156,10 @@ class _Sidebar extends ConsumerWidget {
                 ],
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(children: const [_HistoryButtons()]),
           ),
           const Divider(),
           Expanded(
@@ -367,10 +407,15 @@ class _Rail extends StatelessWidget {
       onDestinationSelected: (index) =>
           _goToSection(context, worldId, _Section.values[index]),
       labelType: NavigationRailLabelType.all,
-      leading: IconButton(
-        tooltip: context.l10n.switchWorld,
-        icon: Icon(Icons.public, color: GmhColors.ember),
-        onPressed: () => context.go(Routes.worlds()),
+      leading: Column(
+        children: [
+          IconButton(
+            tooltip: context.l10n.switchWorld,
+            icon: Icon(Icons.public, color: GmhColors.ember),
+            onPressed: () => context.go(Routes.worlds()),
+          ),
+          const _HistoryButtons(compact: true, vertical: true),
+        ],
       ),
       destinations: [
         NavigationRailDestination(
@@ -402,12 +447,32 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final section = _currentSection(context);
-    return NavigationBar(
-      selectedIndex: section.index,
-      height: 64,
-      onDestinationSelected: (index) =>
-          _goToSection(context, worldId, _Section.values[index]),
-      destinations: [
+    return ColoredBox(
+      color: GmhColors.surface,
+      child: SafeArea(
+        top: false,
+        child: Row(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 2),
+              child: _HistoryButtons(compact: true),
+            ),
+            Expanded(
+              child: NavigationBar(
+                selectedIndex: section.index,
+                height: 64,
+                onDestinationSelected: (index) =>
+                    _goToSection(context, worldId, _Section.values[index]),
+                destinations: _destinations(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<NavigationDestination> _destinations(BuildContext context) => [
         NavigationDestination(
             icon: const Icon(Icons.dashboard_outlined),
             label: context.l10n.navHome),
@@ -422,7 +487,5 @@ class _BottomNav extends StatelessWidget {
         NavigationDestination(
             icon: const Icon(Icons.settings_outlined),
             label: context.l10n.navSettingsShort),
-      ],
-    );
-  }
+      ];
 }

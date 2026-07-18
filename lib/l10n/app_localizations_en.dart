@@ -788,6 +788,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeDark => 'Dark';
 
   @override
+  String get navBack => 'Back';
+
+  @override
+  String get navForward => 'Forward';
+
+  @override
   String get kindCharacter => 'Character';
 
   @override
