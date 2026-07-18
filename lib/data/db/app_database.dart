@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -47,6 +47,10 @@ class AppDatabase extends _$AppDatabase {
             // v3: tag creation timestamps for the Tag Manager. Existing
             // tags get 0 (sorted as oldest) — no other data changes.
             await m.addColumn(tags, tags.createdAt);
+          }
+          if (from < 4) {
+            // v4: per-world visual style. Existing worlds stay 'fantasy'.
+            await m.addColumn(worlds, worlds.style);
           }
         },
         beforeOpen: (details) async {

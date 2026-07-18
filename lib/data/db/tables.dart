@@ -9,6 +9,9 @@ class Worlds extends Table {
   TextColumn get name => text()();
   TextColumn get description => text().withDefault(const Constant(''))();
   TextColumn get coverMediaId => text().nullable()();
+
+  /// Visual & terminology flavor: 'fantasy' (default) or 'cyberpunk'.
+  TextColumn get style => text().withDefault(const Constant('fantasy'))();
   IntColumn get createdAt => integer()();
   IntColumn get updatedAt => integer()();
 

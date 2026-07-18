@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/models/world.dart';
+
 /// GMH design system — a fantasy atmosphere in a modern productivity shell
 /// (Notion/Obsidian/Linear-inspired): soft rounded corners, calm density,
 /// hover states, subtle depth, and full light & dark themes.
@@ -87,6 +89,50 @@ const gmhLightPalette = GmhPalette(
   danger: Color(0xFFB33B2E),
 );
 
+/// Neon noir: deep blue-black chrome, electric cyan primaries, magenta
+/// secondaries — worked for contrast, not just saturation. Text stays cool
+/// and readable; accents glow without burning the eyes.
+const gmhCyberDarkPalette = GmhPalette(
+  brightness: Brightness.dark,
+  background: Color(0xFF0A0E17),
+  surface: Color(0xFF0F1624),
+  surfaceRaised: Color(0xFF151E31),
+  surfaceHigh: Color(0xFF1C2942),
+  border: Color(0xFF283A5E),
+  ember: Color(0xFF2FD9E4),
+  emberBright: Color(0xFF8CF2F8),
+  onEmber: Color(0xFF03181C),
+  arcane: Color(0xFFE05CFF),
+  blood: Color(0xFFFF4365),
+  parchment: Color(0xFFD7E1F4),
+  parchmentDim: Color(0xFF90A2C6),
+  parchmentFaint: Color(0xFF5A6A8E),
+  success: Color(0xFF3DDC97),
+  danger: Color(0xFFFF5C64),
+);
+
+/// Daylight chrome: cool paper-white surfaces with deep teal primaries and
+/// violet secondaries — the same cyberpunk identity, tuned dark enough on
+/// light backgrounds to keep AA contrast.
+const gmhCyberLightPalette = GmhPalette(
+  brightness: Brightness.light,
+  background: Color(0xFFEDF1F8),
+  surface: Color(0xFFF7FAFD),
+  surfaceRaised: Color(0xFFFFFFFF),
+  surfaceHigh: Color(0xFFDFE7F3),
+  border: Color(0xFFC3D0E5),
+  ember: Color(0xFF067F8C),
+  emberBright: Color(0xFF045A64),
+  onEmber: Color(0xFFE7FDFF),
+  arcane: Color(0xFF8A2BC9),
+  blood: Color(0xFFC42B52),
+  parchment: Color(0xFF16223A),
+  parchmentDim: Color(0xFF44557C),
+  parchmentFaint: Color(0xFF7284A8),
+  success: Color(0xFF1F8A5D),
+  danger: Color(0xFFC93A44),
+);
+
 /// Facade over the active palette. The app root keeps [palette] in sync with
 /// the resolved theme (see `GmhApp`); widgets read `GmhColors.x` as before.
 abstract final class GmhColors {
@@ -108,6 +154,32 @@ abstract final class GmhColors {
   static Color get danger => palette.danger;
 }
 
+/// Facade for the active world style. The shell sets [current] from the open
+/// world (and the world picker resets it), so widgets — including the kind
+/// label slang in `l10n_ext.dart` — follow the world without plumbing the
+/// style through every constructor.
+abstract final class GmhStyle {
+  static WorldStyle current = WorldStyle.fantasy;
+
+  static GmhPalette paletteFor(WorldStyle style, Brightness brightness) {
+    final dark = brightness == Brightness.dark;
+    return switch (style) {
+      WorldStyle.fantasy => dark ? gmhDarkPalette : gmhLightPalette,
+      WorldStyle.cyberpunk =>
+        dark ? gmhCyberDarkPalette : gmhCyberLightPalette,
+    };
+  }
+
+  static ThemeData themeFor(WorldStyle style, Brightness brightness) {
+    final dark = brightness == Brightness.dark;
+    return switch (style) {
+      WorldStyle.fantasy => dark ? GmhTheme.dark() : GmhTheme.light(),
+      WorldStyle.cyberpunk =>
+        dark ? GmhTheme.cyberDark() : GmhTheme.cyberLight(),
+    };
+  }
+}
+
 abstract final class GmhTheme {
   static const serifFallback = [
     'Georgia',
@@ -118,6 +190,8 @@ abstract final class GmhTheme {
 
   static ThemeData dark() => _build(gmhDarkPalette);
   static ThemeData light() => _build(gmhLightPalette);
+  static ThemeData cyberDark() => _build(gmhCyberDarkPalette);
+  static ThemeData cyberLight() => _build(gmhCyberLightPalette);
 
   static ThemeData _build(GmhPalette p) {
     final isDark = p.brightness == Brightness.dark;

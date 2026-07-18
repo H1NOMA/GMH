@@ -85,6 +85,7 @@ class ProjectArchiveService {
         'name': world.name,
         'description': world.description,
         'coverMediaId': world.coverMediaId,
+        'style': world.style,
         'createdAt': world.createdAt,
         'updatedAt': world.updatedAt,
       },
@@ -312,6 +313,7 @@ class ProjectArchiveService {
             name: world['name'] as String? ?? 'Imported World',
             description: Value(world['description'] as String? ?? ''),
             coverMediaId: Value(world['coverMediaId'] as String?),
+            style: Value(world['style'] as String? ?? 'fantasy'),
             createdAt: (world['createdAt'] as num?)?.toInt() ?? nowMs(),
             updatedAt: nowMs(),
           ));

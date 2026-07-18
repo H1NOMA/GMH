@@ -4,7 +4,9 @@ import '../core/exceptions.dart';
 import '../core/utils/dates.dart';
 import '../domain/models/entity_kind.dart';
 import '../domain/models/link.dart';
+import '../domain/models/world.dart';
 import '../l10n/app_localizations.dart';
+import 'theme/gmh_theme.dart';
 
 export '../l10n/app_localizations.dart';
 
@@ -14,9 +16,31 @@ extension L10nContext on BuildContext {
 }
 
 /// Localized labels for entity kinds (domain enum stays language-neutral).
+/// Cyberpunk worlds swap the fantasy vocabulary for street slang — Runners,
+/// Sectors, Gigs — driven by the open world's style ([GmhStyle.current]).
 extension EntityKindL10n on EntityKind {
   String localizedLabel(BuildContext context) {
     final l = context.l10n;
+    if (GmhStyle.current == WorldStyle.cyberpunk) {
+      return switch (this) {
+        EntityKind.character => l.cyberKindCharacter,
+        EntityKind.location => l.cyberKindLocation,
+        EntityKind.item => l.cyberKindItem,
+        EntityKind.creature => l.cyberKindCreature,
+        EntityKind.faction => l.cyberKindFaction,
+        EntityKind.event => l.cyberKindEvent,
+        EntityKind.era => l.cyberKindEra,
+        EntityKind.religion => l.cyberKindReligion,
+        EntityKind.magicSystem => l.cyberKindMagicSystem,
+        EntityKind.technology => l.cyberKindTechnology,
+        EntityKind.concept => l.cyberKindConcept,
+        EntityKind.loreDocument => l.cyberKindLoreDocument,
+        EntityKind.campaign => l.cyberKindCampaign,
+        EntityKind.quest => l.cyberKindQuest,
+        EntityKind.session => l.cyberKindSession,
+        EntityKind.custom => l.kindCustomEntry,
+      };
+    }
     return switch (this) {
       EntityKind.character => l.kindCharacter,
       EntityKind.location => l.kindLocation,
@@ -41,6 +65,26 @@ extension EntityKindL10n on EntityKind {
 
   String localizedPlural(BuildContext context) {
     final l = context.l10n;
+    if (GmhStyle.current == WorldStyle.cyberpunk) {
+      return switch (this) {
+        EntityKind.character => l.cyberKindCharacterPlural,
+        EntityKind.location => l.cyberKindLocationPlural,
+        EntityKind.item => l.cyberKindItemPlural,
+        EntityKind.creature => l.cyberKindCreaturePlural,
+        EntityKind.faction => l.cyberKindFactionPlural,
+        EntityKind.event => l.cyberKindEventPlural,
+        EntityKind.era => l.cyberKindEraPlural,
+        EntityKind.religion => l.cyberKindReligionPlural,
+        EntityKind.magicSystem => l.cyberKindMagicSystemPlural,
+        EntityKind.technology => l.cyberKindTechnologyPlural,
+        EntityKind.concept => l.cyberKindConceptPlural,
+        EntityKind.loreDocument => l.cyberKindLoreDocumentPlural,
+        EntityKind.campaign => l.cyberKindCampaignPlural,
+        EntityKind.quest => l.cyberKindQuestPlural,
+        EntityKind.session => l.cyberKindSessionPlural,
+        EntityKind.custom => l.kindCustomEntry,
+      };
+    }
     return switch (this) {
       EntityKind.character => l.kindCharacterPlural,
       EntityKind.location => l.kindLocationPlural,

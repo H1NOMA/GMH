@@ -18,6 +18,7 @@ class WorldRepositoryImpl implements WorldRepository {
         name: row.name,
         description: row.description,
         coverMediaId: row.coverMediaId,
+        style: WorldStyle.parse(row.style),
         createdAt: row.createdAt,
         updatedAt: row.updatedAt,
       );
@@ -37,13 +38,17 @@ class WorldRepositoryImpl implements WorldRepository {
   }
 
   @override
-  Future<World> createWorld(
-      {required String name, String description = ''}) async {
+  Future<World> createWorld({
+    required String name,
+    String description = '',
+    WorldStyle style = WorldStyle.fantasy,
+  }) async {
     final now = nowMs();
     final world = World(
       id: newId(),
       name: name,
       description: description,
+      style: style,
       createdAt: now,
       updatedAt: now,
     );
@@ -51,6 +56,7 @@ class WorldRepositoryImpl implements WorldRepository {
           id: world.id,
           name: world.name,
           description: Value(world.description),
+          style: Value(style.name),
           createdAt: now,
           updatedAt: now,
         ));
@@ -64,6 +70,7 @@ class WorldRepositoryImpl implements WorldRepository {
         name: Value(world.name),
         description: Value(world.description),
         coverMediaId: Value(world.coverMediaId),
+        style: Value(world.style.name),
         updatedAt: Value(nowMs()),
       ),
     );
