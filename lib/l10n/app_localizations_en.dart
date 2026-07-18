@@ -1110,4 +1110,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get worldStyleCyberpunkHint =>
       'Neon chrome and street slang: Runners, Sectors, Gigs';
+
+  @override
+  String get viewAsGrid => 'Grid view';
+
+  @override
+  String get viewAsList => 'List view';
 }

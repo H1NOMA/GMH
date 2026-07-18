@@ -155,11 +155,16 @@ class ListPrefs {
   final bool favoritesOnly;
   final String filterText;
 
+  /// Gallery grid vs. list; null = the section's default (the Concept
+  /// Archive opens as a grid, everything else as a list). Persisted.
+  final bool? gridView;
+
   const ListPrefs({
     this.sort = EntitySort.updatedDesc,
     this.tagId,
     this.favoritesOnly = false,
     this.filterText = '',
+    this.gridView,
   });
 
   ListPrefs copyWith({
@@ -167,12 +172,14 @@ class ListPrefs {
     String? Function()? tagId,
     bool? favoritesOnly,
     String? filterText,
+    bool? gridView,
   }) {
     return ListPrefs(
       sort: sort ?? this.sort,
       tagId: tagId != null ? tagId() : this.tagId,
       favoritesOnly: favoritesOnly ?? this.favoritesOnly,
       filterText: filterText ?? this.filterText,
+      gridView: gridView ?? this.gridView,
     );
   }
 }
@@ -180,18 +187,23 @@ class ListPrefs {
 class ListPrefsController extends FamilyNotifier<ListPrefs, String> {
   String get _worldId => arg.split('|').first;
   String get _sortKey => '${SettingsKeys.entitySort}.$_worldId';
+  String get _viewKey => '${SettingsKeys.listViewMode}.$arg';
 
   @override
   ListPrefs build(String key) {
-    // Sort order is loaded asynchronously; the default shows meanwhile.
+    // Sort order and view mode load asynchronously; defaults show meanwhile.
     Future.microtask(() async {
-      final saved =
-          await ref.read(settingsRepositoryProvider).get(_sortKey);
+      final settings = ref.read(settingsRepositoryProvider);
+      final saved = await settings.get(_sortKey);
       final sort = EntitySort.values
           .where((s) => s.name == saved)
           .firstOrNull;
       if (sort != null && state.sort != sort) {
         state = state.copyWith(sort: sort);
+      }
+      final view = await settings.get(_viewKey);
+      if (view != null) {
+        state = state.copyWith(gridView: view == 'grid');
       }
     });
     return const ListPrefs();
@@ -200,6 +212,13 @@ class ListPrefsController extends FamilyNotifier<ListPrefs, String> {
   void setSort(EntitySort sort) {
     state = state.copyWith(sort: sort);
     ref.read(settingsRepositoryProvider).set(_sortKey, sort.name);
+  }
+
+  void setGridView(bool grid) {
+    state = state.copyWith(gridView: grid);
+    ref
+        .read(settingsRepositoryProvider)
+        .set(_viewKey, grid ? 'grid' : 'list');
   }
 
   void setTag(String? tagId) => state = state.copyWith(tagId: () => tagId);

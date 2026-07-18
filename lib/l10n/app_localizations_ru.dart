@@ -1115,4 +1115,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get worldStyleCyberpunkHint =>
       'Неон, хром и уличный сленг: Раннеры, Сектора, Заказы';
+
+  @override
+  String get viewAsGrid => 'Вид сеткой';
+
+  @override
+  String get viewAsList => 'Вид списком';
 }

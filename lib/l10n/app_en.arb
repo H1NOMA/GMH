@@ -558,5 +558,7 @@
   "worldStyleFantasy": "Fantasy",
   "worldStyleFantasyHint": "Candle-lit parchment, classic vocabulary: Characters, Locations, Quests",
   "worldStyleCyberpunk": "Cyberpunk",
-  "worldStyleCyberpunkHint": "Neon chrome and street slang: Runners, Sectors, Gigs"
+  "worldStyleCyberpunkHint": "Neon chrome and street slang: Runners, Sectors, Gigs",
+  "viewAsGrid": "Grid view",
+  "viewAsList": "List view"
 }
