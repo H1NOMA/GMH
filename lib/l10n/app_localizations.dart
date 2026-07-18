@@ -2059,6 +2059,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'List view'**
   String get viewAsList;
+
+  /// No description provided for @blueprintFieldsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Fields'**
+  String get blueprintFieldsSection;
+
+  /// No description provided for @constructorTitleNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Section Constructor'**
+  String get constructorTitleNew;
+
+  /// No description provided for @constructorTitleEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Section Settings'**
+  String get constructorTitleEdit;
+
+  /// No description provided for @constructorModules.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules'**
+  String get constructorModules;
+
+  /// No description provided for @constructorModulesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add or remove the building blocks entries of this section will have.'**
+  String get constructorModulesHint;
+
+  /// No description provided for @moduleFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Structured fields'**
+  String get moduleFields;
+
+  /// No description provided for @moduleFieldsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A form of fields you define below'**
+  String get moduleFieldsHint;
+
+  /// No description provided for @moduleDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Document'**
+  String get moduleDocument;
+
+  /// No description provided for @moduleDocumentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rich-text editor with links and images'**
+  String get moduleDocumentHint;
+
+  /// No description provided for @moduleGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get moduleGallery;
+
+  /// No description provided for @moduleGalleryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Image grid on every entry'**
+  String get moduleGalleryHint;
+
+  /// No description provided for @moduleAttachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get moduleAttachments;
+
+  /// No description provided for @moduleAttachmentsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached files of any type'**
+  String get moduleAttachmentsHint;
+
+  /// No description provided for @moduleTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get moduleTags;
+
+  /// No description provided for @moduleTagsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tagging and tag filters'**
+  String get moduleTagsHint;
+
+  /// No description provided for @moduleRelations.
+  ///
+  /// In en, this message translates to:
+  /// **'Relations'**
+  String get moduleRelations;
+
+  /// No description provided for @moduleRelationsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Links to other entries and backlinks'**
+  String get moduleRelationsHint;
+
+  /// No description provided for @constructorFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields'**
+  String get constructorFields;
+
+  /// No description provided for @constructorFieldsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No fields yet — add the columns this section needs, e.g. “Level”, “School”, “Price”.'**
+  String get constructorFieldsEmpty;
+
+  /// No description provided for @addField.
+  ///
+  /// In en, this message translates to:
+  /// **'Add field'**
+  String get addField;
+
+  /// No description provided for @editField.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit field'**
+  String get editField;
+
+  /// No description provided for @fieldNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Field name'**
+  String get fieldNameLabel;
+
+  /// No description provided for @fieldTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Field type'**
+  String get fieldTypeLabel;
+
+  /// No description provided for @fieldOptionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Options (comma-separated)'**
+  String get fieldOptionsLabel;
+
+  /// No description provided for @fieldOptionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Common, Rare, Legendary'**
+  String get fieldOptionsHint;
+
+  /// No description provided for @fieldTypeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get fieldTypeText;
+
+  /// No description provided for @fieldTypeLongText.
+  ///
+  /// In en, this message translates to:
+  /// **'Long text'**
+  String get fieldTypeLongText;
+
+  /// No description provided for @fieldTypeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get fieldTypeNumber;
+
+  /// No description provided for @fieldTypeSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Choice list'**
+  String get fieldTypeSelect;
+
+  /// No description provided for @fieldTypeDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get fieldTypeDate;
+
+  /// No description provided for @fieldTypeChecklist.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist'**
+  String get fieldTypeChecklist;
+
+  /// No description provided for @fieldTypeStringList.
+  ///
+  /// In en, this message translates to:
+  /// **'List of values'**
+  String get fieldTypeStringList;
 }
 
 class _AppLocalizationsDelegate

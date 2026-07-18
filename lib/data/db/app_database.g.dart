@@ -540,6 +540,18 @@ class $CustomCategoriesTable extends CustomCategories
     requiredDuringInsert: false,
     defaultValue: const Constant(0),
   );
+  static const VerificationMeta _blueprintJsonMeta = const VerificationMeta(
+    'blueprintJson',
+  );
+  @override
+  late final GeneratedColumn<String> blueprintJson = GeneratedColumn<String>(
+    'blueprint_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('{}'),
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -559,6 +571,7 @@ class $CustomCategoriesTable extends CustomCategories
     icon,
     color,
     sortOrder,
+    blueprintJson,
     createdAt,
   ];
   @override
@@ -614,6 +627,15 @@ class $CustomCategoriesTable extends CustomCategories
         sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
       );
     }
+    if (data.containsKey('blueprint_json')) {
+      context.handle(
+        _blueprintJsonMeta,
+        blueprintJson.isAcceptableOrUnknown(
+          data['blueprint_json']!,
+          _blueprintJsonMeta,
+        ),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -655,6 +677,10 @@ class $CustomCategoriesTable extends CustomCategories
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
       )!,
+      blueprintJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}blueprint_json'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}created_at'],
@@ -680,6 +706,10 @@ class CustomCategoryRow extends DataClass
   /// ARGB color value.
   final int color;
   final int sortOrder;
+
+  /// Section blueprint JSON: enabled modules + user-defined fields
+  /// (see `CategoryBlueprint`). '{}' = the standard everything-on layout.
+  final String blueprintJson;
   final int createdAt;
   const CustomCategoryRow({
     required this.id,
@@ -688,6 +718,7 @@ class CustomCategoryRow extends DataClass
     required this.icon,
     required this.color,
     required this.sortOrder,
+    required this.blueprintJson,
     required this.createdAt,
   });
   @override
@@ -699,6 +730,7 @@ class CustomCategoryRow extends DataClass
     map['icon'] = Variable<String>(icon);
     map['color'] = Variable<int>(color);
     map['sort_order'] = Variable<int>(sortOrder);
+    map['blueprint_json'] = Variable<String>(blueprintJson);
     map['created_at'] = Variable<int>(createdAt);
     return map;
   }
@@ -711,6 +743,7 @@ class CustomCategoryRow extends DataClass
       icon: Value(icon),
       color: Value(color),
       sortOrder: Value(sortOrder),
+      blueprintJson: Value(blueprintJson),
       createdAt: Value(createdAt),
     );
   }
@@ -727,6 +760,7 @@ class CustomCategoryRow extends DataClass
       icon: serializer.fromJson<String>(json['icon']),
       color: serializer.fromJson<int>(json['color']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      blueprintJson: serializer.fromJson<String>(json['blueprintJson']),
       createdAt: serializer.fromJson<int>(json['createdAt']),
     );
   }
@@ -740,6 +774,7 @@ class CustomCategoryRow extends DataClass
       'icon': serializer.toJson<String>(icon),
       'color': serializer.toJson<int>(color),
       'sortOrder': serializer.toJson<int>(sortOrder),
+      'blueprintJson': serializer.toJson<String>(blueprintJson),
       'createdAt': serializer.toJson<int>(createdAt),
     };
   }
@@ -751,6 +786,7 @@ class CustomCategoryRow extends DataClass
     String? icon,
     int? color,
     int? sortOrder,
+    String? blueprintJson,
     int? createdAt,
   }) => CustomCategoryRow(
     id: id ?? this.id,
@@ -759,6 +795,7 @@ class CustomCategoryRow extends DataClass
     icon: icon ?? this.icon,
     color: color ?? this.color,
     sortOrder: sortOrder ?? this.sortOrder,
+    blueprintJson: blueprintJson ?? this.blueprintJson,
     createdAt: createdAt ?? this.createdAt,
   );
   CustomCategoryRow copyWithCompanion(CustomCategoriesCompanion data) {
@@ -769,6 +806,9 @@ class CustomCategoryRow extends DataClass
       icon: data.icon.present ? data.icon.value : this.icon,
       color: data.color.present ? data.color.value : this.color,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      blueprintJson: data.blueprintJson.present
+          ? data.blueprintJson.value
+          : this.blueprintJson,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -782,14 +822,23 @@ class CustomCategoryRow extends DataClass
           ..write('icon: $icon, ')
           ..write('color: $color, ')
           ..write('sortOrder: $sortOrder, ')
+          ..write('blueprintJson: $blueprintJson, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, worldId, name, icon, color, sortOrder, createdAt);
+  int get hashCode => Object.hash(
+    id,
+    worldId,
+    name,
+    icon,
+    color,
+    sortOrder,
+    blueprintJson,
+    createdAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -800,6 +849,7 @@ class CustomCategoryRow extends DataClass
           other.icon == this.icon &&
           other.color == this.color &&
           other.sortOrder == this.sortOrder &&
+          other.blueprintJson == this.blueprintJson &&
           other.createdAt == this.createdAt);
 }
 
@@ -810,6 +860,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
   final Value<String> icon;
   final Value<int> color;
   final Value<int> sortOrder;
+  final Value<String> blueprintJson;
   final Value<int> createdAt;
   final Value<int> rowid;
   const CustomCategoriesCompanion({
@@ -819,6 +870,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
     this.icon = const Value.absent(),
     this.color = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.blueprintJson = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -829,6 +881,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
     this.icon = const Value.absent(),
     required int color,
     this.sortOrder = const Value.absent(),
+    this.blueprintJson = const Value.absent(),
     required int createdAt,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -843,6 +896,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
     Expression<String>? icon,
     Expression<int>? color,
     Expression<int>? sortOrder,
+    Expression<String>? blueprintJson,
     Expression<int>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -853,6 +907,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
       if (icon != null) 'icon': icon,
       if (color != null) 'color': color,
       if (sortOrder != null) 'sort_order': sortOrder,
+      if (blueprintJson != null) 'blueprint_json': blueprintJson,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -865,6 +920,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
     Value<String>? icon,
     Value<int>? color,
     Value<int>? sortOrder,
+    Value<String>? blueprintJson,
     Value<int>? createdAt,
     Value<int>? rowid,
   }) {
@@ -875,6 +931,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
       icon: icon ?? this.icon,
       color: color ?? this.color,
       sortOrder: sortOrder ?? this.sortOrder,
+      blueprintJson: blueprintJson ?? this.blueprintJson,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -901,6 +958,9 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
+    if (blueprintJson.present) {
+      map['blueprint_json'] = Variable<String>(blueprintJson.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<int>(createdAt.value);
     }
@@ -919,6 +979,7 @@ class CustomCategoriesCompanion extends UpdateCompanion<CustomCategoryRow> {
           ..write('icon: $icon, ')
           ..write('color: $color, ')
           ..write('sortOrder: $sortOrder, ')
+          ..write('blueprintJson: $blueprintJson, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -5562,6 +5623,7 @@ typedef $$CustomCategoriesTableCreateCompanionBuilder =
       Value<String> icon,
       required int color,
       Value<int> sortOrder,
+      Value<String> blueprintJson,
       required int createdAt,
       Value<int> rowid,
     });
@@ -5573,6 +5635,7 @@ typedef $$CustomCategoriesTableUpdateCompanionBuilder =
       Value<String> icon,
       Value<int> color,
       Value<int> sortOrder,
+      Value<String> blueprintJson,
       Value<int> createdAt,
       Value<int> rowid,
     });
@@ -5643,6 +5706,11 @@ class $$CustomCategoriesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get blueprintJson => $composableBuilder(
+    column: $table.blueprintJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
@@ -5706,6 +5774,11 @@ class $$CustomCategoriesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get blueprintJson => $composableBuilder(
+    column: $table.blueprintJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -5758,6 +5831,11 @@ class $$CustomCategoriesTableAnnotationComposer
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<String> get blueprintJson => $composableBuilder(
+    column: $table.blueprintJson,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -5822,6 +5900,7 @@ class $$CustomCategoriesTableTableManager
                 Value<String> icon = const Value.absent(),
                 Value<int> color = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
+                Value<String> blueprintJson = const Value.absent(),
                 Value<int> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CustomCategoriesCompanion(
@@ -5831,6 +5910,7 @@ class $$CustomCategoriesTableTableManager
                 icon: icon,
                 color: color,
                 sortOrder: sortOrder,
+                blueprintJson: blueprintJson,
                 createdAt: createdAt,
                 rowid: rowid,
               ),
@@ -5842,6 +5922,7 @@ class $$CustomCategoriesTableTableManager
                 Value<String> icon = const Value.absent(),
                 required int color,
                 Value<int> sortOrder = const Value.absent(),
+                Value<String> blueprintJson = const Value.absent(),
                 required int createdAt,
                 Value<int> rowid = const Value.absent(),
               }) => CustomCategoriesCompanion.insert(
@@ -5851,6 +5932,7 @@ class $$CustomCategoriesTableTableManager
                 icon: icon,
                 color: color,
                 sortOrder: sortOrder,
+                blueprintJson: blueprintJson,
                 createdAt: createdAt,
                 rowid: rowid,
               ),

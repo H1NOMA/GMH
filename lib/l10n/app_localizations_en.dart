@@ -1116,4 +1116,102 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewAsList => 'List view';
+
+  @override
+  String get blueprintFieldsSection => 'Fields';
+
+  @override
+  String get constructorTitleNew => 'Section Constructor';
+
+  @override
+  String get constructorTitleEdit => 'Section Settings';
+
+  @override
+  String get constructorModules => 'Modules';
+
+  @override
+  String get constructorModulesHint =>
+      'Add or remove the building blocks entries of this section will have.';
+
+  @override
+  String get moduleFields => 'Structured fields';
+
+  @override
+  String get moduleFieldsHint => 'A form of fields you define below';
+
+  @override
+  String get moduleDocument => 'Document';
+
+  @override
+  String get moduleDocumentHint => 'Rich-text editor with links and images';
+
+  @override
+  String get moduleGallery => 'Gallery';
+
+  @override
+  String get moduleGalleryHint => 'Image grid on every entry';
+
+  @override
+  String get moduleAttachments => 'Files';
+
+  @override
+  String get moduleAttachmentsHint => 'Attached files of any type';
+
+  @override
+  String get moduleTags => 'Tags';
+
+  @override
+  String get moduleTagsHint => 'Tagging and tag filters';
+
+  @override
+  String get moduleRelations => 'Relations';
+
+  @override
+  String get moduleRelationsHint => 'Links to other entries and backlinks';
+
+  @override
+  String get constructorFields => 'Custom fields';
+
+  @override
+  String get constructorFieldsEmpty =>
+      'No fields yet — add the columns this section needs, e.g. “Level”, “School”, “Price”.';
+
+  @override
+  String get addField => 'Add field';
+
+  @override
+  String get editField => 'Edit field';
+
+  @override
+  String get fieldNameLabel => 'Field name';
+
+  @override
+  String get fieldTypeLabel => 'Field type';
+
+  @override
+  String get fieldOptionsLabel => 'Options (comma-separated)';
+
+  @override
+  String get fieldOptionsHint => 'e.g. Common, Rare, Legendary';
+
+  @override
+  String get fieldTypeText => 'Text';
+
+  @override
+  String get fieldTypeLongText => 'Long text';
+
+  @override
+  String get fieldTypeNumber => 'Number';
+
+  @override
+  String get fieldTypeSelect => 'Choice list';
+
+  @override
+  String get fieldTypeDate => 'Date';
+
+  @override
+  String get fieldTypeChecklist => 'Checklist';
+
+  @override
+  String get fieldTypeStringList => 'List of values';
 }

@@ -6,8 +6,10 @@ import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
+import '../categories/category_ui.dart';
 import '../editor/lore_editor.dart';
 import '../shell/ui_providers.dart';
 import '../attachments/attachments_panel.dart';
@@ -185,8 +187,30 @@ class _EntityScaffold extends ConsumerWidget {
       );
     }
 
+    // Custom sections are assembled from their category's blueprint: the
+    // constructor decides which modules exist on this page.
+    final blueprint = entity.kind == EntityKind.custom
+        ? (ref
+                .watch(categoryMapProvider(worldId))[entity.customCategoryId]
+                ?.blueprint ??
+            CategoryBlueprint.standard)
+        : CategoryBlueprint.standard;
+
     final document = _DocumentPane(worldId: worldId, entity: entity);
-    final sidePanel = _SidePanel(entity: entity);
+    final sidePanel = _SidePanel(entity: entity, blueprint: blueprint);
+
+    if (!blueprint.has(CategoryModule.document)) {
+      // No document module: the side panel becomes the whole page.
+      return Scaffold(
+        appBar: appBar,
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: sidePanel,
+          ),
+        ),
+      );
+    }
 
     if (isWide) {
       return Scaffold(
@@ -258,11 +282,17 @@ class _DocumentPane extends ConsumerWidget {
 
 class _SidePanel extends StatelessWidget {
   final Entity entity;
+  final CategoryBlueprint blueprint;
 
-  const _SidePanel({required this.entity});
+  const _SidePanel({
+    required this.entity,
+    this.blueprint = CategoryBlueprint.standard,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final showMedia = blueprint.has(CategoryModule.gallery) ||
+        blueprint.has(CategoryModule.attachments);
     return ListView(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 40),
       children: [
@@ -274,13 +304,27 @@ class _SidePanel extends StatelessWidget {
                   color: GmhColors.parchmentDim)),
           const SizedBox(height: 10),
         ],
-        TagEditor(entity: entity),
+        if (blueprint.has(CategoryModule.tags)) TagEditor(entity: entity),
         const SizedBox(height: 6),
-        AttributeForm(entity: entity),
-        const SizedBox(height: 16),
-        RelationsPanel(entity: entity),
-        const SizedBox(height: 16),
-        AttachmentsPanel(entity: entity),
+        if (blueprint.has(CategoryModule.fields))
+          AttributeForm(
+            entity: entity,
+            sectionsOverride: entity.kind == EntityKind.custom
+                ? blueprint.toSections(context.l10n.blueprintFieldsSection)
+                : null,
+          ),
+        if (blueprint.has(CategoryModule.relations)) ...[
+          const SizedBox(height: 16),
+          RelationsPanel(entity: entity),
+        ],
+        if (showMedia) ...[
+          const SizedBox(height: 16),
+          AttachmentsPanel(
+            entity: entity,
+            showImages: blueprint.has(CategoryModule.gallery),
+            showFiles: blueprint.has(CategoryModule.attachments),
+          ),
+        ],
       ],
     );
   }

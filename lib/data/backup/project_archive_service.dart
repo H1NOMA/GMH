@@ -97,6 +97,7 @@ class ProjectArchiveService {
             'icon': c.icon,
             'color': c.color,
             'sortOrder': c.sortOrder,
+            'blueprint': jsonDecode(c.blueprintJson),
             'createdAt': c.createdAt,
           }
       ],
@@ -327,6 +328,7 @@ class ProjectArchiveService {
                 icon: Value(c['icon'] as String? ?? 'folder'),
                 color: (c['color'] as num?)?.toInt() ?? 0xFFB98BC9,
                 sortOrder: Value((c['sortOrder'] as num?)?.toInt() ?? 0),
+                blueprintJson: Value(jsonEncode(c['blueprint'] ?? {})),
                 createdAt: (c['createdAt'] as num?)?.toInt() ?? nowMs(),
               ),
             );

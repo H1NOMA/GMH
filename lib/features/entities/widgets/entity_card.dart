@@ -11,6 +11,7 @@ import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/models/entity.dart';
 import '../../categories/category_ui.dart';
 import '../../shell/ui_providers.dart';
+import 'entity_context.dart';
 
 /// Card representation of an entity used in lists, dashboards and search.
 class EntityCard extends ConsumerWidget {
@@ -80,6 +81,11 @@ class EntityCard extends ConsumerWidget {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
+                    // What this section cares about: status/class for
+                    // characters, rarity for items, CR for creatures…
+                    ContextBadgesRow(
+                        entity: entity,
+                        category: categories[entity.customCategoryId]),
                     if (tags.isNotEmpty) ...[
                       const SizedBox(height: 6),
                       Wrap(
