@@ -197,10 +197,13 @@ class _Sidebar extends ConsumerWidget {
                       .setOrder(order),
                 ),
                 _SectionHeader(context.l10n.sectionWorld),
-                _kindGroup(ref, 'worldKinds', EntityKind.worldKinds, counts),
+                _kindGroup(
+                    ref, 'worldKinds', EntityKind.worldKinds, counts,
+                    location),
                 _SectionHeader(context.l10n.sectionLibrary),
                 _kindGroup(
-                    ref, 'libraryKinds', EntityKind.libraryKinds, counts),
+                    ref, 'libraryKinds', EntityKind.libraryKinds, counts,
+                    location),
                 _CategoriesSection(worldId: worldId),
               ],
             ),
@@ -263,7 +266,7 @@ extension on _Sidebar {
   }
 
   Widget _kindGroup(WidgetRef ref, String group, List<EntityKind> kinds,
-      Map<EntityKind, int> counts) {
+      Map<EntityKind, int> counts, String location) {
     final byName = {for (final k in kinds) k.name: k};
     return _DraggableGroup(
       ids: applySidebarOrder(
@@ -272,7 +275,11 @@ extension on _Sidebar {
       ),
       itemBuilder: (name) {
         final kind = byName[name]!;
-        return _KindTile(worldId: worldId, kind: kind, count: counts[kind]);
+        return _KindTile(
+            worldId: worldId,
+            kind: kind,
+            count: counts[kind],
+            location: location);
       },
       onReorder: (order) => ref
           .read(sidebarOrderProvider('$worldId|$group').notifier)
@@ -310,9 +317,14 @@ class _DraggableGroup extends StatelessWidget {
         color: Colors.transparent,
         elevation: 4,
         borderRadius: BorderRadius.circular(10),
-        child: ColoredBox(
-          color: GmhColors.surfaceHigh,
-          child: child,
+        // Clip the fill to the same radius — otherwise the shadow is
+        // rounded but the highlight color paints square corners.
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: ColoredBox(
+            color: GmhColors.surfaceHigh,
+            child: child,
+          ),
         ),
       ),
       children: [
@@ -385,11 +397,20 @@ class _KindTile extends StatelessWidget {
   final EntityKind kind;
   final int? count;
 
-  const _KindTile({required this.worldId, required this.kind, this.count});
+  /// Current route path, passed in from the sidebar: the reorder drag proxy
+  /// rebuilds this tile inside the app-level Overlay, which is outside the
+  /// router's route subtree — `GoRouterState.of(context)` would throw there.
+  final String location;
+
+  const _KindTile({
+    required this.worldId,
+    required this.kind,
+    this.count,
+    required this.location,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final location = GoRouterState.of(context).uri.path;
     final selected = location.endsWith('/browse/${kind.name}');
     return ListTile(
       leading: Icon(kind.icon,
@@ -563,6 +584,10 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final section = _currentSection(context);
+    // The history buttons eat ~80px; on narrow phones the five destinations
+    // are left with too little room for always-on labels (worse in Russian),
+    // so labels switch to selected-only before they'd clip.
+    final narrow = MediaQuery.sizeOf(context).width < 480;
     return ColoredBox(
       color: GmhColors.surface,
       child: SafeArea(
@@ -577,6 +602,9 @@ class _BottomNav extends StatelessWidget {
               child: NavigationBar(
                 selectedIndex: section.index,
                 height: 64,
+                labelBehavior: narrow
+                    ? NavigationDestinationLabelBehavior.onlyShowSelected
+                    : NavigationDestinationLabelBehavior.alwaysShow,
                 onDestinationSelected: (index) =>
                     _goToSection(context, worldId, _Section.values[index]),
                 destinations: _destinations(context),

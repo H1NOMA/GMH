@@ -77,4 +77,36 @@ void main() {
     expect(await h.entities.getEntity(a.id), isNotNull,
         reason: 'the entry itself must survive tag deletion');
   });
+
+  test('rename, merge and delete keep the search index in sync', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final a = (await h.entityService.create(
+            worldId: world.id, kind: EntityKind.character, name: 'A'))
+        .value;
+    await h.entityService.addTag(a.id, world.id, 'npc');
+
+    final tag = (await h.tags.watchTags(world.id).first).single;
+    await h.tags.rename(tag.id, 'villager');
+
+    expect(
+        (await h.search.search(world.id, 'villager')).map((r) => r.entityId),
+        contains(a.id),
+        reason: 'search must find the renamed tag');
+    expect(await h.search.search(world.id, 'npc'), isEmpty,
+        reason: 'search must stop matching the old tag name');
+
+    // Merging re-points assignments; the index must follow.
+    await h.entityService.addTag(a.id, world.id, 'boss');
+    final tags = await h.tags.watchTags(world.id).first;
+    final villager = tags.firstWhere((t) => t.name == 'villager');
+    final boss = tags.firstWhere((t) => t.name == 'boss');
+    await h.tags.merge(fromTagId: villager.id, intoTagId: boss.id);
+    expect(await h.search.search(world.id, 'villager'), isEmpty);
+    expect((await h.search.search(world.id, 'boss')).map((r) => r.entityId),
+        contains(a.id));
+
+    await h.tags.delete(boss.id);
+    expect(await h.search.search(world.id, 'boss'), isEmpty,
+        reason: 'search must stop matching a deleted tag');
+  });
 }

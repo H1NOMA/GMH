@@ -159,17 +159,39 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final path = picked?.files.firstOrNull?.path;
         if (path == null || !mounted) return;
 
+        // Importing replaces the archive's world wholesale if it already
+        // exists — that is irreversible, so it needs explicit consent.
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(context.l10n.importConfirmTitle),
+            content: Text(context.l10n.importConfirmBody),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(context.l10n.cancel)),
+              FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(context.l10n.importSection)),
+            ],
+          ),
+        );
+        if (confirmed != true || !mounted) return;
+
         final result =
             await ref.read(projectArchiveServiceProvider).importArchive(path);
         if (!mounted) return;
-        result.fold(
-          (worldId) {
-            _notify(context.l10n.worldImported);
-            ref.read(searchRepositoryProvider).rebuildIndex(worldId);
-            if (mounted) context.go(Routes.home(worldId));
-          },
-          (error) => _notify(localizedError(context, error)),
-        );
+        if (result.isErr) {
+          _notify(localizedError(context, result.error));
+          return;
+        }
+        final worldId = result.value;
+        // Await the FTS rebuild while the busy indicator is up: quitting
+        // right after import would otherwise leave the world unsearchable.
+        await ref.read(searchRepositoryProvider).rebuildIndex(worldId);
+        if (!mounted) return;
+        _notify(context.l10n.worldImported);
+        context.go(Routes.home(worldId));
       });
 
   Future<void> _restoreBackup(BackupInfo backup) => _run(() async {
@@ -195,14 +217,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final result =
             await ref.read(backupServiceProvider).restore(backup.path);
         if (!mounted) return;
-        result.fold(
-          (worldId) {
-            ref.read(searchRepositoryProvider).rebuildIndex(worldId);
-            _notify(context.l10n.backupRestored);
-            _refreshBackups();
-          },
-          (error) => _notify(localizedError(context, error)),
-        );
+        if (result.isErr) {
+          _notify(localizedError(context, result.error));
+          return;
+        }
+        // Await the FTS rebuild while the busy indicator is up: quitting
+        // right after restore would otherwise leave the world unsearchable.
+        await ref.read(searchRepositoryProvider).rebuildIndex(result.value);
+        if (!mounted) return;
+        _notify(context.l10n.backupRestored);
+        _refreshBackups();
       });
 
   @override

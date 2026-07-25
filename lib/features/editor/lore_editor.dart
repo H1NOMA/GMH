@@ -73,6 +73,14 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
         ),
       ),
     );
+    _listenToDocument();
+  }
+
+  /// (Re)binds autosave to the controller's current document. Must be called
+  /// again whenever the document instance is swapped (e.g. version restore),
+  /// because the change stream belongs to the Document, not the controller.
+  void _listenToDocument() {
+    _changes?.cancel();
     _changes = _controller.document.changes.listen((_) {
       _autosave(_save);
     });
@@ -143,6 +151,8 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     if (files.isEmpty) return;
     final imported = await importXFiles(ref,
         worldId: widget.worldId, files: files);
+    // Large imports can outlive the editor; the controller is disposed then.
+    if (!mounted) return;
     for (final item in imported) {
       if (isImageMime(item.mimeType)) {
         insertVaultImage(_controller, item.id);
@@ -213,6 +223,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
                         final restored =
                             Document.fromJson(jsonDecode(contentJson) as List);
                         _controller.document = restored;
+                        _listenToDocument();
                         _autosave(_save);
                       } catch (_) {}
                     },

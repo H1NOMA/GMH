@@ -794,6 +794,18 @@ abstract class AppLocalizations {
   /// **'Choose a .gmhw archive'**
   String get importPickArchive;
 
+  /// No description provided for @importConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import project archive?'**
+  String get importConfirmTitle;
+
+  /// No description provided for @importConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If a world from this archive already exists on this device, it will be completely replaced by the archive contents. This cannot be undone.'**
+  String get importConfirmBody;
+
   /// No description provided for @backupsSection.
   ///
   /// In en, this message translates to:

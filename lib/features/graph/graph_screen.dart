@@ -68,12 +68,18 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     super.dispose();
   }
 
+  /// Generation stamp so overlapping builds (fast filter toggles) can't
+  /// finish out of order and render a stale graph.
+  int _buildGeneration = 0;
+
   Future<void> _build() async {
+    final generation = ++_buildGeneration;
     setState(() => _loading = true);
 
     final entities = await ref
         .read(entityRepositoryProvider)
         .getAllEntities(widget.worldId);
+    if (!mounted || generation != _buildGeneration) return;
     final links =
         await ref.read(linkRepositoryProvider).allForWorld(widget.worldId);
     final byId = {for (final e in entities) e.id: e};
@@ -123,7 +129,11 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
       final ranked = visible.toList()
         ..sort((a, b) => (degree[b] ?? 0).compareTo(degree[a] ?? 0));
       visible = ranked.take(_maxGraphNodes).toSet();
-      if (_focusId != null) visible.add(_focusId!);
+      // Keep the focused node visible — but only if it still exists,
+      // otherwise a ghost node with no entity enters the simulation.
+      if (_focusId != null && byId.containsKey(_focusId)) {
+        visible.add(_focusId!);
+      }
     }
 
     final ids = visible.toList();
@@ -146,27 +156,34 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
 
     final simulation = GraphSimulation(nodes: nodes, edges: edges)..settle();
 
-    if (!mounted) return;
+    if (!mounted || generation != _buildGeneration) return;
     setState(() {
       _entitiesById = byId;
       _simulation = simulation;
       _loading = false;
     });
+    // Dense graphs may not converge within settle()'s tick budget —
+    // let the ticker animate the remaining relaxation instead of
+    // freezing the layout half-tangled.
+    if (!simulation.isSettled) _ticker.repeat();
   }
 
-  void _onTapUp(TapUpDetails details) {
+  void _onTapUp(TapUpDetails details, Size canvasSize) {
     final simulation = _simulation;
     if (simulation == null) return;
     final scenePoint =
         _transformController.toScene(details.localPosition);
-    // Canvas origin is centered by the painter.
-    final size = context.size ?? Size.zero;
+    // Canvas origin is centered by the painter. The canvas is the body-sized
+    // CustomPaint, not this State's Scaffold (which includes the AppBar) —
+    // using the wrong box would shift every hit test down by half the bar.
     final point =
-        scenePoint - Offset(size.width / 2, size.height / 2);
+        scenePoint - Offset(canvasSize.width / 2, canvasSize.height / 2);
 
     GraphNode? hit;
     var bestDistance = 24.0;
     for (final node in simulation.nodes) {
+      // The painter skips nodes without a backing entity; so must hit-testing.
+      if (!_entitiesById.containsKey(node.id)) continue;
       final distance = (node.position - point).distance;
       if (distance < bestDistance) {
         bestDistance = distance;
@@ -248,8 +265,11 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
               : Stack(
                   children: [
                     Positioned.fill(
-                      child: GestureDetector(
-                        onTapUp: _onTapUp,
+                      child: LayoutBuilder(
+                          builder: (context, constraints) =>
+                              GestureDetector(
+                        onTapUp: (details) =>
+                            _onTapUp(details, constraints.biggest),
                         child: InteractiveViewer(
                           transformationController: _transformController,
                           minScale: 0.15,
@@ -269,7 +289,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                             ),
                           ),
                         ),
-                      ),
+                      )),
                     ),
                     if (_truncated)
                       Positioned(

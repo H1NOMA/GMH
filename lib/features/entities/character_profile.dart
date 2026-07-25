@@ -36,17 +36,35 @@ class _CharacterProfileState extends ConsumerState<CharacterProfile>
     with SingleTickerProviderStateMixin {
   static const _tabCount = 9;
 
-  late final TabController _tabController = TabController(
-    length: _tabCount,
-    vsync: this,
-    // Restore the tab that was active when this profile was last open.
-    initialIndex:
-        ref.read(profileTabProvider(widget.entity.id)).clamp(0, _tabCount - 1),
-  )..addListener(() {
-      ref
-          .read(profileTabProvider(widget.entity.id).notifier)
-          .set(_tabController.index);
-    });
+  late TabController _tabController = _createController();
+
+  TabController _createController() => TabController(
+        length: _tabCount,
+        vsync: this,
+        // Restore the tab that was active when this profile was last open.
+        initialIndex: ref
+            .read(profileTabProvider(widget.entity.id))
+            .clamp(0, _tabCount - 1),
+      )..addListener(_persistTab);
+
+  void _persistTab() {
+    ref
+        .read(profileTabProvider(widget.entity.id).notifier)
+        .set(_tabController.index);
+  }
+
+  @override
+  void didUpdateWidget(covariant CharacterProfile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Character → character navigation reuses this State (go_router keys
+    // shell pages by route pattern), so the controller must be rebuilt to
+    // pick up the new character's remembered tab.
+    if (oldWidget.entity.id != widget.entity.id) {
+      _tabController.removeListener(_persistTab);
+      _tabController.dispose();
+      _tabController = _createController();
+    }
+  }
 
   @override
   void dispose() {

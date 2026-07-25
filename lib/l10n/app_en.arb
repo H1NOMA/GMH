@@ -207,6 +207,8 @@
   "importArchiveTitle": "Import project archive",
   "importArchiveSubtitle": "Restores a .gmhw file, including all media.",
   "importPickArchive": "Choose a .gmhw archive",
+  "importConfirmTitle": "Import project archive?",
+  "importConfirmBody": "If a world from this archive already exists on this device, it will be completely replaced by the archive contents. This cannot be undone.",
   "backupsSection": "Backups",
   "backupsSubtitle": "A backup is taken automatically once a day when you open the app. The last {count} are kept.",
   "@backupsSubtitle": {

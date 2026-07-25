@@ -51,7 +51,13 @@ Future<String?> showNewEntityDialog(
   final categories =
       ref.read(worldCategoriesProvider(worldId)).valueOrNull ?? [];
 
-  _TypeChoice choice = initialCategoryId != null
+  // Only preselect a category that is actually in the dropdown's items —
+  // the category stream may not have emitted yet (e.g. FAB pressed right
+  // after startup restore), and DropdownButtonFormField asserts that its
+  // value matches exactly one item.
+  final categoryExists = initialCategoryId != null &&
+      categories.any((c) => c.id == initialCategoryId);
+  _TypeChoice choice = categoryExists
       ? _CategoryChoice(initialCategoryId)
       : _KindChoice(initialKind ?? EntityKind.character);
 

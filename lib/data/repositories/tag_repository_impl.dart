@@ -66,10 +66,34 @@ class TagRepositoryImpl implements TagRepository {
     return tag;
   }
 
+  /// The FTS index stores tag names per entity, so tag-level mutations
+  /// (rename/delete/merge) must refresh the `tags` column of every affected
+  /// entity — otherwise search keeps matching the old name forever.
+  Future<List<String>> _entityIdsWithTag(String tagId) async {
+    final rows = await _db.customSelect(
+      'SELECT entity_id AS eid FROM entity_tags WHERE tag_id = ?',
+      variables: [Variable.withString(tagId)],
+    ).get();
+    return [for (final r in rows) r.read<String>('eid')];
+  }
+
+  Future<void> _refreshSearchTags(List<String> entityIds) async {
+    for (final id in entityIds) {
+      await _db.customStatement('''
+        UPDATE entity_search SET tags = (
+          SELECT COALESCE(GROUP_CONCAT(t.name, ' '), '')
+          FROM entity_tags et JOIN tags t ON t.id = et.tag_id
+          WHERE et.entity_id = ?
+        ) WHERE entity_id = ?
+      ''', [id, id]);
+    }
+  }
+
   @override
   Future<void> rename(String tagId, String name) async {
     await (_db.update(_db.tags)..where((t) => t.id.equals(tagId)))
         .write(TagsCompanion(name: Value(name.trim())));
+    await _refreshSearchTags(await _entityIdsWithTag(tagId));
   }
 
   @override
@@ -80,8 +104,11 @@ class TagRepositoryImpl implements TagRepository {
 
   @override
   Future<void> delete(String tagId) async {
+    // Affected entities must be captured before the cascade removes the rows.
+    final affected = await _entityIdsWithTag(tagId);
     // entity_tags rows cascade away with the tag; entries are untouched.
     await (_db.delete(_db.tags)..where((t) => t.id.equals(tagId))).go();
+    await _refreshSearchTags(affected);
   }
 
   @override
@@ -116,6 +143,7 @@ class TagRepositoryImpl implements TagRepository {
       await (_db.delete(_db.tags)..where((t) => t.id.equals(fromTagId)))
           .go();
     });
+    await _refreshSearchTags(await _entityIdsWithTag(intoTagId));
   }
 
   @override

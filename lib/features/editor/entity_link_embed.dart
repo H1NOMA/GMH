@@ -17,8 +17,10 @@ import '../shell/ui_providers.dart';
 /// Serialized as `{"insert": {"entityLink": "{\"id\":…,\"label\":…}"}}` —
 /// exactly what the mention parser and link sync service consume.
 void insertEntityLink(QuillController controller, domain.Entity target) {
-  final index = controller.selection.baseOffset;
-  final length = controller.selection.extentOffset - index;
+  // selection.start/end, not base/extent: a right-to-left selection has
+  // extent < base, which would produce a negative replace length.
+  final index = controller.selection.start;
+  final length = controller.selection.end - index;
   controller.replaceText(
     index,
     length,
@@ -114,12 +116,16 @@ class _EntityLinkChip extends ConsumerWidget {
               Icon(entity.kind.icon, size: 12, color: color),
               const SizedBox(width: 3),
             ],
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                color: broken ? GmhColors.parchmentFaint : color,
-                decoration: broken ? TextDecoration.lineThrough : null,
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: broken ? GmhColors.parchmentFaint : color,
+                  decoration: broken ? TextDecoration.lineThrough : null,
+                ),
               ),
             ),
           ],

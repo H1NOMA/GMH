@@ -416,6 +416,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get importPickArchive => 'Выберите архив .gmhw';
 
   @override
+  String get importConfirmTitle => 'Импортировать архив проекта?';
+
+  @override
+  String get importConfirmBody =>
+      'Если мир из этого архива уже существует на устройстве, он будет полностью заменён содержимым архива. Это действие нельзя отменить.';
+
+  @override
   String get backupsSection => 'Резервные копии';
 
   @override

@@ -58,11 +58,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     super.dispose();
   }
 
+  /// Guards against out-of-order responses: a slower older query must not
+  /// overwrite the results of a newer one.
+  int _searchGeneration = 0;
+
   Future<void> _search() async {
     final query = _controller.text.trim();
     ref
         .read(searchStateProvider(widget.worldId).notifier)
         .update(query: query);
+    final generation = ++_searchGeneration;
     if (query.isEmpty) {
       setState(() {
         _results = const [];
@@ -71,10 +76,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       return;
     }
     setState(() => _searching = true);
-    final results = await ref.read(searchRepositoryProvider).search(
-        widget.worldId, query,
-        kind: _kindFilter, customCategoryId: _categoryFilter);
-    if (!mounted) return;
+    List<SearchResult> results;
+    try {
+      results = await ref.read(searchRepositoryProvider).search(
+          widget.worldId, query,
+          kind: _kindFilter, customCategoryId: _categoryFilter);
+    } catch (_) {
+      // Never leave the screen spinning forever on a repository error.
+      results = const [];
+    }
+    if (!mounted || generation != _searchGeneration) return;
     setState(() {
       _results = results;
       _searching = false;

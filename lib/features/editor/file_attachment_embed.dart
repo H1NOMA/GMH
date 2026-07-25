@@ -17,8 +17,10 @@ import '../attachments/attachment_utils.dart';
 const fileAttachmentEmbedKey = 'fileAttachment';
 
 void insertFileAttachment(QuillController controller, MediaItem item) {
-  final index = controller.selection.baseOffset;
-  final length = controller.selection.extentOffset - index;
+  // selection.start/end, not base/extent: a right-to-left selection has
+  // extent < base, which would produce a negative replace length.
+  final index = controller.selection.start;
+  final length = controller.selection.end - index;
   controller.replaceText(
     index,
     length,
@@ -67,18 +69,38 @@ class FileAttachmentEmbedBuilder extends EmbedBuilder {
   }
 }
 
-class _AttachmentChip extends ConsumerWidget {
+class _AttachmentChip extends ConsumerStatefulWidget {
   final String? mediaId;
   final String fallbackName;
 
   const _AttachmentChip({required this.mediaId, required this.fallbackName});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_AttachmentChip> createState() => _AttachmentChipState();
+}
+
+class _AttachmentChipState extends ConsumerState<_AttachmentChip> {
+  // Cached in state: a fresh future per build would flash the chip to its
+  // "broken" fallback on every keystroke while the lookup re-runs.
+  late Future<MediaItem?> _item = _load();
+
+  Future<MediaItem?> _load() => widget.mediaId == null
+      ? Future.value(null)
+      : ref.read(mediaRepositoryProvider).get(widget.mediaId!);
+
+  @override
+  void didUpdateWidget(covariant _AttachmentChip oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.mediaId != widget.mediaId) {
+      _item = _load();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fallbackName = widget.fallbackName;
     return FutureBuilder<MediaItem?>(
-      future: mediaId == null
-          ? Future.value(null)
-          : ref.read(mediaRepositoryProvider).get(mediaId!),
+      future: _item,
       builder: (context, snapshot) {
         final item = snapshot.data;
         final broken = snapshot.connectionState == ConnectionState.done &&
@@ -105,14 +127,18 @@ class _AttachmentChip extends ConsumerWidget {
                   color: GmhColors.parchmentDim,
                 ),
                 const SizedBox(width: 4),
-                Text(
-                  item?.fileName ?? fallbackName,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    color: broken
-                        ? GmhColors.parchmentFaint
-                        : GmhColors.parchment,
-                    decoration: broken ? TextDecoration.lineThrough : null,
+                Flexible(
+                  child: Text(
+                    item?.fileName ?? fallbackName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: broken
+                          ? GmhColors.parchmentFaint
+                          : GmhColors.parchment,
+                      decoration: broken ? TextDecoration.lineThrough : null,
+                    ),
                   ),
                 ),
                 if (item != null) ...[

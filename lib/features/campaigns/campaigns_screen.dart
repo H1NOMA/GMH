@@ -353,9 +353,15 @@ class _MetaItem extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: GmhColors.parchmentDim),
         const SizedBox(width: 4),
-        Text(text,
-            style: TextStyle(
-                fontSize: 12, color: GmhColors.parchmentDim)),
+        // Flexible + ellipsis: a long player list or chapter name must
+        // truncate instead of overflowing the campaign card.
+        Flexible(
+          child: Text(text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: 12, color: GmhColors.parchmentDim)),
+        ),
       ],
     );
   }

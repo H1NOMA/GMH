@@ -69,7 +69,9 @@ Future<void> showVersionHistorySheet(
                         preview.isEmpty
                             ? context.l10n.versionEmptyPreview
                             : preview.length > 120
-                                ? '${preview.substring(0, 120)}…'
+                                // characters, not substring: a raw UTF-16
+                                // cut can split an emoji surrogate pair.
+                                ? '${preview.characters.take(120)}…'
                                 : preview,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

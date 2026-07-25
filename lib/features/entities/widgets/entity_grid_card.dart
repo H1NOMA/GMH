@@ -41,6 +41,8 @@ class EntityGridCard extends ConsumerWidget {
             .map((e) => e.media.id)
             .firstOrNull;
 
+    final hasImage = imageId != null;
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -69,13 +71,18 @@ class EntityGridCard extends ConsumerWidget {
               bottom: 0,
               child: Container(
                 padding: const EdgeInsets.fromLTRB(10, 22, 10, 8),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Color(0xC7000000)],
-                  ),
-                ),
+                // The white-on-gradient caption is only readable over a
+                // photo; on the tinted placeholder (white-ish in light
+                // themes) the theme's own text colors are used instead.
+                decoration: hasImage
+                    ? const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Color(0xC7000000)],
+                        ),
+                      )
+                    : null,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -84,8 +91,10 @@ class EntityGridCard extends ConsumerWidget {
                       entity.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFFF2F2F2),
+                      style: TextStyle(
+                        color: hasImage
+                            ? const Color(0xFFF2F2F2)
+                            : GmhColors.parchment,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         height: 1.2,
@@ -96,8 +105,11 @@ class EntityGridCard extends ConsumerWidget {
                         entity.summary,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: Color(0xB8FFFFFF), fontSize: 10.5),
+                        style: TextStyle(
+                            color: hasImage
+                                ? const Color(0xB8FFFFFF)
+                                : GmhColors.parchmentDim,
+                            fontSize: 10.5),
                       ),
                   ],
                 ),
@@ -124,7 +136,7 @@ class EntityGridCard extends ConsumerWidget {
   }
 }
 
-class _MediaImage extends ConsumerWidget {
+class _MediaImage extends ConsumerStatefulWidget {
   final String mediaId;
   final IconData fallbackIcon;
   final Color color;
@@ -136,13 +148,34 @@ class _MediaImage extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_MediaImage> createState() => _MediaImageState();
+}
+
+class _MediaImageState extends ConsumerState<_MediaImage> {
+  // Cached: a fresh future per build would re-hit the media repo (and flash
+  // the placeholder) every time any watched stream above this card emits.
+  late Future<String?> _path = _resolve();
+
+  Future<String?> _resolve() async {
+    final media = await ref.read(mediaRepositoryProvider).get(widget.mediaId);
+    if (media == null) return null;
+    return ref.read(mediaRepositoryProvider).absolutePath(media);
+  }
+
+  @override
+  void didUpdateWidget(covariant _MediaImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.mediaId != widget.mediaId) {
+      _path = _resolve();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fallbackIcon = widget.fallbackIcon;
+    final color = widget.color;
     return FutureBuilder<String?>(
-      future: () async {
-        final media = await ref.read(mediaRepositoryProvider).get(mediaId);
-        if (media == null) return null;
-        return ref.read(mediaRepositoryProvider).absolutePath(media);
-      }(),
+      future: _path,
       builder: (context, snapshot) {
         final path = snapshot.data;
         if (path == null) {

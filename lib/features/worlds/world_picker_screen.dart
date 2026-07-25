@@ -126,7 +126,11 @@ class WorldPickerScreen extends ConsumerWidget {
                   label: context.l10n.worldStyleFantasy,
                   hint: context.l10n.worldStyleFantasyHint,
                   icon: Icons.auto_stories,
-                  accent: gmhDarkPalette.ember,
+                  // Brightness-aware accents: the dark palettes' neons are
+                  // unreadable on the light theme's paper background.
+                  accent: GmhStyle.paletteFor(WorldStyle.fantasy,
+                          Theme.of(context).brightness)
+                      .ember,
                   selected: style == WorldStyle.fantasy,
                   onTap: () =>
                       setDialogState(() => style = WorldStyle.fantasy),
@@ -136,7 +140,9 @@ class WorldPickerScreen extends ConsumerWidget {
                   label: context.l10n.worldStyleCyberpunk,
                   hint: context.l10n.worldStyleCyberpunkHint,
                   icon: Icons.memory,
-                  accent: gmhCyberDarkPalette.ember,
+                  accent: GmhStyle.paletteFor(WorldStyle.cyberpunk,
+                          Theme.of(context).brightness)
+                      .ember,
                   selected: style == WorldStyle.cyberpunk,
                   onTap: () =>
                       setDialogState(() => style = WorldStyle.cyberpunk),
@@ -229,10 +235,9 @@ class WorldPickerScreen extends ConsumerWidget {
                                     world.style == WorldStyle.cyberpunk
                                         ? Icons.memory
                                         : Icons.public,
-                                    color:
-                                        world.style == WorldStyle.cyberpunk
-                                            ? gmhCyberDarkPalette.ember
-                                            : GmhColors.ember,
+                                    color: GmhStyle.paletteFor(world.style,
+                                            Theme.of(context).brightness)
+                                        .ember,
                                   ),
                                   title: Text(world.name,
                                       style: Theme.of(context)

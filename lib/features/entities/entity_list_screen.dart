@@ -39,6 +39,20 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
       text: ref.read(listPrefsProvider(_prefsKey)).filterText);
 
   @override
+  void didUpdateWidget(covariant EntityListScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // go_router keys shell pages by route *pattern*, so switching from
+    // /browse/character to /browse/location reuses this State. The filter
+    // box must switch to the new section's stored text or it goes stale.
+    final oldKey = listPrefsKey(oldWidget.worldId,
+        kind: oldWidget.kind, categoryId: oldWidget.customCategoryId);
+    if (oldKey != _prefsKey) {
+      _filterController.text =
+          ref.read(listPrefsProvider(_prefsKey)).filterText;
+    }
+  }
+
+  @override
   void dispose() {
     _filterController.dispose();
     super.dispose();
@@ -180,15 +194,22 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                             e.summary.toLowerCase().contains(filter))
                         .toList();
                 if (visible.isEmpty) {
+                  // "No matches" when a filter hides everything; "empty
+                  // section" only when the section truly has no entries.
+                  final filtered = filter.isNotEmpty ||
+                      prefs.tagId != null ||
+                      prefs.favoritesOnly;
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(icon,
+                        Icon(filtered ? Icons.filter_alt_off_outlined : icon,
                             size: 44, color: color.withValues(alpha: 0.4)),
                         const SizedBox(height: 10),
                         Text(
-                          context.l10n.noEntriesOfKind(title),
+                          filtered
+                              ? context.l10n.searchNoMatches
+                              : context.l10n.noEntriesOfKind(title),
                           style: TextStyle(
                               color: GmhColors.parchmentDim),
                         ),

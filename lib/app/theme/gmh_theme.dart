@@ -364,10 +364,12 @@ abstract final class GmhTheme {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(9)),
       ),
+      // Inverse surfaces derived from the palette (not hardcoded fantasy
+      // browns) so snackbars/tooltips match cyberpunk worlds too.
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: isDark ? p.surfaceHigh : const Color(0xFF322A20),
-        contentTextStyle:
-            const TextStyle(color: Color(0xFFE8DCC8), fontSize: 13),
+        backgroundColor: isDark ? p.surfaceHigh : p.parchment,
+        contentTextStyle: TextStyle(
+            color: isDark ? p.parchment : p.background, fontSize: 13),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12)),
@@ -408,11 +410,12 @@ abstract final class GmhTheme {
       tooltipTheme: TooltipThemeData(
         waitDuration: const Duration(milliseconds: 350),
         decoration: BoxDecoration(
-          color: isDark ? p.surfaceHigh : const Color(0xFF322A20),
+          color: isDark ? p.surfaceHigh : p.parchment,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: p.border),
         ),
-        textStyle: const TextStyle(fontSize: 12, color: Color(0xFFE8DCC8)),
+        textStyle: TextStyle(
+            fontSize: 12, color: isDark ? p.parchment : p.background),
       ),
       scrollbarTheme: ScrollbarThemeData(
         radius: const Radius.circular(8),

@@ -63,15 +63,20 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
     super.dispose();
   }
 
+  /// Guards against out-of-order debounced responses.
+  int _queryGeneration = 0;
+
   Future<void> _query(String text) async {
-    final all = await ref
+    final generation = ++_queryGeneration;
+    // Kind restriction is applied in SQL (before the LIMIT): filtering the
+    // 30 returned rows client-side could hide every valid match behind
+    // same-named entities of other kinds.
+    final results = await ref
         .read(entityRepositoryProvider)
-        .lookupByName(widget.worldId, text, limit: 30);
-    if (!mounted) return;
+        .lookupByName(widget.worldId, text, limit: 30, kinds: widget.kinds);
+    if (!mounted || generation != _queryGeneration) return;
     setState(() {
-      _results = widget.kinds.isEmpty
-          ? all
-          : all.where((e) => widget.kinds.contains(e.kind)).toList();
+      _results = results;
       _loading = false;
     });
   }

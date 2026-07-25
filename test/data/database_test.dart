@@ -151,14 +151,24 @@ void main() {
     expect(await h.links.allForWorld(world.id), isEmpty);
   });
 
-  test('lookupByName strips wildcards and matches case-insensitively',
+  test('lookupByName escapes wildcards and matches case-insensitively',
       () async {
     final world = await h.worlds.createWorld(name: 'W');
     await h.entities.createEntity(
         worldId: world.id, kind: EntityKind.character, name: 'Lady Vex');
+    await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.location, name: 'Vault_7');
     final hits = await h.entities.lookupByName(world.id, 'vex');
     expect(hits.map((e) => e.name), contains('Lady Vex'));
-    expect(await h.entities.lookupByName(world.id, '%'), isNotEmpty);
+    // LIKE wildcards are treated as literal characters, so names containing
+    // '_' stay findable and '%' cannot match everything.
+    final vault = await h.entities.lookupByName(world.id, 'Vault_7');
+    expect(vault.map((e) => e.name), contains('Vault_7'));
+    expect(await h.entities.lookupByName(world.id, '%'), isEmpty);
+    // A kind restriction applies before the LIMIT.
+    final locationsOnly = await h.entities
+        .lookupByName(world.id, 'v', kinds: [EntityKind.location]);
+    expect(locationsOnly.map((e) => e.name), ['Vault_7']);
   });
 
   test('settings round-trip', () async {

@@ -74,8 +74,11 @@ class GraphSimulation {
         var delta = nodes[i].position - nodes[j].position;
         var distanceSquared = delta.distanceSquared;
         if (distanceSquared < 1) {
-          delta = Offset(
-              (i - j).isEven ? 0.5 : -0.5, (i + j).isOdd ? 0.5 : -0.5);
+          // Deterministic pseudo-random direction per pair. (i - j) and
+          // (i + j) always share parity, so a parity-based jitter would only
+          // ever separate coincident nodes along a single diagonal.
+          final angle = (i * 31 + j * 17) % 64 / 64 * 2 * pi;
+          delta = Offset(cos(angle), sin(angle)) * 0.5;
           distanceSquared = 0.5;
         }
         final force = delta * (repulsion / distanceSquared / sqrt(distanceSquared));

@@ -76,6 +76,13 @@ class CategoryRepositoryImpl implements CategoryRepository {
           ..where(_db.customCategories.worldId.equals(worldId)))
         .map((r) => r.read(_db.customCategories.id.count())!)
         .getSingle();
+    // max(sortOrder) + 1, not the row count: after a deletion the count
+    // collides with an existing order and the new category lands mid-list.
+    final maxOrder = await (_db.selectOnly(_db.customCategories)
+          ..addColumns([_db.customCategories.sortOrder.max()])
+          ..where(_db.customCategories.worldId.equals(worldId)))
+        .map((r) => r.read(_db.customCategories.sortOrder.max()))
+        .getSingle();
 
     final category = CustomCategory(
       id: newId(),
@@ -83,7 +90,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       name: name.trim(),
       icon: icon,
       color: color ?? _categoryPalette[count % _categoryPalette.length],
-      sortOrder: count,
+      sortOrder: (maxOrder ?? -1) + 1,
       blueprint: blueprint,
       createdAt: nowMs(),
     );

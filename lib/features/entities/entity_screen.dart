@@ -119,7 +119,13 @@ class _EntityScaffold extends ConsumerWidget {
     );
     if (confirmed != true) return;
     await ref.read(entityServiceProvider).moveToTrash(entity.id);
-    if (context.mounted) context.pop();
+    if (!context.mounted) return;
+    // The app navigates with `go` only, so there is nothing on the stack to
+    // pop — return to the section list this entry belonged to instead.
+    context.go(entity.kind == EntityKind.custom &&
+            entity.customCategoryId != null
+        ? Routes.browseCategory(worldId, entity.customCategoryId!)
+        : Routes.browse(worldId, entity.kind));
   }
 
   @override
@@ -252,18 +258,47 @@ class _EntityScaffold extends ConsumerWidget {
   }
 }
 
-class _DocumentPane extends ConsumerWidget {
+class _DocumentPane extends ConsumerStatefulWidget {
   final String worldId;
   final Entity entity;
 
   const _DocumentPane({required this.worldId, required this.entity});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Load once (not watch): the editor owns the document while open;
-    // watching would reset it on every autosave.
+  ConsumerState<_DocumentPane> createState() => _DocumentPaneState();
+}
+
+class _DocumentPaneState extends ConsumerState<_DocumentPane> {
+  // Load once (not watch): the editor owns the document while open; watching
+  // would reset it on every autosave. The future is cached in state so that
+  // unrelated entity updates (rename, tags, favorite…) don't recreate it —
+  // a new future would momentarily yield null, tearing down the editor and
+  // resetting the cursor mid-typing.
+  late Future<DocumentModel> _document;
+
+  @override
+  void initState() {
+    super.initState();
+    _document = _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant _DocumentPane oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.entity.id != widget.entity.id) {
+      setState(() => _document = _load());
+    }
+  }
+
+  Future<DocumentModel> _load() =>
+      ref.read(documentRepositoryProvider).getOrCreate(widget.entity.id);
+
+  @override
+  Widget build(BuildContext context) {
+    final entity = widget.entity;
+    final worldId = widget.worldId;
     return FutureBuilder<DocumentModel>(
-      future: ref.read(documentRepositoryProvider).getOrCreate(entity.id),
+      future: _document,
       builder: (context, snapshot) {
         final doc = snapshot.data;
         if (doc == null) {

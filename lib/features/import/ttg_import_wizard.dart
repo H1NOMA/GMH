@@ -169,7 +169,12 @@ class _TtgImportWizardState extends ConsumerState<_TtgImportWizard> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Padding(
+    // The close button is hidden while running, but the system back gesture
+    // must also be blocked — popping mid-migration would leave the import
+    // writing to the database with no UI, no cancel path and no report.
+    return PopScope(
+      canPop: _step != _Step.running,
+      child: Padding(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -193,6 +198,7 @@ class _TtgImportWizardState extends ConsumerState<_TtgImportWizard> {
           const SizedBox(height: 12),
           Flexible(child: _body(l)),
         ],
+      ),
       ),
     );
   }

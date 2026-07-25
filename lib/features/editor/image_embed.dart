@@ -12,8 +12,10 @@ import '../../app/theme/gmh_theme.dart';
 const mediaImagePrefix = 'media:';
 
 void insertVaultImage(QuillController controller, String mediaId) {
-  final index = controller.selection.baseOffset;
-  final length = controller.selection.extentOffset - index;
+  // selection.start/end, not base/extent: a right-to-left selection has
+  // extent < base, which would produce a negative replace length.
+  final index = controller.selection.start;
+  final length = controller.selection.end - index;
   controller.replaceText(
     index,
     length,
@@ -38,14 +40,31 @@ class VaultImageEmbedBuilder extends EmbedBuilder {
   }
 }
 
-class _VaultImage extends ConsumerWidget {
+class _VaultImage extends ConsumerStatefulWidget {
   final String source;
   const _VaultImage({required this.source});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_VaultImage> createState() => _VaultImageState();
+}
+
+class _VaultImageState extends ConsumerState<_VaultImage> {
+  // Cached in state: a fresh future per build would collapse the image to
+  // a spinner on every keystroke (the editor rebuilds its embeds often).
+  late Future<String?> _path = _resolvePath();
+
+  @override
+  void didUpdateWidget(covariant _VaultImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.source != widget.source) {
+      _path = _resolvePath();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-      future: _resolvePath(ref),
+      future: _path,
       builder: (context, snapshot) {
         final path = snapshot.data;
         if (path == null) {
@@ -80,7 +99,8 @@ class _VaultImage extends ConsumerWidget {
     );
   }
 
-  Future<String?> _resolvePath(WidgetRef ref) async {
+  Future<String?> _resolvePath() async {
+    final source = widget.source;
     if (source.startsWith(mediaImagePrefix)) {
       final mediaId = source.substring(mediaImagePrefix.length);
       final media = await ref.read(mediaRepositoryProvider).get(mediaId);

@@ -15,6 +15,8 @@ Future<void> showImageViewer(
   required int initialIndex,
   Map<String, String> captions = const {},
 }) {
+  if (images.isEmpty) return Future.value();
+  final startIndex = initialIndex.clamp(0, images.length - 1);
   return Navigator.of(context, rootNavigator: true).push(
     PageRouteBuilder(
       opaque: false,
@@ -22,7 +24,7 @@ Future<void> showImageViewer(
       pageBuilder: (context, animation, secondary) => FadeTransition(
         opacity: animation,
         child: _ImageViewer(
-            images: images, initialIndex: initialIndex, captions: captions),
+            images: images, initialIndex: startIndex, captions: captions),
       ),
     ),
   );
@@ -47,6 +49,14 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
   late final PageController _pageController =
       PageController(initialPage: widget.initialIndex);
   late int _index = widget.initialIndex;
+
+  // Resolved file paths, cached per media id: rebuilding the FutureBuilder
+  // with a fresh future on every page swipe would flash a spinner over
+  // already-loaded images.
+  final _paths = <String, Future<String>>{};
+
+  Future<String> _pathFor(MediaItem item) => _paths.putIfAbsent(
+      item.id, () => ref.read(mediaRepositoryProvider).absolutePath(item));
 
   @override
   void dispose() {
@@ -94,8 +104,7 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
               itemBuilder: (context, index) {
                 final item = widget.images[index];
                 return FutureBuilder<String>(
-                  future:
-                      ref.read(mediaRepositoryProvider).absolutePath(item),
+                  future: _pathFor(item),
                   builder: (context, snapshot) {
                     final path = snapshot.data;
                     if (path == null) {

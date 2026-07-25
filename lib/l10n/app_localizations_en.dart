@@ -413,6 +413,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importPickArchive => 'Choose a .gmhw archive';
 
   @override
+  String get importConfirmTitle => 'Import project archive?';
+
+  @override
+  String get importConfirmBody =>
+      'If a world from this archive already exists on this device, it will be completely replaced by the archive contents. This cannot be undone.';
+
+  @override
   String get backupsSection => 'Backups';
 
   @override

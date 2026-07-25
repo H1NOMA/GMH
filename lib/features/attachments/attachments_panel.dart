@@ -258,17 +258,20 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
         final name = await _promptText(
             title: context.l10n.renameAttachmentTitle,
             initial: item.fileName);
+        if (!mounted) return;
         if (name != null && name.trim().isNotEmpty) {
           await media.rename(item.id, name.trim());
         }
       case 'caption':
         final caption = await _promptText(
             title: context.l10n.captionLabel, initial: entry.caption);
+        if (!mounted) return;
         if (caption != null) {
           await media.setCaption(entity.id, item.id, caption.trim());
         }
       case 'replace':
         final files = await pickAnyFiles(dialogTitle: context.l10n.replaceFile);
+        if (!mounted) return;
         final file = files.firstOrNull;
         if (file != null) {
           final bytes = await file.readAsBytes();
@@ -297,15 +300,16 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
             ],
           ),
         );
-        if (confirmed == true) {
-          await media.removeFromGallery(entity.id, item.id);
-          if (entity.coverMediaId == item.id) {
-            await ref
-                .read(entityServiceProvider)
-                .update(entity.copyWith(coverMediaId: () => null));
-          }
-          await media.deleteIfUnreferenced(item.id);
+        // The entity can be deleted / navigated away from while the
+        // confirmation dialog is open — `ref` must not be used then.
+        if (confirmed != true || !mounted) return;
+        await media.removeFromGallery(entity.id, item.id);
+        if (entity.coverMediaId == item.id) {
+          await ref
+              .read(entityServiceProvider)
+              .update(entity.copyWith(coverMediaId: () => null));
         }
+        await media.deleteIfUnreferenced(item.id);
     }
   }
 
@@ -336,7 +340,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
 
 // ------------------------------------------------------------------ tiles
 
-class _ImageTile extends ConsumerWidget {
+class _ImageTile extends ConsumerStatefulWidget {
   final Entity entity;
   final GalleryEntry entry;
   final VoidCallback onTap;
@@ -350,9 +354,36 @@ class _ImageTile extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ImageTile> createState() => _ImageTileState();
+}
+
+class _ImageTileState extends ConsumerState<_ImageTile> {
+  late GalleryEntry entry = widget.entry;
+  late Entity entity = widget.entity;
+
+  // Cached in state so gallery stream emissions don't flash the tiles
+  // while a fresh future re-resolves the same path.
+  late Future<String> _path =
+      ref.read(mediaRepositoryProvider).absolutePath(widget.entry.media);
+
+  @override
+  void didUpdateWidget(covariant _ImageTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    entry = widget.entry;
+    entity = widget.entity;
+    if (oldWidget.entry.media.id != widget.entry.media.id) {
+      _path =
+          ref.read(mediaRepositoryProvider).absolutePath(widget.entry.media);
+    }
+  }
+
+  VoidCallback get onTap => widget.onTap;
+  VoidCallback get onLongPress => widget.onLongPress;
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: ref.read(mediaRepositoryProvider).absolutePath(entry.media),
+      future: _path,
       builder: (context, snapshot) {
         final path = snapshot.data;
         return InkWell(
