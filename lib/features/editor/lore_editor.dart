@@ -13,6 +13,7 @@ import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/debouncer.dart';
+import '../../domain/services/document_service.dart';
 import '../attachments/attachment_utils.dart';
 import '../entities/widgets/entity_picker_dialog.dart';
 import 'entity_link_embed.dart';
@@ -51,9 +52,16 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   StreamSubscription? _changes;
   bool _dragging = false;
 
+  /// Captured in initState: dispose() may run during final tree teardown
+  /// (app shutdown), when `ref` is already unusable — reading it there
+  /// throws "Cannot use ref after the widget was disposed" and skips the
+  /// flush-save and checkpoint.
+  late final DocumentService _documents;
+
   @override
   void initState() {
     super.initState();
+    _documents = ref.read(documentServiceProvider);
     Document document;
     try {
       document =
@@ -83,8 +91,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     _changes?.cancel();
     _autosave.flush(_saveAndCheckpointSync);
     // Checkpoint the version history when leaving the editor.
-    final service = ref.read(documentServiceProvider);
-    unawaited(service.checkpoint(widget.entityId));
+    unawaited(_documents.checkpoint(widget.entityId));
     _controller.dispose();
     _focusNode.dispose();
     _scrollController.dispose();
@@ -100,9 +107,8 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     final json = jsonEncode(_controller.document.toDelta().toJson());
     if (json == _lastSavedJson) return;
     _lastSavedJson = json;
-    final result = await ref
-        .read(documentServiceProvider)
-        .save(entityId: widget.entityId, contentJson: json);
+    final result =
+        await _documents.save(entityId: widget.entityId, contentJson: json);
     if (result.isErr && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(localizedError(context, result.error))));

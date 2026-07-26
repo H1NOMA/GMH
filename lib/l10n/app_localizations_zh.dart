@@ -1331,5 +1331,8 @@ class AppLocalizationsZh extends AppLocalizations {
       'Alt+← / Alt+→——前后导航。在编辑器中输入@即可边写边链接条目。长按侧边栏标签、构建器字段或图库磁贴即可拖动排序。右键（或长按）附件可进行重命名、替换和设为封面等操作。每个版块的网格／列表切换都会分别记住。排序、筛选和所选战役同样会被记住——应用总会回到你上次离开的地方。';
 
   @override
+  String get helpScreenshotCaption => '应用截图（英文界面）';
+
+  @override
   String get helpFigureCaption => '真实界面的示意图';
 }

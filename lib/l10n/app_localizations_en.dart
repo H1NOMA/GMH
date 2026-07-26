@@ -1369,5 +1369,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Alt+← / Alt+→ — navigate back and forward. Type @ in the editor to link entries as you write. Long-press sidebar tabs, constructor fields or gallery tiles to drag-reorder them. Right-click (or long-press) attachments for rename, replace and cover actions. The grid/list toggle on any section is remembered per section. Sort, filters and the selected campaign are remembered too — the app always reopens where you left it.';
 
   @override
+  String get helpScreenshotCaption =>
+      'Screenshot of the app (English interface)';
+
+  @override
   String get helpFigureCaption => 'Schematic view of the actual screen';
 }

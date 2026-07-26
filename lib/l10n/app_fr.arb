@@ -401,5 +401,6 @@
   "helpBackupBody": "Tout est stocké localement — sans compte ni cloud. L'application effectue une sauvegarde automatique une fois par jour ; vous pouvez en lancer une à tout moment dans les Paramètres. Pour déplacer ou partager un monde, exportez une archive .gmhw : un seul fichier contenant la base de données et tous les médias. L'importer sur un autre appareil restaure le monde à l'identique, y compris les sections et styles personnalisés. L'export JSON et le livre du monde en PDF imprimable sont aussi disponibles dans les Paramètres.",
   "helpTipsTitle": "Astuces et raccourcis",
   "helpTipsBody": "Alt+← / Alt+→ — naviguer en arrière et en avant. Tapez @ dans l'éditeur pour lier des entrées en écrivant. Un appui long sur les onglets de la barre latérale, les champs du constructeur ou les tuiles de la galerie permet de les réordonner par glisser-déposer. Clic droit (ou appui long) sur une pièce jointe pour la renommer, la remplacer ou la définir comme couverture. La bascule grille/liste est mémorisée pour chaque section. Le tri, les filtres et la campagne sélectionnée le sont aussi — l'application rouvre toujours là où vous vous êtes arrêté.",
+  "helpScreenshotCaption": "Capture d'écran de l'application (interface en anglais)",
   "helpFigureCaption": "Vue schématique de l'écran réel"
 }

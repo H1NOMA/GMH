@@ -1375,5 +1375,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Alt+← / Alt+→ – zurück und vorwärts navigieren. Im Editor @ tippen, um beim Schreiben Einträge zu verknüpfen. Seitenleisten-Tabs, Baukasten-Felder oder Galeriekacheln lange drücken und ziehen, um sie umzuordnen. Rechtsklick (oder langes Drücken) auf einen Anhang öffnet Umbenennen, Ersetzen und Titelbild. Der Raster/Liste-Umschalter wird pro Bereich gespeichert. Auch Sortierung, Filter und die gewählte Kampagne werden gemerkt – die App öffnet sich immer dort, wo Sie aufgehört haben.';
 
   @override
+  String get helpScreenshotCaption =>
+      'Bildschirmfoto der App (englische Oberfläche)';
+
+  @override
   String get helpFigureCaption => 'Schematische Ansicht des echten Bildschirms';
 }
