@@ -366,7 +366,11 @@ class _GraphPainter extends CustomPainter {
           text: entity.name.length > 22
               ? '${entity.name.substring(0, 22)}…'
               : entity.name,
+          // TextPainter bypasses the theme, so the family must be
+          // explicit — otherwise node labels fall back to the platform
+          // default (and to placeholder blocks in test captures).
           style: TextStyle(
+            fontFamily: 'Roboto',
             fontSize: isFocus ? 12 : 10.5,
             color: isFocus ? GmhColors.emberBright : GmhColors.parchmentDim,
             fontWeight: isFocus ? FontWeight.w700 : FontWeight.w400,
