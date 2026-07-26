@@ -94,6 +94,22 @@ void main() {
     expect(find.text('Отмена'), findsOneWidget);
   });
 
+  testWidgets('German, French and Chinese locales render translated UI',
+      (tester) async {
+    const expectations = [
+      (Locale('de'), 'Neue Welt erstellen'),
+      (Locale('fr'), 'Créer un nouveau monde'),
+      (Locale('zh'), '创建新世界'),
+    ];
+    for (final (locale, cta) in expectations) {
+      await tester.pumpWidget(
+          _app(_FakeWorldRepository([]), locale: locale));
+      await tester.pumpAndSettle();
+      expect(find.text(cta), findsOneWidget,
+          reason: 'world picker CTA in $locale');
+    }
+  });
+
   testWidgets('light theme renders the world picker', (tester) async {
     await tester.pumpWidget(_app(_FakeWorldRepository([]), light: true));
     await tester.pumpAndSettle();
