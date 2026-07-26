@@ -19,7 +19,6 @@ import 'dart:ui' as ui;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_quill/flutter_quill.dart'
@@ -38,34 +37,40 @@ import 'package:path/path.dart' as p;
 
 final _enabled = Platform.environment['GMH_SCREENSHOTS'] == '1';
 
+bool _fontsLoaded = false;
+
 /// Loads the real Roboto + MaterialIcons fonts from the Flutter SDK cache so
-/// screenshots render actual text instead of the Ahem placeholder blocks.
-Future<void> _loadRealFonts() async {
-  final flutterRoot = Platform.environment['FLUTTER_ROOT'];
-  if (flutterRoot == null) fail('FLUTTER_ROOT is not set');
-  final fontsDir = p.join(
-      flutterRoot, 'bin', 'cache', 'artifacts', 'material_fonts');
+/// screenshots render actual text instead of the FlutterTest blocks.
+///
+/// Must run through [WidgetTester.runAsync] inside a test body — a
+/// FontLoader awaited in setUpAll resolves in the fake-async zone and the
+/// registration silently never reaches the engine.
+Future<void> _loadRealFonts(WidgetTester tester) async {
+  if (_fontsLoaded) return;
+  await tester.runAsync(() async {
+    final flutterRoot = Platform.environment['FLUTTER_ROOT'];
+    if (flutterRoot == null) fail('FLUTTER_ROOT is not set');
+    final fontsDir =
+        p.join(flutterRoot, 'bin', 'cache', 'artifacts', 'material_fonts');
 
-  Future<void> load(String family, List<String> files) async {
-    final loader = FontLoader(family);
-    for (final file in files) {
-      final path = p.join(fontsDir, file);
-      if (!File(path).existsSync()) fail('font not found: $path');
-      final bytes = await File(path).readAsBytes();
-      loader.addFont(Future.value(ByteData.view(bytes.buffer)));
+    Future<void> load(String family, List<String> files) async {
+      for (final file in files) {
+        final path = p.join(fontsDir, file);
+        if (!File(path).existsSync()) fail('font not found: $path');
+        await ui.loadFontFromList(await File(path).readAsBytes(),
+            fontFamily: family);
+      }
     }
-    await loader.load();
-    // ignore: avoid_print
-    print('loaded $family (${files.length} files)');
-  }
 
-  await load('Roboto', [
-    'Roboto-Regular.ttf',
-    'Roboto-Medium.ttf',
-    'Roboto-Bold.ttf',
-    'Roboto-Italic.ttf',
-  ]);
-  await load('MaterialIcons', ['MaterialIcons-Regular.otf']);
+    await load('Roboto', [
+      'Roboto-Regular.ttf',
+      'Roboto-Medium.ttf',
+      'Roboto-Bold.ttf',
+      'Roboto-Italic.ttf',
+    ]);
+    await load('MaterialIcons', ['MaterialIcons-Regular.otf']);
+  });
+  _fontsLoaded = true;
 }
 
 class _Demo {
@@ -237,6 +242,9 @@ Future<_Demo> _seedDemoWorld() async {
 
 Future<void> _pumpApp(WidgetTester tester, _Demo demo,
     String initialLocation) async {
+  // Fresh key per test: reusing one GlobalKey across tests trips the
+  // duplicate-GlobalKey assertion while the previous tree is finalized.
+  _shotKey = GlobalKey();
   // A trimmed GmhApp: the real router, theme and localization stack, but
   // without the nav-history wiring (its delegate listener fires during the
   // very first build under flutter_test and trips Riverpod's build guard).
@@ -267,7 +275,7 @@ Future<void> _pumpApp(WidgetTester tester, _Demo demo,
   await _settle(tester);
 }
 
-final _shotKey = GlobalKey();
+late GlobalKey _shotKey;
 
 /// pumpAndSettle can never finish while tickers (graph simulation) or
 /// repeating timers run; real async DB work needs runAsync slices instead.
@@ -299,11 +307,6 @@ Future<void> _capture(WidgetTester tester, String name) async {
 }
 
 void main() {
-  setUpAll(() async {
-    if (!_enabled) return;
-    TestWidgetsFlutterBinding.ensureInitialized();
-    await _loadRealFonts();
-  });
 
   Future<void> run(WidgetTester tester, String name,
       String Function(_Demo demo) location,
@@ -311,6 +314,7 @@ void main() {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
+    await _loadRealFonts(tester);
 
     final demo = await tester.runAsync(_seedDemoWorld) as _Demo;
     addTearDown(() async {

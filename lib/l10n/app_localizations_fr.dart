@@ -1377,5 +1377,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Alt+← / Alt+→ — naviguer en arrière et en avant. Tapez @ dans l\'éditeur pour lier des entrées en écrivant. Un appui long sur les onglets de la barre latérale, les champs du constructeur ou les tuiles de la galerie permet de les réordonner par glisser-déposer. Clic droit (ou appui long) sur une pièce jointe pour la renommer, la remplacer ou la définir comme couverture. La bascule grille/liste est mémorisée pour chaque section. Le tri, les filtres et la campagne sélectionnée le sont aussi — l\'application rouvre toujours là où vous vous êtes arrêté.';
 
   @override
+  String get helpScreenshotCaption =>
+      'Capture d\'écran de l\'application (interface en anglais)';
+
+  @override
   String get helpFigureCaption => 'Vue schématique de l\'écran réel';
 }

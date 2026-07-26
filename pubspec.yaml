@@ -59,6 +59,23 @@ flutter:
   uses-material-design: true
   generate: true
 
+  assets:
+    - assets/help/
+
+  # Bundled Roboto (Apache 2.0): consistent typography on desktop, and
+  # `flutter test` loads project fonts for real — which is what lets the
+  # help-screenshot generator render actual text instead of Ahem blocks.
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
+
 flutter_launcher_icons:
   image_path: "assets/icon/gmh_icon_1024.png"
   android: true

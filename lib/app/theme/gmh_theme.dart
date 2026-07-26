@@ -212,6 +212,7 @@ abstract final class GmhTheme {
 
     TextStyle display(double size, {FontWeight weight = FontWeight.w600}) =>
         TextStyle(
+          fontFamily: 'Roboto',
           fontFamilyFallback: serifFallback,
           fontSize: size,
           fontWeight: weight,
@@ -229,6 +230,9 @@ abstract final class GmhTheme {
       splashFactory: InkSparkle.splashFactory,
       hoverColor: p.parchment.withValues(alpha: 0.04),
       focusColor: p.ember.withValues(alpha: 0.12),
+      // The bundled asset font (see pubspec): identical typography on
+      // Windows/Linux/macOS instead of whatever the platform falls back to.
+      fontFamily: 'Roboto',
     );
 
     final shadow = isDark
@@ -257,7 +261,7 @@ abstract final class GmhTheme {
         bodySmall: TextStyle(fontSize: 12, color: p.parchmentDim),
         labelLarge: TextStyle(
             fontSize: 13, fontWeight: FontWeight.w600, color: p.parchment),
-      ),
+      ).apply(fontFamily: 'Roboto'),
       // Smooth, quick page transitions everywhere.
       pageTransitionsTheme: const PageTransitionsTheme(builders: {
         TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
@@ -298,8 +302,8 @@ abstract final class GmhTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: isDark ? p.surface : Colors.white,
-        hintStyle: TextStyle(color: p.parchmentFaint),
-        labelStyle: TextStyle(color: p.parchmentDim),
+        hintStyle: TextStyle(fontFamily: 'Roboto', color: p.parchmentFaint),
+        labelStyle: TextStyle(fontFamily: 'Roboto', color: p.parchmentDim),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         border: OutlineInputBorder(
@@ -324,8 +328,10 @@ abstract final class GmhTheme {
           padding: const EdgeInsets.symmetric(horizontal: 18),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(11)),
-          textStyle:
-              const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+          textStyle: const TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 13.5,
+              fontWeight: FontWeight.w600),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -335,8 +341,10 @@ abstract final class GmhTheme {
           padding: const EdgeInsets.symmetric(horizontal: 14),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)),
-          textStyle:
-              const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+          textStyle: const TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 13.5,
+              fontWeight: FontWeight.w600),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -360,14 +368,15 @@ abstract final class GmhTheme {
       chipTheme: base.chipTheme.copyWith(
         backgroundColor: p.surfaceHigh,
         side: BorderSide(color: p.border),
-        labelStyle: TextStyle(fontSize: 12, color: p.parchment),
+        labelStyle:
+            TextStyle(fontFamily: 'Roboto', fontSize: 12, color: p.parchment),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(9)),
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: isDark ? p.surfaceHigh : const Color(0xFF322A20),
-        contentTextStyle:
-            const TextStyle(color: Color(0xFFE8DCC8), fontSize: 13),
+        contentTextStyle: const TextStyle(
+            fontFamily: 'Roboto', color: Color(0xFFE8DCC8), fontSize: 13),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12)),
@@ -377,8 +386,8 @@ abstract final class GmhTheme {
         indicatorColor: p.ember.withValues(alpha: 0.2),
         iconTheme:
             WidgetStatePropertyAll(IconThemeData(color: p.parchmentDim)),
-        labelTextStyle: WidgetStatePropertyAll(
-            TextStyle(fontSize: 11.5, color: p.parchmentDim)),
+        labelTextStyle: WidgetStatePropertyAll(TextStyle(
+            fontFamily: 'Roboto', fontSize: 11.5, color: p.parchmentDim)),
       ),
       tabBarTheme: TabBarThemeData(
         labelColor: p.ember,
@@ -402,7 +411,8 @@ abstract final class GmhTheme {
         elevation: 10,
         shadowColor: shadow,
         shape: rounded(12),
-        textStyle: TextStyle(fontSize: 13.5, color: p.parchment),
+        textStyle: TextStyle(
+            fontFamily: 'Roboto', fontSize: 13.5, color: p.parchment),
         menuPadding: const EdgeInsets.symmetric(vertical: 6),
       ),
       tooltipTheme: TooltipThemeData(
@@ -412,7 +422,8 @@ abstract final class GmhTheme {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: p.border),
         ),
-        textStyle: const TextStyle(fontSize: 12, color: Color(0xFFE8DCC8)),
+        textStyle: const TextStyle(
+            fontFamily: 'Roboto', fontSize: 12, color: Color(0xFFE8DCC8)),
       ),
       scrollbarTheme: ScrollbarThemeData(
         radius: const Radius.circular(8),

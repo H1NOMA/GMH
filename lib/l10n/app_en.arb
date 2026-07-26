@@ -635,5 +635,6 @@
   "helpBackupBody": "Everything is stored locally — no account, no cloud. The app takes an automatic backup once a day; you can trigger one anytime in Settings. To move or share a world, export a .gmhw archive: one file containing the database and all media. Importing it on another device restores the world exactly, including custom sections and styles. JSON export and the printable PDF world book are also available in Settings.",
   "helpTipsTitle": "Tips & shortcuts",
   "helpTipsBody": "Alt+← / Alt+→ — navigate back and forward. Type @ in the editor to link entries as you write. Long-press sidebar tabs, constructor fields or gallery tiles to drag-reorder them. Right-click (or long-press) attachments for rename, replace and cover actions. The grid/list toggle on any section is remembered per section. Sort, filters and the selected campaign are remembered too — the app always reopens where you left it.",
+  "helpScreenshotCaption": "Screenshot of the app (English interface)",
   "helpFigureCaption": "Schematic view of the actual screen"
 }
