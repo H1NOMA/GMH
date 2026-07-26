@@ -64,14 +64,15 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
   }
 
   Future<void> _query(String text) async {
+    // The kind restriction is applied in SQL: filtering the 30-row result
+    // afterwards could show "no matches" for an existing campaign whenever
+    // same-named locations/items consumed the whole limit.
     final all = await ref
         .read(entityRepositoryProvider)
-        .lookupByName(widget.worldId, text, limit: 30);
+        .lookupByName(widget.worldId, text, limit: 30, kinds: widget.kinds);
     if (!mounted) return;
     setState(() {
-      _results = widget.kinds.isEmpty
-          ? all
-          : all.where((e) => widget.kinds.contains(e.kind)).toList();
+      _results = all;
       _loading = false;
     });
   }

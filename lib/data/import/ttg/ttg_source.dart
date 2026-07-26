@@ -590,12 +590,16 @@ TtgSourceData _readJson(
   };
   final mediaNorm = _mediaColumns.map(_norm).toSet();
 
-  // collection lookup for `cityId` -> collection 'cities'.
+  // collection lookup for `cityId` -> collection 'cities'. Exact collection
+  // names are registered first; singular aliases must never shadow another
+  // collection's real name (an export with both `city` and `cities` would
+  // otherwise resolve `city_id` FKs against whichever came later).
   final collectionByNorm = <String, String>{};
   for (final name in rawCollections.keys) {
-    final norm = _norm(name);
-    collectionByNorm[norm] = name;
-    collectionByNorm[singularizeType(norm)] = name;
+    collectionByNorm[_norm(name)] = name;
+  }
+  for (final name in rawCollections.keys) {
+    collectionByNorm.putIfAbsent(singularizeType(_norm(name)), () => name);
   }
 
   final collections = <String, List<TtgRecord>>{};
@@ -727,21 +731,31 @@ Future<TtgSourceData> _readZip(String path, String defaultName) async {
     throw const ImportException('The ZIP contains no JSON database.');
   }
 
-  // Media entries are matched by full path first, then by basename.
+  // Media entries are matched by full path first, then by basename — but the
+  // basename fallback is only trusted when it is unambiguous: attaching
+  // maps/new-liberty.png where portraits/new-liberty.png was meant is worse
+  // than reporting the file as missing.
   final byPath = <String, ArchiveFile>{};
   final byBase = <String, ArchiveFile>{};
+  final ambiguousBases = <String>{};
   for (final f in archive.files) {
     if (!f.isFile) continue;
     final normalized = f.name.replaceAll('\\', '/');
     byPath[normalized] = f;
-    byBase.putIfAbsent(p.basename(normalized), () => f);
+    final base = p.basename(normalized);
+    if (byBase.containsKey(base)) {
+      ambiguousBases.add(base);
+    } else {
+      byBase[base] = f;
+    }
   }
 
   Future<List<int>?> readMedia(String ref) async {
     final cleaned = ref.replaceAll('\\', '/').split('?').first;
+    final base = p.basename(cleaned);
     final entry = byPath[cleaned] ??
         byPath[cleaned.startsWith('/') ? cleaned.substring(1) : cleaned] ??
-        byBase[p.basename(cleaned)];
+        (ambiguousBases.contains(base) ? null : byBase[base]);
     if (entry == null) return null;
     return entry.content as List<int>;
   }

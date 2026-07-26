@@ -218,14 +218,18 @@ class EntityRepositoryImpl implements EntityRepository {
 
   @override
   Future<List<Entity>> lookupByName(String worldId, String query,
-      {int limit = 12}) async {
+      {int limit = 12, List<EntityKind> kinds = const []}) async {
     // Strip LIKE wildcards; a stray broader match is harmless in a picker.
     final escaped = query.replaceAll('%', '').replaceAll('_', ' ');
+    final kindNames = kinds.map((k) => k.name).toList();
     final rows = await (_db.select(_db.entities)
           ..where((e) =>
               e.worldId.equals(worldId) &
               e.deletedAt.isNull() &
-              e.name.like('%$escaped%'))
+              e.name.like('%$escaped%') &
+              (kindNames.isEmpty
+                  ? const Constant(true)
+                  : e.kind.isIn(kindNames)))
           ..orderBy([
             (e) => OrderingTerm.asc(e.name.length),
             (e) => OrderingTerm.asc(e.name),
