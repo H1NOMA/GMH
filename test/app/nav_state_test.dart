@@ -124,7 +124,7 @@ void main() {
   });
 
   group('ListPrefs', () {
-    test('sort persists per world and is restored after restart', () async {
+    test('sort persists per section and is restored after restart', () async {
       final key = listPrefsKey('w1', categoryId: null);
       container.read(listPrefsProvider(key).notifier)
         ..setSort(EntitySort.nameAsc)

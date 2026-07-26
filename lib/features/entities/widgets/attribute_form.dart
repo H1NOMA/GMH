@@ -35,17 +35,12 @@ class AttributeForm extends ConsumerWidget {
 
   Future<void> _setValue(
       WidgetRef ref, String key, Object? value) async {
-    final attributes = Map<String, Object?>.of(entity.attributes);
-    if (value == null ||
-        (value is String && value.isEmpty) ||
-        (value is List && value.isEmpty)) {
-      attributes.remove(key);
-    } else {
-      attributes[key] = value;
-    }
+    // Single-field write through the service, which re-reads the freshest
+    // row: this widget's build-time snapshot must not roll back another
+    // field committed a moment ago (e.g. via a dispose-commit).
     await ref
         .read(entityServiceProvider)
-        .update(entity.copyWith(attributes: attributes));
+        .setAttribute(entity.id, key, value);
   }
 
   @override

@@ -91,11 +91,15 @@ class MediaRepositoryImpl implements MediaRepository {
   Future<void> rename(String mediaId, String newFileName) async {
     final trimmed = newFileName.trim();
     if (trimmed.isEmpty) return;
+    // Only re-derive the mime when the new name carries a known extension.
+    // Renaming "hero.png" to "Hero portrait" is a display rename — the
+    // bytes are untouched, and downgrading the mime to octet-stream would
+    // silently demote the image to a generic file tile everywhere.
+    final derived = _mimeByExtension[p.extension(trimmed).toLowerCase()];
     await (_db.update(_db.mediaFiles)..where((m) => m.id.equals(mediaId)))
         .write(MediaFilesCompanion(
       fileName: Value(trimmed),
-      mimeType: Value(_mimeByExtension[p.extension(trimmed).toLowerCase()] ??
-          'application/octet-stream'),
+      mimeType: derived != null ? Value(derived) : const Value.absent(),
     ));
   }
 

@@ -67,10 +67,12 @@ class AppShell extends ConsumerWidget {
         bottomNavigationBar: _BottomNav(worldId: worldId),
       );
     }
-    return style == WorldStyle.fantasy
-        ? scaffold
-        : Theme(
-            data: GmhStyle.themeFor(style, brightness), child: scaffold);
+    // Always wrap in a Theme — for fantasy too. Inserting the Theme widget
+    // only for cyberpunk changes the tree shape when the world style
+    // resolves, failing Widget.canUpdate and remounting the entire page
+    // subtree (editor state, graph simulation, scroll positions).
+    return Theme(
+        data: GmhStyle.themeFor(style, brightness), child: scaffold);
   }
 }
 
@@ -108,13 +110,16 @@ class _HistoryButtons extends ConsumerWidget {
 
 enum _Section { home, search, graph, campaigns, settings }
 
-_Section _currentSection(BuildContext context) {
+/// Null when no top-level section matches (browsing a kind, a category or
+/// an entry) — the rail/bottom nav must not highlight "Home" then.
+_Section? _currentSection(BuildContext context) {
   final location = GoRouterState.of(context).uri.path;
   if (location.contains('/search')) return _Section.search;
   if (location.contains('/graph')) return _Section.graph;
   if (location.contains('/campaigns')) return _Section.campaigns;
   if (location.contains('/settings')) return _Section.settings;
-  return _Section.home;
+  if (location.endsWith('/home')) return _Section.home;
+  return null;
 }
 
 void _goToSection(BuildContext context, String worldId, _Section section) {
@@ -221,13 +226,13 @@ class _Sidebar extends ConsumerWidget {
 
 extension on _Sidebar {
   Widget _mainNavTile(
-      BuildContext context, String id, _Section section, String location) {
+      BuildContext context, String id, _Section? section, String location) {
     switch (id) {
       case 'dashboard':
         return _NavTile(
           icon: Icons.dashboard_outlined,
           label: context.l10n.navDashboard,
-          selected: section == _Section.home && location.endsWith('/home'),
+          selected: section == _Section.home,
           onTap: () => context.go(Routes.home(worldId)),
         );
       case 'search':
@@ -519,7 +524,7 @@ class _Rail extends StatelessWidget {
     final section = _currentSection(context);
     return NavigationRail(
       backgroundColor: GmhColors.surface,
-      selectedIndex: section.index,
+      selectedIndex: section?.index,
       onDestinationSelected: (index) =>
           _goToSection(context, worldId, _Section.values[index]),
       labelType: NavigationRailLabelType.all,
@@ -575,7 +580,11 @@ class _BottomNav extends StatelessWidget {
             ),
             Expanded(
               child: NavigationBar(
-                selectedIndex: section.index,
+                // NavigationBar can't render "nothing selected"; hide the
+                // indicator instead when no top-level section is active.
+                selectedIndex: section?.index ?? 0,
+                indicatorColor:
+                    section == null ? Colors.transparent : null,
                 height: 64,
                 onDestinationSelected: (index) =>
                     _goToSection(context, worldId, _Section.values[index]),

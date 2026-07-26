@@ -127,10 +127,15 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<void> delete(String categoryId) async {
-    await _db.transaction(() async {
+  Future<List<String>> delete(String categoryId) async {
+    return _db.transaction(() async {
       // Preserve the category's entries by converting them to the Concept
       // Archive — no data is ever lost by deleting a category.
+      final moved = await (_db.selectOnly(_db.entities)
+            ..addColumns([_db.entities.id])
+            ..where(_db.entities.customCategoryId.equals(categoryId)))
+          .map((row) => row.read(_db.entities.id)!)
+          .get();
       await (_db.update(_db.entities)
             ..where((e) => e.customCategoryId.equals(categoryId)))
           .write(EntitiesCompanion(
@@ -141,6 +146,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       await (_db.delete(_db.customCategories)
             ..where((c) => c.id.equals(categoryId)))
           .go();
+      return moved;
     });
   }
 

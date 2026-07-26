@@ -148,7 +148,7 @@ Future<void> persistLastLocation(WidgetRef ref, String location) {
 
 /// Filter/sort state of one entity list, keyed by "worldId|scope" where
 /// scope is a kind name or a category id. Sort order also persists across
-/// restarts (per world); filters live for the session.
+/// restarts (per section); filters live for the session.
 class ListPrefs {
   final EntitySort sort;
   final String? tagId;
@@ -185,12 +185,21 @@ class ListPrefs {
 }
 
 class ListPrefsController extends FamilyNotifier<ListPrefs, String> {
-  String get _worldId => arg.split('|').first;
-  String get _sortKey => '${SettingsKeys.entitySort}.$_worldId';
+  // Both persisted values are keyed per section ("worldId|scope"), matching
+  // the in-session state. A world-wide sort key would silently re-sort
+  // sections the user never touched after a restart.
+  String get _sortKey => '${SettingsKeys.entitySort}.$arg';
   String get _viewKey => '${SettingsKeys.listViewMode}.$arg';
+
+  // A user choice made while the saved values are still loading must win
+  // over the load — otherwise the async read snaps the UI back.
+  bool _sortTouched = false;
+  bool _viewTouched = false;
 
   @override
   ListPrefs build(String key) {
+    _sortTouched = false;
+    _viewTouched = false;
     // Sort order and view mode load asynchronously; defaults show meanwhile.
     Future.microtask(() async {
       final settings = ref.read(settingsRepositoryProvider);
@@ -198,11 +207,11 @@ class ListPrefsController extends FamilyNotifier<ListPrefs, String> {
       final sort = EntitySort.values
           .where((s) => s.name == saved)
           .firstOrNull;
-      if (sort != null && state.sort != sort) {
+      if (sort != null && !_sortTouched) {
         state = state.copyWith(sort: sort);
       }
       final view = await settings.get(_viewKey);
-      if (view != null) {
+      if (view != null && !_viewTouched) {
         state = state.copyWith(gridView: view == 'grid');
       }
     });
@@ -210,11 +219,13 @@ class ListPrefsController extends FamilyNotifier<ListPrefs, String> {
   }
 
   void setSort(EntitySort sort) {
+    _sortTouched = true;
     state = state.copyWith(sort: sort);
     ref.read(settingsRepositoryProvider).set(_sortKey, sort.name);
   }
 
   void setGridView(bool grid) {
+    _viewTouched = true;
     state = state.copyWith(gridView: grid);
     ref
         .read(settingsRepositoryProvider)
@@ -274,20 +285,25 @@ class SidebarOrderController extends FamilyNotifier<List<String>, String> {
   String get _key =>
       '${SettingsKeys.sidebarOrder}.${arg.replaceAll('|', '.')}';
 
+  // A drag finished before the saved order loads must win over the load.
+  bool _touched = false;
+
   @override
   List<String> build(String key) {
+    _touched = false;
     Future.microtask(() async {
       final saved = await ref.read(settingsRepositoryProvider).get(_key);
-      if (saved == null) return;
+      if (saved == null || _touched) return;
       try {
         final ids = (jsonDecode(saved) as List).cast<String>();
-        if (ids.isNotEmpty) state = ids;
+        if (ids.isNotEmpty && !_touched) state = ids;
       } catch (_) {}
     });
     return const [];
   }
 
   void setOrder(List<String> ids) {
+    _touched = true;
     state = ids;
     ref.read(settingsRepositoryProvider).set(_key, jsonEncode(ids));
   }

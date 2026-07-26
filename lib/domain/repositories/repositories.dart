@@ -51,7 +51,9 @@ abstract interface class CategoryRepository {
 
   /// Deletes the category. Its entries are preserved: they are converted to
   /// the Concept Archive so no data is ever lost.
-  Future<void> delete(String categoryId);
+  /// Deletes the category, converting its entries to the Concept Archive.
+  /// Returns the ids of the converted entries so callers can reindex them.
+  Future<List<String>> delete(String categoryId);
 
   Future<Map<String, int>> countsByCategory(String worldId);
 }

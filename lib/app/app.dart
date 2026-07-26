@@ -87,9 +87,11 @@ class _GmhAppState extends ConsumerState<GmhApp> {
       builder: (context, child) {
         // Keep the GmhColors facade in sync with the resolved theme so the
         // whole widget tree (built after this) reads the right palette.
-        GmhColors.palette = Theme.of(context).brightness == Brightness.dark
-            ? gmhDarkPalette
-            : gmhLightPalette;
+        // Resolve against the active world style — hardcoding the fantasy
+        // palettes here would repaint a cyberpunk world in gold for a frame
+        // whenever this builder runs after the shell set the style.
+        GmhColors.palette = GmhStyle.paletteFor(
+            GmhStyle.current, Theme.of(context).brightness);
         return child!;
       },
       routerConfig: _router,

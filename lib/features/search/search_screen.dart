@@ -37,11 +37,33 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   final _debouncer = Debouncer(GmhConstants.searchDebounce);
   List<SearchResult> _results = const [];
   bool _searching = false;
+  // Monotonic token: two quick searches can resolve out of order, and the
+  // earlier one must not overwrite the later one's results.
+  int _searchGeneration = 0;
 
   EntityKind? get _kindFilter =>
       ref.read(searchStateProvider(widget.worldId)).kind;
-  String? get _categoryFilter =>
-      ref.read(searchStateProvider(widget.worldId)).categoryId;
+
+  String? get _categoryFilter {
+    final id = ref.read(searchStateProvider(widget.worldId)).categoryId;
+    if (id == null) return null;
+    // The session-kept filter may point at a category deleted meanwhile;
+    // silently filtering every query down to zero results would look like
+    // the search is broken. Treat a missing category as "no filter" (the
+    // stored id is cleared post-frame, never during build).
+    final categories =
+        ref.read(worldCategoriesProvider(widget.worldId)).valueOrNull;
+    if (categories != null && !categories.any((c) => c.id == id)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref
+            .read(searchStateProvider(widget.worldId).notifier)
+            .update(clearCategory: true);
+      });
+      return null;
+    }
+    return id;
+  }
 
   @override
   void initState() {
@@ -71,10 +93,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       return;
     }
     setState(() => _searching = true);
+    final generation = ++_searchGeneration;
     final results = await ref.read(searchRepositoryProvider).search(
         widget.worldId, query,
         kind: _kindFilter, customCategoryId: _categoryFilter);
-    if (!mounted) return;
+    if (!mounted || generation != _searchGeneration) return;
     setState(() {
       _results = results;
       _searching = false;
