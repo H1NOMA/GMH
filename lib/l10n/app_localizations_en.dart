@@ -370,6 +370,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageRussian => 'Русский';
 
   @override
+  String get languageGerman => 'Deutsch';
+
+  @override
+  String get languageFrench => 'Français';
+
+  @override
+  String get languageChinese => '中文';
+
+  @override
   String exportSection(String world) {
     return 'Export \"$world\"';
   }
@@ -1214,4 +1223,151 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldTypeStringList => 'List of values';
+
+  @override
+  String get helpTitle => 'User Guide';
+
+  @override
+  String get helpSettingsSubtitle =>
+      'The built-in manual: where everything is and how to use it';
+
+  @override
+  String get helpIntroBody =>
+      'Game Master\'s Hub is an offline workspace for game masters: worlds, characters, locations, campaigns and lore all live on this device, connected into one navigable web. This guide walks through every part of the app — the diagrams below are schematic views of the real screens, and the numbered markers are explained under each picture.';
+
+  @override
+  String get helpWorldsTitle => 'Worlds & world styles';
+
+  @override
+  String get helpWorldsBody =>
+      'Everything starts with a world — a fully isolated project with its own entries, tags and campaigns. The world picker opens on launch; the globe icon in the sidebar returns you there at any time. When creating a world you choose its style: Fantasy (parchment and classic terms — Characters, Locations, Quests) or Cyberpunk (neon palette and street slang — Runners, Sectors, Gigs). The style changes the entire look and vocabulary of that world and can differ per world. Each world remembers where you left off and reopens exactly there.';
+
+  @override
+  String get helpShellTitle => 'Navigation & sidebar';
+
+  @override
+  String get helpShellBody =>
+      'The left sidebar is your control center. It lists the main pages, the World and Library sections with live entry counts, and your custom categories. Hold and drag any tab to reorder a group — the order is saved per world. On tablets the sidebar collapses into a rail, on phones into the bottom bar.';
+
+  @override
+  String get helpShellLegend1 =>
+      'World switcher — tap the header to return to the world picker.';
+
+  @override
+  String get helpShellLegend2 =>
+      'Back / Forward — browser-style history over everything you visit. Alt+← / Alt+→ work anywhere.';
+
+  @override
+  String get helpShellLegend3 =>
+      'Section tabs with live counts. Press-and-hold, then drag to reorder; your order persists.';
+
+  @override
+  String get helpShellLegend4 =>
+      'List controls — filter box, grid/list toggle, sort menu and favorites filter for the open section.';
+
+  @override
+  String get helpShellLegend5 =>
+      'Entry cards show the summary and context chips: status, race, rarity, dates — whatever fits the section.';
+
+  @override
+  String get helpShellLegend6 =>
+      'New entry — creates an entry in the section you are viewing.';
+
+  @override
+  String get helpEntryTitle => 'Entries: document, fields & attachments';
+
+  @override
+  String get helpEntryBody =>
+      'Every entry is a page with a rich-text document and a structured side panel. The document editor supports headers, lists, quotes, images pasted or dropped straight into the text, file attachments and version history (the clock icon on the toolbar). Type @ or press the mention button to link another entry inline — links are two-way and feed the graph. The side panel holds the template fields of the entry\'s kind, tags, relations with backlinks, and the gallery.';
+
+  @override
+  String get helpEntryLegend1 =>
+      'Name — click it to rename; the star toggles favorite.';
+
+  @override
+  String get helpEntryLegend2 =>
+      'Editor toolbar: formatting, alignment, @ mention, insert image, attach file, version history.';
+
+  @override
+  String get helpEntryLegend3 =>
+      'An inline mention of another entry — click to jump there; it also creates a backlink.';
+
+  @override
+  String get helpEntryLegend4 =>
+      'Structured fields defined by the entry\'s kind (or your section constructor).';
+
+  @override
+  String get helpEntryLegend5 =>
+      'Gallery and file attachments — drag & drop files anywhere on the page to attach.';
+
+  @override
+  String get helpProfileTitle => 'Character profiles';
+
+  @override
+  String get helpProfileBody =>
+      'Characters open as a full tabbed profile: General Information, Biography, Statistics with a D&D-style ability grid and derived modifiers, Beliefs, Relationships (allies, enemies, factions — all real links), Inventory, Abilities & Magic, Timeline and Notes. The portrait comes from the entry\'s cover image — set any gallery image as cover from its long-press menu. Every relationship you fill in appears in the graph and as a backlink on the target entry.';
+
+  @override
+  String get helpCampaignsTitle => 'Campaigns, quests & sessions';
+
+  @override
+  String get helpCampaignsBody =>
+      'The Campaigns page is your table dashboard. Pick the active campaign from the dropdown in the top-right corner — the choice is remembered per world. The Quest Board shows every quest whose Campaign field points at the selected campaign, grouped by status; the Session Log collects session entries the same way. Create quests and sessions right from this page — the campaign link is filled in automatically.';
+
+  @override
+  String get helpSearchTitle => 'Search & tags';
+
+  @override
+  String get helpSearchBody =>
+      'Search (the magnifier in the sidebar) is instant full-text search across names, summaries, documents and tags. Filter chips narrow results to one section or category. Tags are managed in the Tag Manager — reachable from the sidebar or search quick actions — where you can rename, recolor, merge duplicates and delete tags with live usage counts. Every list screen can also filter by a tag and by favorites.';
+
+  @override
+  String get helpGraphTitle => 'Relationship graph';
+
+  @override
+  String get helpGraphBody =>
+      'The graph shows your world as a living web: every mention, relation and structured reference becomes an edge. Colors follow entry kinds; node size follows the number of connections. Tap a node to open its entry, or use \"Show in graph\" on any entry to see its local neighborhood. The kind filter in the toolbar hides categories you don\'t need right now.';
+
+  @override
+  String get helpConstructorTitle => 'Custom sections & the constructor';
+
+  @override
+  String get helpConstructorBody =>
+      'Beyond the built-in sections you can create your own — Guilds, Spells, Recipes, anything. A custom section behaves exactly like a built-in one: sidebar tab with counts, dashboard tile, search filter, graph colors and PDF chapters. The Section Constructor decides what its entries look like: toggle modules on or off and define custom fields of seven types. Deleting a category never deletes entries — they move to the Concept Archive.';
+
+  @override
+  String get helpConstructorLegend1 =>
+      'Modules — the building blocks an entry page will have. Disabled modules disappear entirely.';
+
+  @override
+  String get helpConstructorLegend2 =>
+      'Custom fields with types: text, long text, number, choice list, date, checklist, list of values. Drag to reorder.';
+
+  @override
+  String get helpConstructorLegend3 =>
+      'Add field — the first fields also become the chips on the section\'s cards.';
+
+  @override
+  String get helpImportTitle => 'Importing from TTG';
+
+  @override
+  String get helpImportBody =>
+      'Settings → Import migrates a complete TTG D&D database into a new world: campaigns, NPCs, monsters, spells, items, locations, factions, quests, session notes, media and every relationship. SQLite (.db, .sqlite, .ttg), JSON and ZIP exports are supported. Formatting is preserved, references are validated and repaired, duplicates can be skipped, merged or decided per record, and an interrupted import resumes where it stopped. A full migration report is saved as a lore document in the new world.';
+
+  @override
+  String get helpBackupTitle => 'Backups & moving between devices';
+
+  @override
+  String get helpBackupBody =>
+      'Everything is stored locally — no account, no cloud. The app takes an automatic backup once a day; you can trigger one anytime in Settings. To move or share a world, export a .gmhw archive: one file containing the database and all media. Importing it on another device restores the world exactly, including custom sections and styles. JSON export and the printable PDF world book are also available in Settings.';
+
+  @override
+  String get helpTipsTitle => 'Tips & shortcuts';
+
+  @override
+  String get helpTipsBody =>
+      'Alt+← / Alt+→ — navigate back and forward. Type @ in the editor to link entries as you write. Long-press sidebar tabs, constructor fields or gallery tiles to drag-reorder them. Right-click (or long-press) attachments for rename, replace and cover actions. The grid/list toggle on any section is remembered per section. Sort, filters and the selected campaign are remembered too — the app always reopens where you left it.';
+
+  @override
+  String get helpFigureCaption => 'Schematic view of the actual screen';
 }

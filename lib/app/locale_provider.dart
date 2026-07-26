@@ -7,7 +7,7 @@ import 'providers.dart';
 
 /// Selected app locale. `null` = follow the system language (the default on
 /// first launch — so a Russian system gets Russian automatically, because
-/// Flutter resolves against `supportedLocales` [en, ru]).
+/// Flutter resolves against `supportedLocales` [en, ru, de, fr, zh]).
 ///
 /// The explicit choice persists in the local settings table; `main()` seeds
 /// the controller before the first frame.
@@ -37,5 +37,8 @@ class LocaleController extends Notifier<Locale?> {
 Locale? localeFromSetting(String? value) => switch (value) {
       'en' => const Locale('en'),
       'ru' => const Locale('ru'),
+      'de' => const Locale('de'),
+      'fr' => const Locale('fr'),
+      'zh' => const Locale('zh'),
       _ => null,
     };

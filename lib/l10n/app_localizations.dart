@@ -722,6 +722,24 @@ abstract class AppLocalizations {
   /// **'Русский'**
   String get languageRussian;
 
+  /// No description provided for @languageGerman.
+  ///
+  /// In en, this message translates to:
+  /// **'Deutsch'**
+  String get languageGerman;
+
+  /// No description provided for @languageFrench.
+  ///
+  /// In en, this message translates to:
+  /// **'Français'**
+  String get languageFrench;
+
+  /// No description provided for @languageChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'中文'**
+  String get languageChinese;
+
   /// No description provided for @exportSection.
   ///
   /// In en, this message translates to:
@@ -2251,6 +2269,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'List of values'**
   String get fieldTypeStringList;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'User Guide'**
+  String get helpTitle;
+
+  /// No description provided for @helpSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The built-in manual: where everything is and how to use it'**
+  String get helpSettingsSubtitle;
+
+  /// No description provided for @helpIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Master\'s Hub is an offline workspace for game masters: worlds, characters, locations, campaigns and lore all live on this device, connected into one navigable web. This guide walks through every part of the app — the diagrams below are schematic views of the real screens, and the numbered markers are explained under each picture.'**
+  String get helpIntroBody;
+
+  /// No description provided for @helpWorldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Worlds & world styles'**
+  String get helpWorldsTitle;
+
+  /// No description provided for @helpWorldsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything starts with a world — a fully isolated project with its own entries, tags and campaigns. The world picker opens on launch; the globe icon in the sidebar returns you there at any time. When creating a world you choose its style: Fantasy (parchment and classic terms — Characters, Locations, Quests) or Cyberpunk (neon palette and street slang — Runners, Sectors, Gigs). The style changes the entire look and vocabulary of that world and can differ per world. Each world remembers where you left off and reopens exactly there.'**
+  String get helpWorldsBody;
+
+  /// No description provided for @helpShellTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation & sidebar'**
+  String get helpShellTitle;
+
+  /// No description provided for @helpShellBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The left sidebar is your control center. It lists the main pages, the World and Library sections with live entry counts, and your custom categories. Hold and drag any tab to reorder a group — the order is saved per world. On tablets the sidebar collapses into a rail, on phones into the bottom bar.'**
+  String get helpShellBody;
+
+  /// No description provided for @helpShellLegend1.
+  ///
+  /// In en, this message translates to:
+  /// **'World switcher — tap the header to return to the world picker.'**
+  String get helpShellLegend1;
+
+  /// No description provided for @helpShellLegend2.
+  ///
+  /// In en, this message translates to:
+  /// **'Back / Forward — browser-style history over everything you visit. Alt+← / Alt+→ work anywhere.'**
+  String get helpShellLegend2;
+
+  /// No description provided for @helpShellLegend3.
+  ///
+  /// In en, this message translates to:
+  /// **'Section tabs with live counts. Press-and-hold, then drag to reorder; your order persists.'**
+  String get helpShellLegend3;
+
+  /// No description provided for @helpShellLegend4.
+  ///
+  /// In en, this message translates to:
+  /// **'List controls — filter box, grid/list toggle, sort menu and favorites filter for the open section.'**
+  String get helpShellLegend4;
+
+  /// No description provided for @helpShellLegend5.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry cards show the summary and context chips: status, race, rarity, dates — whatever fits the section.'**
+  String get helpShellLegend5;
+
+  /// No description provided for @helpShellLegend6.
+  ///
+  /// In en, this message translates to:
+  /// **'New entry — creates an entry in the section you are viewing.'**
+  String get helpShellLegend6;
+
+  /// No description provided for @helpEntryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries: document, fields & attachments'**
+  String get helpEntryTitle;
+
+  /// No description provided for @helpEntryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every entry is a page with a rich-text document and a structured side panel. The document editor supports headers, lists, quotes, images pasted or dropped straight into the text, file attachments and version history (the clock icon on the toolbar). Type @ or press the mention button to link another entry inline — links are two-way and feed the graph. The side panel holds the template fields of the entry\'s kind, tags, relations with backlinks, and the gallery.'**
+  String get helpEntryBody;
+
+  /// No description provided for @helpEntryLegend1.
+  ///
+  /// In en, this message translates to:
+  /// **'Name — click it to rename; the star toggles favorite.'**
+  String get helpEntryLegend1;
+
+  /// No description provided for @helpEntryLegend2.
+  ///
+  /// In en, this message translates to:
+  /// **'Editor toolbar: formatting, alignment, @ mention, insert image, attach file, version history.'**
+  String get helpEntryLegend2;
+
+  /// No description provided for @helpEntryLegend3.
+  ///
+  /// In en, this message translates to:
+  /// **'An inline mention of another entry — click to jump there; it also creates a backlink.'**
+  String get helpEntryLegend3;
+
+  /// No description provided for @helpEntryLegend4.
+  ///
+  /// In en, this message translates to:
+  /// **'Structured fields defined by the entry\'s kind (or your section constructor).'**
+  String get helpEntryLegend4;
+
+  /// No description provided for @helpEntryLegend5.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery and file attachments — drag & drop files anywhere on the page to attach.'**
+  String get helpEntryLegend5;
+
+  /// No description provided for @helpProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Character profiles'**
+  String get helpProfileTitle;
+
+  /// No description provided for @helpProfileBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Characters open as a full tabbed profile: General Information, Biography, Statistics with a D&D-style ability grid and derived modifiers, Beliefs, Relationships (allies, enemies, factions — all real links), Inventory, Abilities & Magic, Timeline and Notes. The portrait comes from the entry\'s cover image — set any gallery image as cover from its long-press menu. Every relationship you fill in appears in the graph and as a backlink on the target entry.'**
+  String get helpProfileBody;
+
+  /// No description provided for @helpCampaignsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaigns, quests & sessions'**
+  String get helpCampaignsTitle;
+
+  /// No description provided for @helpCampaignsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The Campaigns page is your table dashboard. Pick the active campaign from the dropdown in the top-right corner — the choice is remembered per world. The Quest Board shows every quest whose Campaign field points at the selected campaign, grouped by status; the Session Log collects session entries the same way. Create quests and sessions right from this page — the campaign link is filled in automatically.'**
+  String get helpCampaignsBody;
+
+  /// No description provided for @helpSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search & tags'**
+  String get helpSearchTitle;
+
+  /// No description provided for @helpSearchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Search (the magnifier in the sidebar) is instant full-text search across names, summaries, documents and tags. Filter chips narrow results to one section or category. Tags are managed in the Tag Manager — reachable from the sidebar or search quick actions — where you can rename, recolor, merge duplicates and delete tags with live usage counts. Every list screen can also filter by a tag and by favorites.'**
+  String get helpSearchBody;
+
+  /// No description provided for @helpGraphTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship graph'**
+  String get helpGraphTitle;
+
+  /// No description provided for @helpGraphBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The graph shows your world as a living web: every mention, relation and structured reference becomes an edge. Colors follow entry kinds; node size follows the number of connections. Tap a node to open its entry, or use \"Show in graph\" on any entry to see its local neighborhood. The kind filter in the toolbar hides categories you don\'t need right now.'**
+  String get helpGraphBody;
+
+  /// No description provided for @helpConstructorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom sections & the constructor'**
+  String get helpConstructorTitle;
+
+  /// No description provided for @helpConstructorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Beyond the built-in sections you can create your own — Guilds, Spells, Recipes, anything. A custom section behaves exactly like a built-in one: sidebar tab with counts, dashboard tile, search filter, graph colors and PDF chapters. The Section Constructor decides what its entries look like: toggle modules on or off and define custom fields of seven types. Deleting a category never deletes entries — they move to the Concept Archive.'**
+  String get helpConstructorBody;
+
+  /// No description provided for @helpConstructorLegend1.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules — the building blocks an entry page will have. Disabled modules disappear entirely.'**
+  String get helpConstructorLegend1;
+
+  /// No description provided for @helpConstructorLegend2.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields with types: text, long text, number, choice list, date, checklist, list of values. Drag to reorder.'**
+  String get helpConstructorLegend2;
+
+  /// No description provided for @helpConstructorLegend3.
+  ///
+  /// In en, this message translates to:
+  /// **'Add field — the first fields also become the chips on the section\'s cards.'**
+  String get helpConstructorLegend3;
+
+  /// No description provided for @helpImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing from TTG'**
+  String get helpImportTitle;
+
+  /// No description provided for @helpImportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings → Import migrates a complete TTG D&D database into a new world: campaigns, NPCs, monsters, spells, items, locations, factions, quests, session notes, media and every relationship. SQLite (.db, .sqlite, .ttg), JSON and ZIP exports are supported. Formatting is preserved, references are validated and repaired, duplicates can be skipped, merged or decided per record, and an interrupted import resumes where it stopped. A full migration report is saved as a lore document in the new world.'**
+  String get helpImportBody;
+
+  /// No description provided for @helpBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups & moving between devices'**
+  String get helpBackupTitle;
+
+  /// No description provided for @helpBackupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is stored locally — no account, no cloud. The app takes an automatic backup once a day; you can trigger one anytime in Settings. To move or share a world, export a .gmhw archive: one file containing the database and all media. Importing it on another device restores the world exactly, including custom sections and styles. JSON export and the printable PDF world book are also available in Settings.'**
+  String get helpBackupBody;
+
+  /// No description provided for @helpTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips & shortcuts'**
+  String get helpTipsTitle;
+
+  /// No description provided for @helpTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt+← / Alt+→ — navigate back and forward. Type @ in the editor to link entries as you write. Long-press sidebar tabs, constructor fields or gallery tiles to drag-reorder them. Right-click (or long-press) attachments for rename, replace and cover actions. The grid/list toggle on any section is remembered per section. Sort, filters and the selected campaign are remembered too — the app always reopens where you left it.'**
+  String get helpTipsBody;
+
+  /// No description provided for @helpFigureCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Schematic view of the actual screen'**
+  String get helpFigureCaption;
 }
 
 class _AppLocalizationsDelegate

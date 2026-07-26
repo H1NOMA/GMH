@@ -1,0 +1,81 @@
+# Builds the Windows release and pushes it to Steam via SteamPipe.
+#
+# Manual trigger only: run it from the Actions tab when you want a new
+# Steam build. Requires these repository secrets (Settings -> Secrets):
+#   STEAM_USERNAME    - the Steamworks builder account login
+#   STEAM_CONFIG_VDF  - base64 of the config.vdf produced after a local
+#                       steamcmd login with Steam Guard (see
+#                       https://github.com/game-ci/steam-deploy#configuration)
+#   STEAM_APP_ID      - the numeric app id
+# (the action maps depot1Path to depot id = app id + 1, the Steamworks
+#  default for the first depot)
+#
+# The build lands in Steamworks unpublished; set it live on a branch in
+# App Admin -> SteamPipe -> Builds.
+name: Steam Release
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build-and-upload:
+    name: Build (Windows x64) & upload to Steam
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read app version from pubspec
+        id: version
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path pubspec.yaml -Pattern '^version:\s*(\S+)').Matches[0].Groups[1].Value
+          $version = $version.Split('+')[0]
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.5
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze & test
+        run: |
+          flutter analyze
+          flutter test
+
+      - name: Build Windows (release)
+        run: flutter build windows --release
+
+      - name: Bundle VC++ runtime DLLs
+        shell: pwsh
+        run: |
+          $releaseDir = "build/windows/x64/runner/Release"
+          foreach ($dll in @('msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll')) {
+            $target = Join-Path $releaseDir $dll
+            if (-not (Test-Path $target)) {
+              Copy-Item "C:\Windows\System32\$dll" $target
+            }
+          }
+
+      - name: Stage Steam content root
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path build/steam_content/windows -Force | Out-Null
+          Copy-Item "build/windows/x64/runner/Release/*" build/steam_content/windows -Recurse
+
+      - name: Upload to Steam
+        uses: game-ci/steam-deploy@v3
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
+          appId: ${{ secrets.STEAM_APP_ID }}
+          buildDescription: v${{ steps.version.outputs.version }}
+          rootPath: build/steam_content
+          depot1Path: windows
+          releaseBranch: ''

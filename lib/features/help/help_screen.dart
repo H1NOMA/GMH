@@ -1,0 +1,770 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../app/l10n_ext.dart';
+import '../../app/theme/gmh_theme.dart';
+
+/// Built-in user guide, opened from the «?» icon. Instead of bundled PNG
+/// screenshots it renders schematic replicas of the app's screens with
+/// numbered call-outs — they always match the active theme, world style and
+/// language, and cost nothing in binary size.
+class HelpScreen extends ConsumerWidget {
+  final String worldId;
+  const HelpScreen({super.key, required this.worldId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    final sections = [
+      _HelpSection(
+        icon: Icons.public,
+        title: l.helpWorldsTitle,
+        body: l.helpWorldsBody,
+      ),
+      _HelpSection(
+        icon: Icons.view_sidebar_outlined,
+        title: l.helpShellTitle,
+        body: l.helpShellBody,
+        figure: const _ShellFigure(),
+        legend: [
+          l.helpShellLegend1,
+          l.helpShellLegend2,
+          l.helpShellLegend3,
+          l.helpShellLegend4,
+          l.helpShellLegend5,
+          l.helpShellLegend6,
+        ],
+      ),
+      _HelpSection(
+        icon: Icons.article_outlined,
+        title: l.helpEntryTitle,
+        body: l.helpEntryBody,
+        figure: const _EntryFigure(),
+        legend: [
+          l.helpEntryLegend1,
+          l.helpEntryLegend2,
+          l.helpEntryLegend3,
+          l.helpEntryLegend4,
+          l.helpEntryLegend5,
+        ],
+      ),
+      _HelpSection(
+        icon: Icons.person_outline,
+        title: l.helpProfileTitle,
+        body: l.helpProfileBody,
+      ),
+      _HelpSection(
+        icon: Icons.map_outlined,
+        title: l.helpCampaignsTitle,
+        body: l.helpCampaignsBody,
+      ),
+      _HelpSection(
+        icon: Icons.search,
+        title: l.helpSearchTitle,
+        body: l.helpSearchBody,
+      ),
+      _HelpSection(
+        icon: Icons.hub_outlined,
+        title: l.helpGraphTitle,
+        body: l.helpGraphBody,
+      ),
+      _HelpSection(
+        icon: Icons.category_outlined,
+        title: l.helpConstructorTitle,
+        body: l.helpConstructorBody,
+        figure: const _ConstructorFigure(),
+        legend: [
+          l.helpConstructorLegend1,
+          l.helpConstructorLegend2,
+          l.helpConstructorLegend3,
+        ],
+      ),
+      _HelpSection(
+        icon: Icons.swap_horiz,
+        title: l.helpImportTitle,
+        body: l.helpImportBody,
+      ),
+      _HelpSection(
+        icon: Icons.shield_outlined,
+        title: l.helpBackupTitle,
+        body: l.helpBackupBody,
+      ),
+      _HelpSection(
+        icon: Icons.tips_and_updates_outlined,
+        title: l.helpTipsTitle,
+        body: l.helpTipsBody,
+      ),
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 8,
+        title: Row(
+          children: [
+            const Icon(Icons.help_outline, size: 20),
+            const SizedBox(width: 8),
+            Text(l.helpTitle),
+          ],
+        ),
+      ),
+      body: ListView(
+        key: const PageStorageKey('helpScroll'),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        children: [
+          _IntroCard(text: l.helpIntroBody),
+          const SizedBox(height: 12),
+          for (final section in sections) ...[
+            _SectionCard(section: section),
+            const SizedBox(height: 12),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _HelpSection {
+  final IconData icon;
+  final String title;
+  final String body;
+  final Widget? figure;
+  final List<String> legend;
+
+  const _HelpSection({
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.figure,
+    this.legend = const [],
+  });
+}
+
+class _IntroCard extends StatelessWidget {
+  final String text;
+  const _IntroCard({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: GmhColors.ember.withValues(alpha: 0.09),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.auto_stories_outlined,
+                size: 26, color: GmhColors.ember),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(text, style: const TextStyle(height: 1.45)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionCard extends StatelessWidget {
+  final _HelpSection section;
+  const _SectionCard({required this.section});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: ExpansionTile(
+        leading: Icon(section.icon, size: 21, color: GmhColors.ember),
+        title: Text(section.title,
+            style: const TextStyle(fontWeight: FontWeight.w600)),
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(section.body, style: const TextStyle(height: 1.45)),
+          if (section.figure != null) ...[
+            const SizedBox(height: 14),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
+                child: section.figure!,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Center(
+              child: Text(
+                context.l10n.helpFigureCaption,
+                style: TextStyle(
+                    fontSize: 11,
+                    fontStyle: FontStyle.italic,
+                    color: GmhColors.parchmentDim),
+              ),
+            ),
+            const SizedBox(height: 6),
+            for (var i = 0; i < section.legend.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _Marker(number: i + 1, small: true),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(section.legend[i],
+                          style: const TextStyle(
+                              fontSize: 12.5, height: 1.4)),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ==================================================================
+// Schematic figures — miniature replicas of real screens, annotated
+// with numbered markers that the legend below explains.
+// ==================================================================
+
+class _Marker extends StatelessWidget {
+  final int number;
+  final bool small;
+  const _Marker({required this.number, this.small = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = small ? 18.0 : 20.0;
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: GmhColors.ember,
+        shape: BoxShape.circle,
+      ),
+      child: Text(
+        '$number',
+        style: TextStyle(
+          fontSize: small ? 11 : 12,
+          fontWeight: FontWeight.w700,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ),
+    );
+  }
+}
+
+class _FigureFrame extends StatelessWidget {
+  final Widget child;
+  final double aspectRatio;
+  const _FigureFrame({required this.child, this.aspectRatio = 16 / 10});
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: Container(
+        decoration: BoxDecoration(
+          color: GmhColors.background,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+              color: GmhColors.parchmentDim.withValues(alpha: 0.4)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: child,
+      ),
+    );
+  }
+}
+
+/// Grey placeholder bar imitating a line of text.
+class _Bar extends StatelessWidget {
+  final double width;
+  final double height;
+  final Color? color;
+  const _Bar(this.width, {this.height = 7, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: color ?? GmhColors.parchmentDim.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(3),
+      ),
+    );
+  }
+}
+
+class _MockTile extends StatelessWidget {
+  final IconData icon;
+  final bool selected;
+  const _MockTile({required this.icon, this.selected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      decoration: BoxDecoration(
+        color: selected
+            ? GmhColors.ember.withValues(alpha: 0.18)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 11, color: GmhColors.parchmentDim),
+          const SizedBox(width: 6),
+          const _Bar(52),
+        ],
+      ),
+    );
+  }
+}
+
+/// Figure 1: the main shell — sidebar, list, history, FAB.
+class _ShellFigure extends StatelessWidget {
+  const _ShellFigure();
+
+  @override
+  Widget build(BuildContext context) {
+    return _FigureFrame(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Sidebar
+          Container(
+            width: 132,
+            color: GmhColors.surface,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Icon(Icons.public, size: 12, color: GmhColors.ember),
+                      const SizedBox(width: 5),
+                      const _Bar(46, height: 8),
+                      const Spacer(),
+                      const _Marker(number: 1),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 4),
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back,
+                          size: 11, color: GmhColors.parchmentDim),
+                      const SizedBox(width: 4),
+                      Icon(Icons.arrow_forward,
+                          size: 11, color: GmhColors.parchmentDim),
+                      const SizedBox(width: 5),
+                      const _Marker(number: 2),
+                    ],
+                  ),
+                ),
+                const Divider(height: 8),
+                const _MockTile(icon: Icons.dashboard_outlined),
+                const _MockTile(
+                    icon: Icons.person_outline, selected: true),
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, top: 2),
+                  child: Row(
+                    children: [
+                      const _Bar(40, height: 5),
+                      const SizedBox(width: 5),
+                      const _Marker(number: 3),
+                    ],
+                  ),
+                ),
+                const _MockTile(icon: Icons.location_on_outlined),
+                const _MockTile(icon: Icons.shield_outlined),
+                const Spacer(),
+                const _MockTile(icon: Icons.help_outline),
+                const _MockTile(icon: Icons.settings_outlined),
+                const SizedBox(height: 6),
+              ],
+            ),
+          ),
+          VerticalDivider(
+              width: 1,
+              color: GmhColors.parchmentDim.withValues(alpha: 0.3)),
+          // Content: list of entry cards
+          Expanded(
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          const _Bar(70, height: 9),
+                          const Spacer(),
+                          Icon(Icons.grid_view,
+                              size: 11, color: GmhColors.parchmentDim),
+                          const SizedBox(width: 4),
+                          Icon(Icons.sort,
+                              size: 11, color: GmhColors.parchmentDim),
+                          const SizedBox(width: 5),
+                          const _Marker(number: 4),
+                          const SizedBox(width: 4),
+                        ],
+                      ),
+                    ),
+                    for (var i = 0; i < 3; i++)
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.all(7),
+                        decoration: BoxDecoration(
+                          color: GmhColors.surfaceRaised,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: GmhColors.ember
+                                    .withValues(alpha: 0.25),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                _Bar(90 - i * 14.0, height: 7),
+                                const SizedBox(height: 4),
+                                _Bar(120 - i * 10.0, height: 5),
+                              ],
+                            ),
+                            const Spacer(),
+                            if (i == 0) const _Marker(number: 5),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: Row(
+                    children: [
+                      const _Marker(number: 6),
+                      const SizedBox(width: 5),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 9, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: GmhColors.ember,
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Icon(Icons.add,
+                            size: 13,
+                            color:
+                                Theme.of(context).colorScheme.onPrimary),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Figure 2: an entry page — document editor and the details side panel.
+class _EntryFigure extends StatelessWidget {
+  const _EntryFigure();
+
+  @override
+  Widget build(BuildContext context) {
+    return _FigureFrame(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // App bar: name, favorite, menu
+          Container(
+            color: GmhColors.surface,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            child: Row(
+              children: [
+                Icon(Icons.person_outline,
+                    size: 12, color: GmhColors.ember),
+                const SizedBox(width: 6),
+                const _Bar(74, height: 8),
+                const SizedBox(width: 6),
+                const _Marker(number: 1),
+                const Spacer(),
+                Icon(Icons.star_border,
+                    size: 12, color: GmhColors.parchmentDim),
+                const SizedBox(width: 6),
+                Icon(Icons.more_vert,
+                    size: 12, color: GmhColors.parchmentDim),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Editor pane
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(9),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            for (final icon in [
+                              Icons.format_bold,
+                              Icons.format_italic,
+                              Icons.format_list_bulleted,
+                              Icons.alternate_email,
+                              Icons.image_outlined,
+                              Icons.history,
+                            ]) ...[
+                              Icon(icon,
+                                  size: 11,
+                                  color: GmhColors.parchmentDim),
+                              const SizedBox(width: 5),
+                            ],
+                            const _Marker(number: 2),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        const _Bar(150, height: 6),
+                        const SizedBox(height: 5),
+                        const _Bar(170, height: 6),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const _Bar(60, height: 6),
+                            const SizedBox(width: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: GmhColors.ember
+                                    .withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const _Bar(34,
+                                  height: 5, color: null),
+                            ),
+                            const SizedBox(width: 5),
+                            const _Marker(number: 3),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        const _Bar(140, height: 6),
+                      ],
+                    ),
+                  ),
+                ),
+                VerticalDivider(
+                    width: 1,
+                    color:
+                        GmhColors.parchmentDim.withValues(alpha: 0.3)),
+                // Details side panel
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(9),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const _Bar(46, height: 6),
+                            const SizedBox(width: 5),
+                            const _Marker(number: 4),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        for (var i = 0; i < 2; i++) ...[
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.only(bottom: 5),
+                            decoration: BoxDecoration(
+                              color: GmhColors.surfaceRaised,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: _Bar(64 - i * 10.0, height: 5),
+                          ),
+                        ],
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            for (var i = 0; i < 3; i++)
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(right: 4),
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  color: GmhColors.ember
+                                      .withValues(alpha: 0.18),
+                                  borderRadius:
+                                      BorderRadius.circular(4),
+                                ),
+                              ),
+                            const _Marker(number: 5),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Figure 3: the section constructor — modules and custom fields.
+class _ConstructorFigure extends StatelessWidget {
+  const _ConstructorFigure();
+
+  @override
+  Widget build(BuildContext context) {
+    return _FigureFrame(
+      aspectRatio: 16 / 9,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Modules column
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const _Bar(52, height: 7),
+                      const SizedBox(width: 5),
+                      const _Marker(number: 1),
+                    ],
+                  ),
+                  const SizedBox(height: 7),
+                  for (final (icon, on) in [
+                    (Icons.list_alt, true),
+                    (Icons.article_outlined, true),
+                    (Icons.image_outlined, true),
+                    (Icons.attach_file, false),
+                    (Icons.sell_outlined, true),
+                    (Icons.hub_outlined, false),
+                  ])
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Row(
+                        children: [
+                          Icon(icon,
+                              size: 11, color: GmhColors.parchmentDim),
+                          const SizedBox(width: 6),
+                          const _Bar(48, height: 5),
+                          const SizedBox(width: 6),
+                          Container(
+                            width: 18,
+                            height: 10,
+                            alignment: on
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            padding: const EdgeInsets.all(1.5),
+                            decoration: BoxDecoration(
+                              color: on
+                                  ? GmhColors.ember
+                                  : GmhColors.parchmentDim
+                                      .withValues(alpha: 0.4),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Container(
+                              width: 7,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Fields column
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const _Bar(58, height: 7),
+                      const SizedBox(width: 5),
+                      const _Marker(number: 2),
+                    ],
+                  ),
+                  const SizedBox(height: 7),
+                  for (var i = 0; i < 3; i++)
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 7, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: GmhColors.surfaceRaised,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.drag_indicator,
+                              size: 10, color: GmhColors.parchmentDim),
+                          const SizedBox(width: 5),
+                          _Bar(52 - i * 8.0, height: 5),
+                          const Spacer(),
+                          _Bar(26, height: 5),
+                        ],
+                      ),
+                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.add_circle_outline,
+                          size: 12, color: GmhColors.ember),
+                      const SizedBox(width: 5),
+                      const _Bar(40, height: 5),
+                      const SizedBox(width: 5),
+                      const _Marker(number: 3),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
