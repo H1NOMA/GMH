@@ -3,10 +3,10 @@
 //
 // Not part of the normal suite: every test below is skipped unless the
 // GMH_SCREENSHOTS environment variable is set, so CI never depends on
-// pixel-perfect rendering of a particular host. To regenerate the images:
+// pixel-perfect rendering of a particular host. To regenerate the images
+// (written straight into assets/help/):
 //
-//   GMH_SCREENSHOTS=1 flutter test --update-goldens test/help_screenshots_test.dart
-//   cp test/goldens/help/*.png assets/help/
+//   GMH_SCREENSHOTS=1 flutter test test/help_screenshots_test.dart
 //
 // Screenshots are captured with the ENGLISH interface on purpose — one
 // set of images serves every app language, while captions and schematic
@@ -14,9 +14,11 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,10 +49,14 @@ Future<void> _loadRealFonts() async {
   Future<void> load(String family, List<String> files) async {
     final loader = FontLoader(family);
     for (final file in files) {
-      final bytes = await File(p.join(fontsDir, file)).readAsBytes();
+      final path = p.join(fontsDir, file);
+      if (!File(path).existsSync()) fail('font not found: $path');
+      final bytes = await File(path).readAsBytes();
       loader.addFont(Future.value(ByteData.view(bytes.buffer)));
     }
     await loader.load();
+    // ignore: avoid_print
+    print('loaded $family (${files.length} files)');
   }
 
   await load('Roboto', [
@@ -240,23 +246,28 @@ Future<void> _pumpApp(WidgetTester tester, _Demo demo,
       databaseProvider.overrideWithValue(demo.db),
       mediaVaultProvider.overrideWithValue(demo.vault),
     ],
-    child: MaterialApp.router(
+    child: RepaintBoundary(
+      key: _shotKey,
+      child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.light(),
       darkTheme: GmhTheme.dark(),
       themeMode: ThemeMode.dark,
       // Screenshots ship in English for every app language.
       locale: const Locale('en'),
-      routerConfig: createRouter(initialLocation: initialLocation),
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
-        ...FlutterQuillLocalizations.localizationsDelegates,
-      ],
+        routerConfig: createRouter(initialLocation: initialLocation),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          ...FlutterQuillLocalizations.localizationsDelegates,
+        ],
+      ),
     ),
   ));
   await _settle(tester);
 }
+
+final _shotKey = GlobalKey();
 
 /// pumpAndSettle can never finish while tickers (graph simulation) or
 /// repeating timers run; real async DB work needs runAsync slices instead.
@@ -268,11 +279,23 @@ Future<void> _settle(WidgetTester tester) async {
   }
 }
 
+/// Captures the RepaintBoundary straight into assets/help/ — inside
+/// runAsync, because both toImage and the file write need the real event
+/// loop (matchesGoldenFile's own I/O deadlocks under the fake-async zone).
 Future<void> _capture(WidgetTester tester, String name) async {
-  await expectLater(
-    find.byType(MaterialApp),
-    matchesGoldenFile('goldens/help/$name.png'),
-  );
+  await tester.runAsync(() async {
+    final boundary = _shotKey.currentContext!.findRenderObject()!
+        as RenderRepaintBoundary;
+    final image = await boundary.toImage();
+    final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+    final file = File(p.join('assets', 'help', '$name.png'));
+    await file.parent.create(recursive: true);
+    await file.writeAsBytes(bytes!.buffer.asUint8List());
+  });
+  // Dispose the tree and drain debounce/blink timers so the test ends
+  // without "Timer is still pending" noise.
+  await tester.pumpWidget(const SizedBox());
+  await tester.pump(const Duration(seconds: 35));
 }
 
 void main() {
