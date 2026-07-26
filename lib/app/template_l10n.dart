@@ -1,15 +1,26 @@
 import 'package:flutter/widgets.dart';
 
-/// Russian translations for template-defined strings (section titles, field
-/// labels, hints and select options).
+import 'template_l10n_de.dart';
+import 'template_l10n_fr.dart';
+import 'template_l10n_zh.dart';
+
+/// Translations for template-defined strings (section titles, field labels,
+/// hints and select options).
 ///
 /// Templates are pure domain data with stable English strings — those strings
 /// double as storage values for select fields, so the database stays
 /// language-neutral and worlds survive language switches. The UI translates
 /// them at render time via [trTemplate].
 String trTemplate(BuildContext context, String source) {
-  if (Localizations.localeOf(context).languageCode != 'ru') return source;
-  return _ru[source] ?? source;
+  final map = switch (Localizations.localeOf(context).languageCode) {
+    'ru' => _ru,
+    'de' => templateDe,
+    'fr' => templateFr,
+    'zh' => templateZh,
+    _ => null,
+  };
+  if (map == null) return source;
+  return map[source] ?? source;
 }
 
 const _ru = <String, String>{
