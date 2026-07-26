@@ -92,8 +92,11 @@ abstract interface class EntityRepository {
   Future<Map<EntityKind, int>> countsByKind(String worldId);
 
   /// Lightweight name lookup for the mention picker (prefix match).
+  /// [kinds] restricts matches in SQL, so the limit budget is spent on the
+  /// requested kinds only — same-named entities of other kinds can't crowd
+  /// the results out.
   Future<List<Entity>> lookupByName(String worldId, String query,
-      {int limit = 12});
+      {int limit = 12, List<EntityKind> kinds = const []});
 }
 
 abstract interface class DocumentRepository {

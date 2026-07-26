@@ -32,8 +32,8 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
     // The selection is a persisted per-world provider: it survives moving
     // to other sections and app restarts, and only changes when the user
     // explicitly picks another campaign.
-    final selectedId =
-        ref.watch(selectedCampaignProvider(widget.worldId)).valueOrNull;
+    final selection = ref.watch(selectedCampaignProvider(widget.worldId));
+    final selectedId = selection.valueOrNull;
     // Campaigns are always ordered by creation date, newest first. The
     // order derives from the stored created_at timestamp, so it survives
     // restarts without any change to the data format.
@@ -49,10 +49,13 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
             .valueOrNull ??
         [];
 
+    // While the persisted selection is still loading, don't fall back to the
+    // newest campaign: that flashes (and briefly acts on) a campaign the
+    // user never picked, then swaps once the setting arrives.
     final selected = campaigns
             .where((c) => c.id == selectedId)
             .firstOrNull ??
-        campaigns.firstOrNull;
+        (selection.isLoading ? null : campaigns.firstOrNull);
 
     return Scaffold(
       appBar: AppBar(

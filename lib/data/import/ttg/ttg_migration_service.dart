@@ -334,6 +334,9 @@ class TtgMigrationService {
       var tagsCreated = 0;
       final importedByCollection = <String, int>{};
       final idByKey = <String, String>{};
+      // Which source collection registered each nameKey during this run —
+      // pre-existing world entities are absent from this map.
+      final importedNameCollection = <String, String>{};
       final total = source.totalRecords;
       var done = 0;
       var cancelled = false;
@@ -366,7 +369,15 @@ class TtgMigrationService {
             var strategy = options.duplicates;
 
             final existsById = existingIds.contains(id);
-            final byNameId = existingByName[nameKey];
+            // A name match only counts as a duplicate against a pre-existing
+            // world entity or a record of the same source collection. Several
+            // collections map onto one kind (city and tavern both become
+            // locations), and those may legitimately share a name — the
+            // tavern "New Liberty" is not the city "New Liberty".
+            final registeredBy = importedNameCollection[nameKey];
+            final byNameId = (registeredBy == null || registeredBy == collection)
+                ? existingByName[nameKey]
+                : null;
             final isDuplicate = existsById || byNameId != null;
 
             if (isDuplicate) {
@@ -474,6 +485,7 @@ class TtgMigrationService {
 
               existingIds.add(targetId);
               existingByName[nameKey] = targetId;
+              if (!isDuplicate) importedNameCollection[nameKey] = collection;
               if (!isDuplicate) {
                 imported++;
                 importedByCollection[collection] =
@@ -493,9 +505,20 @@ class TtgMigrationService {
       if (!cancelled) {
         final allRelations = <(String, TtgRelation)>[];
         final nameByKey = <String, String>{};
-        for (final records in source.collections.values) {
-          for (final record in records) {
+        // The record's dedup scope (kind name or category id), mirroring
+        // pass A — so name-based repair can stay inside the right kind.
+        final scopeByKey = <String, String>{};
+        for (final entry in source.collections.entries) {
+          final target = targetForCollection(entry.key);
+          final scope = (target.isCategory
+                  ? categoryIdByName[target.categoryName!]
+                  : null) ??
+              (target.isCategory
+                  ? EntityKind.custom.name
+                  : target.kind!.name);
+          for (final record in entry.value) {
             nameByKey[record.key] = record.name;
+            scopeByKey[record.key] = scope;
             for (final relation in record.relations) {
               allRelations.add((record.key, relation));
             }
@@ -516,12 +539,13 @@ class TtgMigrationService {
               // some exports point at ids that were renumbered.
               final targetName =
                   nameByKey[relation.targetKey]?.trim().toLowerCase();
+              final targetScope = scopeByKey[relation.targetKey];
               String? recovered;
-              if (targetName != null) {
-                recovered = existingByName.entries
-                    .where((e) => e.key.endsWith('|$targetName'))
-                    .map((e) => e.value)
-                    .firstOrNull;
+              if (targetName != null && targetScope != null) {
+                // Only repair within the target's own kind/category: a link
+                // meant for the city "New Liberty" must never be reattached
+                // to a campaign that happens to share the name.
+                recovered = existingByName['$targetScope|$targetName'];
               }
               if (recovered == null) {
                 repaired++; // dropped: better than a dangling link

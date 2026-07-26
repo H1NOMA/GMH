@@ -455,6 +455,70 @@ void main() {
           isTrue);
     });
 
+    test(
+        'same-named records from different collections stay separate '
+        'and keep their own links', () async {
+      // A city and a tavern both named "New Liberty" map to the same GMH
+      // kind (location) — they must not be collapsed into one entity, and
+      // the NPC's tavern_id link must point at the tavern, not the city.
+      final jsonPath = p.join(dir.path, 'liberty.json');
+      await File(jsonPath).writeAsString(jsonEncode({
+        'worldName': 'Liberty Realm',
+        'collections': {
+          'cities': [
+            {'id': 1, 'name': 'New Liberty', 'description': 'The city.'},
+          ],
+          'taverns': [
+            {'id': 1, 'name': 'New Liberty', 'description': 'The tavern.'},
+          ],
+          'npcs': [
+            {
+              'id': 1,
+              'name': 'Mira Voss',
+              'description': 'Regular.',
+              'tavern_id': 1,
+            },
+          ],
+        },
+      }));
+
+      final result = await service.migrate(
+          jsonPath, const TtgImportOptions(worldName: 'Liberty Realm'));
+      expect(result.isOk, isTrue,
+          reason: result.isErr ? '${result.error}' : '');
+      final report = result.value;
+      expect(report.imported, 3);
+
+      final entities = await h.entities.getAllEntities(report.worldId);
+      final liberties =
+          entities.where((e) => e.name == 'New Liberty').toList();
+      expect(liberties, hasLength(2));
+
+      Future<String> idWithTag(String tag) async {
+        for (final e in liberties) {
+          final tags = await h.tags.entityTags(e.id);
+          if (tags.any((t) => t.name == tag)) return e.id;
+        }
+        fail('no New Liberty entity tagged "$tag"');
+      }
+
+      final tavernId = await idWithTag('tavern');
+      final cityId = await idWithTag('city');
+      expect(tavernId, isNot(cityId));
+
+      final mira = entities.firstWhere((e) => e.name == 'Mira Voss');
+      final links = await h.links.allForWorld(report.worldId);
+      expect(
+          links.any(
+              (l) => l.sourceId == mira.id && l.targetId == tavernId),
+          isTrue,
+          reason: 'the NPC link must land on the tavern');
+      expect(
+          links.any((l) => l.sourceId == mira.id && l.targetId == cityId),
+          isFalse,
+          reason: 'the NPC link must not be re-routed to the city');
+    });
+
     test('rejects garbage files with a typed error', () async {
       final bad = p.join(dir.path, 'bad.ttg');
       await File(bad).writeAsString('this is not a database');
