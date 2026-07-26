@@ -212,7 +212,14 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
                       try {
                         final restored =
                             Document.fromJson(jsonDecode(contentJson) as List);
+                        // The changes stream belongs to the Document
+                        // instance: without re-subscribing, no edit made
+                        // after a restore would ever reach autosave.
+                        _changes?.cancel();
                         _controller.document = restored;
+                        _changes = _controller.document.changes.listen((_) {
+                          _autosave(_save);
+                        });
                         _autosave(_save);
                       } catch (_) {}
                     },

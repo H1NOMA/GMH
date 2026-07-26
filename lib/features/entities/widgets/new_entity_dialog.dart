@@ -51,7 +51,11 @@ Future<String?> showNewEntityDialog(
   final categories =
       ref.read(worldCategoriesProvider(worldId)).valueOrNull ?? [];
 
-  _TypeChoice choice = initialCategoryId != null
+  // Only preselect a category the dropdown will actually contain: if the
+  // categories stream hasn't emitted yet (cold start straight onto a
+  // category route), a value without a matching item would assert.
+  _TypeChoice choice = initialCategoryId != null &&
+          categories.any((c) => c.id == initialCategoryId)
       ? _CategoryChoice(initialCategoryId)
       : _KindChoice(initialKind ?? EntityKind.character);
 

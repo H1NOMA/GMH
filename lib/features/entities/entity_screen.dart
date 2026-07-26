@@ -119,7 +119,15 @@ class _EntityScaffold extends ConsumerWidget {
     );
     if (confirmed != true) return;
     await ref.read(entityServiceProvider).moveToTrash(entity.id);
-    if (context.mounted) context.pop();
+    if (!context.mounted) return;
+    // Every navigation here uses go() with a single-page match list, so
+    // there is never anything to pop — pop() would throw and strand the
+    // user on the "entry gone" screen. Return to the entry's section.
+    if (entity.kind == EntityKind.custom && entity.customCategoryId != null) {
+      context.go(Routes.browseCategory(worldId, entity.customCategoryId!));
+    } else {
+      context.go(Routes.browse(worldId, entity.kind));
+    }
   }
 
   @override
@@ -183,7 +191,11 @@ class _EntityScaffold extends ConsumerWidget {
     if (entity.kind == EntityKind.character) {
       return Scaffold(
         appBar: appBar,
-        body: CharacterProfile(worldId: worldId, entity: entity),
+        // Keyed by entity id: the route element is reused between /e/A and
+        // /e/B, and the profile's TabController must not leak A's tab
+        // index (and writes) into B's remembered tab.
+        body: CharacterProfile(
+            key: ValueKey(entity.id), worldId: worldId, entity: entity),
       );
     }
 

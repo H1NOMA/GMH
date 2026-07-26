@@ -61,6 +61,34 @@ class EntityService {
     });
   }
 
+  /// Read-modify-write of a single attribute against the freshest row.
+  /// Widgets hold build-time entity snapshots; two quick edits of different
+  /// fields would otherwise overwrite each other with stale data.
+  Future<Result<Entity>> setAttribute(
+      String entityId, String key, Object? value) {
+    return guard(() async {
+      final current = await _entities.getEntity(entityId);
+      if (current == null) {
+        throw const ValidationException('Entry no longer exists.');
+      }
+      final attributes = Map<String, Object?>.of(current.attributes);
+      if (value == null ||
+          (value is String && value.isEmpty) ||
+          (value is List && value.isEmpty)) {
+        attributes.remove(key);
+      } else {
+        attributes[key] = value;
+      }
+      final template = EntityTemplates.of(current.kind);
+      final updated =
+          current.copyWith(attributes: template.sanitize(attributes));
+      await _entities.updateEntity(updated);
+      await _linkSync.syncAttributeRefs(updated);
+      await _search.reindexEntity(updated.id);
+      return updated;
+    });
+  }
+
   Future<Result<void>> setFavorite(String id, bool favorite) =>
       guard(() => _entities.setFavorite(id, favorite));
 

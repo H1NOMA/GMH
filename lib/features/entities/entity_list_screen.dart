@@ -39,6 +39,20 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
       text: ref.read(listPrefsProvider(_prefsKey)).filterText);
 
   @override
+  void didUpdateWidget(EntityListScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The route element is reused between /browse/character and
+    // /browse/location: without this reset the filter box would keep the
+    // previous section's text while the list uses the new section's prefs.
+    final oldKey = listPrefsKey(oldWidget.worldId,
+        kind: oldWidget.kind, categoryId: oldWidget.customCategoryId);
+    if (oldKey != _prefsKey) {
+      _filterController.text =
+          ref.read(listPrefsProvider(_prefsKey)).filterText;
+    }
+  }
+
+  @override
   void dispose() {
     _filterController.dispose();
     super.dispose();

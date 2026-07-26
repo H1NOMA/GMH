@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
+import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/custom_category.dart';
+import '../../domain/models/entity_kind.dart';
 import 'category_constructor.dart';
 import 'category_ui.dart';
 
@@ -159,7 +162,27 @@ class _ManageCategories extends ConsumerWidget {
       ),
     );
     if (confirmed == true) {
-      await ref.read(categoryRepositoryProvider).delete(category.id);
+      final movedIds =
+          await ref.read(categoryRepositoryProvider).delete(category.id);
+      // The converted entries changed kind — without a reindex the search
+      // keeps returning them under the deleted category's filter.
+      final search = ref.read(searchRepositoryProvider);
+      for (final id in movedIds) {
+        await search.reindexEntity(id);
+      }
+      // If the user is currently browsing the deleted category, its route
+      // would become a dead page (empty list, FAB writing into a ghost
+      // category). Move them to the Concept Archive where the entries went.
+      if (context.mounted) {
+        final router = GoRouter.of(context);
+        final location =
+            router.routerDelegate.currentConfiguration.uri.path;
+        if (location ==
+            Routes.browseCategory(category.worldId, category.id)) {
+          router.go(
+              Routes.browse(category.worldId, EntityKind.concept));
+        }
+      }
     }
   }
 }

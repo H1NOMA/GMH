@@ -68,8 +68,13 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     super.dispose();
   }
 
+  // Guards overlapping rebuilds: rapid filter toggles each start an async
+  // _build, and only the latest one may publish its result.
+  int _buildGeneration = 0;
+
   Future<void> _build() async {
     setState(() => _loading = true);
+    final generation = ++_buildGeneration;
 
     final entities = await ref
         .read(entityRepositoryProvider)
@@ -146,7 +151,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
 
     final simulation = GraphSimulation(nodes: nodes, edges: edges)..settle();
 
-    if (!mounted) return;
+    if (!mounted || generation != _buildGeneration) return;
     setState(() {
       _entitiesById = byId;
       _simulation = simulation;
