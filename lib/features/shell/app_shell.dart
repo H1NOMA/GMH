@@ -212,6 +212,12 @@ class _Sidebar extends ConsumerWidget {
           ),
           const Divider(),
           _NavTile(
+            icon: Icons.help_outline,
+            label: context.l10n.helpTitle,
+            selected: location.endsWith('/help'),
+            onTap: () => context.go(Routes.help(worldId)),
+          ),
+          _NavTile(
             icon: Icons.settings_outlined,
             label: context.l10n.navSettings,
             selected: section == _Section.settings,

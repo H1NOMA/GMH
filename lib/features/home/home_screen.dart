@@ -43,6 +43,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(world?.name ?? ''),
         actions: [
+          IconButton(
+            tooltip: context.l10n.helpTitle,
+            icon: const Icon(Icons.help_outline),
+            onPressed: () => context.go(Routes.help(worldId)),
+          ),
           if (isPhone)
             IconButton(
               tooltip: context.l10n.switchWorld,

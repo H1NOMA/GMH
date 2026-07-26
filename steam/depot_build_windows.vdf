@@ -1,0 +1,14 @@
+// Windows x64 depot: everything the Flutter Windows release build
+// produces (exe, DLLs, data/ with assets and the ICU data file), staged
+// by build_steam.ps1 into build/steam_content/windows/.
+"DepotBuild"
+{
+	"DepotID" "YOUR_DEPOT_ID"
+
+	"FileMapping"
+	{
+		"LocalPath" "windows\*"
+		"DepotPath" "."
+		"recursive" "1"
+	}
+}

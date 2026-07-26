@@ -244,6 +244,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       .read(localeControllerProvider.notifier)
                       .setLocale(const Locale('ru')),
                 ),
+                _LanguageTile(
+                  label: l.languageGerman,
+                  selected: locale?.languageCode == 'de',
+                  onTap: () => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(const Locale('de')),
+                ),
+                _LanguageTile(
+                  label: l.languageFrench,
+                  selected: locale?.languageCode == 'fr',
+                  onTap: () => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(const Locale('fr')),
+                ),
+                _LanguageTile(
+                  label: l.languageChinese,
+                  selected: locale?.languageCode == 'zh',
+                  onTap: () => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(const Locale('zh')),
+                ),
               ],
             ),
             const SizedBox(height: 14),
@@ -361,6 +382,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             _SectionCard(
               title: l.aboutSection,
               children: [
+                ListTile(
+                  leading: const Icon(Icons.help_outline),
+                  title: Text(l.helpTitle),
+                  subtitle: Text(l.helpSettingsSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
+                  onTap: () => context.go(Routes.help(widget.worldId)),
+                ),
                 ListTile(
                   leading: const Icon(Icons.shield_outlined),
                   title: Text(l.aboutLocalFirst),

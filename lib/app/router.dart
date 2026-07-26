@@ -5,6 +5,7 @@ import '../features/campaigns/campaigns_screen.dart';
 import '../features/entities/entity_list_screen.dart';
 import '../features/entities/entity_screen.dart';
 import '../features/graph/graph_screen.dart';
+import '../features/help/help_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/search/search_screen.dart';
 import '../features/settings/settings_screen.dart';
@@ -26,6 +27,7 @@ abstract final class Routes {
       '/w/$worldId/graph${focusEntityId == null ? '' : '?focus=$focusEntityId'}';
   static String campaigns(String worldId) => '/w/$worldId/campaigns';
   static String settings(String worldId) => '/w/$worldId/settings';
+  static String help(String worldId) => '/w/$worldId/help';
 }
 
 GoRouter createRouter({required String initialLocation}) {
@@ -112,6 +114,12 @@ GoRouter createRouter({required String initialLocation}) {
             pageBuilder: (context, state) => NoTransitionPage(
               child:
                   SettingsScreen(worldId: state.pathParameters['worldId']!),
+            ),
+          ),
+          GoRoute(
+            path: '/w/:worldId/help',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: HelpScreen(worldId: state.pathParameters['worldId']!),
             ),
           ),
         ],
