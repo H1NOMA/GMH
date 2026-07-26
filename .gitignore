@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Generated help screenshots land in assets/help/ via the docs in
+# test/help_screenshots_test.dart; the raw goldens are build output.
+test/goldens/
