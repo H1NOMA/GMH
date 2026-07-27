@@ -26,7 +26,7 @@ const _badgeKeysByKind = <EntityKind, List<String>>{
   EntityKind.event: ['date'],
   EntityKind.era: ['startDate', 'endDate'],
   EntityKind.religion: ['domains'],
-  EntityKind.magicSystem: ['source'],
+  EntityKind.magicSystem: ['level', 'school', 'castingTime'],
   EntityKind.technology: ['techLevel'],
   EntityKind.concept: ['category'],
   EntityKind.loreDocument: ['chapterNumber'],

@@ -17,6 +17,7 @@ import '../../domain/models/entity_kind.dart';
 import 'character_profile.dart';
 import 'widgets/attribute_form.dart';
 import 'widgets/relations_panel.dart';
+import 'widgets/stat_block.dart';
 import 'widgets/tag_editor.dart';
 
 /// The entity page: rich-text document in the center, properties/relations/
@@ -318,6 +319,9 @@ class _SidePanel extends StatelessWidget {
         ],
         if (blueprint.has(CategoryModule.tags)) TagEditor(entity: entity),
         const SizedBox(height: 6),
+        // D&D-style read-only stat card for spells, creatures and items;
+        // the form below stays the editor.
+        StatBlock(entity: entity),
         if (blueprint.has(CategoryModule.fields))
           AttributeForm(
             entity: entity,

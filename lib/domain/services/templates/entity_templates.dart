@@ -136,6 +136,8 @@ abstract final class EntityTemplates {
         ]),
         FieldDef(key: 'population', label: 'Population', type: FieldType.text),
         FieldDef(key: 'government', label: 'Government', type: FieldType.text),
+        FieldDef(key: 'climate', label: 'Climate & Terrain', type: FieldType.text),
+        FieldDef(key: 'inhabitants', label: 'Inhabitants', type: FieldType.text),
       ]),
       FieldSection('Connections', [
         FieldDef(
@@ -161,6 +163,12 @@ abstract final class EntityTemplates {
         ]),
         const FieldDef(key: 'attunement', label: 'Attunement', type: FieldType.text),
         const FieldDef(key: 'properties', label: 'Properties / Damage', type: FieldType.longText),
+        const FieldDef(key: 'weight', label: 'Weight', type: FieldType.text,
+            hint: 'e.g. 4 lb.'),
+        const FieldDef(key: 'value', label: 'Value', type: FieldType.text,
+            hint: 'e.g. 500 gp'),
+        const FieldDef(key: 'charges', label: 'Charges', type: FieldType.text,
+            hint: 'e.g. 7, regains 1d6+1 at dawn'),
       ]),
       FieldSection('Provenance', [
         const FieldDef(
@@ -184,6 +192,46 @@ abstract final class EntityTemplates {
         FieldDef(key: 'size', label: 'Size', type: FieldType.select, options: [
           'Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan',
         ]),
+      ]),
+      // Full monster stat block, mirroring the classic D&D layout. The
+      // ability keys are shared with the character template so the same
+      // translations and grid rendering apply.
+      const FieldSection('Combat', [
+        FieldDef(key: 'ac', label: 'Armor Class', type: FieldType.number),
+        FieldDef(key: 'hp', label: 'Hit Points', type: FieldType.text,
+            hint: 'e.g. 45 (6d10 + 12)'),
+        FieldDef(key: 'speed', label: 'Speed', type: FieldType.text,
+            hint: 'e.g. walk 30 ft., fly 60 ft.'),
+      ]),
+      const FieldSection('Statistics', [
+        FieldDef(key: 'strength', label: 'STR', type: FieldType.number),
+        FieldDef(key: 'dexterity', label: 'DEX', type: FieldType.number),
+        FieldDef(key: 'constitution', label: 'CON', type: FieldType.number),
+        FieldDef(key: 'intelligence', label: 'INT', type: FieldType.number),
+        FieldDef(key: 'wisdom', label: 'WIS', type: FieldType.number),
+        FieldDef(key: 'charisma', label: 'CHA', type: FieldType.number),
+      ]),
+      const FieldSection('Defenses & Senses', [
+        FieldDef(key: 'savingThrows', label: 'Saving Throws',
+            type: FieldType.text, hint: 'e.g. DEX +5, WIS +3'),
+        FieldDef(key: 'skills', label: 'Skills', type: FieldType.text,
+            hint: 'e.g. Perception +5, Stealth +4'),
+        FieldDef(key: 'resistances', label: 'Damage Resistances',
+            type: FieldType.text),
+        FieldDef(key: 'immunities', label: 'Damage Immunities',
+            type: FieldType.text),
+        FieldDef(key: 'conditionImmunities', label: 'Condition Immunities',
+            type: FieldType.text),
+        FieldDef(key: 'senses', label: 'Senses', type: FieldType.text,
+            hint: 'e.g. darkvision 60 ft., passive Perception 13'),
+        FieldDef(key: 'languages', label: 'Languages', type: FieldType.text),
+      ]),
+      const FieldSection('Actions', [
+        FieldDef(key: 'traits', label: 'Traits', type: FieldType.longText),
+        FieldDef(key: 'actions', label: 'Actions', type: FieldType.longText),
+        FieldDef(key: 'reactions', label: 'Reactions', type: FieldType.longText),
+        FieldDef(key: 'legendaryActions', label: 'Legendary Actions',
+            type: FieldType.longText),
       ]),
       FieldSection('Ecology', [
         const FieldDef(
@@ -244,7 +292,37 @@ abstract final class EntityTemplates {
         const FieldDef(key: 'tenets', label: 'Tenets & Rites', type: FieldType.longText),
       ]),
     ]),
+    // Doubles as a D&D-style spell card (the TTG importer routes spells
+    // here): the Spell section mirrors the classic stat card, while
+    // Overview keeps the worldbuilding-level fields.
     EntityTemplate(kind: EntityKind.magicSystem, sections: [
+      const FieldSection('Spell', [
+        FieldDef(key: 'level', label: 'Level', type: FieldType.select, options: [
+          'Cantrip', '1st Level', '2nd Level', '3rd Level', '4th Level',
+          '5th Level', '6th Level', '7th Level', '8th Level', '9th Level',
+        ]),
+        FieldDef(key: 'school', label: 'School', type: FieldType.select, options: [
+          'Abjuration', 'Conjuration', 'Divination', 'Enchantment',
+          'Evocation', 'Illusion', 'Necromancy', 'Transmutation',
+        ]),
+        FieldDef(key: 'castingTime', label: 'Casting Time',
+            type: FieldType.text, hint: 'e.g. 1 action'),
+        FieldDef(key: 'range', label: 'Range', type: FieldType.text,
+            hint: 'e.g. 60 ft.'),
+        FieldDef(key: 'components', label: 'Components', type: FieldType.text,
+            hint: 'e.g. V, S, M (a pinch of salt)'),
+        FieldDef(key: 'duration', label: 'Duration', type: FieldType.text,
+            hint: 'e.g. Concentration, up to 1 minute'),
+        FieldDef(key: 'ritual', label: 'Ritual', type: FieldType.select,
+            options: ['Yes', 'No']),
+        FieldDef(key: 'saveAttack', label: 'Save / Attack',
+            type: FieldType.text, hint: 'e.g. DEX save, half on success'),
+        FieldDef(key: 'damageEffect', label: 'Damage / Effect',
+            type: FieldType.text, hint: 'e.g. 8d6 fire'),
+        FieldDef(key: 'classes', label: 'Classes', type: FieldType.stringList),
+        FieldDef(key: 'higherLevels', label: 'At Higher Levels',
+            type: FieldType.longText),
+      ]),
       const FieldSection('Overview', [
         FieldDef(key: 'source', label: 'Source of Power', type: FieldType.text),
         FieldDef(key: 'rules', label: 'Rules & Limits', type: FieldType.longText),

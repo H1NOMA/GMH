@@ -12,6 +12,32 @@ void main() {
     }
   });
 
+  test('D&D stat card fields exist on spells, creatures and items', () {
+    Set<String> keysOf(EntityKind kind) => EntityTemplates.of(kind)
+        .sections
+        .expand((s) => s.fields)
+        .map((f) => f.key)
+        .toSet();
+
+    expect(
+        keysOf(EntityKind.magicSystem),
+        containsAll(['level', 'school', 'castingTime', 'range',
+          'components', 'duration', 'higherLevels',
+          // legacy worldbuilding fields must survive
+          'source', 'rules', 'costs']));
+    expect(
+        keysOf(EntityKind.creature),
+        containsAll(['ac', 'hp', 'speed', 'strength', 'charisma',
+          'savingThrows', 'senses', 'languages', 'actions',
+          'legendaryActions',
+          // legacy keys must survive
+          'creatureType', 'challenge', 'size', 'habitat', 'abilities']));
+    expect(keysOf(EntityKind.item),
+        containsAll(['weight', 'value', 'charges', 'itemType', 'rarity']));
+    expect(keysOf(EntityKind.location),
+        containsAll(['climate', 'inhabitants', 'locationType']));
+  });
+
   test('extractEntityRefs mirrors ref and refList fields with roles', () {
     final template = EntityTemplates.of(EntityKind.item);
     final refs = template.extractEntityRefs({
