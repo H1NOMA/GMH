@@ -33,10 +33,11 @@ class EntityGridCard extends ConsumerWidget {
     final color = entityColor(entity, categories);
 
     // Cover first; otherwise fall back to the first image attachment so a
-    // freshly imported archive still looks like a gallery.
-    final gallery = ref.watch(galleryProvider(entity.id)).valueOrNull ?? [];
+    // freshly imported archive still looks like a gallery. The gallery
+    // stream is only subscribed when there is no cover — a 200-tile grid
+    // must not hold 200 live watch queries just in case.
     final imageId = entity.coverMediaId ??
-        gallery
+        (ref.watch(galleryProvider(entity.id)).valueOrNull ?? [])
             .where((e) => isImageMime(e.media.mimeType))
             .map((e) => e.media.id)
             .firstOrNull;
@@ -137,14 +138,11 @@ class _MediaImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<String?>(
-      future: () async {
-        final media = await ref.read(mediaRepositoryProvider).get(mediaId);
-        if (media == null) return null;
-        return ref.read(mediaRepositoryProvider).absolutePath(media);
-      }(),
-      builder: (context, snapshot) {
-        final path = snapshot.data;
+    // Cached provider: grid tiles are recycled on scroll, and every
+    // recycle used to fire a fresh SQLite query and flash the placeholder.
+    return Builder(
+      builder: (context) {
+        final path = ref.watch(mediaPathProvider(mediaId)).valueOrNull;
         if (path == null) {
           return ColoredBox(
             color: color.withValues(alpha: 0.10),

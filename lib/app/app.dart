@@ -34,9 +34,6 @@ class _ForwardIntent extends Intent {
   const _ForwardIntent();
 }
 
-class _PauseMenuIntent extends Intent {
-  const _PauseMenuIntent();
-}
 
 class _GmhAppState extends ConsumerState<GmhApp> {
   late final GoRouter _router =
@@ -65,20 +62,22 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     super.dispose();
   }
 
-  /// Escape: first close whatever modal is open (dialog, sheet, popup) —
-  /// then, with nothing left to dismiss, open the pause menu.
+  /// App-level fallback for [DismissIntent]: reached only when nothing
+  /// closer to the focus consumed Escape (open dialogs, popups and text
+  /// fields all handle it first), so plain Escape on a page opens the
+  /// pause menu. Registered on DismissIntent rather than a custom Escape
+  /// shortcut: a LogicalKeySet(escape) entry can never win over the
+  /// default SingleActivator mapping — first match wins per trigger.
   void _onEscape() {
     final navigator = _router.routerDelegate.navigatorKey.currentState;
-    if (navigator == null) return;
-    if (navigator.canPop()) {
-      navigator.pop();
-      return;
-    }
+    // A modal that opted out of barrier dismissal (e.g. the section
+    // constructor) lets the intent bubble here — never stack the pause
+    // menu on top of it, and never force it closed.
+    if (navigator == null || navigator.canPop()) return;
     final location = _router.routerDelegate.currentConfiguration.uri.path;
     final worldId =
         RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
-    final context = navigator.context;
-    unawaited(showPauseMenu(context, worldId: worldId));
+    unawaited(showPauseMenu(navigator.context, worldId: worldId));
   }
 
   @override
@@ -94,7 +93,6 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             const _BackIntent(),
         LogicalKeySet(LogicalKeyboardKey.alt, LogicalKeyboardKey.arrowRight):
             const _ForwardIntent(),
-        LogicalKeySet(LogicalKeyboardKey.escape): const _PauseMenuIntent(),
       },
       actions: {
         ...WidgetsApp.defaultActions,
@@ -104,7 +102,7 @@ class _GmhAppState extends ConsumerState<GmhApp> {
         _ForwardIntent: CallbackAction<_ForwardIntent>(
             onInvoke: (_) =>
                 ref.read(navHistoryProvider.notifier).goForward()),
-        _PauseMenuIntent: CallbackAction<_PauseMenuIntent>(
+        DismissIntent: CallbackAction<DismissIntent>(
             onInvoke: (_) => _onEscape()),
       },
       debugShowCheckedModeBanner: false,

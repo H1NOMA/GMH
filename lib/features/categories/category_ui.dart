@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers.dart';
+import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity.dart';
 import '../../domain/models/entity_kind.dart';
@@ -71,7 +72,7 @@ IconData entityIcon(Entity entity, Map<String, CustomCategory> categories) {
 Color entityColor(Entity entity, Map<String, CustomCategory> categories) {
   if (entity.kind == EntityKind.custom) {
     final category = categories[entity.customCategoryId];
-    if (category != null) return Color(category.color);
+    if (category != null) return adaptiveAccent(Color(category.color));
   }
   return entity.kind.color;
 }

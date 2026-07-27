@@ -26,9 +26,12 @@ class RelationsPanel extends ConsumerWidget {
     if (target == null || !context.mounted) return;
 
     final roleController = TextEditingController(text: LinkRoles.related);
+    ModalRoute<Object?>? dialogRoute;
     final role = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(context.l10n.relationToTitle(target.name)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -63,8 +66,11 @@ class RelationsPanel extends ConsumerWidget {
                   Navigator.pop(context, roleController.text.trim()),
               child: Text(context.l10n.add)),
         ],
-      ),
+      );
+      },
     );
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(roleController.dispose);
     if (role == null || role.isEmpty) return;
 
     await ref.read(linkRepositoryProvider).create(

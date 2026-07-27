@@ -9,6 +9,7 @@ import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../../core/utils/save_flush.dart';
 
 /// Game-style pause menu opened with Escape (fullscreen has no title bar,
 /// so this is also the only way to quit): logo, app name, save project,
@@ -39,9 +40,17 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
     setState(() => _saving = true);
     final messenger = ScaffoldMessenger.of(context);
     final savedText = context.l10n.backupSaved;
+    final errorText = context.l10n.errorUnexpected;
     try {
+      // Persist any debounced editor edits first, or the archive would
+      // zip a database that misses the last seconds of typing.
+      await flushPendingSaves();
       await ref.read(backupServiceProvider).backupNow(worldId);
       messenger.showSnackBar(SnackBar(content: Text(savedText)));
+    } catch (_) {
+      // Disk full / locked file: the menu must not close pretending the
+      // backup succeeded.
+      messenger.showSnackBar(SnackBar(content: Text(errorText)));
     } finally {
       if (mounted) {
         setState(() => _saving = false);
@@ -52,8 +61,11 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
 
   Future<void> _exit() async {
     // A Steam app must terminate for real — no tray, no background
-    // process. destroy() closes the native window and ends the process;
-    // exit(0) is the belt-and-braces fallback.
+    // process. exit(0) skips widget disposal, so pending debounced
+    // saves are flushed explicitly first.
+    try {
+      await flushPendingSaves();
+    } catch (_) {}
     try {
       await windowManager.destroy();
     } catch (_) {}

@@ -75,6 +75,19 @@ final galleryProvider = StreamProvider.family<List<GalleryEntry>, String>(
   (ref, entityId) => ref.watch(mediaRepositoryProvider).watchGallery(entityId),
 );
 
+/// Absolute path of a media item, cached per media id. Thumbnails and
+/// embeds resolve through this instead of ad-hoc FutureBuilders, so a
+/// rebuilt card or a keystroke near an inline image no longer re-queries
+/// SQLite for a path that cannot change (the vault is content-addressed).
+final mediaPathProvider = FutureProvider.family<String?, String>(
+  (ref, mediaId) async {
+    final repository = ref.watch(mediaRepositoryProvider);
+    final item = await repository.get(mediaId);
+    if (item == null) return null;
+    return repository.absolutePath(item);
+  },
+);
+
 final entityCountsProvider =
     FutureProvider.family<Map<EntityKind, int>, String>((ref, worldId) {
   // Recompute whenever the entity list of the world changes.

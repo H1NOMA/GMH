@@ -477,7 +477,7 @@ class _CategoriesSection extends ConsumerWidget {
               leading: Icon(categoryIconFor(category.icon),
                   size: 19,
                   color: selected
-                      ? Color(category.color)
+                      ? adaptiveAccent(Color(category.color))
                       : GmhColors.parchmentDim),
               title: Text(category.name,
                   maxLines: 1,

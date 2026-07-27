@@ -13,6 +13,7 @@ import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/debouncer.dart';
+import '../../core/utils/save_flush.dart';
 import '../../domain/services/document_service.dart';
 import '../attachments/attachment_utils.dart';
 import '../entities/widgets/entity_picker_dialog.dart';
@@ -58,10 +59,19 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   /// flush-save and checkpoint.
   late final DocumentService _documents;
 
+  /// Flushes the debounced autosave immediately; registered globally so
+  /// the pause menu can persist pending edits before backup or exit.
+  Future<void> _flushNow() async {
+    var pending = false;
+    _autosave.flush(() => pending = true);
+    if (pending) await _save();
+  }
+
   @override
   void initState() {
     super.initState();
     _documents = ref.read(documentServiceProvider);
+    saveFlushHooks.add(_flushNow);
     Document document;
     try {
       document =
@@ -88,6 +98,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
 
   @override
   void dispose() {
+    saveFlushHooks.remove(_flushNow);
     _changes?.cancel();
     _autosave.flush(_saveAndCheckpointSync);
     // Checkpoint the version history when leaving the editor.

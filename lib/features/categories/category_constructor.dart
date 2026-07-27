@@ -100,9 +100,12 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
         TextEditingController(text: existing?.options.join(', ') ?? '');
     var type = existing?.type ?? FieldType.text;
 
+    ModalRoute<Object?>? dialogRoute;
     final saved = await showDialog<bool>(
       context: context,
-      builder: (context) => StatefulBuilder(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(existing == null ? l.addField : l.editField),
           content: SizedBox(
@@ -150,16 +153,24 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
                 child: Text(existing == null ? l.addField : l.save)),
           ],
         ),
-      ),
+      );
+      },
     );
-    if (saved != true || label.text.trim().isEmpty) return;
+    final labelText = label.text.trim();
+    final optionsText = options.text;
+    // Release the controllers only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(() {
+      label.dispose();
+      options.dispose();
+    });
+    if (saved != true || labelText.isEmpty) return;
 
     final field = BlueprintField(
       key: existing?.key ?? 'f_${newId().substring(0, 8)}',
-      label: label.text.trim(),
+      label: labelText,
       type: type,
       options: type == FieldType.select
-          ? options.text
+          ? optionsText
               .split(',')
               .map((o) => o.trim())
               .where((o) => o.isNotEmpty)

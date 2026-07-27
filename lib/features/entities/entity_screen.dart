@@ -58,9 +58,12 @@ class _EntityScaffold extends ConsumerWidget {
   Future<void> _rename(BuildContext context, WidgetRef ref) async {
     final nameController = TextEditingController(text: entity.name);
     final summaryController = TextEditingController(text: entity.summary);
+    ModalRoute<Object?>? dialogRoute;
     final saved = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(context.l10n.editEntryTitle),
         content: SizedBox(
           width: 420,
@@ -91,12 +94,20 @@ class _EntityScaffold extends ConsumerWidget {
               onPressed: () => Navigator.pop(context, true),
               child: Text(context.l10n.save)),
         ],
-      ),
+      );
+      },
     );
+    final name = nameController.text.trim();
+    final summary = summaryController.text.trim();
+    // Release the controllers only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(() {
+      nameController.dispose();
+      summaryController.dispose();
+    });
     if (saved != true) return;
     await ref.read(entityServiceProvider).update(entity.copyWith(
-          name: nameController.text.trim(),
-          summary: summaryController.text.trim(),
+          name: name,
+          summary: summary,
         ));
   }
 
@@ -272,6 +283,10 @@ class _EntityScaffold extends ConsumerWidget {
     }
 
     return DefaultTabController(
+      // Keyed like CharacterProfile: the route element is reused between
+      // /e/A and /e/B, and statFirst swaps the tab order — a surviving
+      // controller would open stat-first pages on the wrong tab.
+      key: ValueKey(entity.id),
       length: 2,
       child: Scaffold(
         appBar: appBar,

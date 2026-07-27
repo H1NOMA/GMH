@@ -269,9 +269,12 @@ class _StringListField extends StatelessWidget {
 
   Future<void> _add(BuildContext context) async {
     final controller = TextEditingController();
+    ModalRoute<Object?>? dialogRoute;
     final added = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(context.l10n.addToList(label)),
         content: TextField(
           controller: controller,
@@ -286,8 +289,11 @@ class _StringListField extends StatelessWidget {
               onPressed: () => Navigator.pop(context, controller.text),
               child: Text(context.l10n.add)),
         ],
-      ),
+      );
+      },
     );
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(controller.dispose);
     final trimmed = added?.trim() ?? '';
     if (trimmed.isNotEmpty) onChanged([...values, trimmed]);
   }
@@ -342,9 +348,12 @@ class _ChecklistField extends StatelessWidget {
 
   Future<void> _add(BuildContext context) async {
     final controller = TextEditingController();
+    ModalRoute<Object?>? dialogRoute;
     final added = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(context.l10n.addToList(label)),
         content: TextField(
           controller: controller,
@@ -359,8 +368,11 @@ class _ChecklistField extends StatelessWidget {
               onPressed: () => Navigator.pop(context, controller.text),
               child: Text(context.l10n.add)),
         ],
-      ),
+      );
+      },
     );
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(controller.dispose);
     final trimmed = added?.trim() ?? '';
     if (trimmed.isNotEmpty) _commit([...items, (text: trimmed, done: false)]);
   }

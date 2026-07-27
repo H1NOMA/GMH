@@ -89,7 +89,9 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
     final icon =
         category == null ? widget.kind.icon : categoryIconFor(category.icon);
     final color =
-        category == null ? widget.kind.color : Color(category.color);
+        category == null
+        ? widget.kind.color
+        : adaptiveAccent(Color(category.color));
 
     return Scaffold(
       appBar: AppBar(

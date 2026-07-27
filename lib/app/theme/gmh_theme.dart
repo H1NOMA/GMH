@@ -158,6 +158,19 @@ abstract final class GmhColors {
 /// world (and the world picker resets it), so widgets — including the kind
 /// label slang in `l10n_ext.dart` — follow the world without plumbing the
 /// style through every constructor.
+/// Adapts an accent color that was tuned for the dark theme so it keeps
+/// >=3:1 contrast on light surfaces: darkened and slightly saturated when
+/// the active palette is light, untouched otherwise. Used by entity-kind
+/// and custom-category accents (icons, chips, graph nodes).
+Color adaptiveAccent(Color base) {
+  if (GmhColors.palette.brightness != Brightness.light) return base;
+  final hsl = HSLColor.fromColor(base);
+  return hsl
+      .withLightness((hsl.lightness * 0.58).clamp(0.0, 1.0))
+      .withSaturation((hsl.saturation * 1.1).clamp(0.0, 1.0))
+      .toColor();
+}
+
 abstract final class GmhStyle {
   static WorldStyle current = WorldStyle.fantasy;
 

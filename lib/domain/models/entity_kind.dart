@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../app/theme/gmh_theme.dart';
+
 /// Every object type in GMH. The unified entity model means all kinds share
 /// one table, one linking system, one search index and one browser UI —
 /// adding a kind here (plus a template) is all it takes to introduce a new
@@ -61,7 +63,13 @@ enum EntityKind {
   bool get isCampaignKind => campaignKinds.contains(this);
 
   /// Node color in the graph view and accent color in lists.
-  Color get color => switch (this) {
+  ///
+  /// The base hues are tuned for the dark theme; on light palettes they
+  /// wash out against white cards (the concept yellow was 1.4:1 against
+  /// #FFFFFF), so they are darkened toward >=3:1 contrast at render time.
+  Color get color => adaptiveAccent(_baseColor);
+
+  Color get _baseColor => switch (this) {
         character => const Color(0xFFE0A458),
         location => const Color(0xFF6FA8DC),
         item => const Color(0xFFC27BA0),

@@ -145,24 +145,20 @@ class _CoverThumb extends ConsumerWidget {
       clipBehavior: Clip.antiAlias,
       child: coverId == null
           ? Icon(icon, color: color, size: 22)
-          : FutureBuilder<String?>(
-              future: () async {
-                final media =
-                    await ref.read(mediaRepositoryProvider).get(coverId);
-                if (media == null) return null;
-                return ref.read(mediaRepositoryProvider).absolutePath(media);
-              }(),
-              builder: (context, snapshot) {
-                final path = snapshot.data;
-                if (path == null) {
-                  return Icon(icon, color: color, size: 22);
-                }
-                return Image.file(File(path),
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) =>
-                        Icon(icon, color: color, size: 22));
-              },
-            ),
+          : Builder(builder: (context) {
+              final path =
+                  ref.watch(mediaPathProvider(coverId)).valueOrNull;
+              if (path == null) {
+                return Icon(icon, color: color, size: 22);
+              }
+              // Decode at thumbnail resolution — a full-size portrait
+              // must not enter the image cache for a 44px box.
+              return Image.file(File(path),
+                  fit: BoxFit.cover,
+                  cacheWidth: 132,
+                  errorBuilder: (_, _, _) =>
+                      Icon(icon, color: color, size: 22));
+            }),
     );
   }
 }

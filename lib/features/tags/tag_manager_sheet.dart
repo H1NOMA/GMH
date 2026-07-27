@@ -173,9 +173,12 @@ class _TagManagerState extends ConsumerState<_TagManager> {
 
   Future<String?> _promptName({String initial = ''}) async {
     final controller = TextEditingController(text: initial);
+    ModalRoute<Object?>? dialogRoute;
     final saved = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(initial.isEmpty
             ? context.l10n.newTag
             : context.l10n.rename),
@@ -194,9 +197,12 @@ class _TagManagerState extends ConsumerState<_TagManager> {
               onPressed: () => Navigator.pop(context, true),
               child: Text(context.l10n.save)),
         ],
-      ),
+      );
+      },
     );
     final name = controller.text.trim();
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(controller.dispose);
     return (saved == true && name.isNotEmpty) ? name : null;
   }
 

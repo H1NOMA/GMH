@@ -193,7 +193,7 @@ class _CategoryGrid extends ConsumerWidget {
                 child: Row(
                   children: [
                     Icon(categoryIconFor(category.icon),
-                        color: Color(category.color), size: 22),
+                        color: adaptiveAccent(Color(category.color)), size: 22),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(

@@ -92,7 +92,7 @@ class _ManageCategories extends ConsumerWidget {
                                 size: 18, color: GmhColors.parchmentFaint),
                             const SizedBox(width: 8),
                             Icon(categoryIconFor(category.icon),
-                                size: 20, color: Color(category.color)),
+                                size: 20, color: adaptiveAccent(Color(category.color))),
                           ],
                         ),
                       ),
@@ -162,6 +162,17 @@ class _ManageCategories extends ConsumerWidget {
       ),
     );
     if (confirmed == true) {
+      // The dialog just closed; the tile is still mounted at this point.
+      if (!context.mounted) return;
+      // Capture before the delete's awaits: this context is the category's
+      // own list tile, which unmounts as soon as the categories stream
+      // emits the deletion — a context.mounted guard after them would skip
+      // the redirect exactly when it matters. GoRouter needs no context.
+      final router = GoRouter.of(context);
+      final wasOnCategory =
+          router.routerDelegate.currentConfiguration.uri.path ==
+              Routes.browseCategory(category.worldId, category.id);
+
       final movedIds =
           await ref.read(categoryRepositoryProvider).delete(category.id);
       // The converted entries changed kind — without a reindex the search
@@ -170,18 +181,11 @@ class _ManageCategories extends ConsumerWidget {
       for (final id in movedIds) {
         await search.reindexEntity(id);
       }
-      // If the user is currently browsing the deleted category, its route
-      // would become a dead page (empty list, FAB writing into a ghost
-      // category). Move them to the Concept Archive where the entries went.
-      if (context.mounted) {
-        final router = GoRouter.of(context);
-        final location =
-            router.routerDelegate.currentConfiguration.uri.path;
-        if (location ==
-            Routes.browseCategory(category.worldId, category.id)) {
-          router.go(
-              Routes.browse(category.worldId, EntityKind.concept));
-        }
+      // If the user was browsing the deleted category, its route is now a
+      // dead page (empty list, FAB writing into a ghost category). Move
+      // them to the Concept Archive where the entries went.
+      if (wasOnCategory) {
+        router.go(Routes.browse(category.worldId, EntityKind.concept));
       }
     }
   }

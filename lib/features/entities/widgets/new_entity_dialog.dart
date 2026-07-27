@@ -59,9 +59,12 @@ Future<String?> showNewEntityDialog(
       ? _CategoryChoice(initialCategoryId)
       : _KindChoice(initialKind ?? EntityKind.character);
 
+  ModalRoute<Object?>? dialogRoute;
   final confirmed = await showDialog<bool>(
     context: context,
-    builder: (context) => StatefulBuilder(
+    builder: (context) {
+      dialogRoute ??= ModalRoute.of(context);
+      return StatefulBuilder(
       builder: (context, setState) => AlertDialog(
         title: Text(context.l10n.newEntryTitle),
         content: SizedBox(
@@ -125,10 +128,14 @@ Future<String?> showNewEntityDialog(
               child: Text(context.l10n.create)),
         ],
       ),
-    ),
+    );
+    },
   );
 
   final name = nameController.text.trim();
+  // The dialog can still rebuild during its exit transition — release the
+  // controller only once the route is fully gone.
+  dialogRoute?.completed.whenComplete(nameController.dispose);
   if (confirmed != true || name.isEmpty) return null;
 
   final selected = choice;

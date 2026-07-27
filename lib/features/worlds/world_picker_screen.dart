@@ -88,9 +88,12 @@ class WorldPickerScreen extends ConsumerWidget {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
     var style = WorldStyle.fantasy;
+    ModalRoute<Object?>? dialogRoute;
     final created = await showDialog<bool>(
       context: context,
-      builder: (context) => StatefulBuilder(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(context.l10n.createWorldTitle),
           content: SizedBox(
@@ -154,13 +157,22 @@ class WorldPickerScreen extends ConsumerWidget {
                 child: Text(context.l10n.create)),
           ],
         ),
-      ),
+      );
+      },
     );
-    if (created != true || nameController.text.trim().isEmpty) return;
+    final name = nameController.text.trim();
+    final description = descriptionController.text.trim();
+    // The dialog can still rebuild during its exit transition — release the
+    // controllers only once the route is fully gone.
+    dialogRoute?.completed.whenComplete(() {
+      nameController.dispose();
+      descriptionController.dispose();
+    });
+    if (created != true || name.isEmpty) return;
 
     final world = await ref.read(worldRepositoryProvider).createWorld(
-          name: nameController.text.trim(),
-          description: descriptionController.text.trim(),
+          name: name,
+          description: description,
           style: style,
         );
     if (context.mounted) await _openWorld(context, ref, world);

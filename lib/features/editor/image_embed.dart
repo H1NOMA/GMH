@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../shell/ui_providers.dart';
 
 /// Value prefix for vault-backed images inside documents. Storing the media
 /// id (not an absolute path) keeps documents portable across devices.
@@ -44,10 +44,18 @@ class _VaultImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<String?>(
-      future: _resolvePath(ref),
-      builder: (context, snapshot) {
-        final path = snapshot.data;
+    // The path is cached per media id — the editor rebuilds this embed on
+    // every keystroke around it, which used to mean a query per keypress.
+    final AsyncValue<String?> resolved;
+    if (source.startsWith(mediaImagePrefix)) {
+      resolved = ref
+          .watch(mediaPathProvider(source.substring(mediaImagePrefix.length)));
+    } else {
+      resolved = AsyncData(source.isEmpty ? null : source);
+    }
+    return Builder(
+      builder: (context) {
+        final path = resolved.valueOrNull;
         if (path == null) {
           return Container(
             height: 120,
@@ -56,7 +64,7 @@ class _VaultImage extends ConsumerWidget {
               color: GmhColors.surfaceHigh,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: snapshot.connectionState == ConnectionState.waiting
+            child: resolved.isLoading
                 ? const SizedBox(
                     width: 22, height: 22, child: CircularProgressIndicator())
                 : Icon(Icons.broken_image_outlined,
@@ -80,14 +88,4 @@ class _VaultImage extends ConsumerWidget {
     );
   }
 
-  Future<String?> _resolvePath(WidgetRef ref) async {
-    if (source.startsWith(mediaImagePrefix)) {
-      final mediaId = source.substring(mediaImagePrefix.length);
-      final media = await ref.read(mediaRepositoryProvider).get(mediaId);
-      if (media == null) return null;
-      return ref.read(mediaRepositoryProvider).absolutePath(media);
-    }
-    if (source.isEmpty) return null;
-    return source;
-  }
 }

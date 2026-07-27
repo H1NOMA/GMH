@@ -312,9 +312,12 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
   Future<String?> _promptText(
       {required String title, String initial = ''}) async {
     final controller = TextEditingController(text: initial);
-    return showDialog<String>(
+    ModalRoute<Object?>? dialogRoute;
+    final result = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(title),
         content: TextField(
           controller: controller,
@@ -329,8 +332,12 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
               onPressed: () => Navigator.pop(context, controller.text),
               child: Text(context.l10n.save)),
         ],
-      ),
+      );
+      },
     );
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(controller.dispose);
+    return result;
   }
 }
 
@@ -351,10 +358,11 @@ class _ImageTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<String>(
-      future: ref.read(mediaRepositoryProvider).absolutePath(entry.media),
-      builder: (context, snapshot) {
-        final path = snapshot.data;
+    // Cached path lookup — image tiles rebuild with every gallery change.
+    return Builder(
+      builder: (context) {
+        final path =
+            ref.watch(mediaPathProvider(entry.media.id)).valueOrNull;
         return InkWell(
           onTap: onTap,
           onLongPress: onLongPress,

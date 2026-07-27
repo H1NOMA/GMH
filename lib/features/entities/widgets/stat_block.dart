@@ -63,6 +63,19 @@ class StatBlock extends StatelessWidget {
         child: Container(height: 2, color: GmhColors.ember.withValues(alpha: 0.5)),
       );
 
+  /// Joins non-empty widget groups with a single rule between them — no
+  /// leading, trailing or doubled dividers regardless of which groups
+  /// happen to have data.
+  List<Widget> _joinGroups(List<List<Widget>> groups) {
+    final present = groups.where((g) => g.isNotEmpty).toList();
+    return [
+      for (var i = 0; i < present.length; i++) ...[
+        if (i > 0) _divider(),
+        ...present[i],
+      ],
+    ];
+  }
+
   Widget _line(BuildContext context, String label, String value,
       {bool translateValue = false}) {
     return Padding(
@@ -93,48 +106,48 @@ class StatBlock extends StatelessWidget {
   List<Widget> _spell(BuildContext context) {
     final level = _s('level');
     final school = _s('school');
-    final rows = <Widget>[];
-    if (level != null || school != null) {
-      rows.add(_italicHeader(context, [
-        if (level != null) trTemplate(context, level),
-        if (school != null) trTemplate(context, school),
-        if (_s('ritual') == 'Yes') trTemplate(context, 'Ritual'),
-      ].join(' · ')));
-      rows.add(_divider());
-    }
-    for (final (label, key) in [
-      ('Casting Time', 'castingTime'),
-      ('Range', 'range'),
-      ('Components', 'components'),
-      ('Duration', 'duration'),
-      ('Save / Attack', 'saveAttack'),
-      ('Damage / Effect', 'damageEffect'),
-      ('Classes', 'classes'),
-    ]) {
-      final value = _s(key);
-      if (value != null) rows.add(_line(context, label, value));
-    }
-    return rows.length <= 2 && _s('level') == null ? const [] : rows;
+    final meta = <Widget>[
+      if (level != null || school != null)
+        _italicHeader(context, [
+          if (level != null) trTemplate(context, level),
+          if (school != null) trTemplate(context, school),
+          if (_s('ritual') == 'Yes') trTemplate(context, 'Ritual'),
+        ].join(' · ')),
+    ];
+    final details = <Widget>[
+      for (final (label, key) in [
+        ('Casting Time', 'castingTime'),
+        ('Range', 'range'),
+        ('Components', 'components'),
+        ('Duration', 'duration'),
+        ('Save / Attack', 'saveAttack'),
+        ('Damage / Effect', 'damageEffect'),
+        ('Classes', 'classes'),
+      ])
+        if (_s(key) != null) _line(context, label, _s(key)!),
+    ];
+    if (meta.isEmpty && details.isEmpty) return const [];
+    return _joinGroups([meta, details]);
   }
 
   // ----------------------------------------------------------- creature
   List<Widget> _creature(BuildContext context) {
-    final rows = <Widget>[];
-    final meta = [
+    final metaText = [
       if (_s('size') != null) trTemplate(context, _s('size')!),
       if (_s('creatureType') != null) trTemplate(context, _s('creatureType')!),
     ].join(' · ');
-    if (meta.isNotEmpty) rows.add(_italicHeader(context, meta));
-    if (rows.isNotEmpty) rows.add(_divider());
+    final meta = <Widget>[
+      if (metaText.isNotEmpty) _italicHeader(context, metaText),
+    ];
 
-    for (final (label, key) in [
-      ('Armor Class', 'ac'),
-      ('Hit Points', 'hp'),
-      ('Speed', 'speed'),
-    ]) {
-      final value = _s(key);
-      if (value != null) rows.add(_line(context, label, value));
-    }
+    final combat = <Widget>[
+      for (final (label, key) in [
+        ('Armor Class', 'ac'),
+        ('Hit Points', 'hp'),
+        ('Speed', 'speed'),
+      ])
+        if (_s(key) != null) _line(context, label, _s(key)!),
+    ];
 
     // Classic six-column ability grid with derived modifiers.
     const abilities = [
@@ -145,54 +158,45 @@ class StatBlock extends StatelessWidget {
       ('WIS', 'wisdom'),
       ('CHA', 'charisma'),
     ];
-    final present =
-        abilities.where((a) => _s(a.$2) != null).toList();
-    if (present.isNotEmpty) {
-      rows.add(_divider());
-      rows.add(Row(
-        children: [
-          for (final (label, key) in abilities)
-            Expanded(
-              child: Column(
-                children: [
-                  Text(trTemplate(context, label),
-                      style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w700,
-                          color: GmhColors.parchmentDim)),
-                  const SizedBox(height: 2),
-                  Text(_abilityText(key),
-                      style: TextStyle(
-                          fontSize: 12.5, color: GmhColors.parchment)),
-                ],
+    final grid = <Widget>[
+      if (abilities.any((a) => _s(a.$2) != null))
+        Row(
+          children: [
+            for (final (label, key) in abilities)
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(trTemplate(context, label),
+                        style: TextStyle(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w700,
+                            color: GmhColors.parchmentDim)),
+                    const SizedBox(height: 2),
+                    Text(_abilityText(key),
+                        style: TextStyle(
+                            fontSize: 12.5, color: GmhColors.parchment)),
+                  ],
+                ),
               ),
-            ),
-        ],
-      ));
-    }
+          ],
+        ),
+    ];
 
-    final tail = <Widget>[];
-    for (final (label, key) in [
-      ('Saving Throws', 'savingThrows'),
-      ('Skills', 'skills'),
-      ('Damage Resistances', 'resistances'),
-      ('Damage Immunities', 'immunities'),
-      ('Condition Immunities', 'conditionImmunities'),
-      ('Senses', 'senses'),
-      ('Languages', 'languages'),
-    ]) {
-      final value = _s(key);
-      if (value != null) tail.add(_line(context, label, value));
-    }
-    final challenge = _s('challenge');
-    if (challenge != null) {
-      tail.add(_line(context, 'Challenge Rating', challenge));
-    }
-    if (tail.isNotEmpty) {
-      rows.add(_divider());
-      rows.addAll(tail);
-    }
-    return rows;
+    final tail = <Widget>[
+      for (final (label, key) in [
+        ('Saving Throws', 'savingThrows'),
+        ('Skills', 'skills'),
+        ('Damage Resistances', 'resistances'),
+        ('Damage Immunities', 'immunities'),
+        ('Condition Immunities', 'conditionImmunities'),
+        ('Senses', 'senses'),
+        ('Languages', 'languages'),
+        ('Challenge Rating', 'challenge'),
+      ])
+        if (_s(key) != null) _line(context, label, _s(key)!),
+    ];
+
+    return _joinGroups([meta, combat, grid, tail]);
   }
 
   String _abilityText(String key) {
@@ -206,26 +210,25 @@ class StatBlock extends StatelessWidget {
 
   // --------------------------------------------------------------- item
   List<Widget> _item(BuildContext context) {
-    final rows = <Widget>[];
-    final meta = [
+    final metaText = [
       if (_s('itemType') != null) trTemplate(context, _s('itemType')!),
       if (_s('rarity') != null) trTemplate(context, _s('rarity')!),
     ].join(' · ');
-    if (meta.isNotEmpty) {
-      rows.add(_italicHeader(context, meta));
-      rows.add(_divider());
-    }
-    for (final (label, key) in [
-      ('Attunement', 'attunement'),
-      ('Weight', 'weight'),
-      ('Value', 'value'),
-      ('Charges', 'charges'),
-    ]) {
-      final value = _s(key);
-      if (value != null) rows.add(_line(context, label, value));
-    }
-    // Meta line alone is already shown as chips on cards; only render the
-    // block when it adds detail.
-    return rows.length <= 2 ? const [] : rows;
+    final details = <Widget>[
+      for (final (label, key) in [
+        ('Attunement', 'attunement'),
+        ('Weight', 'weight'),
+        ('Value', 'value'),
+        ('Charges', 'charges'),
+      ])
+        if (_s(key) != null) _line(context, label, _s(key)!),
+    ];
+    // Type/rarity alone are already shown as chips on cards; the block
+    // only earns its space when it adds detail beyond them.
+    if (details.isEmpty) return const [];
+    return _joinGroups([
+      [if (metaText.isNotEmpty) _italicHeader(context, metaText)],
+      details,
+    ]);
   }
 }

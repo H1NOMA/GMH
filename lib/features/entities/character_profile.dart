@@ -12,6 +12,7 @@ import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
 import '../attachments/attachments_panel.dart';
 import '../editor/lore_editor.dart';
+import '../shell/ui_providers.dart';
 import 'widgets/attribute_form.dart';
 import 'widgets/relations_panel.dart';
 import 'widgets/tag_editor.dart';
@@ -236,27 +237,19 @@ class _Portrait extends ConsumerWidget {
       clipBehavior: Clip.antiAlias,
       child: coverId == null
           ? Icon(entity.kind.icon, color: entity.kind.color, size: 30)
-          : FutureBuilder<String?>(
-              future: () async {
-                final media =
-                    await ref.read(mediaRepositoryProvider).get(coverId);
-                if (media == null) return null;
-                return ref
-                    .read(mediaRepositoryProvider)
-                    .absolutePath(media);
-              }(),
-              builder: (context, snapshot) {
-                final path = snapshot.data;
-                if (path == null) {
-                  return Icon(entity.kind.icon,
-                      color: entity.kind.color, size: 30);
-                }
-                return Image.file(File(path),
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Icon(entity.kind.icon,
-                        color: entity.kind.color, size: 30));
-              },
-            ),
+          : Builder(builder: (context) {
+              final path =
+                  ref.watch(mediaPathProvider(coverId)).valueOrNull;
+              if (path == null) {
+                return Icon(entity.kind.icon,
+                    color: entity.kind.color, size: 30);
+              }
+              return Image.file(File(path),
+                  fit: BoxFit.cover,
+                  cacheWidth: 192,
+                  errorBuilder: (_, _, _) => Icon(entity.kind.icon,
+                      color: entity.kind.color, size: 30));
+            }),
     );
   }
 }
@@ -330,9 +323,12 @@ class _AbilityScoreGrid extends ConsumerWidget {
     final current = entity.attributes[key];
     final controller =
         TextEditingController(text: current?.toString() ?? '');
+    ModalRoute<Object?>? dialogRoute;
     final saved = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
         title: Text(label),
         content: TextField(
           controller: controller,
@@ -348,11 +344,15 @@ class _AbilityScoreGrid extends ConsumerWidget {
               onPressed: () => Navigator.pop(context, true),
               child: Text(context.l10n.save)),
         ],
-      ),
+      );
+      },
     );
+    final text = controller.text.trim();
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(controller.dispose);
     if (saved != true) return;
     final attributes = Map<String, Object?>.of(entity.attributes);
-    final parsed = num.tryParse(controller.text.trim());
+    final parsed = num.tryParse(text);
     if (parsed == null) {
       attributes.remove(key);
     } else {

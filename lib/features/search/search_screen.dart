@@ -56,9 +56,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     if (categories != null && !categories.any((c) => c.id == id)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
+        // The category chip sets kind=custom together with the id; both
+        // must go, or a hidden custom-kind filter keeps every query empty
+        // with no chip visibly selected.
         ref
             .read(searchStateProvider(widget.worldId).notifier)
-            .update(clearCategory: true);
+            .update(clearCategory: true, clearKind: true);
       });
       return null;
     }
@@ -86,6 +89,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         .read(searchStateProvider(widget.worldId).notifier)
         .update(query: query);
     if (query.isEmpty) {
+      // Invalidate any in-flight search so its late result can't repaint
+      // the cleared box.
+      ++_searchGeneration;
       setState(() {
         _results = const [];
         _searching = false;
@@ -194,7 +200,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     padding: const EdgeInsets.only(right: 6),
                     child: FilterChip(
                       avatar: Icon(categoryIconFor(category.icon),
-                          size: 13, color: Color(category.color)),
+                          size: 13, color: adaptiveAccent(Color(category.color))),
                       label: Text(category.name,
                           style: const TextStyle(fontSize: 11.5)),
                       selected: _categoryFilter == category.id,
