@@ -56,14 +56,24 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     tabs.navigate = (location) => _router.go(location);
     String location() =>
         _router.routerDelegate.currentConfiguration.uri.toString();
-    history.onLocationChanged(location());
-    tabs.onLocationChanged(location());
-    _router.routerDelegate.addListener(() {
+    void record() {
+      if (!mounted) return;
       final current = location();
       history.onLocationChanged(current);
       tabs.onLocationChanged(current);
       persistLastLocation(ref, current);
-    });
+    }
+
+    // The delegate notifies mid-build while resolving a route (and this
+    // very initState runs during the first build), where provider writes
+    // are illegal. Every notification also schedules a frame, so
+    // recording after that frame is both safe and lossless.
+    void recordAfterFrame() {
+      WidgetsBinding.instance.addPostFrameCallback((_) => record());
+    }
+
+    recordAfterFrame();
+    _router.routerDelegate.addListener(recordAfterFrame);
   }
 
   @override
@@ -80,22 +90,33 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     if (worldId != null) _router.go(Routes.search(worldId));
   }
 
-  /// App-level fallback for [DismissIntent]: reached only when nothing
-  /// closer to the focus consumed Escape (open dialogs, popups and text
-  /// fields all handle it first), so plain Escape on a page opens the
-  /// pause menu. Registered on DismissIntent rather than a custom Escape
-  /// shortcut: a LogicalKeySet(escape) entry can never win over the
-  /// default SingleActivator mapping — first match wins per trigger.
-  void _onEscape() {
+  /// Escape → pause menu, wired as a root [Focus.onKeyEvent] rather than
+  /// an action on [DismissIntent]: the Actions lookup stops at the
+  /// NEAREST action registered for an intent type, and every page route
+  /// installs its own (disabled, barrierDismissible=false) dismiss
+  /// action — an app-level DismissIntent handler is permanently
+  /// shadowed and never runs. Unhandled key events, in contrast, bubble
+  /// up the focus tree all the way to the root.
+  ///
+  /// While something is open on top (dialog, popup menu), the event is
+  /// left unhandled so the framework's regular Escape-dismiss flow closes
+  /// it — and a modal that opted out of barrier dismissal (e.g. the
+  /// section constructor) keeps ignoring Escape without the pause menu
+  /// stacking on top of it.
+  KeyEventResult _onRootKey(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent ||
+        event.logicalKey != LogicalKeyboardKey.escape) {
+      return KeyEventResult.ignored;
+    }
     final navigator = _router.routerDelegate.navigatorKey.currentState;
-    // A modal that opted out of barrier dismissal (e.g. the section
-    // constructor) lets the intent bubble here — never stack the pause
-    // menu on top of it, and never force it closed.
-    if (navigator == null || navigator.canPop()) return;
+    if (navigator == null || navigator.canPop()) {
+      return KeyEventResult.ignored;
+    }
     final location = _router.routerDelegate.currentConfiguration.uri.path;
     final worldId =
         RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
     unawaited(showPauseMenu(navigator.context, worldId: worldId));
+    return KeyEventResult.handled;
   }
 
   @override
@@ -125,8 +146,6 @@ class _GmhAppState extends ConsumerState<GmhApp> {
         _ForwardIntent: CallbackAction<_ForwardIntent>(
             onInvoke: (_) =>
                 ref.read(navHistoryProvider.notifier).goForward()),
-        DismissIntent: CallbackAction<DismissIntent>(
-            onInvoke: (_) => _onEscape()),
         _QuickSearchIntent: CallbackAction<_QuickSearchIntent>(
             onInvoke: (_) => _goToSearch()),
       },
@@ -143,17 +162,22 @@ class _GmhAppState extends ConsumerState<GmhApp> {
         GmhColors.palette = GmhStyle.paletteFor(
             GmhStyle.current, Theme.of(context).brightness);
         // Mouse side buttons navigate history, like in every browser.
-        return Listener(
-          behavior: HitTestBehavior.translucent,
-          onPointerDown: (event) {
-            if (event.kind != PointerDeviceKind.mouse) return;
-            if (event.buttons == kBackMouseButton) {
-              ref.read(navHistoryProvider.notifier).goBack();
-            } else if (event.buttons == kForwardMouseButton) {
-              ref.read(navHistoryProvider.notifier).goForward();
-            }
-          },
-          child: child!,
+        return Focus(
+          canRequestFocus: false,
+          skipTraversal: true,
+          onKeyEvent: _onRootKey,
+          child: Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (event) {
+              if (event.kind != PointerDeviceKind.mouse) return;
+              if (event.buttons == kBackMouseButton) {
+                ref.read(navHistoryProvider.notifier).goBack();
+              } else if (event.buttons == kForwardMouseButton) {
+                ref.read(navHistoryProvider.notifier).goForward();
+              }
+            },
+            child: child!,
+          ),
         );
       },
       routerConfig: _router,
