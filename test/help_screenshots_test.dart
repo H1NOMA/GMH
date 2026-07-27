@@ -217,7 +217,12 @@ Future<_Demo> _seedDemoWorld() async {
       'insert': 'A grim harbor city where the fog never fully lifts. '
           'The docks belong to '
     },
-    {'insert': 'Captain Mira Voss', 'attributes': {'bold': true}},
+    // A real @-mention: renders as a link chip and creates a backlink.
+    {
+      'insert': {
+        'entityLink': jsonEncode({'id': mira.id, 'label': mira.name}),
+      },
+    },
     {
       'insert': ', the market belongs to the gulls, and the deep water '
           'belongs to something older.\n'

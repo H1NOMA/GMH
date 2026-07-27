@@ -181,6 +181,11 @@ Future<_Demo> _seedRichWorld() async {
   }
 
   // ------------------------------------------------- fantasy world content
+  final aldenmark = await create(world.id, EntityKind.location, 'Aldenmark',
+      'Old kingdom of amber and oaths', attributes: {
+    'locationType': 'Country',
+    'government': 'Elective monarchy',
+  });
   final ravenport = await create(world.id, EntityKind.location, 'Ravenport',
       'A grim harbor city under perpetual drizzle',
       cover: true,
@@ -190,6 +195,8 @@ Future<_Demo> _seedRichWorld() async {
         'locationType': 'City',
         'population': '12,400',
         'government': 'Harbor Council',
+        'climate': 'Cold coastal, fog nine months a year',
+        'parentLocation': entityRefValue(aldenmark.id),
       });
   await create(world.id, EntityKind.location, 'The Sunken Bell',
       'Dockside tavern where every rumor is half true',
@@ -199,12 +206,6 @@ Future<_Demo> _seedRichWorld() async {
   await create(world.id, EntityKind.location, 'Gloomwood',
       'The forest that swallows lantern light',
       cover: true, attributes: {'locationType': 'Region'});
-  await create(world.id, EntityKind.location, 'Aldenmark',
-      'Old kingdom of amber and oaths', attributes: {
-    'locationType': 'Country',
-    'government': 'Elective monarchy',
-  });
-
   final circle = await create(world.id, EntityKind.faction,
       'The Silver Circle', 'Secretive order of tide-mages',
       attributes: {'factionType': 'Order'});
@@ -296,6 +297,28 @@ Future<_Demo> _seedRichWorld() async {
     'challenge': '7',
     'size': 'Huge',
     'habitat': [entityRefValue(ravenport.id)],
+    // Full stat block for the monster-card screenshot.
+    'ac': 17,
+    'hp': '142 (15d12 + 45)',
+    'speed': '30 ft., swim 60 ft.',
+    'strength': 21,
+    'dexterity': 12,
+    'constitution': 17,
+    'intelligence': 8,
+    'wisdom': 13,
+    'charisma': 10,
+    'savingThrows': 'CON +6, WIS +4',
+    'skills': 'Perception +4, Stealth +4',
+    'resistances': 'cold; bludgeoning from nonmagical attacks',
+    'immunities': 'poison',
+    'senses': 'darkvision 120 ft., passive Perception 14',
+    'languages': 'understands Draconic, cannot speak',
+    'traits': 'Amphibious. The wyrm can breathe air and water.\n'
+        'Fog Shroud. While in fog, attack rolls against it have '
+        'disadvantage.',
+    'actions': 'Multiattack. Bite and tail.\n'
+        'Bite. +8 to hit, 2d10+5 piercing plus 1d8 cold.\n'
+        'Tail. +8 to hit, reach 15 ft., 2d8+5 bludgeoning.',
   });
   await create(world.id, EntityKind.creature, 'Fog Hounds',
       'They hunt by the sound of your heartbeat', attributes: {
@@ -308,6 +331,27 @@ Future<_Demo> _seedRichWorld() async {
       'When the sky wept the old kingdom back', attributes: {
     'date': '3rd Age, Year 409',
     'locations': [entityRefValue(ravenport.id)],
+  });
+
+  // The city's ruler ref creates a visible relation + backlink pair.
+  await entities.setAttribute(
+      ravenport.id, 'ruler', entityRefValue(mira.id));
+
+  // A full spell card for the stat-first page screenshot.
+  await create(world.id, EntityKind.magicSystem, 'Tidebinding',
+      'Chains of seawater hold what the deep has claimed', attributes: {
+    'level': '3rd Level',
+    'school': 'Conjuration',
+    'castingTime': '1 action',
+    'range': '60 ft.',
+    'components': 'V, S, M (a link of rusted chain)',
+    'duration': 'Concentration, up to 1 minute',
+    'ritual': 'No',
+    'saveAttack': 'STR save, restrained on failure',
+    'damageEffect': '3d8 cold on entering the chains',
+    'classes': ['Wizard', 'Sorcerer'],
+    'higherLevels': 'One extra target per slot level above 3rd.',
+    'source': 'The Silver Circle tide-lore',
   });
 
   final campaign = await create(world.id, EntityKind.campaign,
@@ -346,14 +390,22 @@ Future<_Demo> _seedRichWorld() async {
     });
   }
 
-  // A meaty lore document for the entry screenshot.
+  // A meaty lore document for the entry screenshot, with real @-mention
+  // links to entries (they render as chips and create backlinks).
+  Map<String, Object> mention(Entity e) => {
+        'insert': {
+          'entityLink': jsonEncode({'id': e.id, 'label': e.name}),
+        },
+      };
+  final tavern = demo.byName['The Sunken Bell']!;
+  final aldous = demo.byName['Brother Aldous']!;
   final delta = [
     {'insert': 'Ravenport\n', 'attributes': {'header': 2}},
     {
       'insert': 'A grim harbor city where the fog never fully lifts. '
           'The docks belong to '
     },
-    {'insert': 'Captain Mira Voss', 'attributes': {'bold': true}},
+    mention(mira),
     {
       'insert': ', the market belongs to the gulls, and the deep water '
           'belongs to something older.\n'
@@ -363,9 +415,12 @@ Future<_Demo> _seedRichWorld() async {
         'attributes': {'list': 'bullet'}},
     {'insert': 'Amber market — relics of the old kingdom\n',
         'attributes': {'list': 'bullet'}},
-    {'insert': 'The Sunken Bell — where rumors surface first\n',
+    mention(tavern),
+    {'insert': ' — where rumors surface first\n',
         'attributes': {'list': 'bullet'}},
-    {'insert': 'Chapel row — Brother Aldous rings for the drowned\n',
+    {'insert': 'Chapel row — '},
+    mention(aldous),
+    {'insert': ' rings for the drowned\n',
         'attributes': {'list': 'bullet'}},
     {
       'insert': 'Nothing leaves this harbor that the tide does not '
@@ -558,5 +613,15 @@ void main() {
     await run(tester, '08_light_theme',
         (d) => Routes.entity(d.worldId, d.byName['Ravenport']!.id),
         themeMode: ThemeMode.light);
+  });
+
+  testWidgets('09 spell card', skip: !_enabled, (tester) async {
+    await run(tester, '09_spell_card',
+        (d) => Routes.entity(d.worldId, d.byName['Tidebinding']!.id));
+  });
+
+  testWidgets('10 monster stat block', skip: !_enabled, (tester) async {
+    await run(tester, '10_monster_statblock',
+        (d) => Routes.entity(d.worldId, d.byName['Harbor Wyrm']!.id));
   });
 }
