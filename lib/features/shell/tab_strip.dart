@@ -37,8 +37,10 @@ class WorkspaceTabStrip extends ConsumerWidget {
                 location: tabs.locations[index],
                 active: index == tabs.activeIndex,
                 onTap: () => controller.activate(index),
-                onClose: () => controller.close(index,
-                    fallbackLocation: Routes.home(worldId)),
+                onClose: () => controller.close(
+                  index,
+                  fallbackLocation: Routes.home(worldId),
+                ),
               ),
             ),
           ),
@@ -78,28 +80,29 @@ class _WorkspaceTab extends ConsumerWidget {
   /// Resolves a display icon + label for a location.
   (IconData, String) _describe(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final entityMatch =
-        RegExp(r'^/w/[^/]+/e/([^/]+)$').firstMatch(location);
+    final entityMatch = RegExp(r'^/w/[^/]+/e/([^/]+)$').firstMatch(location);
     if (entityMatch != null) {
-      final entity =
-          ref.watch(entityProvider(entityMatch.group(1)!)).valueOrNull;
+      final entity = ref
+          .watch(entityProvider(entityMatch.group(1)!))
+          .valueOrNull;
       if (entity == null) return (Icons.description_outlined, '…');
-      final categories =
-          ref.watch(categoryMapProvider(entity.worldId));
+      final categories = ref.watch(categoryMapProvider(entity.worldId));
       return (entityIcon(entity, categories), entity.name);
     }
-    final browseMatch =
-        RegExp(r'^/w/[^/]+/browse/([^/]+)$').firstMatch(location);
+    final browseMatch = RegExp(
+      r'^/w/[^/]+/browse/([^/]+)$',
+    ).firstMatch(location);
     if (browseMatch != null) {
       final kind = EntityKind.tryParse(browseMatch.group(1)!);
       if (kind != null) return (kind.icon, kind.localizedPlural(context));
     }
-    final categoryMatch =
-        RegExp(r'^/w/([^/]+)/category/([^/]+)$').firstMatch(location);
+    final categoryMatch = RegExp(
+      r'^/w/([^/]+)/category/([^/]+)$',
+    ).firstMatch(location);
     if (categoryMatch != null) {
       final category = ref.watch(
-          categoryMapProvider(categoryMatch.group(1)!))[
-          categoryMatch.group(2)!];
+        categoryMapProvider(categoryMatch.group(1)!),
+      )[categoryMatch.group(2)!];
       if (category != null) {
         return (categoryIconFor(category.icon), category.name);
       }
@@ -135,47 +138,59 @@ class _WorkspaceTab extends ConsumerWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 190),
-          padding: const EdgeInsets.only(left: 10, right: 2),
           decoration: BoxDecoration(
             color: active ? GmhColors.background : Colors.transparent,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(8)),
-            border: active
-                ? Border(
-                    top: BorderSide(color: GmhColors.ember, width: 2),
-                    left: BorderSide(color: GmhColors.border),
-                    right: BorderSide(color: GmhColors.border),
-                  )
-                : null,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+            // A rounded box only accepts a uniform border; the ember
+            // accent is painted separately as the strip below.
+            border: active ? Border.all(color: GmhColors.border) : null,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+          clipBehavior: active ? Clip.antiAlias : Clip.none,
+          child: Stack(
             children: [
-              Icon(icon, size: 14, color: color),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: color,
-                    fontWeight:
-                        active ? FontWeight.w600 : FontWeight.w400,
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 2),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 14, color: color),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: color,
+                          fontWeight: active
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 13),
+                      color: GmhColors.parchmentFaint,
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(
+                        minWidth: 26,
+                        minHeight: 26,
+                      ),
+                      padding: EdgeInsets.zero,
+                      onPressed: onClose,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 2),
-              IconButton(
-                icon: const Icon(Icons.close, size: 13),
-                color: GmhColors.parchmentFaint,
-                visualDensity: VisualDensity.compact,
-                constraints:
-                    const BoxConstraints(minWidth: 26, minHeight: 26),
-                padding: EdgeInsets.zero,
-                onPressed: onClose,
-              ),
+              if (active)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(height: 2, color: GmhColors.ember),
+                ),
             ],
           ),
         ),
