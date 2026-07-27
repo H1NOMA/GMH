@@ -596,6 +596,8 @@
   "fieldTypeDate": "Date",
   "fieldTypeChecklist": "Checklist",
   "fieldTypeStringList": "List of values",
+  "pauseSaveProject": "Save project",
+  "pauseExit": "Exit",
   "helpTitle": "User Guide",
   "helpSettingsSubtitle": "The built-in manual: where everything is and how to use it",
   "helpIntroBody": "Game Master's Hub is an offline workspace for game masters: worlds, characters, locations, campaigns and lore all live on this device, connected into one navigable web. This guide walks through every part of the app — the diagrams below are schematic views of the real screens, and the numbered markers are explained under each picture.",

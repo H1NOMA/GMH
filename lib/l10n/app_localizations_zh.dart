@@ -1200,6 +1200,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fieldTypeStringList => '值列表';
 
   @override
+  String get pauseSaveProject => '保存项目';
+
+  @override
+  String get pauseExit => '退出';
+
+  @override
   String get helpTitle => '使用指南';
 
   @override

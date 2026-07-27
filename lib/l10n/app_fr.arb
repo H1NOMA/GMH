@@ -362,6 +362,8 @@
   "fieldTypeDate": "Date",
   "fieldTypeChecklist": "Liste à cocher",
   "fieldTypeStringList": "Liste de valeurs",
+  "pauseSaveProject": "Enregistrer le projet",
+  "pauseExit": "Quitter",
   "helpTitle": "Guide de l'utilisateur",
   "helpSettingsSubtitle": "Le manuel intégré : où tout se trouve et comment l'utiliser",
   "helpIntroBody": "Game Master's Hub est un espace de travail hors ligne pour maîtres de jeu : mondes, personnages, lieux, campagnes et lore vivent sur cet appareil, reliés en une seule toile navigable. Ce guide passe en revue chaque partie de l'application — les schémas ci-dessous sont des vues simplifiées des vrais écrans, et les repères numérotés sont expliqués sous chaque image.",

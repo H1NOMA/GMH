@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../features/shell/pause_menu.dart';
 
 import 'l10n_ext.dart';
 import 'locale_provider.dart';
@@ -28,6 +32,10 @@ class _BackIntent extends Intent {
 
 class _ForwardIntent extends Intent {
   const _ForwardIntent();
+}
+
+class _PauseMenuIntent extends Intent {
+  const _PauseMenuIntent();
 }
 
 class _GmhAppState extends ConsumerState<GmhApp> {
@@ -57,6 +65,22 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     super.dispose();
   }
 
+  /// Escape: first close whatever modal is open (dialog, sheet, popup) —
+  /// then, with nothing left to dismiss, open the pause menu.
+  void _onEscape() {
+    final navigator = _router.routerDelegate.navigatorKey.currentState;
+    if (navigator == null) return;
+    if (navigator.canPop()) {
+      navigator.pop();
+      return;
+    }
+    final location = _router.routerDelegate.currentConfiguration.uri.path;
+    final worldId =
+        RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
+    final context = navigator.context;
+    unawaited(showPauseMenu(context, worldId: worldId));
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeControllerProvider);
@@ -70,6 +94,7 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             const _BackIntent(),
         LogicalKeySet(LogicalKeyboardKey.alt, LogicalKeyboardKey.arrowRight):
             const _ForwardIntent(),
+        LogicalKeySet(LogicalKeyboardKey.escape): const _PauseMenuIntent(),
       },
       actions: {
         ...WidgetsApp.defaultActions,
@@ -79,6 +104,8 @@ class _GmhAppState extends ConsumerState<GmhApp> {
         _ForwardIntent: CallbackAction<_ForwardIntent>(
             onInvoke: (_) =>
                 ref.read(navHistoryProvider.notifier).goForward()),
+        _PauseMenuIntent: CallbackAction<_PauseMenuIntent>(
+            onInvoke: (_) => _onEscape()),
       },
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.light(),

@@ -191,10 +191,6 @@ class WorldPickerScreen extends ConsumerWidget {
                 Text(context.l10n.appTitle,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displaySmall),
-                const SizedBox(height: 4),
-                Text(context.l10n.worldsTagline,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 28),
                 Flexible(
                   child: worlds.when(

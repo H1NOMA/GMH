@@ -1231,6 +1231,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fieldTypeStringList => 'Список значений';
 
   @override
+  String get pauseSaveProject => 'Сохранить проект';
+
+  @override
+  String get pauseExit => 'Выйти';
+
+  @override
   String get helpTitle => 'Руководство';
 
   @override

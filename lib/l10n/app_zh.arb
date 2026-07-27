@@ -362,6 +362,8 @@
   "fieldTypeDate": "日期",
   "fieldTypeChecklist": "清单",
   "fieldTypeStringList": "值列表",
+  "pauseSaveProject": "保存项目",
+  "pauseExit": "退出",
   "helpTitle": "使用指南",
   "helpSettingsSubtitle": "内置手册：功能都在哪里、该怎么用",
   "helpIntroBody": "Game Master's Hub是为游戏主持人打造的离线工作台：世界、角色、地点、战役和传说全部保存在本设备上，并连接成一张可以自由漫游的网络。本指南将带你走遍应用的每个部分——下方的示意图是真实界面的简化呈现，图中带编号的标记会在每张图下方逐一说明。",

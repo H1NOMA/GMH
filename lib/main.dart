@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'app/app.dart';
 import 'app/locale_provider.dart';
@@ -15,6 +16,22 @@ import 'domain/repositories/repositories.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Desktop opens as a borderless fullscreen "game" window; the Escape
+  // pause menu (logo, save, settings, exit) replaces the title bar.
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    await windowManager.ensureInitialized();
+    const options = WindowOptions(
+      title: "Game Master's Hub",
+      titleBarStyle: TitleBarStyle.hidden,
+      fullScreen: true,
+    );
+    unawaited(windowManager.waitUntilReadyToShow(options, () async {
+      await windowManager.setFullScreen(true);
+      await windowManager.show();
+      await windowManager.focus();
+    }));
+  }
 
   // All user data lives under {documents}/gmh — database, media vault,
   // backups. Fully local, fully offline.

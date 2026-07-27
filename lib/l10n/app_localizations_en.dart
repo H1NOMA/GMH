@@ -1225,6 +1225,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fieldTypeStringList => 'List of values';
 
   @override
+  String get pauseSaveProject => 'Save project';
+
+  @override
+  String get pauseExit => 'Exit';
+
+  @override
   String get helpTitle => 'User Guide';
 
   @override

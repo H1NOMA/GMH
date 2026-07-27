@@ -362,6 +362,8 @@
   "fieldTypeDate": "Datum",
   "fieldTypeChecklist": "Checkliste",
   "fieldTypeStringList": "Werteliste",
+  "pauseSaveProject": "Projekt speichern",
+  "pauseExit": "Beenden",
   "helpTitle": "Benutzerhandbuch",
   "helpSettingsSubtitle": "Das eingebaute Handbuch: wo alles ist und wie es funktioniert",
   "helpIntroBody": "Game Master's Hub ist ein Offline-Arbeitsplatz für Spielleiter: Welten, Charaktere, Orte, Kampagnen und Lore liegen auf diesem Gerät und sind zu einem begehbaren Netz verknüpft. Dieses Handbuch führt durch jeden Teil der App – die Abbildungen unten sind schematische Ansichten der echten Bildschirme, und die nummerierten Markierungen werden unter jedem Bild erklärt.",

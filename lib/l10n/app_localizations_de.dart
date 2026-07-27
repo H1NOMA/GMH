@@ -1231,6 +1231,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get fieldTypeStringList => 'Werteliste';
 
   @override
+  String get pauseSaveProject => 'Projekt speichern';
+
+  @override
+  String get pauseExit => 'Beenden';
+
+  @override
   String get helpTitle => 'Benutzerhandbuch';
 
   @override

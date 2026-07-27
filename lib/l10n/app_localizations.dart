@@ -2276,6 +2276,18 @@ abstract class AppLocalizations {
   /// **'List of values'**
   String get fieldTypeStringList;
 
+  /// No description provided for @pauseSaveProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Save project'**
+  String get pauseSaveProject;
+
+  /// No description provided for @pauseExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get pauseExit;
+
   /// No description provided for @helpTitle.
   ///
   /// In en, this message translates to:
