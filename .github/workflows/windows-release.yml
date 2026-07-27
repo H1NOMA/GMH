@@ -74,6 +74,14 @@ jobs:
             /DSourceDir=$source `
             windows/installer/gmh.iss
 
+      - name: Point the release tag at the built commit
+        # Without this, a workflow_dispatch run from a non-default branch
+        # lets the release API create the tag on the DEFAULT branch head —
+        # the uploaded binaries then don't match the tagged source.
+        shell: pwsh
+        run: |
+          git push origin --force "+${{ github.sha }}:refs/tags/v${{ steps.version.outputs.version }}"
+
       - name: Create GitHub Release and upload assets
         uses: softprops/action-gh-release@v2
         with:
