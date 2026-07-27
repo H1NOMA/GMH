@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n_ext.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../shell/history_buttons.dart';
 
 /// Built-in user guide, opened from the «?» icon. Instead of bundled PNG
 /// screenshots it renders schematic replicas of the app's screens with
@@ -99,6 +100,8 @@ class HelpScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
         titleSpacing: 8,
         title: Row(
           children: [

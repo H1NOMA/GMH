@@ -13,6 +13,7 @@ import '../../app/nav_state.dart';
 import '../categories/category_ui.dart';
 import '../tags/tag_manager_sheet.dart';
 import '../categories/manage_categories_sheet.dart';
+import 'history_buttons.dart';
 import 'ui_providers.dart';
 
 /// Adaptive navigation shell:
@@ -73,38 +74,6 @@ class AppShell extends ConsumerWidget {
     // subtree (editor state, graph simulation, scroll positions).
     return Theme(
         data: GmhStyle.themeFor(style, brightness), child: scaffold);
-  }
-}
-
-/// Browser-style back/forward controls fed by the navigation history.
-class _HistoryButtons extends ConsumerWidget {
-  final bool compact;
-  final bool vertical;
-  const _HistoryButtons({this.compact = false, this.vertical = false});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(navHistoryProvider);
-    final controller = ref.read(navHistoryProvider.notifier);
-    final size = compact ? 18.0 : 19.0;
-    return Flex(
-      direction: vertical ? Axis.vertical : Axis.horizontal,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          tooltip: '${context.l10n.navBack} (Alt+←)',
-          icon: Icon(Icons.arrow_back, size: size),
-          onPressed: history.canGoBack ? controller.goBack : null,
-          visualDensity: VisualDensity.compact,
-        ),
-        IconButton(
-          tooltip: '${context.l10n.navForward} (Alt+→)',
-          icon: Icon(Icons.arrow_forward, size: size),
-          onPressed: history.canGoForward ? controller.goForward : null,
-          visualDensity: VisualDensity.compact,
-        ),
-      ],
-    );
   }
 }
 
@@ -177,10 +146,6 @@ class _Sidebar extends ConsumerWidget {
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(children: const [_HistoryButtons()]),
           ),
           const Divider(),
           Expanded(
@@ -541,7 +506,7 @@ class _Rail extends StatelessWidget {
             icon: Icon(Icons.public, color: GmhColors.ember),
             onPressed: () => context.go(Routes.worlds()),
           ),
-          const _HistoryButtons(compact: true, vertical: true),
+          const HistoryButtons(compact: true, vertical: true),
         ],
       ),
       destinations: [
@@ -582,7 +547,7 @@ class _BottomNav extends StatelessWidget {
           children: [
             const Padding(
               padding: EdgeInsets.only(left: 2),
-              child: _HistoryButtons(compact: true),
+              child: HistoryButtons(compact: true),
             ),
             Expanded(
               child: NavigationBar(

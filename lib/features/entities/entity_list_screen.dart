@@ -7,6 +7,7 @@ import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
 import '../categories/category_ui.dart';
+import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 import 'widgets/entity_card.dart';
 import 'widgets/entity_grid_card.dart';
@@ -95,6 +96,8 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
         title: Row(
           children: [
             Icon(icon, color: color, size: 22),

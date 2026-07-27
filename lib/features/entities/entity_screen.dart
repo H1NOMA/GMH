@@ -11,6 +11,7 @@ import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
 import '../categories/category_ui.dart';
 import '../editor/lore_editor.dart';
+import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 import '../attachments/attachments_panel.dart';
 import '../../domain/models/entity_kind.dart';
@@ -147,11 +148,35 @@ class _EntityScaffold extends ConsumerWidget {
     final isWide = MediaQuery.sizeOf(context).width >= 980;
 
     final appBar = AppBar(
+      leading: historyLeading(),
+      leadingWidth: kHistoryLeadingWidth,
       titleSpacing: 8,
       title: Row(
         children: [
-          Icon(entity.kind.icon, color: entity.kind.color, size: 20),
-          const SizedBox(width: 8),
+          // Breadcrumb: the kind icon jumps to the entry's section list —
+          // the same "click the crumb to go up a level" affordance as in
+          // Notion/Obsidian.
+          IconButton(
+            tooltip: entity.kind == EntityKind.custom
+                ? (ref
+                        .watch(categoryMapProvider(worldId))[
+                            entity.customCategoryId]
+                        ?.name ??
+                    entity.kind.localizedPlural(context))
+                : entity.kind.localizedPlural(context),
+            icon: Icon(entity.kind.icon, color: entity.kind.color, size: 20),
+            visualDensity: VisualDensity.compact,
+            onPressed: () {
+              if (entity.kind == EntityKind.custom &&
+                  entity.customCategoryId != null) {
+                context.go(Routes.browseCategory(
+                    worldId, entity.customCategoryId!));
+              } else {
+                context.go(Routes.browse(worldId, entity.kind));
+              }
+            },
+          ),
+          const SizedBox(width: 4),
           Flexible(
             child: InkWell(
               onTap: () => _rename(context, ref),

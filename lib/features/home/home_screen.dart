@@ -12,6 +12,7 @@ import '../categories/category_ui.dart';
 import '../categories/manage_categories_sheet.dart';
 import '../entities/widgets/entity_card.dart';
 import '../entities/widgets/new_entity_dialog.dart';
+import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 
 /// World dashboard: category grid with live counts, recently opened items
@@ -41,6 +42,8 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
         title: Text(world?.name ?? ''),
         actions: [
           IconButton(

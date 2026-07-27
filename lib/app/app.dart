@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -34,6 +35,10 @@ class _ForwardIntent extends Intent {
   const _ForwardIntent();
 }
 
+class _QuickSearchIntent extends Intent {
+  const _QuickSearchIntent();
+}
+
 
 class _GmhAppState extends ConsumerState<GmhApp> {
   late final GoRouter _router =
@@ -60,6 +65,14 @@ class _GmhAppState extends ConsumerState<GmhApp> {
   void dispose() {
     _router.dispose();
     super.dispose();
+  }
+
+  /// Ctrl/Cmd+K: jump to the current world's search from anywhere.
+  void _goToSearch() {
+    final location = _router.routerDelegate.currentConfiguration.uri.path;
+    final worldId =
+        RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
+    if (worldId != null) _router.go(Routes.search(worldId));
   }
 
   /// App-level fallback for [DismissIntent]: reached only when nothing
@@ -93,6 +106,11 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             const _BackIntent(),
         LogicalKeySet(LogicalKeyboardKey.alt, LogicalKeyboardKey.arrowRight):
             const _ForwardIntent(),
+        // Quick switch to search, the Obsidian/Notion muscle-memory combo.
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyK):
+            const _QuickSearchIntent(),
+        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyK):
+            const _QuickSearchIntent(),
       },
       actions: {
         ...WidgetsApp.defaultActions,
@@ -104,6 +122,8 @@ class _GmhAppState extends ConsumerState<GmhApp> {
                 ref.read(navHistoryProvider.notifier).goForward()),
         DismissIntent: CallbackAction<DismissIntent>(
             onInvoke: (_) => _onEscape()),
+        _QuickSearchIntent: CallbackAction<_QuickSearchIntent>(
+            onInvoke: (_) => _goToSearch()),
       },
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.light(),
@@ -117,7 +137,19 @@ class _GmhAppState extends ConsumerState<GmhApp> {
         // whenever this builder runs after the shell set the style.
         GmhColors.palette = GmhStyle.paletteFor(
             GmhStyle.current, Theme.of(context).brightness);
-        return child!;
+        // Mouse side buttons navigate history, like in every browser.
+        return Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (event) {
+            if (event.kind != PointerDeviceKind.mouse) return;
+            if (event.buttons == kBackMouseButton) {
+              ref.read(navHistoryProvider.notifier).goBack();
+            } else if (event.buttons == kForwardMouseButton) {
+              ref.read(navHistoryProvider.notifier).goForward();
+            }
+          },
+          child: child!,
+        );
       },
       routerConfig: _router,
       locale: locale,

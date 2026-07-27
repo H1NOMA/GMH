@@ -16,6 +16,7 @@ import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/dates.dart';
 import '../../data/backup/backup_service.dart';
+import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 
 /// Settings: language, manual/automatic backups, full-project export
@@ -212,7 +213,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final l = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.settingsTitle)),
+      appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
+        title: Text(l.settingsTitle),
+      ),
       body: AbsorbPointer(
         absorbing: _busy,
         child: ListView(

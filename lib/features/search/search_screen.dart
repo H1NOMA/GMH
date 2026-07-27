@@ -16,6 +16,7 @@ import '../../domain/models/search_result.dart';
 import '../categories/category_ui.dart';
 import '../entities/widgets/new_entity_dialog.dart';
 import '../tags/tag_manager_sheet.dart';
+import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 
 /// Global full-text search across every entity — names, summaries, document
@@ -122,7 +123,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         ref.watch(recentEntitiesProvider(widget.worldId)).valueOrNull ?? [];
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.navSearch)),
+      appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
+        title: Text(context.l10n.navSearch),
+      ),
       body: Column(
         children: [
           Padding(

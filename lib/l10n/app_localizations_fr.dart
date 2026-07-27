@@ -1255,7 +1255,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get helpTipsBody =>
-      'Alt+← / Alt+→ — naviguer en arrière et en avant. Tapez @ dans l\'éditeur pour lier des entrées en écrivant. Un appui long sur les onglets de la barre latérale, les champs du constructeur ou les tuiles de la galerie permet de les réordonner par glisser-déposer. Clic droit (ou appui long) sur une pièce jointe pour la renommer, la remplacer ou la définir comme couverture. La bascule grille/liste est mémorisée pour chaque section. Le tri, les filtres et la campagne sélectionnée le sont aussi — l\'application rouvre toujours là où vous vous êtes arrêté.';
+      'Alt+← / Alt+→ — naviguer en arrière et en avant. Tapez @ dans l\'éditeur pour lier des entrées en écrivant. Un appui long sur les onglets de la barre latérale, les champs du constructeur ou les tuiles de la galerie permet de les réordonner par glisser-déposer. Clic droit (ou appui long) sur une pièce jointe pour la renommer, la remplacer ou la définir comme couverture. La bascule grille/liste est mémorisée pour chaque section. Le tri, les filtres et la campagne sélectionnée le sont aussi — l\'application rouvre toujours là où vous vous êtes arrêté. Ctrl+K ouvre directement la recherche ; les boutons latéraux de la souris parcourent l\'historique et les flèches de navigation se trouvent en haut à gauche de chaque page.';
 
   @override
   String get helpScreenshotCaption =>

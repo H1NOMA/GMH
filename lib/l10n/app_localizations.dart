@@ -2291,7 +2291,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpTipsBody.
   ///
   /// In en, this message translates to:
-  /// **'Alt+← / Alt+→ — navigate back and forward. Type @ in the editor to link entries as you write. Long-press sidebar tabs, constructor fields or gallery tiles to drag-reorder them. Right-click (or long-press) attachments for rename, replace and cover actions. The grid/list toggle on any section is remembered per section. Sort, filters and the selected campaign are remembered too — the app always reopens where you left it.'**
+  /// **'Alt+← / Alt+→ — navigate back and forward. Type @ in the editor to link entries as you write. Long-press sidebar tabs, constructor fields or gallery tiles to drag-reorder them. Right-click (or long-press) attachments for rename, replace and cover actions. The grid/list toggle on any section is remembered per section. Sort, filters and the selected campaign are remembered too — the app always reopens where you left it. Ctrl+K (Cmd+K on Mac) jumps straight to search; the mouse back/forward side buttons walk the history, and the navigation arrows sit at the top-left of every page.'**
   String get helpTipsBody;
 
   /// No description provided for @helpScreenshotCaption.

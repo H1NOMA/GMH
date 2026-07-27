@@ -13,6 +13,7 @@ import '../../domain/models/entity_kind.dart';
 import '../../domain/models/link.dart';
 import '../../domain/repositories/repositories.dart';
 import '../entities/widgets/new_entity_dialog.dart';
+import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 
 /// Campaign manager: campaigns with their quest board and session log.
@@ -59,6 +60,8 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
         title: Text(context.l10n.campaignsTitle),
         actions: [
           if (selected != null)

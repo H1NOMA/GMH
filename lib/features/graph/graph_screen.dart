@@ -12,6 +12,7 @@ import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity.dart';
 import '../../domain/models/entity_kind.dart';
 import '../categories/category_ui.dart';
+import '../shell/history_buttons.dart';
 import 'graph_simulation.dart';
 
 /// Obsidian-style relationship graph. World mode shows every linked entity
@@ -189,6 +190,8 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     final simulation = _simulation;
     return Scaffold(
       appBar: AppBar(
+        leading: historyLeading(),
+        leadingWidth: kHistoryLeadingWidth,
         title: Text(_focusId == null
             ? context.l10n.graphTitle
             : context.l10n.graphLocalTitle),
