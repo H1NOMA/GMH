@@ -901,124 +901,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get close => 'Fermer';
 
   @override
-  String get ttgImportTitle => 'Importer une base TTG';
-
-  @override
-  String get ttgImportIntro =>
-      'Migrez une base de données TTG D&D complète — campagnes, PNJ, monstres, sorts, objets, lieux, factions, quêtes, médias et toutes les relations — vers un monde GMH. Sources prises en charge : bases SQLite (.db, .sqlite, .ttg), exports JSON et exports ZIP avec médias.';
-
-  @override
-  String get ttgPickFile => 'Sélectionner une base TTG…';
-
-  @override
-  String ttgPreviewCount(int count) {
-    return '$count enregistrements détectés';
-  }
-
-  @override
-  String get ttgResumeBanner =>
-      'Un import interrompu de ce fichier a été trouvé. Il reprendra — les enregistrements déjà importés sont ignorés.';
-
-  @override
-  String get ttgWorldName => 'Nom du monde';
-
-  @override
-  String get ttgDuplicatesLabel => 'Si un enregistrement existe déjà';
-
-  @override
-  String get ttgSkip => 'Ignorer';
-
-  @override
-  String get ttgMerge => 'Fusionner';
-
-  @override
-  String get ttgReplace => 'Remplacer';
-
-  @override
-  String get ttgAsk => 'Demander à chaque fois';
-
-  @override
-  String get ttgBack => 'Retour';
-
-  @override
-  String get ttgStart => 'Démarrer l\'import';
-
-  @override
-  String get ttgResume => 'Reprendre l\'import';
-
-  @override
-  String get ttgPhaseReading => 'Lecture de la source';
-
-  @override
-  String get ttgPhaseEntities => 'Import des enregistrements';
-
-  @override
-  String get ttgPhaseLinks => 'Reconstruction des relations';
-
-  @override
-  String get ttgPhaseValidating => 'Validation';
-
-  @override
-  String get ttgPhaseIndexing => 'Construction de l\'index de recherche';
-
-  @override
-  String ttgEta(int seconds) {
-    return '~$seconds s restantes';
-  }
-
-  @override
-  String get ttgErrorLog => 'Problèmes';
-
-  @override
-  String get ttgDoneTitle => 'Migration terminée';
-
-  @override
-  String get ttgInterruptedTitle =>
-      'Import interrompu — vous pourrez le reprendre plus tard';
-
-  @override
-  String get ttgStatImported => 'Enregistrements importés';
-
-  @override
-  String get ttgStatLinks => 'Liens créés';
-
-  @override
-  String get ttgStatMedia => 'Fichiers médias importés';
-
-  @override
-  String get ttgStatDocuments => 'Documents créés';
-
-  @override
-  String get ttgStatTags => 'Tags créés';
-
-  @override
-  String get ttgStatRepaired => 'Références réparées';
-
-  @override
-  String get ttgStatSkipped => 'Doublons ignorés';
-
-  @override
-  String get ttgOpenWorld => 'Ouvrir le monde';
-
-  @override
-  String get ttgDuplicateTitle => 'Doublon trouvé';
-
-  @override
-  String ttgDuplicateBody(String name, String collection) {
-    return '« $name » ($collection) existe déjà dans ce monde. Que faire ?';
-  }
-
-  @override
-  String get ttgApplyToAll => 'Appliquer à tous les doublons restants';
-
-  @override
-  String get ttgSettingsTitle => 'Importer une base TTG';
-
-  @override
-  String get ttgSettingsSubtitle =>
-      'Migre une base TTG D&D complète vers un nouveau monde : tous les enregistrements, relations, mises en forme et médias';
-
-  @override
   String get cyberKindCharacter => 'Runner';
 
   @override
@@ -1360,13 +1242,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get helpConstructorLegend3 =>
       'Ajouter un champ — les premiers champs deviennent aussi les puces sur les cartes de la section.';
-
-  @override
-  String get helpImportTitle => 'Importer depuis TTG';
-
-  @override
-  String get helpImportBody =>
-      'Paramètres → Importer migre une base TTG D&D complète vers un nouveau monde : campagnes, PNJ, monstres, sorts, objets, lieux, factions, quêtes, notes de session, médias et toutes les relations. Les exports SQLite (.db, .sqlite, .ttg), JSON et ZIP sont pris en charge. La mise en forme est préservée, les références sont vérifiées et réparées, les doublons peuvent être ignorés, fusionnés ou décidés au cas par cas, et un import interrompu reprend là où il s\'est arrêté. Un rapport de migration complet est enregistré comme document de lore dans le nouveau monde.';
 
   @override
   String get helpBackupTitle => 'Sauvegardes et changement d\'appareil';

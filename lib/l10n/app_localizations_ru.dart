@@ -901,124 +901,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get close => 'Закрыть';
 
   @override
-  String get ttgImportTitle => 'Импорт базы TTG';
-
-  @override
-  String get ttgImportIntro =>
-      'Перенесите полную базу данных TTG D&D — кампании, NPC, монстров, заклинания, предметы, локации, фракции, квесты, медиа и все связи — в мир GMH. Поддерживаются: базы SQLite (.db, .sqlite, .ttg), экспорт в JSON и ZIP-экспорт с медиафайлами.';
-
-  @override
-  String get ttgPickFile => 'Выбрать базу TTG…';
-
-  @override
-  String ttgPreviewCount(int count) {
-    return 'Обнаружено записей: $count';
-  }
-
-  @override
-  String get ttgResumeBanner =>
-      'Найден прерванный импорт этого файла. Он будет продолжен — уже импортированные записи пропускаются.';
-
-  @override
-  String get ttgWorldName => 'Название мира';
-
-  @override
-  String get ttgDuplicatesLabel => 'Если запись уже существует';
-
-  @override
-  String get ttgSkip => 'Пропустить';
-
-  @override
-  String get ttgMerge => 'Объединить';
-
-  @override
-  String get ttgReplace => 'Заменить';
-
-  @override
-  String get ttgAsk => 'Спрашивать каждый раз';
-
-  @override
-  String get ttgBack => 'Назад';
-
-  @override
-  String get ttgStart => 'Начать импорт';
-
-  @override
-  String get ttgResume => 'Продолжить импорт';
-
-  @override
-  String get ttgPhaseReading => 'Чтение источника';
-
-  @override
-  String get ttgPhaseEntities => 'Импорт записей';
-
-  @override
-  String get ttgPhaseLinks => 'Восстановление связей';
-
-  @override
-  String get ttgPhaseValidating => 'Проверка';
-
-  @override
-  String get ttgPhaseIndexing => 'Построение поискового индекса';
-
-  @override
-  String ttgEta(int seconds) {
-    return 'осталось ~$seconds с';
-  }
-
-  @override
-  String get ttgErrorLog => 'Проблемы';
-
-  @override
-  String get ttgDoneTitle => 'Миграция завершена';
-
-  @override
-  String get ttgInterruptedTitle =>
-      'Импорт прерван — его можно продолжить позже';
-
-  @override
-  String get ttgStatImported => 'Импортировано записей';
-
-  @override
-  String get ttgStatLinks => 'Создано связей';
-
-  @override
-  String get ttgStatMedia => 'Импортировано медиафайлов';
-
-  @override
-  String get ttgStatDocuments => 'Создано документов';
-
-  @override
-  String get ttgStatTags => 'Создано тегов';
-
-  @override
-  String get ttgStatRepaired => 'Исправлено ссылок';
-
-  @override
-  String get ttgStatSkipped => 'Пропущено дубликатов';
-
-  @override
-  String get ttgOpenWorld => 'Открыть мир';
-
-  @override
-  String get ttgDuplicateTitle => 'Найден дубликат';
-
-  @override
-  String ttgDuplicateBody(String name, String collection) {
-    return '«$name» ($collection) уже существует в этом мире. Что сделать?';
-  }
-
-  @override
-  String get ttgApplyToAll => 'Применить ко всем оставшимся дубликатам';
-
-  @override
-  String get ttgSettingsTitle => 'Импорт базы TTG';
-
-  @override
-  String get ttgSettingsSubtitle =>
-      'Перенос полной базы TTG D&D в новый мир: все записи, связи, форматирование и медиа';
-
-  @override
   String get cyberKindCharacter => 'Раннер';
 
   @override
@@ -1358,13 +1240,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get helpConstructorLegend3 =>
       'Добавить поле — первые поля также становятся чипами на карточках раздела.';
-
-  @override
-  String get helpImportTitle => 'Импорт из TTG';
-
-  @override
-  String get helpImportBody =>
-      'Настройки → Импорт переносит полную базу TTG D&D в новый мир: кампании, NPC, монстров, заклинания, предметы, локации, фракции, квесты, заметки сессий, медиа и все связи. Поддерживаются SQLite (.db, .sqlite, .ttg), JSON и ZIP-экспорты. Форматирование сохраняется, ссылки проверяются и чинятся, дубликаты можно пропускать, сливать или решать по одному, а прерванный импорт продолжается с места остановки. Полный отчёт о миграции сохраняется лор-документом в новом мире.';
 
   @override
   String get helpBackupTitle => 'Бэкапы и перенос между устройствами';

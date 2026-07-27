@@ -299,4 +299,11 @@ const templateFr = <String, String>{
   'e.g. 4 lb.': 'p. ex. 2 kg',
   'e.g. 500 gp': 'p. ex. 500 po',
   'e.g. 7, regains 1d6+1 at dawn': 'p. ex. 7, récupère 1d6+1 à l\'aube',
+
+  // -------------------------------------- cyberpunk skin terms
+  'Protocol': 'Protocole',
+  'Subsystem': 'Sous-système',
+  'Activation Time': 'Temps d\'activation',
+  'Requirements': 'Prérequis',
+  'Overdrive Actions': 'Actions overdrive',
 };

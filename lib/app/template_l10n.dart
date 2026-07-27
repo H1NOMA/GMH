@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 
+import '../domain/models/world.dart';
 import 'template_l10n_de.dart';
 import 'template_l10n_fr.dart';
 import 'template_l10n_zh.dart';
+import 'theme/gmh_theme.dart';
 
 /// Translations for template-defined strings (section titles, field labels,
 /// hints and select options).
@@ -12,6 +14,11 @@ import 'template_l10n_zh.dart';
 /// language-neutral and worlds survive language switches. The UI translates
 /// them at render time via [trTemplate].
 String trTemplate(BuildContext context, String source) {
+  // Cyberpunk worlds re-skin a handful of tabletop terms before language
+  // translation (stored values stay language-neutral, as always).
+  final skinned = GmhStyle.current == WorldStyle.cyberpunk
+      ? (_cyberOverrides[source] ?? source)
+      : source;
   final map = switch (Localizations.localeOf(context).languageCode) {
     'ru' => _ru,
     'de' => templateDe,
@@ -19,9 +26,19 @@ String trTemplate(BuildContext context, String source) {
     'zh' => templateZh,
     _ => null,
   };
-  if (map == null) return source;
-  return map[source] ?? source;
+  if (map == null) return skinned;
+  return map[skinned] ?? skinned;
 }
+
+/// Flavor swaps for cyberpunk worlds: a spell card reads as a protocol
+/// card, keeping the same underlying fields and stored values.
+const _cyberOverrides = <String, String>{
+  'Spell': 'Protocol',
+  'School': 'Subsystem',
+  'Casting Time': 'Activation Time',
+  'Components': 'Requirements',
+  'Legendary Actions': 'Overdrive Actions',
+};
 
 const _ru = <String, String>{
   // ------------------------------------------------------- section titles
@@ -323,4 +340,11 @@ const _ru = <String, String>{
   'e.g. 4 lb.': 'например, 4 фунта',
   'e.g. 500 gp': 'например, 500 зм',
   'e.g. 7, regains 1d6+1 at dawn': 'например, 7, восстанавливает 1d6+1 на рассвете',
+
+  // -------------------------------------- cyberpunk skin terms
+  'Protocol': 'Протокол',
+  'Subsystem': 'Подсистема',
+  'Activation Time': 'Время активации',
+  'Requirements': 'Требования',
+  'Overdrive Actions': 'Действия овердрайва',
 };

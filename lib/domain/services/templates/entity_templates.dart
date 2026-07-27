@@ -292,9 +292,8 @@ abstract final class EntityTemplates {
         const FieldDef(key: 'tenets', label: 'Tenets & Rites', type: FieldType.longText),
       ]),
     ]),
-    // Doubles as a D&D-style spell card (the TTG importer routes spells
-    // here): the Spell section mirrors the classic stat card, while
-    // Overview keeps the worldbuilding-level fields.
+    // Doubles as a D&D-style spell card: the Spell section mirrors the
+    // classic stat card, while Overview keeps the worldbuilding fields.
     EntityTemplate(kind: EntityKind.magicSystem, sections: [
       const FieldSection('Spell', [
         FieldDef(key: 'level', label: 'Level', type: FieldType.select, options: [

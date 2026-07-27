@@ -225,7 +225,36 @@ class _EntityScaffold extends ConsumerWidget {
       );
     }
 
+    // Spell/creature/item pages lead with the stat card and fields — the
+    // structured data is the point of these entries; the free-text lore
+    // window sits below it.
+    final statFirst = const {
+      EntityKind.magicSystem,
+      EntityKind.creature,
+      EntityKind.item,
+    }.contains(entity.kind);
+
     if (isWide) {
+      if (statFirst) {
+        return Scaffold(
+          appBar: appBar,
+          body: Column(
+            children: [
+              Expanded(
+                flex: 5,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 860),
+                    child: sidePanel,
+                  ),
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(flex: 4, child: document),
+            ],
+          ),
+        );
+      }
       return Scaffold(
         appBar: appBar,
         body: Row(
@@ -249,13 +278,20 @@ class _EntityScaffold extends ConsumerWidget {
         body: Column(
           children: [
             TabBar(tabs: [
-              Tab(text: context.l10n.tabDocument),
-              Tab(text: context.l10n.tabDetails),
+              if (statFirst) ...[
+                Tab(text: context.l10n.tabDetails),
+                Tab(text: context.l10n.tabDocument),
+              ] else ...[
+                Tab(text: context.l10n.tabDocument),
+                Tab(text: context.l10n.tabDetails),
+              ],
             ]),
             Expanded(
               child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
-                children: [document, sidePanel],
+                children: statFirst
+                    ? [sidePanel, document]
+                    : [document, sidePanel],
               ),
             ),
           ],

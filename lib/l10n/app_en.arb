@@ -467,66 +467,6 @@
   "kindSession": "Session",
   "kindSessionPlural": "Sessions",
   "close": "Close",
-  "ttgImportTitle": "Import TTG database",
-  "ttgImportIntro": "Migrate a complete TTG D&D database — campaigns, NPCs, monsters, spells, items, locations, factions, quests, media and every relationship — into a GMH world. Supported sources: SQLite databases (.db, .sqlite, .ttg), JSON exports and ZIP exports with media.",
-  "ttgPickFile": "Select TTG database…",
-  "ttgPreviewCount": "{count} records detected",
-  "@ttgPreviewCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "ttgResumeBanner": "An interrupted import of this file was found. It will resume — records already imported are skipped.",
-  "ttgWorldName": "World name",
-  "ttgDuplicatesLabel": "If a record already exists",
-  "ttgSkip": "Skip",
-  "ttgMerge": "Merge",
-  "ttgReplace": "Replace",
-  "ttgAsk": "Ask every time",
-  "ttgBack": "Back",
-  "ttgStart": "Start import",
-  "ttgResume": "Resume import",
-  "ttgPhaseReading": "Reading source",
-  "ttgPhaseEntities": "Importing records",
-  "ttgPhaseLinks": "Rebuilding relationships",
-  "ttgPhaseValidating": "Validating",
-  "ttgPhaseIndexing": "Building search index",
-  "ttgEta": "~{seconds}s left",
-  "@ttgEta": {
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "ttgErrorLog": "Issues",
-  "ttgDoneTitle": "Migration complete",
-  "ttgInterruptedTitle": "Import interrupted — you can resume it later",
-  "ttgStatImported": "Records imported",
-  "ttgStatLinks": "Links created",
-  "ttgStatMedia": "Media files imported",
-  "ttgStatDocuments": "Documents created",
-  "ttgStatTags": "Tags created",
-  "ttgStatRepaired": "References repaired",
-  "ttgStatSkipped": "Duplicates skipped",
-  "ttgOpenWorld": "Open world",
-  "ttgDuplicateTitle": "Duplicate found",
-  "ttgDuplicateBody": "“{name}” ({collection}) already exists in this world. What should happen?",
-  "@ttgDuplicateBody": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      },
-      "collection": {
-        "type": "String"
-      }
-    }
-  },
-  "ttgApplyToAll": "Apply to all remaining duplicates",
-  "ttgSettingsTitle": "Import TTG database",
-  "ttgSettingsSubtitle": "Migrate a complete TTG D&D database into a new world: all records, relationships, formatting and media",
   "cyberKindCharacter": "Runner",
   "cyberKindCharacterPlural": "Runners",
   "cyberKindLocation": "Sector",
@@ -631,8 +571,6 @@
   "helpConstructorLegend1": "Modules — the building blocks an entry page will have. Disabled modules disappear entirely.",
   "helpConstructorLegend2": "Custom fields with types: text, long text, number, choice list, date, checklist, list of values. Drag to reorder.",
   "helpConstructorLegend3": "Add field — the first fields also become the chips on the section's cards.",
-  "helpImportTitle": "Importing from TTG",
-  "helpImportBody": "Settings → Import migrates a complete TTG D&D database into a new world: campaigns, NPCs, monsters, spells, items, locations, factions, quests, session notes, media and every relationship. SQLite (.db, .sqlite, .ttg), JSON and ZIP exports are supported. Formatting is preserved, references are validated and repaired, duplicates can be skipped, merged or decided per record, and an interrupted import resumes where it stopped. A full migration report is saved as a lore document in the new world.",
   "helpBackupTitle": "Backups & moving between devices",
   "helpBackupBody": "Everything is stored locally — no account, no cloud. The app takes an automatic backup once a day; you can trigger one anytime in Settings. To move or share a world, export a .gmhw archive: one file containing the database and all media. Importing it on another device restores the world exactly, including custom sections and styles. JSON export and the printable PDF world book are also available in Settings.",
   "helpTipsTitle": "Tips & shortcuts",

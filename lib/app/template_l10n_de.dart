@@ -299,4 +299,11 @@ const templateDe = <String, String>{
   'e.g. 4 lb.': 'z. B. 2 kg',
   'e.g. 500 gp': 'z. B. 500 GM',
   'e.g. 7, regains 1d6+1 at dawn': 'z. B. 7, regeneriert 1W6+1 im Morgengrauen',
+
+  // -------------------------------------- cyberpunk skin terms
+  'Protocol': 'Protokoll',
+  'Subsystem': 'Subsystem',
+  'Activation Time': 'Aktivierungszeit',
+  'Requirements': 'Anforderungen',
+  'Overdrive Actions': 'Overdrive-Aktionen',
 };

@@ -900,124 +900,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get close => 'Schließen';
 
   @override
-  String get ttgImportTitle => 'TTG-Datenbank importieren';
-
-  @override
-  String get ttgImportIntro =>
-      'Überträgt eine vollständige TTG-D&D-Datenbank – Kampagnen, NSC, Monster, Zauber, Gegenstände, Orte, Fraktionen, Quests, Medien und sämtliche Beziehungen – in eine GMH-Welt. Unterstützte Quellen: SQLite-Datenbanken (.db, .sqlite, .ttg), JSON-Exporte und ZIP-Exporte mit Medien.';
-
-  @override
-  String get ttgPickFile => 'TTG-Datenbank auswählen…';
-
-  @override
-  String ttgPreviewCount(int count) {
-    return '$count Datensätze erkannt';
-  }
-
-  @override
-  String get ttgResumeBanner =>
-      'Ein unterbrochener Import dieser Datei wurde gefunden. Er wird fortgesetzt – bereits importierte Datensätze werden übersprungen.';
-
-  @override
-  String get ttgWorldName => 'Name der Welt';
-
-  @override
-  String get ttgDuplicatesLabel => 'Wenn ein Datensatz bereits existiert';
-
-  @override
-  String get ttgSkip => 'Überspringen';
-
-  @override
-  String get ttgMerge => 'Zusammenführen';
-
-  @override
-  String get ttgReplace => 'Ersetzen';
-
-  @override
-  String get ttgAsk => 'Jedes Mal fragen';
-
-  @override
-  String get ttgBack => 'Zurück';
-
-  @override
-  String get ttgStart => 'Import starten';
-
-  @override
-  String get ttgResume => 'Import fortsetzen';
-
-  @override
-  String get ttgPhaseReading => 'Quelle wird gelesen';
-
-  @override
-  String get ttgPhaseEntities => 'Datensätze werden importiert';
-
-  @override
-  String get ttgPhaseLinks => 'Beziehungen werden wiederhergestellt';
-
-  @override
-  String get ttgPhaseValidating => 'Überprüfung';
-
-  @override
-  String get ttgPhaseIndexing => 'Suchindex wird aufgebaut';
-
-  @override
-  String ttgEta(int seconds) {
-    return 'noch ~$seconds s';
-  }
-
-  @override
-  String get ttgErrorLog => 'Probleme';
-
-  @override
-  String get ttgDoneTitle => 'Migration abgeschlossen';
-
-  @override
-  String get ttgInterruptedTitle =>
-      'Import unterbrochen – er kann später fortgesetzt werden';
-
-  @override
-  String get ttgStatImported => 'Datensätze importiert';
-
-  @override
-  String get ttgStatLinks => 'Verknüpfungen erstellt';
-
-  @override
-  String get ttgStatMedia => 'Mediendateien importiert';
-
-  @override
-  String get ttgStatDocuments => 'Dokumente erstellt';
-
-  @override
-  String get ttgStatTags => 'Tags erstellt';
-
-  @override
-  String get ttgStatRepaired => 'Verweise repariert';
-
-  @override
-  String get ttgStatSkipped => 'Duplikate übersprungen';
-
-  @override
-  String get ttgOpenWorld => 'Welt öffnen';
-
-  @override
-  String get ttgDuplicateTitle => 'Duplikat gefunden';
-
-  @override
-  String ttgDuplicateBody(String name, String collection) {
-    return '„$name“ ($collection) existiert bereits in dieser Welt. Wie soll verfahren werden?';
-  }
-
-  @override
-  String get ttgApplyToAll => 'Auf alle verbleibenden Duplikate anwenden';
-
-  @override
-  String get ttgSettingsTitle => 'TTG-Datenbank importieren';
-
-  @override
-  String get ttgSettingsSubtitle =>
-      'Überträgt eine vollständige TTG-D&D-Datenbank in eine neue Welt: alle Datensätze, Beziehungen, Formatierungen und Medien';
-
-  @override
   String get cyberKindCharacter => 'Runner';
 
   @override
@@ -1358,13 +1240,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get helpConstructorLegend3 =>
       'Feld hinzufügen – die ersten Felder werden zugleich zu den Chips auf den Karten des Bereichs.';
-
-  @override
-  String get helpImportTitle => 'Import aus TTG';
-
-  @override
-  String get helpImportBody =>
-      'Einstellungen → Import überträgt eine vollständige TTG-D&D-Datenbank in eine neue Welt: Kampagnen, NSC, Monster, Zauber, Gegenstände, Orte, Fraktionen, Quests, Sitzungsnotizen, Medien und sämtliche Beziehungen. Unterstützt werden SQLite (.db, .sqlite, .ttg), JSON- und ZIP-Exporte. Formatierungen bleiben erhalten, Verweise werden geprüft und repariert, Duplikate lassen sich überspringen, zusammenführen oder einzeln entscheiden, und ein unterbrochener Import setzt dort fort, wo er stehen geblieben ist. Ein vollständiger Migrationsbericht wird als Lore-Dokument in der neuen Welt gespeichert.';
 
   @override
   String get helpBackupTitle => 'Backups & Gerätewechsel';

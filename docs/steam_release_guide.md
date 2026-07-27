@@ -168,7 +168,6 @@ no cloud — back up and move worlds as a single archive file.
 [list]
 [*]Custom sections with their own fields via the Section Constructor
 [*]Two world styles: classic Fantasy or neon Cyberpunk — per world
-[*]Import a complete TTG D&D database with relationships and media
 [*]English, Russian, German, French and Chinese interface
 [/list]
 ```
@@ -208,7 +207,6 @@ Game Master's Hub — локальная рабочая среда мастер�
 [list]
 [*]Свои разделы с собственными полями через Конструктор
 [*]Два стиля мира: классическое Фэнтези или неоновый Киберпанк
-[*]Импорт полной базы TTG D&D со связями и медиа
 [*]Интерфейс: русский, английский, немецкий, французский, китайский
 [/list]
 ```
@@ -248,7 +246,6 @@ keine Cloud — Welten sichern und umziehen als eine einzige Archivdatei.
 [list]
 [*]Eigene Bereiche mit eigenen Feldern per Bereichs-Konstruktor
 [*]Zwei Weltstile: klassische Fantasy oder Neon-Cyberpunk — pro Welt
-[*]Import einer kompletten TTG-D&D-Datenbank mit Beziehungen und Medien
 [*]Oberfläche auf Deutsch, Englisch, Russisch, Französisch und Chinesisch
 [/list]
 ```
@@ -289,7 +286,6 @@ fichier d'archive.
 [list]
 [*]Sections personnalisées avec leurs propres champs via le Constructeur
 [*]Deux styles de monde : Fantasy classique ou Cyberpunk néon — par monde
-[*]Import d'une base TTG D&D complète avec relations et médias
 [*]Interface en français, anglais, russe, allemand et chinois
 [/list]
 ```
@@ -328,7 +324,6 @@ Game Master's Hub 是面向桌面 RPG 主持人的本地优先工作台：每个
 [list]
 [*]通过分区构建器创建带自定义字段的专属分区
 [*]两种世界风格：经典奇幻或霓虹赛博朋克——按世界选择
-[*]导入完整的 TTG D&D 数据库，保留关系与媒体
 [*]界面支持简体中文、英语、俄语、德语、法语
 [/list]
 ```

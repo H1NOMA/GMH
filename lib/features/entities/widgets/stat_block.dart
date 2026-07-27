@@ -5,9 +5,9 @@ import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/models/entity.dart';
 import '../../../domain/models/entity_kind.dart';
 
-/// Read-only D&D-style stat card rendered above the editable form for
-/// spells (Magic Systems), creatures and items — the classic TTG look:
-/// the form below stays the editor, this is the presentation.
+/// Read-only stat card rendered alongside the editable form for spells
+/// (Magic Systems), creatures and items — the classic tabletop stat-block
+/// look: the form stays the editor, this is the presentation.
 class StatBlock extends StatelessWidget {
   final Entity entity;
   const StatBlock({super.key, required this.entity});

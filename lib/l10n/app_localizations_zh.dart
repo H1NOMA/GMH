@@ -878,121 +878,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get close => '关闭';
 
   @override
-  String get ttgImportTitle => '导入TTG数据库';
-
-  @override
-  String get ttgImportIntro =>
-      '将完整的TTG龙与地下城数据库——战役、NPC、怪物、法术、物品、地点、势力、任务、媒体及全部关联——迁移到GMH世界中。支持的来源：SQLite数据库（.db、.sqlite、.ttg）、JSON导出以及包含媒体的ZIP导出。';
-
-  @override
-  String get ttgPickFile => '选择TTG数据库…';
-
-  @override
-  String ttgPreviewCount(int count) {
-    return '检测到$count条记录';
-  }
-
-  @override
-  String get ttgResumeBanner => '发现此文件有一次被中断的导入。导入将继续进行——已导入的记录会被跳过。';
-
-  @override
-  String get ttgWorldName => '世界名称';
-
-  @override
-  String get ttgDuplicatesLabel => '当记录已存在时';
-
-  @override
-  String get ttgSkip => '跳过';
-
-  @override
-  String get ttgMerge => '合并';
-
-  @override
-  String get ttgReplace => '替换';
-
-  @override
-  String get ttgAsk => '每次询问';
-
-  @override
-  String get ttgBack => '返回';
-
-  @override
-  String get ttgStart => '开始导入';
-
-  @override
-  String get ttgResume => '继续导入';
-
-  @override
-  String get ttgPhaseReading => '正在读取来源';
-
-  @override
-  String get ttgPhaseEntities => '正在导入记录';
-
-  @override
-  String get ttgPhaseLinks => '正在重建关联';
-
-  @override
-  String get ttgPhaseValidating => '正在校验';
-
-  @override
-  String get ttgPhaseIndexing => '正在构建搜索索引';
-
-  @override
-  String ttgEta(int seconds) {
-    return '约剩$seconds秒';
-  }
-
-  @override
-  String get ttgErrorLog => '问题';
-
-  @override
-  String get ttgDoneTitle => '迁移完成';
-
-  @override
-  String get ttgInterruptedTitle => '导入已中断——稍后可以继续';
-
-  @override
-  String get ttgStatImported => '已导入记录';
-
-  @override
-  String get ttgStatLinks => '已创建链接';
-
-  @override
-  String get ttgStatMedia => '已导入媒体文件';
-
-  @override
-  String get ttgStatDocuments => '已创建文档';
-
-  @override
-  String get ttgStatTags => '已创建标签';
-
-  @override
-  String get ttgStatRepaired => '已修复引用';
-
-  @override
-  String get ttgStatSkipped => '已跳过重复项';
-
-  @override
-  String get ttgOpenWorld => '打开世界';
-
-  @override
-  String get ttgDuplicateTitle => '发现重复项';
-
-  @override
-  String ttgDuplicateBody(String name, String collection) {
-    return '“$name”（$collection）已存在于此世界。要如何处理？';
-  }
-
-  @override
-  String get ttgApplyToAll => '应用到其余所有重复项';
-
-  @override
-  String get ttgSettingsTitle => '导入TTG数据库';
-
-  @override
-  String get ttgSettingsSubtitle => '将完整的TTG龙与地下城数据库迁移到新世界：全部记录、关联、格式与媒体';
-
-  @override
   String get cyberKindCharacter => '狂奔者';
 
   @override
@@ -1314,13 +1199,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get helpConstructorLegend3 => '添加字段——最前面的几个字段还会成为版块卡片上的信息标签。';
-
-  @override
-  String get helpImportTitle => '从TTG导入';
-
-  @override
-  String get helpImportBody =>
-      '设置→导入可以把完整的TTG龙与地下城数据库迁移到新世界：战役、NPC、怪物、法术、物品、地点、势力、任务、跑团笔记、媒体及全部关联。支持SQLite（.db、.sqlite、.ttg）、JSON和ZIP导出。格式会被保留，引用会被校验并修复，重复项可以跳过、合并或逐条决定，中断的导入会从停下的地方继续。完整的迁移报告会作为传说文档保存在新世界中。';
 
   @override
   String get helpBackupTitle => '备份与设备间迁移';

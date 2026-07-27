@@ -253,8 +253,6 @@ abstract final class SettingsKeys {
   /// Entity list sort order per world (`entitySort.<worldId>`).
   static const entitySort = 'entitySort';
 
-  /// Checkpoint of an interrupted TTG migration (JSON), enabling resume.
-  static const ttgImportState = 'ttgImportState';
 
   /// User-defined sidebar tab order (`sidebarOrder.<worldId>.<group>`).
   static const sidebarOrder = 'sidebarOrder';
