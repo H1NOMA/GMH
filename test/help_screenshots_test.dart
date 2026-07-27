@@ -31,6 +31,7 @@ import 'package:gmh/core/utils/ids.dart';
 import 'package:gmh/data/db/app_database.dart';
 import 'package:gmh/data/storage/media_vault.dart';
 import 'package:gmh/domain/models/entity.dart';
+import 'package:gmh/features/shell/workspace_tabs.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/domain/repositories/repositories.dart';
 import 'package:path/path.dart' as p;
@@ -277,6 +278,19 @@ Future<void> _pumpApp(WidgetTester tester, _Demo demo,
       ),
     ),
   ));
+  // Seed the workspace tab strip like the real router wiring does: a
+  // dashboard tab in the background plus the captured page in front.
+  final container = ProviderScope.containerOf(
+      tester.element(find.byType(MaterialApp)));
+  final tabs = container.read(workspaceTabsProvider.notifier);
+  final worldMatch = RegExp(r'^/w/([^/]+)/').firstMatch(initialLocation);
+  if (worldMatch != null) {
+    final home = '/w/${worldMatch.group(1)}/home';
+    tabs.onLocationChanged(home);
+    if (initialLocation != home) tabs.openInNewTab(initialLocation);
+  } else {
+    tabs.onLocationChanged(initialLocation);
+  }
   await _settle(tester);
 }
 

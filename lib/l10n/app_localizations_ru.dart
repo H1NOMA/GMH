@@ -581,6 +581,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get setAsCover => 'Сделать обложкой';
 
   @override
+  String get changeImage => 'Изменить изображение';
+
+  @override
+  String get addImage => 'Добавить изображение';
+
+  @override
   String get editCaption => 'Изменить подпись';
 
   @override

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/shell/pause_menu.dart';
+import '../features/shell/workspace_tabs.dart';
 
 import 'l10n_ext.dart';
 import 'locale_provider.dart';
@@ -51,12 +52,16 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     // it so the app can reopen exactly where the user left off.
     final history = ref.read(navHistoryProvider.notifier);
     history.navigate = (location) => _router.go(location);
+    final tabs = ref.read(workspaceTabsProvider.notifier);
+    tabs.navigate = (location) => _router.go(location);
     String location() =>
         _router.routerDelegate.currentConfiguration.uri.toString();
     history.onLocationChanged(location());
+    tabs.onLocationChanged(location());
     _router.routerDelegate.addListener(() {
       final current = location();
       history.onLocationChanged(current);
+      tabs.onLocationChanged(current);
       persistLastLocation(ref, current);
     });
   }

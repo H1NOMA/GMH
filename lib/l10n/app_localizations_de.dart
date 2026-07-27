@@ -580,6 +580,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get setAsCover => 'Als Titelbild festlegen';
 
   @override
+  String get changeImage => 'Bild ändern';
+
+  @override
+  String get addImage => 'Bild hinzufügen';
+
+  @override
   String get editCaption => 'Beschriftung bearbeiten';
 
   @override

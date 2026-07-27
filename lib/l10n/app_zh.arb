@@ -168,6 +168,8 @@
   "noAttachments": "还没有附件。",
   "dropFilesHere": "将文件拖放到此处即可附加",
   "setAsCover": "设为封面图",
+  "changeImage": "更换图片",
+  "addImage": "添加图片",
   "editCaption": "编辑说明文字",
   "captionLabel": "说明文字",
   "replaceFile": "替换文件",

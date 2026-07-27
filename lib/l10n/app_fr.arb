@@ -168,6 +168,8 @@
   "noAttachments": "Aucune pièce jointe pour l'instant.",
   "dropFilesHere": "Déposez des fichiers ici pour les joindre",
   "setAsCover": "Définir comme image de couverture",
+  "changeImage": "Changer l'image",
+  "addImage": "Ajouter une image",
   "editCaption": "Modifier la légende",
   "captionLabel": "Légende",
   "replaceFile": "Remplacer le fichier",

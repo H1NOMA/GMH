@@ -14,7 +14,9 @@ import '../categories/category_ui.dart';
 import '../tags/tag_manager_sheet.dart';
 import '../categories/manage_categories_sheet.dart';
 import 'history_buttons.dart';
+import 'tab_strip.dart';
 import 'ui_providers.dart';
+import 'workspace_tabs.dart';
 
 /// Adaptive navigation shell:
 ///  * desktop / wide tablet — persistent left sidebar (world navigator);
@@ -41,6 +43,13 @@ class AppShell extends ConsumerWidget {
     // One shared bucket for all pages: scroll positions (and other
     // PageStorage values) survive navigating between sections.
     final content = PageStorage(bucket: appPageBucket, child: child);
+    // Wide layouts get browser-style workspace tabs above the page.
+    final tabbedContent = Column(
+      children: [
+        WorkspaceTabStrip(worldId: worldId),
+        Expanded(child: content),
+      ],
+    );
     final Widget scaffold;
     if (width >= GmhConstants.desktopMinWidth) {
       scaffold = Scaffold(
@@ -48,7 +57,7 @@ class AppShell extends ConsumerWidget {
           children: [
             SizedBox(width: 264, child: _Sidebar(worldId: worldId)),
             const VerticalDivider(width: 1),
-            Expanded(child: content),
+            Expanded(child: tabbedContent),
           ],
         ),
       );
@@ -58,7 +67,7 @@ class AppShell extends ConsumerWidget {
           children: [
             _Rail(worldId: worldId),
             const VerticalDivider(width: 1),
-            Expanded(child: content),
+            Expanded(child: tabbedContent),
           ],
         ),
       );
@@ -90,6 +99,14 @@ _Section? _currentSection(BuildContext context) {
   if (location.endsWith('/home')) return _Section.home;
   return null;
 }
+
+String _sectionRoute(String worldId, _Section section) => switch (section) {
+      _Section.home => Routes.home(worldId),
+      _Section.search => Routes.search(worldId),
+      _Section.graph => Routes.graph(worldId),
+      _Section.campaigns => Routes.campaigns(worldId),
+      _Section.settings => Routes.settings(worldId),
+    };
 
 void _goToSection(BuildContext context, String worldId, _Section section) {
   switch (section) {
@@ -161,7 +178,7 @@ class _Sidebar extends ConsumerWidget {
                     ref.watch(sidebarOrderProvider('$worldId|nav')),
                   ),
                   itemBuilder: (id) =>
-                      _mainNavTile(context, id, section, location),
+                      _mainNavTile(context, ref, id, section, location),
                   onReorder: (order) => ref
                       .read(sidebarOrderProvider('$worldId|nav').notifier)
                       .setOrder(order),
@@ -180,13 +197,17 @@ class _Sidebar extends ConsumerWidget {
             icon: Icons.help_outline,
             label: context.l10n.helpTitle,
             selected: location.endsWith('/help'),
-            onTap: () => context.go(Routes.help(worldId)),
+            onTap: () => ref
+                .read(workspaceTabsProvider.notifier)
+                .openInNewTab(Routes.help(worldId)),
           ),
           _NavTile(
             icon: Icons.settings_outlined,
             label: context.l10n.navSettings,
             selected: section == _Section.settings,
-            onTap: () => context.go(Routes.settings(worldId)),
+            onTap: () => ref
+                .read(workspaceTabsProvider.notifier)
+                .openInNewTab(Routes.settings(worldId)),
           ),
           const SizedBox(height: 8),
         ],
@@ -196,36 +217,38 @@ class _Sidebar extends ConsumerWidget {
 }
 
 extension on _Sidebar {
-  Widget _mainNavTile(
-      BuildContext context, String id, _Section? section, String location) {
+  Widget _mainNavTile(BuildContext context, WidgetRef ref, String id,
+      _Section? section, String location) {
+    void openTab(String target) =>
+        ref.read(workspaceTabsProvider.notifier).openInNewTab(target);
     switch (id) {
       case 'dashboard':
         return _NavTile(
           icon: Icons.dashboard_outlined,
           label: context.l10n.navDashboard,
           selected: section == _Section.home,
-          onTap: () => context.go(Routes.home(worldId)),
+          onTap: () => openTab(Routes.home(worldId)),
         );
       case 'search':
         return _NavTile(
           icon: Icons.search,
           label: context.l10n.navSearch,
           selected: section == _Section.search,
-          onTap: () => context.go(Routes.search(worldId)),
+          onTap: () => openTab(Routes.search(worldId)),
         );
       case 'graph':
         return _NavTile(
           icon: Icons.hub_outlined,
           label: context.l10n.navGraph,
           selected: section == _Section.graph,
-          onTap: () => context.go(Routes.graph(worldId)),
+          onTap: () => openTab(Routes.graph(worldId)),
         );
       case 'campaigns':
         return _NavTile(
           icon: Icons.map_outlined,
           label: context.l10n.navCampaigns,
           selected: section == _Section.campaigns,
-          onTap: () => context.go(Routes.campaigns(worldId)),
+          onTap: () => openTab(Routes.campaigns(worldId)),
         );
       case 'tags':
       default:
@@ -356,7 +379,7 @@ class _NavTile extends StatelessWidget {
   }
 }
 
-class _KindTile extends StatelessWidget {
+class _KindTile extends ConsumerWidget {
   final String worldId;
   final EntityKind kind;
   final int? count;
@@ -364,7 +387,7 @@ class _KindTile extends StatelessWidget {
   const _KindTile({required this.worldId, required this.kind, this.count});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final location = GoRouterState.of(context).uri.path;
     final selected = location.endsWith('/browse/${kind.name}');
     return ListTile(
@@ -382,7 +405,9 @@ class _KindTile extends StatelessWidget {
                   fontSize: 12, color: GmhColors.parchmentFaint)),
       selected: selected,
       selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
-      onTap: () => context.go(Routes.browse(worldId, kind)),
+      onTap: () => ref
+          .read(workspaceTabsProvider.notifier)
+          .openInNewTab(Routes.browse(worldId, kind)),
       visualDensity: const VisualDensity(vertical: -3),
     );
   }
@@ -460,8 +485,10 @@ class _CategoriesSection extends ConsumerWidget {
                           fontSize: 12, color: GmhColors.parchmentFaint)),
               selected: selected,
               selectedTileColor: GmhColors.ember.withValues(alpha: 0.08),
-              onTap: () =>
-                  context.go(Routes.browseCategory(worldId, category.id)),
+              onTap: () => ref
+                  .read(workspaceTabsProvider.notifier)
+                  .openInNewTab(
+                      Routes.browseCategory(worldId, category.id)),
               visualDensity: const VisualDensity(vertical: -3),
             );
           },
@@ -486,18 +513,20 @@ class _CategoriesSection extends ConsumerWidget {
 
 // ------------------------------------------------------------------- rail
 
-class _Rail extends StatelessWidget {
+class _Rail extends ConsumerWidget {
   final String worldId;
   const _Rail({required this.worldId});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final section = _currentSection(context);
     return NavigationRail(
       backgroundColor: GmhColors.surface,
       selectedIndex: section?.index,
-      onDestinationSelected: (index) =>
-          _goToSection(context, worldId, _Section.values[index]),
+      onDestinationSelected: (index) => ref
+          .read(workspaceTabsProvider.notifier)
+          .openInNewTab(
+              _sectionRoute(worldId, _Section.values[index])),
       labelType: NavigationRailLabelType.all,
       leading: Column(
         children: [

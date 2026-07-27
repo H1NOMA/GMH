@@ -1112,6 +1112,18 @@ abstract class AppLocalizations {
   /// **'Set as cover image'**
   String get setAsCover;
 
+  /// No description provided for @changeImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change image'**
+  String get changeImage;
+
+  /// No description provided for @addImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get addImage;
+
   /// No description provided for @editCaption.
   ///
   /// In en, this message translates to:

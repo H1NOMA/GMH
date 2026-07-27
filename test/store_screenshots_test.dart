@@ -29,6 +29,7 @@ import 'package:gmh/core/utils/ids.dart';
 import 'package:gmh/data/db/app_database.dart';
 import 'package:gmh/data/storage/media_vault.dart';
 import 'package:gmh/domain/models/entity.dart';
+import 'package:gmh/features/shell/workspace_tabs.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/domain/models/world.dart';
 import 'package:gmh/domain/repositories/repositories.dart';
@@ -198,6 +199,14 @@ Future<_Demo> _seedRichWorld() async {
         'climate': 'Cold coastal, fog nine months a year',
         'parentLocation': entityRefValue(aldenmark.id),
       });
+  // Extra vistas so the location page's bottom image strip has cells.
+  for (var i = 0; i < 2; i++) {
+    final vista = await media.import(
+        worldId: world.id,
+        fileName: 'ravenport_vista_${i + 1}.png',
+        bytes: await _coverArt(artSeed++));
+    await media.addToGallery(ravenport.id, vista.id);
+  }
   await create(world.id, EntityKind.location, 'The Sunken Bell',
       'Dockside tavern where every rumor is half true',
       cover: true,
@@ -521,6 +530,19 @@ Future<void> _pumpApp(WidgetTester tester, _Demo demo, String initialLocation,
       ),
     ),
   ));
+  // Seed the workspace tab strip like the real router wiring does: a
+  // dashboard tab in the background plus the captured page in front.
+  final container = ProviderScope.containerOf(
+      tester.element(find.byType(MaterialApp)));
+  final tabs = container.read(workspaceTabsProvider.notifier);
+  final worldMatch = RegExp(r'^/w/([^/]+)/').firstMatch(initialLocation);
+  if (worldMatch != null) {
+    final home = '/w/${worldMatch.group(1)}/home';
+    tabs.onLocationChanged(home);
+    if (initialLocation != home) tabs.openInNewTab(initialLocation);
+  } else {
+    tabs.onLocationChanged(initialLocation);
+  }
   await _settle(tester);
 }
 

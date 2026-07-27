@@ -97,6 +97,25 @@ Future<List<XFile>> pickAnyFiles({String? dialogTitle}) async {
   ];
 }
 
+/// Opens the platform file picker restricted to images.
+Future<List<XFile>> pickImageFiles(
+    {String? dialogTitle, bool allowMultiple = true}) async {
+  final picked = await FilePicker.platform.pickFiles(
+    allowMultiple: allowMultiple,
+    type: FileType.image,
+    dialogTitle: dialogTitle,
+    withData: false,
+  );
+  if (picked == null) return [];
+  return [
+    for (final f in picked.files)
+      if (f.path != null)
+        XFile(f.path!, name: f.name)
+      else if (f.bytes != null)
+        XFile.fromData(f.bytes!, name: f.name)
+  ];
+}
+
 /// Opens the OS photo gallery picker (mobile).
 Future<List<XFile>> pickFromPhotoGallery() async {
   if (!(Platform.isAndroid || Platform.isIOS)) return [];

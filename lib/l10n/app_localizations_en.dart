@@ -578,6 +578,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setAsCover => 'Set as cover image';
 
   @override
+  String get changeImage => 'Change image';
+
+  @override
+  String get addImage => 'Add image';
+
+  @override
   String get editCaption => 'Edit caption';
 
   @override

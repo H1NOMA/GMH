@@ -17,6 +17,8 @@ import '../attachments/attachments_panel.dart';
 import '../../domain/models/entity_kind.dart';
 import 'character_profile.dart';
 import 'widgets/attribute_form.dart';
+import 'widgets/cover_square.dart';
+import 'widgets/gallery_strip.dart';
 import 'widgets/relations_panel.dart';
 import 'widgets/stat_block.dart';
 import 'widgets/tag_editor.dart';
@@ -271,39 +273,30 @@ class _EntityScaffold extends ConsumerWidget {
     }.contains(entity.kind);
 
     if (isWide) {
-      if (statFirst) {
-        return Scaffold(
-          appBar: appBar,
-          body: Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 860),
-                    child: sidePanel,
-                  ),
-                ),
-              ),
-              const Divider(height: 1),
-              Expanded(flex: 4, child: document),
-            ],
+      // Same split everywhere: notes/lore on the left, the structured
+      // panel on the right. Stat-card kinds (spells, creatures, items)
+      // get a wider right panel so the stat block reads like a card.
+      final split = Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: document),
+          const VerticalDivider(width: 1),
+          SizedBox(
+            width: statFirst ? 420 : 330,
+            child: sidePanel,
           ),
-        );
-      }
+        ],
+      );
       return Scaffold(
         appBar: appBar,
-        body: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(child: document),
-            const VerticalDivider(width: 1),
-            SizedBox(
-              width: 330,
-              child: sidePanel,
-            ),
-          ],
-        ),
+        // Locations carry a full-width image strip under both panes: the
+        // battle maps and vistas of a place are worth a dedicated shelf.
+        body: entity.kind == EntityKind.location
+            ? Column(children: [
+                Expanded(child: split),
+                EntityGalleryStrip(entity: entity),
+              ])
+            : split,
       );
     }
 
@@ -385,14 +378,25 @@ class _SidePanel extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 40),
       children: [
-        if (entity.summary.isNotEmpty) ...[
-          Text(entity.summary,
-              style: TextStyle(
-                  fontSize: 13,
-                  fontStyle: FontStyle.italic,
-                  color: GmhColors.parchmentDim)),
-          const SizedBox(height: 10),
-        ],
+        // Cover square + summary header. Hovering the square shows a
+        // pencil; clicking it uploads/replaces the entry's cover image.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            EditableCoverSquare(entity: entity),
+            const SizedBox(width: 12),
+            Expanded(
+              child: entity.summary.isEmpty
+                  ? const SizedBox.shrink()
+                  : Text(entity.summary,
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontStyle: FontStyle.italic,
+                          color: GmhColors.parchmentDim)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
         if (blueprint.has(CategoryModule.tags)) TagEditor(entity: entity),
         const SizedBox(height: 6),
         // D&D-style read-only stat card for spells, creatures and items;

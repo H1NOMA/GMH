@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,8 +10,8 @@ import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
 import '../attachments/attachments_panel.dart';
 import '../editor/lore_editor.dart';
-import '../shell/ui_providers.dart';
 import 'widgets/attribute_form.dart';
+import 'widgets/cover_square.dart';
 import 'widgets/relations_panel.dart';
 import 'widgets/tag_editor.dart';
 
@@ -175,7 +173,7 @@ class _ProfileHeader extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          _Portrait(entity: entity),
+          EditableCoverSquare(entity: entity),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -213,43 +211,6 @@ class _ProfileHeader extends ConsumerWidget {
             ),
         ],
       ),
-    );
-  }
-}
-
-/// Portrait = the entity's cover image (set from any image attachment via
-/// "Set as cover" on the Notes tab).
-class _Portrait extends ConsumerWidget {
-  final Entity entity;
-  const _Portrait({required this.entity});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final coverId = entity.coverMediaId;
-    return Container(
-      width: 64,
-      height: 64,
-      decoration: BoxDecoration(
-        color: entity.kind.color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: entity.kind.color.withValues(alpha: 0.4)),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: coverId == null
-          ? Icon(entity.kind.icon, color: entity.kind.color, size: 30)
-          : Builder(builder: (context) {
-              final path =
-                  ref.watch(mediaPathProvider(coverId)).valueOrNull;
-              if (path == null) {
-                return Icon(entity.kind.icon,
-                    color: entity.kind.color, size: 30);
-              }
-              return Image.file(File(path),
-                  fit: BoxFit.cover,
-                  cacheWidth: 192,
-                  errorBuilder: (_, _, _) => Icon(entity.kind.icon,
-                      color: entity.kind.color, size: 30));
-            }),
     );
   }
 }

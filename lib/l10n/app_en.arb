@@ -287,6 +287,8 @@
   "noAttachments": "No attachments yet.",
   "dropFilesHere": "Drop files here to attach them",
   "setAsCover": "Set as cover image",
+  "changeImage": "Change image",
+  "addImage": "Add image",
   "editCaption": "Edit caption",
   "captionLabel": "Caption",
   "replaceFile": "Replace file",

@@ -566,6 +566,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get setAsCover => '设为封面图';
 
   @override
+  String get changeImage => '更换图片';
+
+  @override
+  String get addImage => '添加图片';
+
+  @override
   String get editCaption => '编辑说明文字';
 
   @override
