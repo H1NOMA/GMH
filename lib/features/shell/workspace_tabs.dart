@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// layouts. Semantics:
 ///
 ///  * clicking a sidebar destination opens it in a NEW tab (the current
-///    tab keeps its page) — unless some tab already shows exactly that
-///    location, which is activated instead;
+///    tab keeps its page) — always a fresh, independent tab, so the same
+///    section can be open many times with different entries in each;
 ///  * navigation inside the content (cards, mentions, graph taps, the
 ///    back/forward history) stays in the ACTIVE tab;
 ///  * "+" opens a fresh tab on the world dashboard;
@@ -50,15 +50,9 @@ class WorkspaceTabs extends Notifier<WorkspaceTabsState> {
   }
 
   /// Sidebar destinations: open in a new tab, keeping the current one.
-  /// An existing tab with the same location is activated instead of
-  /// spawning a duplicate.
+  /// Duplicates are deliberate — every tab is independent, so the same
+  /// section can be open in ten tabs, each browsing its own entry.
   void openInNewTab(String location) {
-    if (state.activeLocation == location) return;
-    final existing = state.locations.indexOf(location);
-    if (existing != -1) {
-      activate(existing);
-      return;
-    }
     final locations = List.of(state.locations)..add(location);
     state = WorkspaceTabsState(
         locations: locations, activeIndex: locations.length - 1);

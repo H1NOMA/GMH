@@ -26,39 +26,36 @@ class WorkspaceTabStrip extends ConsumerWidget {
         color: GmhColors.surface,
         border: Border(bottom: BorderSide(color: GmhColors.border)),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: 6, top: 5),
-              itemCount: tabs.locations.length,
-              itemBuilder: (context, index) => _WorkspaceTab(
-                location: tabs.locations[index],
-                active: index == tabs.activeIndex,
-                onTap: () => controller.activate(index),
-                onClose: () => controller.close(
-                  index,
-                  fallbackLocation: Routes.home(worldId),
-                ),
-              ),
+      // "+" trails the last tab like in a browser, scrolling with the
+      // strip instead of sitting pinned at the far edge.
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 6, top: 5, right: 4),
+        itemCount: tabs.locations.length + 1,
+        itemBuilder: (context, index) {
+          if (index == tabs.locations.length) {
+            return IconButton(
+              tooltip: context.l10n.navHome,
+              icon: const Icon(Icons.add, size: 18),
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints:
+                  const BoxConstraints(minWidth: 32, minHeight: 28),
+              // A fresh dashboard tab, like a browser's new tab.
+              onPressed: () =>
+                  controller.openInNewTab(Routes.home(worldId)),
+            );
+          }
+          return _WorkspaceTab(
+            location: tabs.locations[index],
+            active: index == tabs.activeIndex,
+            onTap: () => controller.activate(index),
+            onClose: () => controller.close(
+              index,
+              fallbackLocation: Routes.home(worldId),
             ),
-          ),
-          IconButton(
-            tooltip: context.l10n.navHome,
-            icon: const Icon(Icons.add, size: 18),
-            visualDensity: VisualDensity.compact,
-            // "+" opens a fresh dashboard tab, like a browser's new tab.
-            onPressed: () {
-              final home = Routes.home(worldId);
-              // Force a new tab even if the dashboard is open elsewhere:
-              // duplicate-activation semantics would just jump there,
-              // which is fine too — reuse openInNewTab for consistency.
-              controller.openInNewTab(home);
-            },
-          ),
-          const SizedBox(width: 4),
-        ],
+          );
+        },
       ),
     );
   }

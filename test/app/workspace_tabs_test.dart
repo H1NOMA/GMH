@@ -45,13 +45,21 @@ void main() {
     expect(state().locations, ['/w/1/e/abc', '/w/1/e/beast']);
   });
 
-  test('openInNewTab activates an existing duplicate instead', () {
+  test('openInNewTab always spawns an independent duplicate', () {
     tabs.onLocationChanged('/w/1/home');
-    tabs.openInNewTab('/w/1/search');
-    tabs.activate(0);
-    tabs.openInNewTab('/w/1/search');
-    expect(state().locations, ['/w/1/home', '/w/1/search']);
-    expect(state().activeIndex, 1);
+    tabs.openInNewTab('/w/1/browse/creature');
+    tabs.openInNewTab('/w/1/browse/creature');
+    expect(state().locations,
+        ['/w/1/home', '/w/1/browse/creature', '/w/1/browse/creature']);
+    expect(state().activeIndex, 2);
+
+    // Each duplicate browses on its own: navigating in the newest tab
+    // leaves its twin untouched.
+    tabs.onLocationChanged('/w/1/e/beastB');
+    tabs.activate(1);
+    tabs.onLocationChanged('/w/1/e/beastA');
+    expect(state().locations,
+        ['/w/1/home', '/w/1/e/beastA', '/w/1/e/beastB']);
   });
 
   test('activate switches tabs and navigates', () {
