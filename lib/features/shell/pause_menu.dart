@@ -60,7 +60,7 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
   }
 
   Future<void> _exit() async {
-    // A Steam app must terminate for real — no tray, no background
+    // Quitting must terminate for real — no tray, no background
     // process. exit(0) skips widget disposal, so pending debounced
     // saves are flushed explicitly first.
     try {

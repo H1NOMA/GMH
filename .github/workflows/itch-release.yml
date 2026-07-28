@@ -1,0 +1,79 @@
+# Uploads the Windows build to itch.io with butler.
+#
+# One-time setup:
+#   1. Create the project page (username.itch.io/gmh, kind: Downloadable).
+#   2. Generate an API key: itch.io -> Settings -> API keys.
+#   3. Add it as the BUTLER_API_KEY repository secret.
+#   4. Set ITCH_TARGET below to your "username/gmh".
+#
+# Run it manually (workflow_dispatch) after a Windows Release run, or push
+# a v* tag to publish both at once. Butler versions the upload from
+# pubspec, so itch.io shows proper version history and delta updates.
+name: itch.io Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch: {}
+
+env:
+  ITCH_TARGET: h1noma/gmh
+
+jobs:
+  publish-itch:
+    name: Build & push to itch.io (Windows x64)
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read app version from pubspec
+        id: version
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path pubspec.yaml -Pattern '^version:\s*(\S+)').Matches[0].Groups[1].Value
+          $version = $version.Split('+')[0]
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "App version: $version"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.5
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows (release)
+        run: flutter build windows --release
+
+      - name: Bundle VC++ runtime DLLs
+        shell: pwsh
+        run: |
+          $releaseDir = "build/windows/x64/runner/Release"
+          foreach ($dll in @('msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll')) {
+            $target = Join-Path $releaseDir $dll
+            if (-not (Test-Path $target)) {
+              Copy-Item "C:\Windows\System32\$dll" $target
+              Write-Host "Bundled $dll"
+            }
+          }
+
+      - name: Download butler
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://broth.itch.zone/butler/windows-amd64/LATEST/archive/default" -OutFile butler.zip
+          Expand-Archive butler.zip -DestinationPath butler
+          butler/butler.exe -V
+
+      - name: Push to itch.io
+        shell: pwsh
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          butler/butler.exe push "build/windows/x64/runner/Release" `
+            "$env:ITCH_TARGET:windows" `
+            --userversion "${{ steps.version.outputs.version }}"

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generates the full Steam store asset set for Game Master's Hub.
+"""Generates the store-page asset set for Game Master's Hub (itch.io).
 
 Design language: calm near-minimalism on deep ink, one muted amber accent,
 a thin "world-web" mark (hexagon + linked nodes — the app's relationship
 graph distilled), generous spacing, Roboto. No gloss, no ornament.
 
-Run from the repo root:  python3 steam/store_assets/generate.py
+Run from the repo root:  python3 marketing/assets/generate.py
 """
 
 import math
@@ -169,7 +169,7 @@ def main():
     OUT.mkdir(exist_ok=True)
 
     # App icon / community avatar (square, mark only).
-    for size, name in [(512, 'icon_512.png'), (184, 'community_avatar_184.png')]:
+    for size, name in [(512, 'icon_512.png'), (184, 'avatar_184.png')]:
         img = background(size, size, seed=11, web_nodes=10)
         m = mark(int(size * 0.72))
         img.paste(m, ((size - m.width) // 2, (size - m.height) // 2), m)
@@ -187,21 +187,19 @@ def main():
     img.save(OUT / 'logo_1280x720.png')
     print('logo_1280x720.png (transparent)')
 
-    # Store capsules.
-    capsule(920, 430, 'header_capsule_920x430.png',
-            layout='left', mark_ratio=0.52, title_px=54, sub=True, seed=3)
-    capsule(462, 174, 'small_capsule_462x174.png',
-            layout='left', mark_ratio=0.62, title_px=30, seed=5)
-    capsule(1232, 706, 'main_capsule_1232x706.png',
+    # Store-page art. itch.io sizes: cover 630x500 (game card),
+    # banner up to 960x400 on the page header; the rest are generic
+    # marketing crops (social preview, wide header, tall poster).
+    capsule(630, 500, 'cover_630x500.png',
+            layout='center', mark_ratio=0.38, title_px=44, sub=True, seed=8)
+    capsule(960, 400, 'banner_960x400.png',
+            layout='left', mark_ratio=0.52, title_px=52, sub=True, seed=3)
+    capsule(1280, 720, 'social_1280x720.png',
             layout='center', mark_ratio=0.40, title_px=64, sub=True, seed=8)
-    capsule(748, 896, 'vertical_capsule_748x896.png',
-            layout='center', mark_ratio=0.34, title_px=44, sub=True, seed=9)
-    capsule(600, 900, 'library_capsule_600x900.png',
-            layout='center', mark_ratio=0.34, title_px=36, sub=True, seed=10)
-    capsule(920, 430, 'library_header_920x430.png',
+    capsule(920, 430, 'header_920x430.png',
             layout='left', mark_ratio=0.52, title_px=54, sub=True, seed=3)
-    capsule(3840, 1240, 'library_hero_3840x1240.png',
-            layout='center', mark_ratio=0.52, title_px=120, sub=True, seed=13)
+    capsule(600, 900, 'poster_600x900.png',
+            layout='center', mark_ratio=0.34, title_px=36, sub=True, seed=10)
 
 
 if __name__ == '__main__':

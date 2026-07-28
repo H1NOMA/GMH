@@ -1,4 +1,5 @@
-// Generates the 1920x1080 Steam store screenshots (steam/screenshots/).
+// Generates the 1920x1080 store-page screenshots (marketing/screenshots/)
+// used on the itch.io page and in the README.
 //
 // Like test/help_screenshots_test.dart, this is not part of the normal
 // suite — every test is skipped unless GMH_STORE_SHOTS is set:
@@ -560,7 +561,7 @@ Future<void> _capture(WidgetTester tester, String name) async {
         as RenderRepaintBoundary;
     final image = await boundary.toImage();
     final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
-    final file = File(p.join('steam', 'screenshots', '$name.png'));
+    final file = File(p.join('marketing', 'screenshots', '$name.png'));
     await file.parent.create(recursive: true);
     await file.writeAsBytes(bytes!.buffer.asUint8List());
   });
