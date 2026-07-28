@@ -6,8 +6,6 @@ lore — cross-linked into one navigable web with a relationship graph,
 campaign dashboards, a rich-text editor and instant full-text search.
 Everything is stored locally on your device: no account, no cloud.
 
-![Characters](marketing/screenshots/02_characters_grid.png)
-
 ## Download
 
 Windows x64 builds (installer + portable ZIP) are published on the
@@ -44,8 +42,6 @@ and also builds for macOS and Linux from source.
   including localized D&D terminology.
 - **Built-in user guide** — the `?` icon opens an illustrated manual with
   real screenshots.
-
-![Entry page](marketing/screenshots/03_entry_document.png)
 
 ## Building from source
 

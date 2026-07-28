@@ -47,3 +47,6 @@ app.*.map.json
 # Generated help screenshots land in assets/help/ via the docs in
 # test/help_screenshots_test.dart; the raw goldens are build output.
 test/goldens/
+
+# Store screenshots are generated locally (GMH_STORE_SHOTS=1) and not tracked.
+marketing/screenshots/
