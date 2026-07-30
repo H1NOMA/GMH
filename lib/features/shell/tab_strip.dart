@@ -143,7 +143,10 @@ class _WorkspaceTab extends ConsumerWidget {
             border: active ? Border.all(color: GmhColors.border) : null,
           ),
           clipBehavior: active ? Clip.antiAlias : Clip.none,
+          // centerLeft keeps the icon+label row vertically centered in the
+          // tab; the default topLeft pushed text against the top border.
           child: Stack(
+            alignment: Alignment.centerLeft,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 2),
