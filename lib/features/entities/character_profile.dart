@@ -24,8 +24,11 @@ class CharacterProfile extends ConsumerStatefulWidget {
   final String worldId;
   final Entity entity;
 
-  const CharacterProfile(
-      {super.key, required this.worldId, required this.entity});
+  const CharacterProfile({
+    super.key,
+    required this.worldId,
+    required this.entity,
+  });
 
   @override
   ConsumerState<CharacterProfile> createState() => _CharacterProfileState();
@@ -35,17 +38,19 @@ class _CharacterProfileState extends ConsumerState<CharacterProfile>
     with SingleTickerProviderStateMixin {
   static const _tabCount = 9;
 
-  late final TabController _tabController = TabController(
-    length: _tabCount,
-    vsync: this,
-    // Restore the tab that was active when this profile was last open.
-    initialIndex:
-        ref.read(profileTabProvider(widget.entity.id)).clamp(0, _tabCount - 1),
-  )..addListener(() {
-      ref
-          .read(profileTabProvider(widget.entity.id).notifier)
-          .set(_tabController.index);
-    });
+  late final TabController _tabController =
+      TabController(
+        length: _tabCount,
+        vsync: this,
+        // Restore the tab that was active when this profile was last open.
+        initialIndex: ref
+            .read(profileTabProvider(widget.entity.id))
+            .clamp(0, _tabCount - 1),
+      )..addListener(() {
+        ref
+            .read(profileTabProvider(widget.entity.id).notifier)
+            .set(_tabController.index);
+      });
 
   @override
   void dispose() {
@@ -60,13 +65,16 @@ class _CharacterProfileState extends ConsumerState<CharacterProfile>
     final tabs = <(String, Widget)>[
       (
         trTemplate(context, 'General Information'),
-        _SectionList(children: [
-          TagEditor(entity: entity),
-          const SizedBox(height: 6),
-          AttributeForm(
+        _SectionList(
+          children: [
+            TagEditor(entity: entity),
+            const SizedBox(height: 6),
+            AttributeForm(
               entity: entity,
-              sectionTitles: const ['General Information']),
-        ]),
+              sectionTitles: const ['General Information'],
+            ),
+          ],
+        ),
       ),
       (
         context.l10n.tabBiography,
@@ -74,53 +82,73 @@ class _CharacterProfileState extends ConsumerState<CharacterProfile>
       ),
       (
         trTemplate(context, 'Statistics'),
-        _SectionList(children: [
-          _AbilityScoreGrid(entity: entity),
-          AttributeForm(entity: entity, sectionTitles: const ['Combat']),
-        ]),
+        _SectionList(
+          children: [
+            _AbilityScoreGrid(entity: entity),
+            AttributeForm(entity: entity, sectionTitles: const ['Combat']),
+          ],
+        ),
       ),
       (
         trTemplate(context, 'Beliefs'),
-        _SectionList(children: [
-          AttributeForm(
-              entity: entity, sectionTitles: const ['Beliefs', 'Roleplay']),
-        ]),
+        _SectionList(
+          children: [
+            AttributeForm(
+              entity: entity,
+              sectionTitles: const ['Beliefs', 'Roleplay'],
+            ),
+          ],
+        ),
       ),
       (
         trTemplate(context, 'Relationships'),
-        _SectionList(children: [
-          AttributeForm(
-              entity: entity, sectionTitles: const ['Relationships']),
-          const SizedBox(height: 14),
-          RelationsPanel(entity: entity),
-        ]),
+        _SectionList(
+          children: [
+            AttributeForm(
+              entity: entity,
+              sectionTitles: const ['Relationships'],
+            ),
+            const SizedBox(height: 14),
+            RelationsPanel(entity: entity),
+          ],
+        ),
       ),
       (
         trTemplate(context, 'Inventory'),
-        _SectionList(children: [
-          AttributeForm(entity: entity, sectionTitles: const ['Inventory']),
-        ]),
+        _SectionList(
+          children: [
+            AttributeForm(entity: entity, sectionTitles: const ['Inventory']),
+          ],
+        ),
       ),
       (
         trTemplate(context, 'Abilities & Magic'),
-        _SectionList(children: [
-          AttributeForm(
-              entity: entity, sectionTitles: const ['Abilities & Magic']),
-        ]),
+        _SectionList(
+          children: [
+            AttributeForm(
+              entity: entity,
+              sectionTitles: const ['Abilities & Magic'],
+            ),
+          ],
+        ),
       ),
       (
         trTemplate(context, 'Timeline'),
-        _SectionList(children: [
-          AttributeForm(entity: entity, sectionTitles: const ['Timeline']),
-        ]),
+        _SectionList(
+          children: [
+            AttributeForm(entity: entity, sectionTitles: const ['Timeline']),
+          ],
+        ),
       ),
       (
         trTemplate(context, 'Notes'),
-        _SectionList(children: [
-          AttributeForm(entity: entity, sectionTitles: const ['Notes']),
-          const SizedBox(height: 14),
-          AttachmentsPanel(entity: entity),
-        ]),
+        _SectionList(
+          children: [
+            AttributeForm(entity: entity, sectionTitles: const ['Notes']),
+            const SizedBox(height: 14),
+            AttachmentsPanel(entity: entity),
+          ],
+        ),
       ),
     ];
 
@@ -154,8 +182,7 @@ class _ProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final race = entity.attributes['race'] as String? ?? '';
-    final characterClass =
-        entity.attributes['characterClass'] as String? ?? '';
+    final characterClass = entity.attributes['characterClass'] as String? ?? '';
     final title = entity.attributes['title'] as String? ?? '';
     final status = entity.attributes['status'] as String? ?? '';
 
@@ -179,34 +206,45 @@ class _ProfileHeader extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(entity.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.headlineSmall),
+                Text(
+                  entity.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 if (subtitleParts.isNotEmpty)
-                  Text(subtitleParts.join(' · '),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 12.5,
-                          fontStyle: FontStyle.italic,
-                          color: GmhColors.parchmentDim)),
+                  Text(
+                    subtitleParts.join(' · '),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontStyle: FontStyle.italic,
+                      color: GmhColors.parchmentDim,
+                    ),
+                  ),
                 if (entity.summary.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text(entity.summary,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 12, color: GmhColors.parchmentFaint)),
+                    child: Text(
+                      entity.summary,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: GmhColors.parchmentFaint,
+                      ),
+                    ),
                   ),
               ],
             ),
           ),
           if (status.isNotEmpty)
             Chip(
-              label: Text(trTemplate(context, status),
-                  style: const TextStyle(fontSize: 11.5)),
+              label: Text(
+                trTemplate(context, status),
+                style: const TextStyle(fontSize: 11.5),
+              ),
               visualDensity: VisualDensity.compact,
             ),
         ],
@@ -230,26 +268,45 @@ class _SectionList extends StatelessWidget {
   }
 }
 
-class _BiographyTab extends ConsumerWidget {
+class _BiographyTab extends ConsumerStatefulWidget {
   final String worldId;
   final Entity entity;
 
   const _BiographyTab({required this.worldId, required this.entity});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_BiographyTab> createState() => _BiographyTabState();
+}
+
+class _BiographyTabState extends ConsumerState<_BiographyTab> {
+  // Memoized per entity — see _DocumentPane: re-firing the future on
+  // every rebuild recreates the editor mid-typing.
+  late Future<DocumentModel> _doc = ref
+      .read(documentRepositoryProvider)
+      .getOrCreate(widget.entity.id);
+
+  @override
+  void didUpdateWidget(covariant _BiographyTab old) {
+    super.didUpdateWidget(old);
+    if (old.entity.id != widget.entity.id) {
+      _doc = ref.read(documentRepositoryProvider).getOrCreate(widget.entity.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Load once: the editor owns the document while open.
     return FutureBuilder<DocumentModel>(
-      future: ref.read(documentRepositoryProvider).getOrCreate(entity.id),
+      future: _doc,
       builder: (context, snapshot) {
         final doc = snapshot.data;
         if (doc == null) {
           return const Center(child: CircularProgressIndicator());
         }
         return LoreEditor(
-          key: ValueKey('bio-${entity.id}'),
-          worldId: worldId,
-          entityId: entity.id,
+          key: ValueKey('bio-${widget.entity.id}'),
+          worldId: widget.worldId,
+          entityId: widget.entity.id,
           initialContentJson: doc.contentJson,
         );
       },
@@ -280,32 +337,37 @@ class _AbilityScoreGrid extends ConsumerWidget {
   }
 
   Future<void> _edit(
-      BuildContext context, WidgetRef ref, String key, String label) async {
+    BuildContext context,
+    WidgetRef ref,
+    String key,
+    String label,
+  ) async {
     final current = entity.attributes[key];
-    final controller =
-        TextEditingController(text: current?.toString() ?? '');
+    final controller = TextEditingController(text: current?.toString() ?? '');
     ModalRoute<Object?>? dialogRoute;
     final saved = await showDialog<bool>(
       context: context,
       builder: (context) {
         dialogRoute ??= ModalRoute.of(context);
         return AlertDialog(
-        title: Text(label),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          keyboardType: TextInputType.number,
-          onSubmitted: (_) => Navigator.pop(context, true),
-        ),
-        actions: [
-          TextButton(
+          title: Text(label),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            onSubmitted: (_) => Navigator.pop(context, true),
+          ),
+          actions: [
+            TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text(context.l10n.cancel)),
-          FilledButton(
+              child: Text(context.l10n.cancel),
+            ),
+            FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text(context.l10n.save)),
-        ],
-      );
+              child: Text(context.l10n.save),
+            ),
+          ],
+        );
       },
     );
     final text = controller.text.trim();
@@ -346,8 +408,8 @@ class _AbilityScoreGrid extends ConsumerWidget {
                   modifier: entity.attributes[key] is num
                       ? _modifier(entity.attributes[key] as num)
                       : null,
-                  onTap: () => _edit(
-                      context, ref, key, trTemplate(context, label)),
+                  onTap: () =>
+                      _edit(context, ref, key, trTemplate(context, label)),
                 ),
             ],
           );
@@ -384,36 +446,43 @@ class _AbilityBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(label,
-                style: TextStyle(
-                    fontSize: 10.5,
-                    letterSpacing: 1.2,
-                    fontWeight: FontWeight.w700,
-                    color: GmhColors.parchmentFaint)),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10.5,
+                letterSpacing: 1.2,
+                fontWeight: FontWeight.w700,
+                color: GmhColors.parchmentFaint,
+              ),
+            ),
             const SizedBox(height: 2),
-            Text(score?.toString() ?? '—',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  fontFamilyFallback: GmhTheme.serifFallback,
-                  color: score == null
-                      ? GmhColors.parchmentFaint
-                      : GmhColors.parchment,
-                )),
+            Text(
+              score?.toString() ?? '—',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                fontFamilyFallback: GmhTheme.serifFallback,
+                color: score == null
+                    ? GmhColors.parchmentFaint
+                    : GmhColors.parchment,
+              ),
+            ),
             if (modifier != null)
               Container(
                 margin: const EdgeInsets.only(top: 2),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
                 decoration: BoxDecoration(
                   color: GmhColors.ember.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(999),
                 ),
-                child: Text(modifier!,
-                    style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w600,
-                        color: GmhColors.emberBright)),
+                child: Text(
+                  modifier!,
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    color: GmhColors.emberBright,
+                  ),
+                ),
               ),
           ],
         ),

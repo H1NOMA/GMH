@@ -581,6 +581,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get setAsCover => 'Сделать обложкой';
 
   @override
+  String get newTab => 'Новая вкладка';
+
+  @override
   String get changeImage => 'Изменить изображение';
 
   @override

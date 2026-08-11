@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n_ext.dart';
-import '../../app/nav_state.dart';
+import 'workspace_tabs.dart';
 
-/// Browser-style back/forward controls fed by the navigation history.
+/// Browser-style back/forward controls fed by the ACTIVE TAB's history.
 /// Lives at the top-left of every page's app bar (like Obsidian and the
 /// browser chrome users already know), plus the rail and the bottom bar.
 class HistoryButtons extends ConsumerWidget {
@@ -14,8 +14,8 @@ class HistoryButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(navHistoryProvider);
-    final controller = ref.read(navHistoryProvider.notifier);
+    final history = ref.watch(workspaceTabsProvider);
+    final controller = ref.read(workspaceTabsProvider.notifier);
     final size = compact ? 18.0 : 19.0;
     return Flex(
       direction: vertical ? Axis.vertical : Axis.horizontal,

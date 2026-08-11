@@ -129,7 +129,7 @@ class WorldPickerScreen extends ConsumerWidget {
                   label: context.l10n.worldStyleFantasy,
                   hint: context.l10n.worldStyleFantasyHint,
                   icon: Icons.auto_stories,
-                  accent: gmhDarkPalette.ember,
+                  accent: adaptiveAccent(gmhDarkPalette.ember),
                   selected: style == WorldStyle.fantasy,
                   onTap: () =>
                       setDialogState(() => style = WorldStyle.fantasy),
@@ -139,7 +139,7 @@ class WorldPickerScreen extends ConsumerWidget {
                   label: context.l10n.worldStyleCyberpunk,
                   hint: context.l10n.worldStyleCyberpunkHint,
                   icon: Icons.memory,
-                  accent: gmhCyberDarkPalette.ember,
+                  accent: adaptiveAccent(gmhCyberDarkPalette.ember),
                   selected: style == WorldStyle.cyberpunk,
                   onTap: () =>
                       setDialogState(() => style = WorldStyle.cyberpunk),
@@ -239,7 +239,7 @@ class WorldPickerScreen extends ConsumerWidget {
                                         : Icons.public,
                                     color:
                                         world.style == WorldStyle.cyberpunk
-                                            ? gmhCyberDarkPalette.ember
+                                            ? adaptiveAccent(gmhCyberDarkPalette.ember)
                                             : GmhColors.ember,
                                   ),
                                   title: Text(world.name,

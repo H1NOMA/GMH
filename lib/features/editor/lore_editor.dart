@@ -59,12 +59,22 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   /// flush-save and checkpoint.
   late final DocumentService _documents;
 
+  /// Save chain: every save is appended to the previous one, so writes
+  /// never interleave and a flush can await whatever is still in flight
+  /// (an armed timer alone is not the only pending state — exit must not
+  /// kill the process mid-write).
+  Future<void> _saveChain = Future.value();
+
   /// Flushes the debounced autosave immediately; registered globally so
   /// the pause menu can persist pending edits before backup or exit.
   Future<void> _flushNow() async {
     var pending = false;
     _autosave.flush(() => pending = true);
-    if (pending) await _save();
+    if (pending) {
+      await _save();
+    } else {
+      await _saveChain;
+    }
   }
 
   @override
@@ -74,8 +84,9 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     saveFlushHooks.add(_flushNow);
     Document document;
     try {
-      document =
-          Document.fromJson(jsonDecode(widget.initialContentJson) as List);
+      document = Document.fromJson(
+        jsonDecode(widget.initialContentJson) as List,
+      );
     } catch (_) {
       document = Document();
     }
@@ -114,21 +125,37 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     unawaited(_save());
   }
 
-  Future<void> _save() async {
+  Future<void> _save() {
+    _saveChain = _saveChain.then((_) => _doSave());
+    return _saveChain;
+  }
+
+  Future<void> _doSave() async {
     final json = jsonEncode(_controller.document.toDelta().toJson());
     if (json == _lastSavedJson) return;
-    _lastSavedJson = json;
-    final result =
-        await _documents.save(entityId: widget.entityId, contentJson: json);
-    if (result.isErr && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(localizedError(context, result.error))));
+    final result = await _documents.save(
+      entityId: widget.entityId,
+      contentJson: json,
+    );
+    if (result.isErr) {
+      // Deliberately NOT marking the content as saved: the next change or
+      // flush retries the write instead of silently losing it.
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(localizedError(context, result.error))),
+        );
+        _autosave(_save);
+      }
+      return;
     }
+    _lastSavedJson = json;
   }
 
   Future<String?> _importPastedImage(Uint8List bytes) async {
     if (bytes.isEmpty) return null;
-    final media = await ref.read(mediaRepositoryProvider).import(
+    final media = await ref
+        .read(mediaRepositoryProvider)
+        .import(
           worldId: widget.worldId,
           fileName: 'pasted-${DateTime.now().millisecondsSinceEpoch}.png',
           bytes: bytes,
@@ -137,20 +164,27 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   }
 
   Future<void> _linkEntity() async {
-    final entity = await showEntityPickerDialog(context,
-        worldId: widget.worldId, title: context.l10n.insertLinkTitle);
-    if (entity == null) return;
+    final entity = await showEntityPickerDialog(
+      context,
+      worldId: widget.worldId,
+      title: context.l10n.insertLinkTitle,
+    );
+    if (entity == null || !mounted) return;
     insertEntityLink(_controller, entity);
     _focusNode.requestFocus();
   }
 
   Future<void> _insertImage() async {
-    final files = await pickAnyFiles(dialogTitle: context.l10n.editorInsertImage);
+    final files = await pickAnyFiles(
+      dialogTitle: context.l10n.editorInsertImage,
+    );
     await _embedFiles(files, imagesOnly: true);
   }
 
   Future<void> _attachFile() async {
-    final files = await pickAnyFiles(dialogTitle: context.l10n.editorAttachFile);
+    final files = await pickAnyFiles(
+      dialogTitle: context.l10n.editorAttachFile,
+    );
     await _embedFiles(files);
   }
 
@@ -158,8 +192,14 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   /// images inline, everything else as attachment chips.
   Future<void> _embedFiles(List<XFile> files, {bool imagesOnly = false}) async {
     if (files.isEmpty) return;
-    final imported = await importXFiles(ref,
-        worldId: widget.worldId, files: files);
+    final imported = await importXFiles(
+      ref,
+      worldId: widget.worldId,
+      files: files,
+    );
+    // A slow import can outlive this editor (user navigated away): the
+    // controller is disposed then, and inserting would throw.
+    if (!mounted) return;
     for (final item in imported) {
       if (isImageMime(item.mimeType)) {
         insertVaultImage(_controller, item.id);
@@ -167,6 +207,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
         insertFileAttachment(_controller, item);
       }
     }
+    _focusNode.requestFocus();
   }
 
   @override
@@ -221,26 +262,35 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
                 QuillToolbarCustomButtonOptions(
                   icon: const Icon(Icons.history, size: 18),
                   tooltip: context.l10n.editorVersionHistory,
-                  onPressed: () => showVersionHistorySheet(
-                    context,
-                    ref,
-                    entityId: widget.entityId,
-                    onRestore: (contentJson) {
-                      try {
-                        final restored =
-                            Document.fromJson(jsonDecode(contentJson) as List);
-                        // The changes stream belongs to the Document
-                        // instance: without re-subscribing, no edit made
-                        // after a restore would ever reach autosave.
-                        _changes?.cancel();
-                        _controller.document = restored;
-                        _changes = _controller.document.changes.listen((_) {
+                  onPressed: () async {
+                    // Pending edits must reach the DB first: the sheet's
+                    // "before restore" checkpoint reads the stored
+                    // document, not the live controller — restoring while
+                    // typing must not lose the unflushed tail.
+                    await _flushNow();
+                    if (!context.mounted) return;
+                    await showVersionHistorySheet(
+                      context,
+                      ref,
+                      entityId: widget.entityId,
+                      onRestore: (contentJson) {
+                        try {
+                          final restored = Document.fromJson(
+                            jsonDecode(contentJson) as List,
+                          );
+                          // The changes stream belongs to the Document
+                          // instance: without re-subscribing, no edit made
+                          // after a restore would ever reach autosave.
+                          _changes?.cancel();
+                          _controller.document = restored;
+                          _changes = _controller.document.changes.listen((_) {
+                            _autosave(_save);
+                          });
                           _autosave(_save);
-                        });
-                        _autosave(_save);
-                      } catch (_) {}
-                    },
-                  ),
+                        } catch (_) {}
+                      },
+                    );
+                  },
                 ),
               ],
             ),

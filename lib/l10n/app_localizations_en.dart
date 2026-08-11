@@ -578,6 +578,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setAsCover => 'Set as cover image';
 
   @override
+  String get newTab => 'New tab';
+
+  @override
   String get changeImage => 'Change image';
 
   @override

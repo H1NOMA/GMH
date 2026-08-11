@@ -48,10 +48,9 @@ class _GmhAppState extends ConsumerState<GmhApp> {
   @override
   void initState() {
     super.initState();
-    // Feed every location change into the browser-style history and persist
-    // it so the app can reopen exactly where the user left off.
-    final history = ref.read(navHistoryProvider.notifier);
-    history.navigate = (location) => _router.go(location);
+    // Feed every location change into the workspace tabs (each tab keeps
+    // its own back/forward history) and persist it so the app can reopen
+    // exactly where the user left off.
     final tabs = ref.read(workspaceTabsProvider.notifier);
     tabs.navigate = (location) => _router.go(location);
     String location() =>
@@ -59,7 +58,6 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     void record() {
       if (!mounted) return;
       final current = location();
-      history.onLocationChanged(current);
       tabs.onLocationChanged(current);
       persistLastLocation(ref, current);
     }
@@ -142,10 +140,10 @@ class _GmhAppState extends ConsumerState<GmhApp> {
         ...WidgetsApp.defaultActions,
         _BackIntent: CallbackAction<_BackIntent>(
             onInvoke: (_) =>
-                ref.read(navHistoryProvider.notifier).goBack()),
+                ref.read(workspaceTabsProvider.notifier).goBack()),
         _ForwardIntent: CallbackAction<_ForwardIntent>(
             onInvoke: (_) =>
-                ref.read(navHistoryProvider.notifier).goForward()),
+                ref.read(workspaceTabsProvider.notifier).goForward()),
         _QuickSearchIntent: CallbackAction<_QuickSearchIntent>(
             onInvoke: (_) => _goToSearch()),
       },
@@ -171,9 +169,9 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             onPointerDown: (event) {
               if (event.kind != PointerDeviceKind.mouse) return;
               if (event.buttons == kBackMouseButton) {
-                ref.read(navHistoryProvider.notifier).goBack();
+                ref.read(workspaceTabsProvider.notifier).goBack();
               } else if (event.buttons == kForwardMouseButton) {
-                ref.read(navHistoryProvider.notifier).goForward();
+                ref.read(workspaceTabsProvider.notifier).goForward();
               }
             },
             child: child!,

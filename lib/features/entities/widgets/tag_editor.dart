@@ -17,49 +17,63 @@ class TagEditor extends ConsumerWidget {
     final existing =
         ref.read(worldTagsProvider(entity.worldId)).valueOrNull ?? [];
     final controller = TextEditingController();
+    ModalRoute<Object?>? dialogRoute;
     final name = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.addTagTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: controller,
-              autofocus: true,
-              decoration:
-                  InputDecoration(hintText: context.l10n.tagNameHint),
-              onSubmitted: (text) => Navigator.pop(context, text),
-            ),
-            if (existing.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  for (final tag in existing.take(16))
-                    ActionChip(
-                      label: Text(tag.name,
-                          style: TextStyle(
-                              fontSize: 11.5, color: Color(tag.color))),
-                      onPressed: () => Navigator.pop(context, tag.name),
-                    ),
-                ],
+      builder: (context) {
+        dialogRoute ??= ModalRoute.of(context);
+        return AlertDialog(
+          title: Text(context.l10n.addTagTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: controller,
+                autofocus: true,
+                decoration: InputDecoration(hintText: context.l10n.tagNameHint),
+                onSubmitted: (text) => Navigator.pop(context, text),
               ),
+              if (existing.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    for (final tag in existing.take(16))
+                      ActionChip(
+                        label: Text(
+                          tag.name,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            // Raw stored colors are dark-tuned; adapt
+                            // them so they keep contrast on light
+                            // palettes.
+                            color: adaptiveAccent(Color(tag.color)),
+                          ),
+                        ),
+                        onPressed: () => Navigator.pop(context, tag.name),
+                      ),
+                  ],
+                ),
+              ],
             ],
-          ],
-        ),
-        actions: [
-          TextButton(
+          ),
+          actions: [
+            TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(context.l10n.cancel)),
-          FilledButton(
+              child: Text(context.l10n.cancel),
+            ),
+            FilledButton(
               onPressed: () => Navigator.pop(context, controller.text),
-              child: Text(context.l10n.add)),
-        ],
-      ),
+              child: Text(context.l10n.add),
+            ),
+          ],
+        );
+      },
     );
+    // Release the controller only once the dialog route is fully gone.
+    dialogRoute?.completed.whenComplete(controller.dispose);
     final trimmed = name?.trim() ?? '';
     if (trimmed.isEmpty) return;
     await ref
@@ -77,19 +91,29 @@ class TagEditor extends ConsumerWidget {
       children: [
         for (final tag in tags)
           Chip(
-            label: Text(tag.name,
-                style: TextStyle(fontSize: 11.5, color: Color(tag.color))),
-            side: BorderSide(color: Color(tag.color).withValues(alpha: 0.5)),
-            backgroundColor: Color(tag.color).withValues(alpha: 0.12),
+            label: Text(
+              tag.name,
+              style: TextStyle(
+                fontSize: 11.5,
+                color: adaptiveAccent(Color(tag.color)),
+              ),
+            ),
+            side: BorderSide(
+              color: adaptiveAccent(Color(tag.color)).withValues(alpha: 0.5),
+            ),
+            backgroundColor: adaptiveAccent(
+              Color(tag.color),
+            ).withValues(alpha: 0.12),
             visualDensity: VisualDensity.compact,
             onDeleted: () =>
                 ref.read(entityServiceProvider).removeTag(entity.id, tag.id),
           ),
         ActionChip(
-          avatar:
-              Icon(Icons.add, size: 14, color: GmhColors.parchmentDim),
-          label:
-              Text(context.l10n.tagChip, style: const TextStyle(fontSize: 11.5)),
+          avatar: Icon(Icons.add, size: 14, color: GmhColors.parchmentDim),
+          label: Text(
+            context.l10n.tagChip,
+            style: const TextStyle(fontSize: 11.5),
+          ),
           visualDensity: VisualDensity.compact,
           onPressed: () => _addTag(context, ref),
         ),

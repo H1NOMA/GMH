@@ -10,7 +10,7 @@ import 'providers.dart';
 /// Navigation & UI state that must survive moving between sections — and,
 /// where it makes sense, app restarts:
 ///
-///  * browser-style back/forward history ([NavHistory]);
+///  * browser-style back/forward history (owned per tab by WorkspaceTabs);
 ///  * the selected campaign (persisted per world);
 ///  * the last visited location (persisted; restored on startup);
 ///  * list sort order (persisted per world), list filters, search state and
@@ -21,91 +21,6 @@ import 'providers.dart';
 /// PageStorage values survive route changes (each `go` replaces the page,
 /// so route-scoped buckets would be lost).
 final appPageBucket = PageStorageBucket();
-
-// ------------------------------------------------------------- history
-
-class NavHistoryState {
-  final List<String> back;
-  final String? current;
-  final List<String> forward;
-
-  const NavHistoryState({
-    this.back = const [],
-    this.current,
-    this.forward = const [],
-  });
-
-  bool get canGoBack => back.isNotEmpty;
-  bool get canGoForward => forward.isNotEmpty;
-}
-
-/// Browser-like history over go_router locations. The router reports every
-/// location change to [onLocationChanged]; [goBack]/[goForward] navigate via
-/// the provided callback while suppressing history recording.
-class NavHistory extends Notifier<NavHistoryState> {
-  bool _suppress = false;
-
-  /// Wired by the app root to `router.go`.
-  void Function(String location)? navigate;
-
-  @override
-  NavHistoryState build() => const NavHistoryState();
-
-  void onLocationChanged(String location) {
-    if (state.current == location) {
-      // The router echoing our own goBack/goForward navigation lands here;
-      // the flag must clear or the next real navigation would be swallowed.
-      _suppress = false;
-      return;
-    }
-    if (_suppress) {
-      _suppress = false;
-      return;
-    }
-    state = NavHistoryState(
-      back: [
-        ...state.back,
-        if (state.current != null) state.current!,
-      ],
-      current: location,
-      // A brand-new navigation clears the forward stack, like a browser.
-      forward: const [],
-    );
-  }
-
-  void goBack() {
-    if (!state.canGoBack) return;
-    final target = state.back.last;
-    state = NavHistoryState(
-      back: state.back.sublist(0, state.back.length - 1),
-      current: target,
-      forward: [
-        if (state.current != null) state.current!,
-        ...state.forward,
-      ],
-    );
-    _suppress = true;
-    navigate?.call(target);
-  }
-
-  void goForward() {
-    if (!state.canGoForward) return;
-    final target = state.forward.first;
-    state = NavHistoryState(
-      back: [
-        ...state.back,
-        if (state.current != null) state.current!,
-      ],
-      current: target,
-      forward: state.forward.sublist(1),
-    );
-    _suppress = true;
-    navigate?.call(target);
-  }
-}
-
-final navHistoryProvider =
-    NotifierProvider<NavHistory, NavHistoryState>(NavHistory.new);
 
 // -------------------------------------------------- selected campaign
 

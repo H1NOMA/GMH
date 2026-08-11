@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'workspace_tabs.dart';
 
 import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
@@ -14,8 +15,7 @@ import '../../core/utils/save_flush.dart';
 /// Game-style pause menu opened with Escape (fullscreen has no title bar,
 /// so this is also the only way to quit): logo, app name, save project,
 /// settings and exit. Escape or a click outside closes it.
-Future<void> showPauseMenu(BuildContext context,
-    {required String? worldId}) {
+Future<void> showPauseMenu(BuildContext context, {required String? worldId}) {
   return showDialog<void>(
     context: context,
     barrierColor: Colors.black54,
@@ -79,7 +79,9 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
     return Dialog(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 340),
-        child: Padding(
+        // Scrollable: on short windows a fixed column would overflow
+        // instead of letting the menu scroll.
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(28, 30, 28, 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -108,10 +110,17 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
               if (worldId != null) ...[
                 FilledButton.icon(
                   icon: _saving
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 16,
                           height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2))
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            // Explicit contrast color: the default
+                            // primary-colored spinner disappears inside
+                            // this ember-filled button.
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        )
                       : const Icon(Icons.save_outlined, size: 18),
                   label: Text(l.pauseSaveProject),
                   onPressed: _saveProject,
@@ -122,16 +131,24 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
                   label: Text(l.navSettingsShort),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.go(Routes.settings(worldId));
+                    // Same behavior as the sidebar tile: settings opens in
+                    // its own tab, the current page stays put.
+                    ref
+                        .read(workspaceTabsProvider.notifier)
+                        .openInNewTab(Routes.settings(worldId));
                   },
                 ),
                 const SizedBox(height: 10),
               ],
               OutlinedButton.icon(
-                icon: Icon(Icons.power_settings_new,
-                    size: 18, color: GmhColors.danger),
+                icon: Icon(
+                  Icons.power_settings_new,
+                  size: 18,
+                  color: GmhColors.danger,
+                ),
                 style: OutlinedButton.styleFrom(
-                    foregroundColor: GmhColors.danger),
+                  foregroundColor: GmhColors.danger,
+                ),
                 label: Text(l.pauseExit),
                 onPressed: _exit,
               ),

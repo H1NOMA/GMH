@@ -122,14 +122,25 @@ class _GalleryCell extends ConsumerWidget {
                   child: Text(entry.caption,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 10)),
+                      // Fixed ink: the scrim below is always black.
+                      style: const TextStyle(
+                          fontSize: 10, color: Colors.white)),
                 ),
               ),
             if (isCover)
               Positioned(
                 top: 4,
                 right: 4,
-                child: Icon(Icons.badge, size: 14, color: GmhColors.ember),
+                // A soft scrim keeps the badge readable over any photo.
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  child:
+                      Icon(Icons.badge, size: 13, color: GmhColors.ember),
+                ),
               ),
           ],
         ),

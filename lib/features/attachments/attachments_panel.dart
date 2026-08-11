@@ -275,6 +275,9 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
           if (bytes.isNotEmpty) {
             await media.replaceBytes(
                 mediaId: item.id, fileName: file.name, bytes: bytes);
+            // The vault is content-addressed, so replacing bytes moves the
+            // file — the cached path would point at the old blob forever.
+            ref.invalidate(mediaPathProvider(item.id));
           }
         }
       case 'delete':
@@ -397,15 +400,25 @@ class _ImageTile extends ConsumerWidget {
                       child: Text(entry.caption,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 10.5)),
+                          // Fixed ink: the scrim below is always black.
+                          style: const TextStyle(
+                              fontSize: 10.5, color: Colors.white)),
                     ),
                   ),
                 if (entity.coverMediaId == entry.media.id)
                   Positioned(
                     top: 4,
                     right: 4,
-                    child:
-                        Icon(Icons.badge, size: 15, color: GmhColors.ember),
+                    // A soft scrim keeps the badge readable over photos.
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.badge,
+                          size: 14, color: GmhColors.ember),
+                    ),
                   ),
               ],
             ),

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers.dart';
-import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/media_item.dart';
 import 'attachment_utils.dart';
 
@@ -22,7 +21,10 @@ Future<void> showImageViewer(
       pageBuilder: (context, animation, secondary) => FadeTransition(
         opacity: animation,
         child: _ImageViewer(
-            images: images, initialIndex: initialIndex, captions: captions),
+          images: images,
+          initialIndex: initialIndex,
+          captions: captions,
+        ),
       ),
     ),
   );
@@ -44,8 +46,9 @@ class _ImageViewer extends ConsumerStatefulWidget {
 }
 
 class _ImageViewerState extends ConsumerState<_ImageViewer> {
-  late final PageController _pageController =
-      PageController(initialPage: widget.initialIndex);
+  late final PageController _pageController = PageController(
+    initialPage: widget.initialIndex,
+  );
   late int _index = widget.initialIndex;
 
   @override
@@ -61,11 +64,17 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      // The backdrop is always near-black regardless of app theme, so
+      // every piece of chrome here uses fixed light ink — theme colors
+      // would turn invisible on the light palettes.
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(current.fileName,
-            style: const TextStyle(fontSize: 14),
-            overflow: TextOverflow.ellipsis),
+        foregroundColor: Colors.white,
+        title: Text(
+          current.fileName,
+          style: const TextStyle(fontSize: 14, color: Colors.white),
+          overflow: TextOverflow.ellipsis,
+        ),
         actions: [
           Center(
             child: Padding(
@@ -73,8 +82,7 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
               child: Text(
                 '${_index + 1}/${widget.images.length}   '
                 '${formatBytes(current.sizeBytes)}',
-                style: TextStyle(
-                    fontSize: 12, color: GmhColors.parchmentDim),
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
               ),
             ),
           ),
@@ -94,13 +102,11 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
               itemBuilder: (context, index) {
                 final item = widget.images[index];
                 return FutureBuilder<String>(
-                  future:
-                      ref.read(mediaRepositoryProvider).absolutePath(item),
+                  future: ref.read(mediaRepositoryProvider).absolutePath(item),
                   builder: (context, snapshot) {
                     final path = snapshot.data;
                     if (path == null) {
-                      return const Center(
-                          child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     return InteractiveViewer(
                       minScale: 0.5,
@@ -109,10 +115,11 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
                         child: Image.file(
                           File(path),
                           fit: BoxFit.contain,
-                          errorBuilder: (_, _, _) => Icon(
-                              Icons.broken_image_outlined,
-                              size: 64,
-                              color: GmhColors.parchmentFaint),
+                          errorBuilder: (_, _, _) => const Icon(
+                            Icons.broken_image_outlined,
+                            size: 64,
+                            color: Colors.white38,
+                          ),
                         ),
                       ),
                     );
@@ -126,10 +133,11 @@ class _ImageViewerState extends ConsumerState<_ImageViewer> {
               top: false,
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Text(caption,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 13, color: GmhColors.parchmentDim)),
+                child: Text(
+                  caption,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 13, color: Colors.white70),
+                ),
               ),
             ),
         ],

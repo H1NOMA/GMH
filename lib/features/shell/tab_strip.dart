@@ -10,15 +10,51 @@ import 'ui_providers.dart';
 import 'workspace_tabs.dart';
 
 /// The browser-like tab strip above the content area (wide layouts).
-class WorkspaceTabStrip extends ConsumerWidget {
+class WorkspaceTabStrip extends ConsumerStatefulWidget {
   final String worldId;
   const WorkspaceTabStrip({super.key, required this.worldId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WorkspaceTabStrip> createState() => _WorkspaceTabStripState();
+}
+
+class _WorkspaceTabStripState extends ConsumerState<WorkspaceTabStrip> {
+  final _scroll = ScrollController();
+  final _activeKey = GlobalKey();
+  int _lastActive = -1;
+  int _lastCount = 0;
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  /// Keeps the active tab visible: opening a tab beyond the right edge or
+  /// activating one scrolled out of view brings it back into the strip.
+  void _revealActiveTab(WorkspaceTabsState tabs) {
+    if (tabs.activeIndex == _lastActive && tabs.tabs.length == _lastCount) {
+      return;
+    }
+    _lastActive = tabs.activeIndex;
+    _lastCount = tabs.tabs.length;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final context = _activeKey.currentContext;
+      if (context == null || !mounted) return;
+      Scrollable.ensureVisible(
+        context,
+        alignment: 0.5,
+        duration: const Duration(milliseconds: 150),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final tabs = ref.watch(workspaceTabsProvider);
     final controller = ref.read(workspaceTabsProvider.notifier);
-    if (tabs.locations.isEmpty) return const SizedBox.shrink();
+    if (tabs.tabs.isEmpty) return const SizedBox.shrink();
+    _revealActiveTab(tabs);
 
     return Container(
       height: 38,
@@ -26,36 +62,38 @@ class WorkspaceTabStrip extends ConsumerWidget {
         color: GmhColors.surface,
         border: Border(bottom: BorderSide(color: GmhColors.border)),
       ),
-      // "+" trails the last tab like in a browser, scrolling with the
-      // strip instead of sitting pinned at the far edge.
-      child: ListView.builder(
+      // A plain scrollable Row (not a lazy list): every tab stays built,
+      // so ensureVisible can always reach the active one. "+" trails the
+      // last tab like in a browser.
+      child: SingleChildScrollView(
+        controller: _scroll,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(left: 6, top: 5, right: 4),
-        itemCount: tabs.locations.length + 1,
-        itemBuilder: (context, index) {
-          if (index == tabs.locations.length) {
-            return IconButton(
-              tooltip: context.l10n.navHome,
+        child: Row(
+          children: [
+            for (var index = 0; index < tabs.tabs.length; index++)
+              _WorkspaceTab(
+                key: index == tabs.activeIndex ? _activeKey : null,
+                location: tabs.tabs[index].location,
+                active: index == tabs.activeIndex,
+                onTap: () => controller.activate(index),
+                onClose: () => controller.close(
+                  index,
+                  fallbackLocation: Routes.home(widget.worldId),
+                ),
+              ),
+            IconButton(
+              tooltip: context.l10n.newTab,
               icon: const Icon(Icons.add, size: 18),
               visualDensity: VisualDensity.compact,
               padding: EdgeInsets.zero,
-              constraints:
-                  const BoxConstraints(minWidth: 32, minHeight: 28),
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 28),
               // A fresh dashboard tab, like a browser's new tab.
               onPressed: () =>
-                  controller.openInNewTab(Routes.home(worldId)),
-            );
-          }
-          return _WorkspaceTab(
-            location: tabs.locations[index],
-            active: index == tabs.activeIndex,
-            onTap: () => controller.activate(index),
-            onClose: () => controller.close(
-              index,
-              fallbackLocation: Routes.home(worldId),
+                  controller.openInNewTab(Routes.home(widget.worldId)),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
@@ -68,6 +106,7 @@ class _WorkspaceTab extends ConsumerWidget {
   final VoidCallback onClose;
 
   const _WorkspaceTab({
+    super.key,
     required this.location,
     required this.active,
     required this.onTap,

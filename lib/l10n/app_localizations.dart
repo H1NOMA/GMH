@@ -1112,6 +1112,12 @@ abstract class AppLocalizations {
   /// **'Set as cover image'**
   String get setAsCover;
 
+  /// No description provided for @newTab.
+  ///
+  /// In en, this message translates to:
+  /// **'New tab'**
+  String get newTab;
+
   /// No description provided for @changeImage.
   ///
   /// In en, this message translates to:

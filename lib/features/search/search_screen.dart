@@ -118,6 +118,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Watched (not read): the filter chips below render _kindFilter /
+    // _categoryFilter, and the post-frame cleanup of a stale category
+    // filter must repaint them.
+    ref.watch(searchStateProvider(widget.worldId));
     final hasQuery = _controller.text.trim().isNotEmpty;
     final recents =
         ref.watch(recentEntitiesProvider(widget.worldId)).valueOrNull ?? [];

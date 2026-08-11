@@ -80,8 +80,12 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     final entities = await ref
         .read(entityRepositoryProvider)
         .getAllEntities(widget.worldId);
+    // Leaving the graph while the queries run disposes this state — using
+    // ref (or setState) past that point throws.
+    if (!mounted) return;
     final links =
         await ref.read(linkRepositoryProvider).allForWorld(widget.worldId);
+    if (!mounted) return;
     final byId = {for (final e in entities) e.id: e};
 
     // Collapse multi-edges; drop links to soft-deleted/missing entities.

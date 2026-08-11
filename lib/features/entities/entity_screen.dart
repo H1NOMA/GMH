@@ -12,6 +12,7 @@ import '../../domain/models/entity.dart';
 import '../categories/category_ui.dart';
 import '../editor/lore_editor.dart';
 import '../shell/history_buttons.dart';
+import '../shell/workspace_tabs.dart';
 import '../shell/ui_providers.dart';
 import '../attachments/attachments_panel.dart';
 import '../../domain/models/entity_kind.dart';
@@ -29,8 +30,11 @@ class EntityScreen extends ConsumerWidget {
   final String worldId;
   final String entityId;
 
-  const EntityScreen(
-      {super.key, required this.worldId, required this.entityId});
+  const EntityScreen({
+    super.key,
+    required this.worldId,
+    required this.entityId,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,8 +42,7 @@ class EntityScreen extends ConsumerWidget {
     final entity = entityAsync.valueOrNull;
 
     if (entityAsync.isLoading && entity == null) {
-      return const Scaffold(
-          body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (entity == null || entity.isDeleted) {
       return Scaffold(
@@ -67,37 +70,42 @@ class _EntityScaffold extends ConsumerWidget {
       builder: (context) {
         dialogRoute ??= ModalRoute.of(context);
         return AlertDialog(
-        title: Text(context.l10n.editEntryTitle),
-        content: SizedBox(
-          width: 420,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                autofocus: true,
-                decoration: InputDecoration(labelText: context.l10n.nameLabel),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: summaryController,
-                maxLines: 2,
-                decoration: InputDecoration(
+          title: Text(context.l10n.editEntryTitle),
+          content: SizedBox(
+            width: 420,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.nameLabel,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: summaryController,
+                  maxLines: 2,
+                  decoration: InputDecoration(
                     labelText: context.l10n.summaryLabel,
-                    hintText: context.l10n.summaryHint),
-              ),
-            ],
+                    hintText: context.l10n.summaryHint,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
+          actions: [
+            TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text(context.l10n.cancel)),
-          FilledButton(
+              child: Text(context.l10n.cancel),
+            ),
+            FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text(context.l10n.save)),
-        ],
-      );
+              child: Text(context.l10n.save),
+            ),
+          ],
+        );
       },
     );
     final name = nameController.text.trim();
@@ -108,10 +116,9 @@ class _EntityScaffold extends ConsumerWidget {
       summaryController.dispose();
     });
     if (saved != true) return;
-    await ref.read(entityServiceProvider).update(entity.copyWith(
-          name: name,
-          summary: summary,
-        ));
+    await ref
+        .read(entityServiceProvider)
+        .update(entity.copyWith(name: name, summary: summary));
   }
 
   Future<void> _delete(BuildContext context, WidgetRef ref) async {
@@ -122,8 +129,9 @@ class _EntityScaffold extends ConsumerWidget {
         content: Text(context.l10n.deleteEntryBody),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(context.l10n.cancel)),
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.cancel),
+          ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: GmhColors.danger),
             onPressed: () => Navigator.pop(context, true),
@@ -134,6 +142,11 @@ class _EntityScaffold extends ConsumerWidget {
     );
     if (confirmed != true) return;
     await ref.read(entityServiceProvider).moveToTrash(entity.id);
+    // Other tabs (and history stacks) may still point at the deleted
+    // entry — close/scrub them so Back or a tab click can't resurrect it.
+    ref
+        .read(workspaceTabsProvider.notifier)
+        .closeForLocation(Routes.entity(worldId, entity.id));
     if (!context.mounted) return;
     // Every navigation here uses go() with a single-page match list, so
     // there is never anything to pop — pop() would throw and strand the
@@ -161,18 +174,20 @@ class _EntityScaffold extends ConsumerWidget {
           IconButton(
             tooltip: entity.kind == EntityKind.custom
                 ? (ref
-                        .watch(categoryMapProvider(worldId))[
-                            entity.customCategoryId]
-                        ?.name ??
-                    entity.kind.localizedPlural(context))
+                          .watch(
+                            categoryMapProvider(worldId),
+                          )[entity.customCategoryId]
+                          ?.name ??
+                      entity.kind.localizedPlural(context))
                 : entity.kind.localizedPlural(context),
             icon: Icon(entity.kind.icon, color: entity.kind.color, size: 20),
             visualDensity: VisualDensity.compact,
             onPressed: () {
               if (entity.kind == EntityKind.custom &&
                   entity.customCategoryId != null) {
-                context.go(Routes.browseCategory(
-                    worldId, entity.customCategoryId!));
+                context.go(
+                  Routes.browseCategory(worldId, entity.customCategoryId!),
+                );
               } else {
                 context.go(Routes.browse(worldId, entity.kind));
               }
@@ -192,8 +207,10 @@ class _EntityScaffold extends ConsumerWidget {
           tooltip: entity.isFavorite
               ? context.l10n.removeFromFavorites
               : context.l10n.addToFavorites,
-          icon: Icon(entity.isFavorite ? Icons.star : Icons.star_border,
-              color: entity.isFavorite ? GmhColors.ember : null),
+          icon: Icon(
+            entity.isFavorite ? Icons.star : Icons.star_border,
+            color: entity.isFavorite ? GmhColors.ember : null,
+          ),
           onPressed: () => ref
               .read(entityServiceProvider)
               .setFavorite(entity.id, !entity.isFavorite),
@@ -204,22 +221,27 @@ class _EntityScaffold extends ConsumerWidget {
               case 'edit':
                 _rename(context, ref);
               case 'graph':
-                context.go(
-                    Routes.graph(worldId, focusEntityId: entity.id));
+                context.go(Routes.graph(worldId, focusEntityId: entity.id));
               case 'delete':
                 _delete(context, ref);
             }
           },
           itemBuilder: (context) => [
             PopupMenuItem(
-                value: 'edit',
-                child: Text(context.l10n.menuEditNameSummary)),
+              value: 'edit',
+              child: Text(context.l10n.menuEditNameSummary),
+            ),
             PopupMenuItem(
-                value: 'graph', child: Text(context.l10n.menuShowInGraph)),
+              value: 'graph',
+              child: Text(context.l10n.menuShowInGraph),
+            ),
             PopupMenuItem(
-                value: 'delete',
-                child: Text(context.l10n.delete,
-                    style: TextStyle(color: GmhColors.danger))),
+              value: 'delete',
+              child: Text(
+                context.l10n.delete,
+                style: TextStyle(color: GmhColors.danger),
+              ),
+            ),
           ],
         ),
       ],
@@ -234,7 +256,10 @@ class _EntityScaffold extends ConsumerWidget {
         // /e/B, and the profile's TabController must not leak A's tab
         // index (and writes) into B's remembered tab.
         body: CharacterProfile(
-            key: ValueKey(entity.id), worldId: worldId, entity: entity),
+          key: ValueKey(entity.id),
+          worldId: worldId,
+          entity: entity,
+        ),
       );
     }
 
@@ -242,9 +267,9 @@ class _EntityScaffold extends ConsumerWidget {
     // constructor decides which modules exist on this page.
     final blueprint = entity.kind == EntityKind.custom
         ? (ref
-                .watch(categoryMapProvider(worldId))[entity.customCategoryId]
-                ?.blueprint ??
-            CategoryBlueprint.standard)
+                  .watch(categoryMapProvider(worldId))[entity.customCategoryId]
+                  ?.blueprint ??
+              CategoryBlueprint.standard)
         : CategoryBlueprint.standard;
 
     final document = _DocumentPane(worldId: worldId, entity: entity);
@@ -276,26 +301,35 @@ class _EntityScaffold extends ConsumerWidget {
       // Same split everywhere: notes/lore on the left, the structured
       // panel on the right. Stat-card kinds (spells, creatures, items)
       // get a wider right panel so the stat block reads like a card.
-      final split = Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: document),
-          const VerticalDivider(width: 1),
-          SizedBox(
-            width: statFirst ? 420 : 330,
-            child: sidePanel,
-          ),
-        ],
+      // The editor keeps priority: on mid-size windows the panel narrows
+      // first so the text column never shrinks to a sliver.
+      final split = LayoutBuilder(
+        builder: (context, constraints) {
+          final compact = constraints.maxWidth < 1250;
+          final panelWidth = statFirst
+              ? (compact ? 360.0 : 420.0)
+              : (compact ? 290.0 : 330.0);
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(child: document),
+              const VerticalDivider(width: 1),
+              SizedBox(width: panelWidth, child: sidePanel),
+            ],
+          );
+        },
       );
       return Scaffold(
         appBar: appBar,
         // Locations carry a full-width image strip under both panes: the
         // battle maps and vistas of a place are worth a dedicated shelf.
         body: entity.kind == EntityKind.location
-            ? Column(children: [
-                Expanded(child: split),
-                EntityGalleryStrip(entity: entity),
-              ])
+            ? Column(
+                children: [
+                  Expanded(child: split),
+                  EntityGalleryStrip(entity: entity),
+                ],
+              )
             : split,
       );
     }
@@ -310,15 +344,17 @@ class _EntityScaffold extends ConsumerWidget {
         appBar: appBar,
         body: Column(
           children: [
-            TabBar(tabs: [
-              if (statFirst) ...[
-                Tab(text: context.l10n.tabDetails),
-                Tab(text: context.l10n.tabDocument),
-              ] else ...[
-                Tab(text: context.l10n.tabDocument),
-                Tab(text: context.l10n.tabDetails),
+            TabBar(
+              tabs: [
+                if (statFirst) ...[
+                  Tab(text: context.l10n.tabDetails),
+                  Tab(text: context.l10n.tabDocument),
+                ] else ...[
+                  Tab(text: context.l10n.tabDocument),
+                  Tab(text: context.l10n.tabDetails),
+                ],
               ],
-            ]),
+            ),
             Expanded(
               child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -334,27 +370,48 @@ class _EntityScaffold extends ConsumerWidget {
   }
 }
 
-class _DocumentPane extends ConsumerWidget {
+class _DocumentPane extends ConsumerStatefulWidget {
   final String worldId;
   final Entity entity;
 
   const _DocumentPane({required this.worldId, required this.entity});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_DocumentPane> createState() => _DocumentPaneState();
+}
+
+class _DocumentPaneState extends ConsumerState<_DocumentPane> {
+  // Memoized per entity: a future re-created on every rebuild (each
+  // entity-row emission, e.g. an attribute autosave) would flash the
+  // spinner and dispose/recreate the editor mid-typing, losing the
+  // current debounce window of edits.
+  late Future<DocumentModel> _doc = ref
+      .read(documentRepositoryProvider)
+      .getOrCreate(widget.entity.id);
+
+  @override
+  void didUpdateWidget(covariant _DocumentPane old) {
+    super.didUpdateWidget(old);
+    if (old.entity.id != widget.entity.id) {
+      _doc = ref.read(documentRepositoryProvider).getOrCreate(widget.entity.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Load once (not watch): the editor owns the document while open;
     // watching would reset it on every autosave.
     return FutureBuilder<DocumentModel>(
-      future: ref.read(documentRepositoryProvider).getOrCreate(entity.id),
+      future: _doc,
       builder: (context, snapshot) {
         final doc = snapshot.data;
         if (doc == null) {
           return const Center(child: CircularProgressIndicator());
         }
         return LoreEditor(
-          key: ValueKey('editor-${entity.id}'),
-          worldId: worldId,
-          entityId: entity.id,
+          key: ValueKey('editor-${widget.entity.id}'),
+          worldId: widget.worldId,
+          entityId: widget.entity.id,
           initialContentJson: doc.contentJson,
         );
       },
@@ -373,7 +430,8 @@ class _SidePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showMedia = blueprint.has(CategoryModule.gallery) ||
+    final showMedia =
+        blueprint.has(CategoryModule.gallery) ||
         blueprint.has(CategoryModule.attachments);
     return ListView(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 40),
@@ -388,11 +446,14 @@ class _SidePanel extends StatelessWidget {
             Expanded(
               child: entity.summary.isEmpty
                   ? const SizedBox.shrink()
-                  : Text(entity.summary,
+                  : Text(
+                      entity.summary,
                       style: TextStyle(
-                          fontSize: 13,
-                          fontStyle: FontStyle.italic,
-                          color: GmhColors.parchmentDim)),
+                        fontSize: 13,
+                        fontStyle: FontStyle.italic,
+                        color: GmhColors.parchmentDim,
+                      ),
+                    ),
             ),
           ],
         ),

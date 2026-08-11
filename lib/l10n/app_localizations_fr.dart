@@ -580,6 +580,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get setAsCover => 'Définir comme image de couverture';
 
   @override
+  String get newTab => 'Nouvel onglet';
+
+  @override
   String get changeImage => 'Changer l\'image';
 
   @override

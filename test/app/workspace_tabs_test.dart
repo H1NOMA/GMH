@@ -49,8 +49,11 @@ void main() {
     tabs.onLocationChanged('/w/1/home');
     tabs.openInNewTab('/w/1/browse/creature');
     tabs.openInNewTab('/w/1/browse/creature');
-    expect(state().locations,
-        ['/w/1/home', '/w/1/browse/creature', '/w/1/browse/creature']);
+    expect(state().locations, [
+      '/w/1/home',
+      '/w/1/browse/creature',
+      '/w/1/browse/creature',
+    ]);
     expect(state().activeIndex, 2);
 
     // Each duplicate browses on its own: navigating in the newest tab
@@ -58,8 +61,7 @@ void main() {
     tabs.onLocationChanged('/w/1/e/beastB');
     tabs.activate(1);
     tabs.onLocationChanged('/w/1/e/beastA');
-    expect(state().locations,
-        ['/w/1/home', '/w/1/e/beastA', '/w/1/e/beastB']);
+    expect(state().locations, ['/w/1/home', '/w/1/e/beastA', '/w/1/e/beastB']);
   });
 
   test('activate switches tabs and navigates', () {
@@ -68,6 +70,57 @@ void main() {
     tabs.activate(0);
     expect(state().activeIndex, 0);
     expect(visited.last, '/w/1/home');
+  });
+
+  test('each tab keeps its own back/forward history', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.onLocationChanged('/w/1/e/a');
+    tabs.openInNewTab('/w/1/browse/creature');
+    tabs.onLocationChanged('/w/1/e/beast');
+
+    // Back in the second tab returns to its own past, not the first tab's.
+    expect(state().canGoBack, isTrue);
+    tabs.goBack();
+    expect(visited.last, '/w/1/browse/creature');
+    tabs.onLocationChanged('/w/1/browse/creature'); // router echo
+    expect(state().locations, ['/w/1/e/a', '/w/1/browse/creature']);
+    expect(state().canGoForward, isTrue);
+
+    // Switching tabs swaps in that tab's history.
+    tabs.activate(0);
+    tabs.onLocationChanged('/w/1/e/a'); // router echo
+    expect(state().canGoForward, isFalse);
+    tabs.goBack();
+    expect(visited.last, '/w/1/home');
+  });
+
+  test('switching worlds resets the strip', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.openInNewTab('/w/1/search');
+    tabs.onLocationChanged('/w/2/home');
+    expect(state().locations, ['/w/2/home']);
+    expect(state().activeIndex, 0);
+    expect(state().canGoBack, isFalse);
+  });
+
+  test('the world picker is not tabbable', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.onLocationChanged('/worlds');
+    expect(state().locations, ['/w/1/home']);
+  });
+
+  test('closeForLocation drops dead tabs and scrubs history stacks', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.onLocationChanged('/w/1/e/dead');
+    tabs.onLocationChanged('/w/1/e/alive');
+    tabs.openInNewTab('/w/1/e/dead');
+    tabs.openInNewTab('/w/1/graph');
+
+    tabs.closeForLocation('/w/1/e/dead');
+    expect(state().locations, ['/w/1/e/alive', '/w/1/graph']);
+    expect(state().activeIndex, 1);
+    // The first tab's back stack contained the dead entry — scrubbed.
+    expect(state().tabs[0].back, ['/w/1/home']);
   });
 
   test('closing tabs adjusts the active index and navigates as needed', () {
