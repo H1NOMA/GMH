@@ -333,7 +333,9 @@ class _TagManagerState extends ConsumerState<_TagManager> {
               onPressed: () => Navigator.pop(context, false),
               child: Text(context.l10n.cancel)),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: GmhColors.danger),
+            style: FilledButton.styleFrom(
+                backgroundColor: GmhColors.danger,
+                foregroundColor: readableOn(GmhColors.danger)),
             onPressed: () => Navigator.pop(context, true),
             child: Text(context.l10n.delete),
           ),

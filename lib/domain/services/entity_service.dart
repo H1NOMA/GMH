@@ -152,6 +152,19 @@ class EntityService {
         await _search.reindexEntity(id);
       });
 
+  /// Deletes a trashed entry for good (its document, links and gallery
+  /// rows cascade; unused media files go at the next sweep).
+  Future<Result<void>> purge(String id) => guard(() => _entities.purge(id));
+
+  /// Purges every trashed entry of [worldId]; returns how many.
+  Future<Result<int>> emptyTrash(String worldId) => guard(() async {
+        final trashed = await _entities.watchTrash(worldId).first;
+        for (final entity in trashed) {
+          await _entities.purge(entity.id);
+        }
+        return trashed.length;
+      });
+
   Future<Result<void>> addTag(String entityId, String worldId, String tagName) {
     return guard(() async {
       final tag = await _tags.getOrCreate(worldId, tagName);

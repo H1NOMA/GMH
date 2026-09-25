@@ -540,5 +540,17 @@
   "combatActions": "Actions du combattant",
   "combatEncounterActions": "Actions de la rencontre",
   "roleCustomLabel": "Ou saisissez votre rôle",
-  "importFilesFailed": "{count, plural, one{1 fichier n’a pas pu être importé} other{{count} fichiers n’ont pas pu être importés}}"
+  "importFilesFailed": "{count, plural, one{1 fichier n’a pas pu être importé} other{{count} fichiers n’ont pas pu être importés}}",
+  "trashTitle": "Corbeille",
+  "trashEmptyState": "La corbeille est vide. Les entrées supprimées restent ici jusqu’à ce que vous les restauriez ou les supprimiez définitivement.",
+  "trashEmptyAction": "Vider la corbeille",
+  "trashEmptyConfirmTitle": "Vider la corbeille ?",
+  "trashEmptyConfirmBody": "{count, plural, one{1 entrée sera supprimée définitivement, avec son texte, ses images et ses liens.} other{{count} entrées seront supprimées définitivement, avec leur texte, leurs images et leurs liens.}}",
+  "trashDeleteForever": "Supprimer définitivement",
+  "trashDeleteForeverTitle": "Supprimer « {name} » définitivement ?",
+  "trashDeleteForeverBody": "Son texte, ses images et ses liens sont aussi supprimés. Action irréversible.",
+  "trashDeletedOn": "Supprimé le {date}",
+  "trashMovedSnack": "« {name} » placé dans la corbeille",
+  "trashRestoredSnack": "« {name} » restauré",
+  "undo": "Annuler"
 }

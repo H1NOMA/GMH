@@ -137,3 +137,9 @@ final worldObjectProvider =
     StreamProvider.autoDispose.family<WorldObject?, String>(
   (ref, id) => ref.watch(worldObjectRepositoryProvider).watchOne(id),
 );
+
+/// Trashed entries of a world, most recently deleted first.
+final trashProvider =
+    StreamProvider.autoDispose.family<List<Entity>, String>(
+  (ref, worldId) => ref.watch(entityRepositoryProvider).watchTrash(worldId),
+);

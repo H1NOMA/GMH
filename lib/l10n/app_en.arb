@@ -909,5 +909,52 @@
         "type": "int"
       }
     }
-  }
+  },
+  "trashTitle": "Trash",
+  "trashEmptyState": "Trash is empty. Deleted entries wait here until you restore them or delete them for good.",
+  "trashEmptyAction": "Empty trash",
+  "trashEmptyConfirmTitle": "Empty the trash?",
+  "trashEmptyConfirmBody": "{count, plural, one{1 entry will be deleted for good, with its lore, images and links.} other{{count} entries will be deleted for good, with their lore, images and links.}}",
+  "@trashEmptyConfirmBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trashDeleteForever": "Delete forever",
+  "trashDeleteForeverTitle": "Delete “{name}” forever?",
+  "@trashDeleteForeverTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trashDeleteForeverBody": "Its lore, images and links are removed too. This can’t be undone.",
+  "trashDeletedOn": "Deleted {date}",
+  "@trashDeletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "trashMovedSnack": "“{name}” moved to trash",
+  "@trashMovedSnack": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trashRestoredSnack": "“{name}” restored",
+  "@trashRestoredSnack": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "undo": "Undo"
 }

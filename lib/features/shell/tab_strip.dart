@@ -170,6 +170,9 @@ class _WorkspaceTab extends ConsumerWidget {
     if (location.contains('/campaigns')) {
       return (Icons.map_outlined, EntityKind.campaign.localizedPlural(context));
     }
+    if (location.endsWith('/trash')) {
+      return (Icons.delete_outline, l.trashTitle);
+    }
     if (location.contains('/settings')) {
       return (Icons.settings_outlined, l.navSettingsShort);
     }

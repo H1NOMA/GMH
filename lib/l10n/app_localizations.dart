@@ -3349,6 +3349,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one{1 file couldn’t be imported} other{{count} files couldn’t be imported}}'**
   String importFilesFailed(int count);
+
+  /// No description provided for @trashTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trash'**
+  String get trashTitle;
+
+  /// No description provided for @trashEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'Trash is empty. Deleted entries wait here until you restore them or delete them for good.'**
+  String get trashEmptyState;
+
+  /// No description provided for @trashEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty trash'**
+  String get trashEmptyAction;
+
+  /// No description provided for @trashEmptyConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty the trash?'**
+  String get trashEmptyConfirmTitle;
+
+  /// No description provided for @trashEmptyConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 entry will be deleted for good, with its lore, images and links.} other{{count} entries will be deleted for good, with their lore, images and links.}}'**
+  String trashEmptyConfirmBody(int count);
+
+  /// No description provided for @trashDeleteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever'**
+  String get trashDeleteForever;
+
+  /// No description provided for @trashDeleteForeverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{name}” forever?'**
+  String trashDeleteForeverTitle(String name);
+
+  /// No description provided for @trashDeleteForeverBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Its lore, images and links are removed too. This can’t be undone.'**
+  String get trashDeleteForeverBody;
+
+  /// No description provided for @trashDeletedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {date}'**
+  String trashDeletedOn(String date);
+
+  /// No description provided for @trashMovedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” moved to trash'**
+  String trashMovedSnack(String name);
+
+  /// No description provided for @trashRestoredSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” restored'**
+  String trashRestoredSnack(String name);
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
 }
 
 class _AppLocalizationsDelegate

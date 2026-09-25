@@ -160,6 +160,10 @@ class WorkspaceTabs extends Notifier<WorkspaceTabsState> {
     if (closedActive) navigate?.call(tabs[active].location);
   }
 
+  /// Undoes [closeForLocation]'s bookkeeping when the page comes back (an
+  /// entry restored from the trash): it may enter history stacks again.
+  void revive(String location) => _dead.remove(location);
+
   /// Called after an entry is deleted: inactive tabs still pointing at it
   /// are closed (the active tab is navigated away by the caller), and the
   /// dead location is scrubbed from every tab's history stacks so Back

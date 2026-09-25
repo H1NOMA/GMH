@@ -8,6 +8,7 @@ import '../features/entities/entity_list_screen.dart';
 import '../features/entities/entity_screen.dart';
 import '../features/graph/graph_screen.dart';
 import '../features/help/help_screen.dart';
+import '../features/trash/trash_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/search/search_screen.dart';
 import '../features/settings/settings_screen.dart';
@@ -31,6 +32,7 @@ abstract final class Routes {
   static String campaigns(String worldId) => '/w/$worldId/campaigns';
   static String settings(String worldId) => '/w/$worldId/settings';
   static String help(String worldId) => '/w/$worldId/help';
+  static String trash(String worldId) => '/w/$worldId/trash';
   static String tools(String worldId) => '/w/$worldId/tools';
   static String tool(String worldId, String toolId, [String? objectId]) =>
       '/w/$worldId/tools/$toolId${objectId == null ? '' : '/$objectId'}';
@@ -165,6 +167,12 @@ GoRouter createRouter({
             path: '/w/:worldId/tools/:toolId/:objectId',
             pageBuilder: (context, state) => _toolPage(state,
                 objectId: state.pathParameters['objectId']),
+          ),
+          GoRoute(
+            path: '/w/:worldId/trash',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: TrashScreen(worldId: state.pathParameters['worldId']!),
+            ),
           ),
           GoRoute(
             path: '/w/:worldId/help',

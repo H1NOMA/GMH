@@ -92,6 +92,9 @@ abstract interface class EntityRepository {
   Future<void> restore(String id);
   Future<void> purge(String id);
 
+  /// Trashed entries of a world, most recently deleted first.
+  Stream<List<Entity>> watchTrash(String worldId);
+
   Future<Map<EntityKind, int>> countsByKind(String worldId);
 
   /// Lightweight name lookup for the mention picker (prefix match).

@@ -144,7 +144,9 @@ class _EntityScaffold extends ConsumerWidget {
             child: Text(context.l10n.cancel),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: GmhColors.danger),
+            style: FilledButton.styleFrom(
+                backgroundColor: GmhColors.danger,
+                foregroundColor: readableOn(GmhColors.danger)),
             onPressed: () => Navigator.pop(context, true),
             child: Text(context.l10n.delete),
           ),
@@ -152,7 +154,24 @@ class _EntityScaffold extends ConsumerWidget {
       ),
     );
     if (confirmed != true) return;
-    await ref.read(entityServiceProvider).moveToTrash(entity.id);
+    if (!context.mounted) return;
+    final service = ref.read(entityServiceProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+    final tabs = ref.read(workspaceTabsProvider.notifier);
+    final l10n = context.l10n;
+    await service.moveToTrash(entity.id);
+    messenger.showSnackBar(SnackBar(
+      content: Text(l10n.trashMovedSnack(entity.name)),
+      action: SnackBarAction(
+        label: l10n.undo,
+        onPressed: () async {
+          await service.restore(entity.id);
+          tabs.revive(Routes.entity(worldId, entity.id));
+          router.go(Routes.entity(worldId, entity.id));
+        },
+      ),
+    ));
     // Other tabs (and history stacks) may still point at the deleted
     // entry — close/scrub them so Back or a tab click can't resurrect it.
     ref

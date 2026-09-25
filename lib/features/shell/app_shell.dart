@@ -211,6 +211,16 @@ class _Sidebar extends ConsumerWidget {
             ),
           ),
           const Divider(),
+          if ((ref.watch(trashProvider(worldId)).valueOrNull ?? const [])
+              case final trashed when trashed.isNotEmpty)
+            _NavTile(
+              icon: Icons.delete_outline,
+              label: '${context.l10n.trashTitle} · ${trashed.length}',
+              selected: location.endsWith('/trash'),
+              onTap: () => ref
+                  .read(workspaceTabsProvider.notifier)
+                  .openInNewTab(Routes.trash(worldId)),
+            ),
           _NavTile(
             icon: Icons.help_outline,
             label: context.l10n.helpTitle,

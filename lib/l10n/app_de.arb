@@ -540,5 +540,17 @@
   "combatActions": "Teilnehmeraktionen",
   "combatEncounterActions": "Begegnungsaktionen",
   "roleCustomLabel": "Oder eigene Rolle eingeben",
-  "importFilesFailed": "{count, plural, one{1 Datei konnte nicht importiert werden} other{{count} Dateien konnten nicht importiert werden}}"
+  "importFilesFailed": "{count, plural, one{1 Datei konnte nicht importiert werden} other{{count} Dateien konnten nicht importiert werden}}",
+  "trashTitle": "Papierkorb",
+  "trashEmptyState": "Der Papierkorb ist leer. Gelöschte Einträge bleiben hier, bis du sie wiederherstellst oder endgültig löschst.",
+  "trashEmptyAction": "Papierkorb leeren",
+  "trashEmptyConfirmTitle": "Papierkorb leeren?",
+  "trashEmptyConfirmBody": "{count, plural, one{1 Eintrag wird endgültig gelöscht, samt Text, Bildern und Verknüpfungen.} other{{count} Einträge werden endgültig gelöscht, samt Text, Bildern und Verknüpfungen.}}",
+  "trashDeleteForever": "Endgültig löschen",
+  "trashDeleteForeverTitle": "„{name}“ endgültig löschen?",
+  "trashDeleteForeverBody": "Text, Bilder und Verknüpfungen werden ebenfalls entfernt. Das lässt sich nicht rückgängig machen.",
+  "trashDeletedOn": "Gelöscht am {date}",
+  "trashMovedSnack": "„{name}“ in den Papierkorb verschoben",
+  "trashRestoredSnack": "„{name}“ wiederhergestellt",
+  "undo": "Rückgängig"
 }

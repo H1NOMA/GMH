@@ -1871,4 +1871,60 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trashTitle => 'Corbeille';
+
+  @override
+  String get trashEmptyState =>
+      'La corbeille est vide. Les entrées supprimées restent ici jusqu’à ce que vous les restauriez ou les supprimiez définitivement.';
+
+  @override
+  String get trashEmptyAction => 'Vider la corbeille';
+
+  @override
+  String get trashEmptyConfirmTitle => 'Vider la corbeille ?';
+
+  @override
+  String trashEmptyConfirmBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count entrées seront supprimées définitivement, avec leur texte, leurs images et leurs liens.',
+      one:
+          '1 entrée sera supprimée définitivement, avec son texte, ses images et ses liens.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => 'Supprimer définitivement';
+
+  @override
+  String trashDeleteForeverTitle(String name) {
+    return 'Supprimer « $name » définitivement ?';
+  }
+
+  @override
+  String get trashDeleteForeverBody =>
+      'Son texte, ses images et ses liens sont aussi supprimés. Action irréversible.';
+
+  @override
+  String trashDeletedOn(String date) {
+    return 'Supprimé le $date';
+  }
+
+  @override
+  String trashMovedSnack(String name) {
+    return '« $name » placé dans la corbeille';
+  }
+
+  @override
+  String trashRestoredSnack(String name) {
+    return '« $name » restauré';
+  }
+
+  @override
+  String get undo => 'Annuler';
 }

@@ -1860,4 +1860,59 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trashTitle => 'Trash';
+
+  @override
+  String get trashEmptyState =>
+      'Trash is empty. Deleted entries wait here until you restore them or delete them for good.';
+
+  @override
+  String get trashEmptyAction => 'Empty trash';
+
+  @override
+  String get trashEmptyConfirmTitle => 'Empty the trash?';
+
+  @override
+  String trashEmptyConfirmBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count entries will be deleted for good, with their lore, images and links.',
+      one: '1 entry will be deleted for good, with its lore, images and links.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => 'Delete forever';
+
+  @override
+  String trashDeleteForeverTitle(String name) {
+    return 'Delete “$name” forever?';
+  }
+
+  @override
+  String get trashDeleteForeverBody =>
+      'Its lore, images and links are removed too. This can’t be undone.';
+
+  @override
+  String trashDeletedOn(String date) {
+    return 'Deleted $date';
+  }
+
+  @override
+  String trashMovedSnack(String name) {
+    return '“$name” moved to trash';
+  }
+
+  @override
+  String trashRestoredSnack(String name) {
+    return '“$name” restored';
+  }
+
+  @override
+  String get undo => 'Undo';
 }

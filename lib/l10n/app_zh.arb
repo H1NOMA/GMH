@@ -540,5 +540,17 @@
   "combatActions": "参战者操作",
   "combatEncounterActions": "遭遇操作",
   "roleCustomLabel": "或输入自定义关系",
-  "importFilesFailed": "{count, plural, other{{count} 个文件无法导入}}"
+  "importFilesFailed": "{count, plural, other{{count} 个文件无法导入}}",
+  "trashTitle": "回收站",
+  "trashEmptyState": "回收站为空。删除的条目会保留在这里，直到你恢复或永久删除它们。",
+  "trashEmptyAction": "清空回收站",
+  "trashEmptyConfirmTitle": "清空回收站？",
+  "trashEmptyConfirmBody": "{count, plural, other{{count} 个条目将被永久删除，包括其正文、图片和关联。}}",
+  "trashDeleteForever": "永久删除",
+  "trashDeleteForeverTitle": "永久删除“{name}”？",
+  "trashDeleteForeverBody": "其正文、图片和关联也将被删除。此操作无法撤销。",
+  "trashDeletedOn": "删除于 {date}",
+  "trashMovedSnack": "“{name}”已移至回收站",
+  "trashRestoredSnack": "“{name}”已恢复",
+  "undo": "撤销"
 }

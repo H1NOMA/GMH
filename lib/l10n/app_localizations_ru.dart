@@ -1873,4 +1873,62 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trashTitle => 'Корзина';
+
+  @override
+  String get trashEmptyState =>
+      'Корзина пуста. Удалённые записи хранятся здесь, пока вы их не восстановите или не удалите навсегда.';
+
+  @override
+  String get trashEmptyAction => 'Очистить корзину';
+
+  @override
+  String get trashEmptyConfirmTitle => 'Очистить корзину?';
+
+  @override
+  String trashEmptyConfirmBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count записей будут удалены навсегда вместе с текстом, изображениями и связями.',
+      few:
+          '$count записи будут удалены навсегда вместе с текстом, изображениями и связями.',
+      one:
+          '$count запись будет удалена навсегда вместе с текстом, изображениями и связями.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => 'Удалить навсегда';
+
+  @override
+  String trashDeleteForeverTitle(String name) {
+    return 'Удалить «$name» навсегда?';
+  }
+
+  @override
+  String get trashDeleteForeverBody =>
+      'Текст, изображения и связи тоже будут удалены. Это нельзя отменить.';
+
+  @override
+  String trashDeletedOn(String date) {
+    return 'Удалено $date';
+  }
+
+  @override
+  String trashMovedSnack(String name) {
+    return '«$name» перемещено в корзину';
+  }
+
+  @override
+  String trashRestoredSnack(String name) {
+    return '«$name» восстановлено';
+  }
+
+  @override
+  String get undo => 'Отменить';
 }

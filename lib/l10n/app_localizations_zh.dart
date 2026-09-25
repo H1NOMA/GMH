@@ -1800,4 +1800,55 @@ class AppLocalizationsZh extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trashTitle => '回收站';
+
+  @override
+  String get trashEmptyState => '回收站为空。删除的条目会保留在这里，直到你恢复或永久删除它们。';
+
+  @override
+  String get trashEmptyAction => '清空回收站';
+
+  @override
+  String get trashEmptyConfirmTitle => '清空回收站？';
+
+  @override
+  String trashEmptyConfirmBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个条目将被永久删除，包括其正文、图片和关联。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => '永久删除';
+
+  @override
+  String trashDeleteForeverTitle(String name) {
+    return '永久删除“$name”？';
+  }
+
+  @override
+  String get trashDeleteForeverBody => '其正文、图片和关联也将被删除。此操作无法撤销。';
+
+  @override
+  String trashDeletedOn(String date) {
+    return '删除于 $date';
+  }
+
+  @override
+  String trashMovedSnack(String name) {
+    return '“$name”已移至回收站';
+  }
+
+  @override
+  String trashRestoredSnack(String name) {
+    return '“$name”已恢复';
+  }
+
+  @override
+  String get undo => '撤销';
 }

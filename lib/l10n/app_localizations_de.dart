@@ -1869,4 +1869,60 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trashTitle => 'Papierkorb';
+
+  @override
+  String get trashEmptyState =>
+      'Der Papierkorb ist leer. Gelöschte Einträge bleiben hier, bis du sie wiederherstellst oder endgültig löschst.';
+
+  @override
+  String get trashEmptyAction => 'Papierkorb leeren';
+
+  @override
+  String get trashEmptyConfirmTitle => 'Papierkorb leeren?';
+
+  @override
+  String trashEmptyConfirmBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count Einträge werden endgültig gelöscht, samt Text, Bildern und Verknüpfungen.',
+      one:
+          '1 Eintrag wird endgültig gelöscht, samt Text, Bildern und Verknüpfungen.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => 'Endgültig löschen';
+
+  @override
+  String trashDeleteForeverTitle(String name) {
+    return '„$name“ endgültig löschen?';
+  }
+
+  @override
+  String get trashDeleteForeverBody =>
+      'Text, Bilder und Verknüpfungen werden ebenfalls entfernt. Das lässt sich nicht rückgängig machen.';
+
+  @override
+  String trashDeletedOn(String date) {
+    return 'Gelöscht am $date';
+  }
+
+  @override
+  String trashMovedSnack(String name) {
+    return '„$name“ in den Papierkorb verschoben';
+  }
+
+  @override
+  String trashRestoredSnack(String name) {
+    return '„$name“ wiederhergestellt';
+  }
+
+  @override
+  String get undo => 'Rückgängig';
 }

@@ -540,5 +540,17 @@
   "combatActions": "Действия участника",
   "combatEncounterActions": "Действия со стычкой",
   "roleCustomLabel": "Или введите свою роль",
-  "importFilesFailed": "{count, plural, one{Не удалось импортировать {count} файл} few{Не удалось импортировать {count} файла} other{Не удалось импортировать {count} файлов}}"
+  "importFilesFailed": "{count, plural, one{Не удалось импортировать {count} файл} few{Не удалось импортировать {count} файла} other{Не удалось импортировать {count} файлов}}",
+  "trashTitle": "Корзина",
+  "trashEmptyState": "Корзина пуста. Удалённые записи хранятся здесь, пока вы их не восстановите или не удалите навсегда.",
+  "trashEmptyAction": "Очистить корзину",
+  "trashEmptyConfirmTitle": "Очистить корзину?",
+  "trashEmptyConfirmBody": "{count, plural, one{{count} запись будет удалена навсегда вместе с текстом, изображениями и связями.} few{{count} записи будут удалены навсегда вместе с текстом, изображениями и связями.} other{{count} записей будут удалены навсегда вместе с текстом, изображениями и связями.}}",
+  "trashDeleteForever": "Удалить навсегда",
+  "trashDeleteForeverTitle": "Удалить «{name}» навсегда?",
+  "trashDeleteForeverBody": "Текст, изображения и связи тоже будут удалены. Это нельзя отменить.",
+  "trashDeletedOn": "Удалено {date}",
+  "trashMovedSnack": "«{name}» перемещено в корзину",
+  "trashRestoredSnack": "«{name}» восстановлено",
+  "undo": "Отменить"
 }

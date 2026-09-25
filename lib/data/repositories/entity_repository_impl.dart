@@ -204,6 +204,15 @@ class EntityRepositoryImpl implements EntityRepository {
   }
 
   @override
+  Stream<List<Entity>> watchTrash(String worldId) {
+    return (_db.select(_db.entities)
+          ..where((e) => e.worldId.equals(worldId) & e.deletedAt.isNotNull())
+          ..orderBy([(e) => OrderingTerm.desc(e.deletedAt)]))
+        .watch()
+        .map((rows) => rows.map(_map).toList());
+  }
+
+  @override
   Future<void> purge(String id) async {
     await _db.transaction(() async {
       await _db.customStatement(

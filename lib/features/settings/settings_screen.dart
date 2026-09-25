@@ -26,6 +26,7 @@ import '../../data/backup/backup_service.dart';
 import '../../domain/repositories/repositories.dart';
 import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
+import '../shell/workspace_tabs.dart';
 
 /// Settings: language, manual/automatic backups, full-project export
 /// (.gmhw ZIP), JSON export, PDF world book, and restore/import.
@@ -366,6 +367,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               description: draft.description,
                               style: draft.style));
                     },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delete_outline),
+                    title: Text(l.trashTitle),
+                    trailing: Text(
+                        '${ref.watch(trashProvider(widget.worldId)).valueOrNull?.length ?? 0}',
+                        style: TextStyle(color: GmhColors.parchmentDim)),
+                    onTap: () => ref
+                        .read(workspaceTabsProvider.notifier)
+                        .openInNewTab(Routes.trash(widget.worldId)),
                   ),
                 ],
               ),

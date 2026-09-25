@@ -395,6 +395,16 @@ Future<DemoWorld> seedRichWorld() async {
     });
   }
 
+  // Two entries in the trash, for the Trash page.
+  for (final (kind, name) in [
+    (EntityKind.character, 'Captain Vell (retconned)'),
+    (EntityKind.item, 'Cracked Spyglass'),
+  ]) {
+    final trashed = await create(world.id, kind, name, 'Cut from the story.');
+    await entities.moveToTrash(trashed.id);
+    demo.byName.remove(name);
+  }
+
   // A meaty lore document for the entry screenshot, with real @-mention
   // links to entries (they render as chips and create backlinks).
   Map<String, Object> mention(Entity e) => {

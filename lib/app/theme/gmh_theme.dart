@@ -182,6 +182,14 @@ Color adaptiveAccent(Color base, {double minContrast = 3.2}) {
 
 final _accentCache = <(Color, Color, Color, double), Color>{};
 
+/// Black or white, whichever reads better on [background] (labels on
+/// danger buttons, status chips…).
+Color readableOn(Color background) =>
+    contrastRatio(Colors.white, background) >=
+            contrastRatio(Colors.black, background)
+        ? Colors.white
+        : Colors.black;
+
 /// Facade for the active world style. The shell sets [current] from the open
 /// world (and the world picker resets it), so widgets — including the kind
 /// label slang in `l10n_ext.dart` — follow the world without plumbing the
