@@ -356,5 +356,9 @@
   "toolTimeline": "Chronologie",
   "toolTimelineHint": "Événements et ères de votre monde dans l'ordre chronologique.",
   "toolReference": "Écran du MJ",
-  "toolReferenceHint": "États et règles rapides en un coup d'œil (SRD 5.2.1)."
+  "toolReferenceHint": "États et règles rapides en un coup d'œil (SRD 5.2.1).",
+  "importReplaceTitle": "Remplacer « {name} » ?",
+  "importReplaceBody": "Cette archive contient un monde qui existe déjà ici. L'import remplace entièrement sa version actuelle.",
+  "importReplaceAction": "Remplacer",
+  "searchIndexFailed": "Le monde a été restauré, mais la recherche n'a pas pu être reconstruite. Relancez l'application pour réessayer."
 }

@@ -1239,4 +1239,20 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'Состояния и быстрые правила под рукой (SRD 5.2.1).';
+
+  @override
+  String importReplaceTitle(String name) {
+    return 'Заменить «$name»?';
+  }
+
+  @override
+  String get importReplaceBody =>
+      'В архиве мир, который уже есть здесь. Импорт полностью заменит его текущую версию.';
+
+  @override
+  String get importReplaceAction => 'Заменить';
+
+  @override
+  String get searchIndexFailed =>
+      'Мир восстановлен, но поиск перестроить не удалось. Перезапустите приложение, чтобы повторить.';
 }

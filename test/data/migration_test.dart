@@ -25,7 +25,58 @@ class _V5Database extends AppDatabase {
       });
 }
 
+/// GMH 1.0's first schema: no custom categories, no category column on
+/// entities, no tag timestamps, no world style, no world objects.
+class _V1Database extends AppDatabase {
+  _V1Database(super.executor);
+
+  @override
+  int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (m) async {
+        for (final table in allTables) {
+          if (table.actualTableName == 'world_objects' ||
+              table.actualTableName == 'custom_categories') {
+            continue;
+          }
+          await m.createTable(table);
+        }
+        await customStatement(
+            'ALTER TABLE entities DROP COLUMN custom_category_id');
+        await customStatement('ALTER TABLE tags DROP COLUMN created_at');
+        await customStatement('ALTER TABLE worlds DROP COLUMN style');
+      });
+}
+
 void main() {
+  test('a v1 database upgrades through every step to the current schema',
+      () async {
+    driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
+    final dir = await Directory.systemTemp.createTemp('gmh_migration_v1_');
+    addTearDown(() => dir.delete(recursive: true));
+    final file = File(p.join(dir.path, 'gmh.db'));
+
+    final old = _V1Database(NativeDatabase(file));
+    await old.customStatement(
+        "INSERT INTO worlds (id, name, description, created_at, updated_at) "
+        "VALUES ('w1', 'Oldest', '', 1, 1)");
+    await old.close();
+
+    final db = AppDatabase(NativeDatabase(file));
+    addTearDown(db.close);
+    final world = (await db.select(db.worlds).get()).single;
+    expect(world.name, 'Oldest');
+    expect(world.style, 'fantasy');
+    await db.into(db.customCategories).insert(
+        CustomCategoriesCompanion.insert(
+            id: 'c1', worldId: 'w1', name: 'Guilds', color: 1, createdAt: 1));
+    final category = (await db.select(db.customCategories).get()).single;
+    expect(category.blueprintJson, '{}');
+    final repo = WorldObjectRepositoryImpl(db);
+    await repo.create(worldId: 'w1', type: WorldObjectTypes.map);
+  });
+
   test('a v5 database upgrades to v6 and keeps its data', () async {
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     final dir = await Directory.systemTemp.createTemp('gmh_migration_');

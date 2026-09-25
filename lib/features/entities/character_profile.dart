@@ -300,7 +300,10 @@ class _BiographyTabState extends ConsumerState<_BiographyTab> {
       future: _doc,
       builder: (context, snapshot) {
         final doc = snapshot.data;
-        if (doc == null) {
+        // FutureBuilder keeps the previous future's data while a new one
+        // loads: after navigating A -> B that would be A's document handed
+        // to B's editor, and B's first autosave would overwrite B with A.
+        if (doc == null || doc.entityId != widget.entity.id) {
           return const Center(child: CircularProgressIndicator());
         }
         return LoreEditor(

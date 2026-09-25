@@ -1233,4 +1233,20 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'Conditions and quick rules at a glance (SRD 5.2.1).';
+
+  @override
+  String importReplaceTitle(String name) {
+    return 'Replace “$name”?';
+  }
+
+  @override
+  String get importReplaceBody =>
+      'This archive contains a world that already exists here. Importing replaces the current version of it completely.';
+
+  @override
+  String get importReplaceAction => 'Replace';
+
+  @override
+  String get searchIndexFailed =>
+      'The world was restored, but search could not be rebuilt. Restart the app to retry.';
 }

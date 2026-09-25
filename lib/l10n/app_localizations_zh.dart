@@ -1191,4 +1191,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toolReferenceHint => '状态与速查规则一目了然（SRD 5.2.1）。';
+
+  @override
+  String importReplaceTitle(String name) {
+    return '替换“$name”？';
+  }
+
+  @override
+  String get importReplaceBody => '此存档中的世界在这里已经存在。导入将完全替换它的当前版本。';
+
+  @override
+  String get importReplaceAction => '替换';
+
+  @override
+  String get searchIndexFailed => '世界已恢复，但搜索索引重建失败。请重启应用重试。';
 }

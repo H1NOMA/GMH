@@ -238,7 +238,13 @@ class ProjectArchiveService {
       final out = File(outputPath);
       await out.parent.create(recursive: true);
       final encoded = ZipEncoder().encode(archive);
-      await out.writeAsBytes(encoded, flush: true);
+      // Write next to the target, then rename: an interrupted write (crash,
+      // full disk) never leaves a truncated archive under the final name,
+      // where it would show up as a restorable backup.
+      final partial = File('$outputPath.part');
+      await partial.writeAsBytes(encoded, flush: true);
+      if (await out.exists()) await out.delete();
+      await partial.rename(outputPath);
       return outputPath;
     });
   }
@@ -261,6 +267,40 @@ class ProjectArchiveService {
   }
 
   // ---------------------------------------------------------------- import
+
+  static final _safeId = RegExp(r'^[A-Za-z0-9_-]{1,64}$');
+
+  static bool _isPlainFileName(String name) =>
+      name.isNotEmpty &&
+      name != '.' &&
+      name != '..' &&
+      !name.contains('/') &&
+      !name.contains('\\') &&
+      !name.contains(':');
+
+  /// Reads an archive's manifest (world id and name) without importing it,
+  /// so the UI can warn before an import replaces an existing world.
+  Future<Result<ArchiveManifest>> inspectArchive(String archivePath) {
+    return guard(() async {
+      final Archive archive;
+      try {
+        archive =
+            ZipDecoder().decodeBytes(await File(archivePath).readAsBytes());
+      } catch (e) {
+        throw ImportException('Not a valid GMH archive: $e');
+      }
+      final manifestFile = archive.findFile('manifest.json');
+      if (manifestFile == null) {
+        throw const ImportException('Archive is missing manifest.json.');
+      }
+      final manifest =
+          jsonDecode(utf8.decode(manifestFile.content as List<int>)) as Map;
+      return ArchiveManifest(
+        worldId: manifest['worldId'] as String? ?? '',
+        worldName: manifest['worldName'] as String? ?? '',
+      );
+    });
+  }
 
   /// Restores a world from a `.gmhw` archive. All-or-nothing: the database
   /// write happens in one transaction; media is restored before that and
@@ -298,12 +338,24 @@ class ProjectArchiveService {
 
       final data =
           jsonDecode(utf8.decode(dataFile.content as List<int>)) as Map;
-      final worldId = (data['world'] as Map)['id'] as String;
+      final worldId = (data['world'] as Map)['id'];
+      if (worldId is! String || !_safeId.hasMatch(worldId)) {
+        throw const ImportException('Archive has an invalid world id.');
+      }
+      // Media rows become vault paths: anything but a plain file name could
+      // make later reads or deletes escape the world's vault directory.
+      for (final m in ((data['media'] as List?) ?? const [])) {
+        final relativePath = (m as Map)['relativePath'];
+        if (relativePath is! String || !_isPlainFileName(relativePath)) {
+          throw const ImportException('Archive has an invalid media path.');
+        }
+      }
 
       // Restore media files first (idempotent: content-addressed names).
       for (final entry in archive.files) {
         if (!entry.isFile || !entry.name.startsWith('media/')) continue;
         final relativePath = p.basename(entry.name);
+        if (!_isPlainFileName(relativePath)) continue;
         final target =
             File(_vault.absolutePath(worldId, relativePath));
         await target.parent.create(recursive: true);
@@ -476,4 +528,11 @@ class ProjectArchiveService {
       }
     });
   }
+}
+
+/// What an archive contains, read from its manifest.
+class ArchiveManifest {
+  final String worldId;
+  final String worldName;
+  const ArchiveManifest({required this.worldId, required this.worldName});
 }

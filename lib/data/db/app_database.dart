@@ -53,9 +53,11 @@ class AppDatabase extends _$AppDatabase {
             // v4: per-world visual style. Existing worlds stay 'fantasy'.
             await m.addColumn(worlds, worlds.style);
           }
-          if (from < 5) {
+          if (from < 5 && from >= 2) {
             // v5: category blueprints (section constructor). Existing
             // categories get '{}' = the standard layout, nothing changes.
+            // (From v1 the table was just created by the v2 step with the
+            // current definition, which already has the column.)
             await m.addColumn(customCategories, customCategories.blueprintJson);
           }
           if (from < 6) {

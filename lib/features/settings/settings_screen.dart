@@ -17,7 +17,9 @@ import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/dates.dart';
+import '../../core/utils/save_flush.dart';
 import '../../data/backup/backup_service.dart';
+import '../../domain/repositories/repositories.dart';
 import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 
@@ -65,6 +67,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _backupNow() => _run(() async {
+        await flushPendingSaves();
         final result =
             await ref.read(backupServiceProvider).backupNow(widget.worldId);
         if (!mounted) return;
@@ -89,6 +92,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _exportArchive() => _run(() async {
+        await flushPendingSaves();
         final world =
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
@@ -106,6 +110,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       });
 
   Future<void> _exportJson() => _run(() async {
+        await flushPendingSaves();
         final world =
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
@@ -121,6 +126,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       });
 
   Future<void> _exportPdf() => _run(() async {
+        await flushPendingSaves();
         final world =
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
@@ -161,50 +167,105 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final path = picked?.files.firstOrNull?.path;
         if (path == null || !mounted) return;
 
-        final result =
-            await ref.read(projectArchiveServiceProvider).importArchive(path);
+        final archives = ref.read(projectArchiveServiceProvider);
+        final manifest = await archives.inspectArchive(path);
         if (!mounted) return;
-        result.fold(
-          (worldId) {
-            _notify(context.l10n.worldImported);
-            ref.read(searchRepositoryProvider).rebuildIndex(worldId);
-            if (mounted) context.go(Routes.home(worldId));
-          },
-          (error) => _notify(localizedError(context, error)),
-        );
+        if (manifest.isErr) {
+          _notify(localizedError(context, manifest.error));
+          return;
+        }
+        // Importing a world that already exists replaces it: say so.
+        final existing = (ref.read(worldsProvider).valueOrNull ?? const [])
+            .where((w) => w.id == manifest.value.worldId)
+            .firstOrNull;
+        if (existing != null) {
+          final replace = await _confirm(
+            title: context.l10n.importReplaceTitle(existing.name),
+            body: context.l10n.importReplaceBody,
+            action: context.l10n.importReplaceAction,
+          );
+          if (!replace || !mounted) return;
+        }
+
+        final result = await archives.importArchive(path);
+        if (!mounted) return;
+        if (result.isErr) {
+          _notify(localizedError(context, result.error));
+          return;
+        }
+        final worldId = result.value;
+        final indexed = await _rebuildIndex(worldId);
+        if (!mounted) return;
+        await ref
+            .read(settingsRepositoryProvider)
+            .set(SettingsKeys.lastOpenedWorld, worldId);
+        if (!mounted) return;
+        _notify(indexed
+            ? context.l10n.worldImported
+            : context.l10n.searchIndexFailed);
+        context.go(Routes.home(worldId));
       });
 
-  Future<void> _restoreBackup(BackupInfo backup) => _run(() async {
-        final confirmed = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(context.l10n.restoreBackupTitle),
-            content: Text(context.l10n.restoreBackupBody(backup.fileName)),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(context.l10n.cancel)),
-              FilledButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(context.l10n.restore)),
-            ],
-          ),
-        );
-        if (confirmed != true) return;
+  /// Rebuilds a world's search index after its rows were replaced;
+  /// false when it failed (the world itself is intact).
+  Future<bool> _rebuildIndex(String worldId) async {
+    try {
+      await ref.read(searchRepositoryProvider).rebuildIndex(worldId);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
-        // Safety net before a destructive restore.
-        await ref.read(backupServiceProvider).backupNow(widget.worldId);
-        final result =
-            await ref.read(backupServiceProvider).restore(backup.path);
-        if (!mounted) return;
-        result.fold(
-          (worldId) {
-            ref.read(searchRepositoryProvider).rebuildIndex(worldId);
-            _notify(context.l10n.backupRestored);
-            _refreshBackups();
-          },
-          (error) => _notify(localizedError(context, error)),
+  Future<bool> _confirm({
+    required String title,
+    required String body,
+    required String action,
+  }) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: SizedBox(width: 420, child: Text(body)),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(context.l10n.cancel)),
+          FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(action)),
+        ],
+      ),
+    );
+    return confirmed == true;
+  }
+
+  Future<void> _restoreBackup(BackupInfo backup) => _run(() async {
+        final confirmed = await _confirm(
+          title: context.l10n.restoreBackupTitle,
+          body: context.l10n.restoreBackupBody(backup.fileName),
+          action: context.l10n.restore,
         );
+        if (!confirmed || !mounted) return;
+
+        // Pending editor edits belong in the safety backup the service
+        // writes before replacing the world.
+        await flushPendingSaves();
+        final result = await ref
+            .read(backupServiceProvider)
+            .restore(backup.path, worldId: widget.worldId);
+        if (!mounted) return;
+        if (result.isErr) {
+          _notify(localizedError(context, result.error));
+          _refreshBackups();
+          return;
+        }
+        final indexed = await _rebuildIndex(result.value);
+        if (!mounted) return;
+        _notify(indexed
+            ? context.l10n.backupRestored
+            : context.l10n.searchIndexFailed);
+        _refreshBackups();
       });
 
   @override

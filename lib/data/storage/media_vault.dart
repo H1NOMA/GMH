@@ -33,12 +33,21 @@ class MediaVault {
     try {
       final hash = sha256.convert(bytes).toString();
       var ext = p.extension(fileName).toLowerCase();
-      if (ext.isEmpty || ext.length > 10) ext = '.bin';
+      if (ext.isEmpty ||
+          ext.length > 10 ||
+          !RegExp(r'^\.[a-z0-9]+$').hasMatch(ext)) {
+        ext = '.bin';
+      }
       final relativePath = '$hash$ext';
       final file = File(p.join(mediaDirectory(worldId), relativePath));
-      if (!await file.exists()) {
+      // A file under the content hash is trusted as complete forever, so
+      // it must only ever appear fully written: temp file, then rename.
+      if (!await file.exists() || await file.length() != bytes.length) {
         await file.parent.create(recursive: true);
-        await file.writeAsBytes(bytes, flush: true);
+        final partial = File('${file.path}.part');
+        await partial.writeAsBytes(bytes, flush: true);
+        if (await file.exists()) await file.delete();
+        await partial.rename(file.path);
       }
       return relativePath;
     } on IOException catch (e, st) {

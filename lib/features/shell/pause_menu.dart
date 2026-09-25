@@ -45,8 +45,9 @@ class _PauseMenuState extends ConsumerState<_PauseMenu> {
       // Persist any debounced editor edits first, or the archive would
       // zip a database that misses the last seconds of typing.
       await flushPendingSaves();
-      await ref.read(backupServiceProvider).backupNow(worldId);
-      messenger.showSnackBar(SnackBar(content: Text(savedText)));
+      final result = await ref.read(backupServiceProvider).backupNow(worldId);
+      messenger.showSnackBar(
+          SnackBar(content: Text(result.isOk ? savedText : errorText)));
     } catch (_) {
       // Disk full / locked file: the menu must not close pretending the
       // backup succeeded.

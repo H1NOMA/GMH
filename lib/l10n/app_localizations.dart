@@ -2245,6 +2245,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Conditions and quick rules at a glance (SRD 5.2.1).'**
   String get toolReferenceHint;
+
+  /// No description provided for @importReplaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace “{name}”?'**
+  String importReplaceTitle(String name);
+
+  /// No description provided for @importReplaceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This archive contains a world that already exists here. Importing replaces the current version of it completely.'**
+  String get importReplaceBody;
+
+  /// No description provided for @importReplaceAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get importReplaceAction;
+
+  /// No description provided for @searchIndexFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The world was restored, but search could not be rebuilt. Restart the app to retry.'**
+  String get searchIndexFailed;
 }
 
 class _AppLocalizationsDelegate

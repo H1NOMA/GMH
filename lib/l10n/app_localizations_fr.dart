@@ -1241,4 +1241,20 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'États et règles rapides en un coup d\'œil (SRD 5.2.1).';
+
+  @override
+  String importReplaceTitle(String name) {
+    return 'Remplacer « $name » ?';
+  }
+
+  @override
+  String get importReplaceBody =>
+      'Cette archive contient un monde qui existe déjà ici. L\'import remplace entièrement sa version actuelle.';
+
+  @override
+  String get importReplaceAction => 'Remplacer';
+
+  @override
+  String get searchIndexFailed =>
+      'Le monde a été restauré, mais la recherche n\'a pas pu être reconstruite. Relancez l\'application pour réessayer.';
 }
