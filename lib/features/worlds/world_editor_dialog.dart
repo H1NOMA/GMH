@@ -9,7 +9,11 @@ class WorldDraft {
   final String name;
   final String description;
   final WorldStyle style;
-  const WorldDraft(this.name, this.description, this.style);
+
+  /// New worlds only: seed example content (see StarterKit).
+  final bool starterContent;
+  const WorldDraft(this.name, this.description, this.style,
+      {this.starterContent = false});
 }
 
 /// Create (when [initial] is null) or edit a world: name, description and
@@ -20,6 +24,7 @@ Future<WorldDraft?> showWorldEditor(BuildContext context,
   final descriptionController =
       TextEditingController(text: initial?.description ?? '');
   var style = initial?.style ?? WorldStyle.fantasy;
+  var starter = true;
   ModalRoute<Object?>? dialogRoute;
   final confirmed = await showDialog<bool>(
     context: context,
@@ -50,6 +55,15 @@ Future<WorldDraft?> showWorldEditor(BuildContext context,
                     decoration:
                         InputDecoration(labelText: l.worldDescriptionLabel),
                   ),
+                  if (initial == null)
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: starter,
+                      onChanged: (v) => setDialogState(() => starter = v),
+                      title: Text(l.starterContentTitle),
+                      subtitle: Text(l.starterContentHint,
+                          style: const TextStyle(fontSize: 12)),
+                    ),
                   const SizedBox(height: 16),
                   Text(l.worldStyleLabel,
                       style: const TextStyle(
@@ -84,7 +98,8 @@ Future<WorldDraft?> showWorldEditor(BuildContext context,
     descriptionController.dispose();
   });
   if (confirmed != true || name.isEmpty) return null;
-  return WorldDraft(name, description, style);
+  return WorldDraft(name, description, style,
+      starterContent: initial == null && starter);
 }
 
 /// Confirms permanent deletion of a world.

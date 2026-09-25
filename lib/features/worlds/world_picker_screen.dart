@@ -11,6 +11,8 @@ import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/world.dart';
 import '../../domain/repositories/repositories.dart';
 import '../shell/ui_providers.dart';
+import '../../domain/services/starter_kit.dart';
+import '../tools/generators/generators_l10n.dart';
 import 'import_world.dart';
 import 'world_editor_dialog.dart';
 
@@ -34,6 +36,22 @@ class WorldPickerScreen extends ConsumerWidget {
           description: draft.description,
           style: draft.style,
         );
+    if (draft.starterContent && context.mounted) {
+      final l = context.l10n;
+      await StarterKit(
+        ref.read(entityServiceProvider),
+        ref.read(worldObjectRepositoryProvider),
+      ).seed(
+        worldId: world.id,
+        style: draft.style,
+        language: Localizations.localeOf(context).languageCode,
+        labels: StarterKitLabels(
+          campaignName: l.starterCampaignName,
+          sessionName: l.sessionNumberName(1),
+          fieldLabel: (key) => generatorFieldLabel(l, key),
+        ),
+      );
+    }
     if (context.mounted) await _openWorld(context, ref, world);
   }
 

@@ -5443,6 +5443,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Truth'**
   String get generatorsFieldTruth;
+
+  /// No description provided for @starterContentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with example content'**
+  String get starterContentTitle;
+
+  /// No description provided for @starterContentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A settlement and its people, a faction, two adventure hooks in a first campaign, and ready-made random tables — generated for the chosen setting. Edit or delete anything.'**
+  String get starterContentHint;
+
+  /// No description provided for @starterCampaignName.
+  ///
+  /// In en, this message translates to:
+  /// **'The First Adventure'**
+  String get starterCampaignName;
 }
 
 class _AppLocalizationsDelegate

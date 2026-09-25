@@ -3092,4 +3092,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get generatorsFieldTruth => 'Правда ли';
+
+  @override
+  String get starterContentTitle => 'Начать с примеров';
+
+  @override
+  String get starterContentHint =>
+      'Поселение и его жители, фракция, две завязки приключений в первой кампании и готовые случайные таблицы — всё под выбранный сеттинг. Любое можно изменить или удалить.';
+
+  @override
+  String get starterCampaignName => 'Первое приключение';
 }

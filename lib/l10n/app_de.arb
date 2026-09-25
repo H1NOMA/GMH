@@ -889,5 +889,8 @@
   "generatorsFieldAir": "Luft",
   "generatorsFieldOmen": "Omen",
   "generatorsFieldSource": "Quelle",
-  "generatorsFieldTruth": "Wahrheit"
+  "generatorsFieldTruth": "Wahrheit",
+  "starterContentTitle": "Mit Beispielinhalten beginnen",
+  "starterContentHint": "Eine Siedlung mit ihren Leuten, eine Fraktion, zwei Abenteueraufhänger in einer ersten Kampagne und fertige Zufallstabellen – passend zum gewählten Setting. Alles lässt sich ändern oder löschen.",
+  "starterCampaignName": "Das erste Abenteuer"
 }

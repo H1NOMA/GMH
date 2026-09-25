@@ -1558,5 +1558,8 @@
   "generatorsFieldAir": "Air",
   "generatorsFieldOmen": "Omen",
   "generatorsFieldSource": "Heard from",
-  "generatorsFieldTruth": "Truth"
+  "generatorsFieldTruth": "Truth",
+  "starterContentTitle": "Start with example content",
+  "starterContentHint": "A settlement and its people, a faction, two adventure hooks in a first campaign, and ready-made random tables — generated for the chosen setting. Edit or delete anything.",
+  "starterCampaignName": "The First Adventure"
 }

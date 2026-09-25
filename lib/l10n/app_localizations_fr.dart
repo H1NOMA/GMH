@@ -3076,4 +3076,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get generatorsFieldTruth => 'Vérité';
+
+  @override
+  String get starterContentTitle => 'Commencer avec des exemples';
+
+  @override
+  String get starterContentHint =>
+      'Un lieu et ses habitants, une faction, deux accroches d’aventure dans une première campagne et des tables aléatoires prêtes — générés pour l’univers choisi. Tout se modifie ou se supprime.';
+
+  @override
+  String get starterCampaignName => 'La première aventure';
 }

@@ -889,5 +889,8 @@
   "generatorsFieldAir": "Воздух",
   "generatorsFieldOmen": "Знамение",
   "generatorsFieldSource": "Источник",
-  "generatorsFieldTruth": "Правда ли"
+  "generatorsFieldTruth": "Правда ли",
+  "starterContentTitle": "Начать с примеров",
+  "starterContentHint": "Поселение и его жители, фракция, две завязки приключений в первой кампании и готовые случайные таблицы — всё под выбранный сеттинг. Любое можно изменить или удалить.",
+  "starterCampaignName": "Первое приключение"
 }

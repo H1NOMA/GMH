@@ -889,5 +889,8 @@
   "generatorsFieldAir": "Air",
   "generatorsFieldOmen": "Présage",
   "generatorsFieldSource": "Source",
-  "generatorsFieldTruth": "Vérité"
+  "generatorsFieldTruth": "Vérité",
+  "starterContentTitle": "Commencer avec des exemples",
+  "starterContentHint": "Un lieu et ses habitants, une faction, deux accroches d’aventure dans une première campagne et des tables aléatoires prêtes — générés pour l’univers choisi. Tout se modifie ou se supprime.",
+  "starterCampaignName": "La première aventure"
 }

@@ -2968,4 +2968,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get generatorsFieldTruth => '真相';
+
+  @override
+  String get starterContentTitle => '以示例内容开始';
+
+  @override
+  String get starterContentHint =>
+      '为所选设定生成：一个聚居地及其居民、一个势力、首个战役中的两个冒险钩子，以及现成的随机表。一切都可以编辑或删除。';
+
+  @override
+  String get starterCampaignName => '第一次冒险';
 }
