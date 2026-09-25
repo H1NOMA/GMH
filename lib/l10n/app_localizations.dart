@@ -2275,6 +2275,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a number'**
   String get fieldNotANumber;
+
+  /// No description provided for @pdfBookSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A World Book'**
+  String get pdfBookSubtitle;
+
+  /// No description provided for @pdfIncludeGmOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Include game-master secrets'**
+  String get pdfIncludeGmOnly;
+
+  /// No description provided for @pdfIncludeGmOnlyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: a player-safe book without fields marked for the GM only.'**
+  String get pdfIncludeGmOnlyHint;
+
+  /// No description provided for @exportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportAction;
 }
 
 class _AppLocalizationsDelegate

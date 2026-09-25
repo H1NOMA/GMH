@@ -361,5 +361,9 @@
   "importReplaceBody": "Cette archive contient un monde qui existe déjà ici. L'import remplace entièrement sa version actuelle.",
   "importReplaceAction": "Remplacer",
   "searchIndexFailed": "Le monde a été restauré, mais la recherche n'a pas pu être reconstruite. Relancez l'application pour réessayer.",
-  "fieldNotANumber": "Saisissez un nombre"
+  "fieldNotANumber": "Saisissez un nombre",
+  "pdfBookSubtitle": "Un livre du monde",
+  "pdfIncludeGmOnly": "Inclure les secrets du MJ",
+  "pdfIncludeGmOnlyHint": "Désactivé : un livre pour les joueurs, sans les champs réservés au MJ.",
+  "exportAction": "Exporter"
 }

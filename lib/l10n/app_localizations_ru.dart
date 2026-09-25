@@ -1258,4 +1258,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get fieldNotANumber => 'Введите число';
+
+  @override
+  String get pdfBookSubtitle => 'Книга мира';
+
+  @override
+  String get pdfIncludeGmOnly => 'Включить секреты мастера';
+
+  @override
+  String get pdfIncludeGmOnlyHint =>
+      'Выключено: книга для игроков без полей «только для мастера».';
+
+  @override
+  String get exportAction => 'Экспортировать';
 }

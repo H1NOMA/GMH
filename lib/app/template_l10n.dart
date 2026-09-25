@@ -13,8 +13,11 @@ import 'theme/gmh_theme.dart';
 /// double as storage values for select fields, so the database stays
 /// language-neutral and worlds survive language switches. The UI translates
 /// them at render time via [trTemplate].
-String trTemplate(BuildContext context, String source) {
-  final lang = Localizations.localeOf(context).languageCode;
+String trTemplate(BuildContext context, String source) =>
+    trTemplateFor(Localizations.localeOf(context).languageCode, source);
+
+/// [trTemplate] without a BuildContext (exports, background work).
+String trTemplateFor(String lang, String source) {
   // The open world's setting pack may re-skin a term (a spell card reads
   // as a protocol card in cyberpunk). Display-only: stored values stay
   // language- and genre-neutral.

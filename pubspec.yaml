@@ -63,6 +63,10 @@ flutter:
   assets:
     - assets/help/
     - assets/icon/gmh_icon_1024.png
+    - assets/fonts/Roboto-Regular.ttf
+    - assets/fonts/Roboto-Bold.ttf
+    - assets/fonts/Roboto-Italic.ttf
+    - assets/fonts/NotoSansSC-Subset.ttf
 
   # Bundled Roboto (Apache 2.0): consistent typography on desktop, and
   # `flutter test` loads project fonts for real — which is what lets the

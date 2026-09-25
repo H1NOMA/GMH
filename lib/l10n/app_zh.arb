@@ -361,5 +361,9 @@
   "importReplaceBody": "此存档中的世界在这里已经存在。导入将完全替换它的当前版本。",
   "importReplaceAction": "替换",
   "searchIndexFailed": "世界已恢复，但搜索索引重建失败。请重启应用重试。",
-  "fieldNotANumber": "请输入数字"
+  "fieldNotANumber": "请输入数字",
+  "pdfBookSubtitle": "世界之书",
+  "pdfIncludeGmOnly": "包含主持人机密",
+  "pdfIncludeGmOnlyHint": "关闭：不含仅限主持人字段的玩家安全版本。",
+  "exportAction": "导出"
 }

@@ -1258,4 +1258,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get fieldNotANumber => 'Zahl eingeben';
+
+  @override
+  String get pdfBookSubtitle => 'Ein Weltenbuch';
+
+  @override
+  String get pdfIncludeGmOnly => 'Meistergeheimnisse einbeziehen';
+
+  @override
+  String get pdfIncludeGmOnlyHint =>
+      'Aus: ein spielersicheres Buch ohne Felder, die nur für die Spielleitung sind.';
+
+  @override
+  String get exportAction => 'Exportieren';
 }

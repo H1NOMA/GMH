@@ -52,6 +52,10 @@ class FieldDef {
 
   final String hint;
 
+  /// Game-master-only knowledge (secrets, twists): left out of
+  /// player-facing outputs such as the player-safe PDF world book.
+  final bool gmOnly;
+
   const FieldDef({
     required this.key,
     required this.label,
@@ -60,6 +64,7 @@ class FieldDef {
     this.refKinds = const [],
     this.linkRole = 'related',
     this.hint = '',
+    this.gmOnly = false,
   });
 }
 

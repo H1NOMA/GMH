@@ -1260,4 +1260,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get fieldNotANumber => 'Saisissez un nombre';
+
+  @override
+  String get pdfBookSubtitle => 'Un livre du monde';
+
+  @override
+  String get pdfIncludeGmOnly => 'Inclure les secrets du MJ';
+
+  @override
+  String get pdfIncludeGmOnlyHint =>
+      'Désactivé : un livre pour les joueurs, sans les champs réservés au MJ.';
+
+  @override
+  String get exportAction => 'Exporter';
 }

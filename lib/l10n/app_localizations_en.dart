@@ -1252,4 +1252,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldNotANumber => 'Enter a number';
+
+  @override
+  String get pdfBookSubtitle => 'A World Book';
+
+  @override
+  String get pdfIncludeGmOnly => 'Include game-master secrets';
+
+  @override
+  String get pdfIncludeGmOnlyHint =>
+      'Off: a player-safe book without fields marked for the GM only.';
+
+  @override
+  String get exportAction => 'Export';
 }

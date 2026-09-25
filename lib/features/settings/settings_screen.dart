@@ -8,6 +8,11 @@ import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 
 import '../../app/l10n_ext.dart';
+import '../../app/template_l10n.dart';
+import '../../data/backup/pdf_exporter.dart';
+import '../../data/backup/pdf_fonts.dart';
+import '../../domain/models/entity_kind.dart';
+import '../../domain/models/world.dart';
 import '../../app/packs/setting_packs.dart';
 import '../worlds/world_editor_dialog.dart';
 import '../../app/locale_provider.dart';
@@ -96,7 +101,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final world =
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
-        final name = _safeName(world?.name ?? 'world');
+        final name = _fileStem(world);
         final path =
             p.join(dir, '$name.${GmhConstants.projectArchiveExtension}');
         final result = await ref
@@ -114,7 +119,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         final world =
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
-        final path = p.join(dir, '${_safeName(world?.name ?? 'world')}.json');
+        final path = p.join(dir, '${_fileStem(world)}.json');
         final result = await ref
             .read(projectArchiveServiceProvider)
             .exportJson(widget.worldId, path);
@@ -126,15 +131,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       });
 
   Future<void> _exportPdf() => _run(() async {
+        final includeGmOnly = await _askIncludeGmOnly();
+        if (includeGmOnly == null || !mounted) return;
         await flushPendingSaves();
+        if (!mounted) return;
+        // Resolve every label now: the export outlives this frame.
+        final l = context.l10n;
+        final lang = Localizations.localeOf(context).languageCode;
+        final chapterTitles = {
+          for (final kind in EntityKind.values)
+            kind: kind.localizedPlural(context),
+        };
+        final labels = PdfBookLabels(
+          subtitle: l.pdfBookSubtitle,
+          chapterTitle: (kind) => chapterTitles[kind] ?? kind.pluralLabel,
+          term: (term) => trTemplateFor(lang, term),
+          fieldsSection: l.blueprintFieldsSection,
+        );
         final world =
             await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
         final dir = await _exportsDir();
-        final path = p.join(dir, '${_safeName(world?.name ?? 'world')}.pdf');
+        final fonts = await PdfFonts.load();
+        final path = p.join(dir, '${_fileStem(world)}.pdf');
         final result = await ref.read(pdfExporterProvider).exportWorldBook(
               worldId: widget.worldId,
               worldName: world?.name ?? 'World',
               outputPath: path,
+              fonts: fonts,
+              labels: labels,
+              includeGmOnly: includeGmOnly,
             );
         if (!mounted) return;
         await result.fold(
@@ -143,6 +168,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
       });
 
+  /// null = cancelled; otherwise whether GM-only fields go into the book.
+  Future<bool?> _askIncludeGmOnly() {
+    var include = false;
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(context.l10n.exportPdfTitle),
+          content: SizedBox(
+            width: 440,
+            child: SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: include,
+              onChanged: (v) => setDialogState(() => include = v),
+              title: Text(context.l10n.pdfIncludeGmOnly),
+              subtitle: Text(context.l10n.pdfIncludeGmOnlyHint),
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(context.l10n.cancel)),
+            FilledButton(
+                onPressed: () => Navigator.pop(context, include),
+                child: Text(context.l10n.exportAction)),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<String> _exportsDir() async {
     final root = ref.read(appRootDirProvider);
     final dir = Directory(p.join(root, 'exports'));
@@ -150,13 +206,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return dir.path;
   }
 
-  String _safeName(String name) {
-    final cleaned = name
-        .replaceAll(RegExp(r'''[<>:"/\\|?*]'''), '')
-        .trim()
-        .replaceAll(RegExp(r'\s+'), '-')
-        .toLowerCase();
-    return cleaned.isEmpty ? 'world' : cleaned;
+  String _safeName(String name) => exportFileStem(name);
+
+  /// World name plus a short id, so two worlds with the same name never
+  /// overwrite each other's exports.
+  String _fileStem(World? world) {
+    final base = _safeName(world?.name ?? 'world');
+    final id = world?.id ?? '';
+    return id.length >= 6 ? '$base-${id.substring(0, 6)}' : base;
   }
 
   Future<void> _importArchive() => _run(() async {
@@ -560,4 +617,20 @@ class _SectionCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A file-name stem that is valid on every desktop OS: no reserved
+/// characters, no Windows device names (CON, NUL, COM1…), never empty.
+String exportFileStem(String name) {
+  var cleaned = name
+      .replaceAll(RegExp(r'''[<>:"/\\|?*\x00-\x1F]'''), '')
+      .trim()
+      .replaceAll(RegExp(r'\s+'), '-')
+      .replaceAll(RegExp(r'^[.\-]+|[.\-]+$'), '')
+      .toLowerCase();
+  if (cleaned.isEmpty) cleaned = 'world';
+  if (RegExp(r'^(con|prn|aux|nul|com[0-9]|lpt[0-9])$').hasMatch(cleaned)) {
+    cleaned = '$cleaned-world';
+  }
+  return cleaned.length > 60 ? cleaned.substring(0, 60) : cleaned;
 }

@@ -1208,4 +1208,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fieldNotANumber => '请输入数字';
+
+  @override
+  String get pdfBookSubtitle => '世界之书';
+
+  @override
+  String get pdfIncludeGmOnly => '包含主持人机密';
+
+  @override
+  String get pdfIncludeGmOnlyHint => '关闭：不含仅限主持人字段的玩家安全版本。';
+
+  @override
+  String get exportAction => '导出';
 }

@@ -64,7 +64,7 @@ abstract final class EntityTemplates {
       ]),
       const FieldSection('Roleplay', [
         FieldDef(key: 'goals', label: 'Goals & Motivation', type: FieldType.longText),
-        FieldDef(key: 'secrets', label: 'Secrets (DM only)', type: FieldType.longText),
+        FieldDef(key: 'secrets', label: 'Secrets (DM only)', type: FieldType.longText, gmOnly: true),
         FieldDef(key: 'voice', label: 'Voice & Mannerisms', type: FieldType.longText),
       ]),
       FieldSection('Relationships', [

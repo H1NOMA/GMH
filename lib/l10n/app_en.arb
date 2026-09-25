@@ -585,5 +585,9 @@
   "importReplaceBody": "This archive contains a world that already exists here. Importing replaces the current version of it completely.",
   "importReplaceAction": "Replace",
   "searchIndexFailed": "The world was restored, but search could not be rebuilt. Restart the app to retry.",
-  "fieldNotANumber": "Enter a number"
+  "fieldNotANumber": "Enter a number",
+  "pdfBookSubtitle": "A World Book",
+  "pdfIncludeGmOnly": "Include game-master secrets",
+  "pdfIncludeGmOnlyHint": "Off: a player-safe book without fields marked for the GM only.",
+  "exportAction": "Export"
 }
