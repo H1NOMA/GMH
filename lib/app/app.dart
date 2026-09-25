@@ -7,6 +7,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/search/search_screen.dart';
 import '../features/shell/pause_menu.dart';
 import '../features/shell/workspace_tabs.dart';
 
@@ -107,7 +108,12 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     final location = _router.routerDelegate.currentConfiguration.uri.path;
     final worldId =
         RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
-    if (worldId != null) _router.go(Routes.search(worldId));
+    if (worldId == null) return;
+    if (location == Routes.search(worldId)) {
+      ref.read(searchFocusRequestProvider.notifier).request();
+    } else {
+      _router.go(Routes.search(worldId));
+    }
   }
 
   /// Escape → pause menu, wired as a root [Focus.onKeyEvent] rather than

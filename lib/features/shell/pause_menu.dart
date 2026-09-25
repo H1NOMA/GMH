@@ -19,7 +19,13 @@ Future<void> showPauseMenu(BuildContext context, {required String? worldId}) {
   return showDialog<void>(
     context: context,
     barrierColor: Colors.black54,
-    builder: (context) => _PauseMenu(worldId: worldId),
+    // Dialogs live on the root navigator, above the shell's per-world
+    // Theme — re-apply the open world's pack so the menu matches it.
+    builder: (context) => Theme(
+      data: GmhStyle.themeFor(
+          GmhStyle.current, Theme.of(context).brightness),
+      child: _PauseMenu(worldId: worldId),
+    ),
   );
 }
 

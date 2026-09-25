@@ -22,6 +22,16 @@ import '../shell/ui_providers.dart';
 /// Global full-text search across every entity — names, summaries, document
 /// bodies and tags — with kind filters, recents and quick commands.
 /// FTS5 with prefix indexes keeps this instant at 10,000+ entries.
+/// Bumped by the Ctrl+K shortcut when the search page is already open.
+final searchFocusRequestProvider =
+    NotifierProvider<_FocusRequest, int>(_FocusRequest.new);
+
+class _FocusRequest extends Notifier<int> {
+  @override
+  int build() => 0;
+  void request() => state++;
+}
+
 class SearchScreen extends ConsumerStatefulWidget {
   final String worldId;
   const SearchScreen({super.key, required this.worldId});
@@ -36,6 +46,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   late final _controller = TextEditingController(
       text: ref.read(searchStateProvider(widget.worldId)).query);
   final _debouncer = Debouncer(GmhConstants.searchDebounce);
+  final _queryFocus = FocusNode();
   List<SearchResult> _results = const [];
   bool _searching = false;
   // Monotonic token: two quick searches can resolve out of order, and the
@@ -80,6 +91,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   void dispose() {
     _debouncer.dispose();
+    _queryFocus.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -122,6 +134,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     // _categoryFilter, and the post-frame cleanup of a stale category
     // filter must repaint them.
     ref.watch(searchStateProvider(widget.worldId));
+    // Ctrl+K while this page is already open: focus and select the query.
+    ref.listen(searchFocusRequestProvider, (_, _) {
+      _queryFocus.requestFocus();
+      _controller.selection = TextSelection(
+          baseOffset: 0, extentOffset: _controller.text.length);
+    });
     final hasQuery = _controller.text.trim().isNotEmpty;
     final recents =
         ref.watch(recentEntitiesProvider(widget.worldId)).valueOrNull ?? [];
@@ -138,6 +156,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               controller: _controller,
+              focusNode: _queryFocus,
               autofocus: true,
               decoration: InputDecoration(
                 hintText: context.l10n.searchHint,

@@ -123,6 +123,16 @@ void main() {
     expect(state().tabs[0].back, ['/w/1/home']);
   });
 
+  test('the redirect after deleting an entry never lands in Back', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.onLocationChanged('/w/1/e/doomed');
+    tabs.closeForLocation('/w/1/e/doomed');
+    tabs.onLocationChanged('/w/1/browse/character'); // post-delete redirect
+    expect(state().tabs.single.back, ['/w/1/home']);
+    tabs.goBack();
+    expect(visited.last, '/w/1/home');
+  });
+
   test('closing tabs adjusts the active index and navigates as needed', () {
     tabs.onLocationChanged('/w/1/home');
     tabs.openInNewTab('/w/1/search');

@@ -51,12 +51,20 @@ final selectedCampaignProvider =
 
 // ---------------------------------------------------- last location
 
-/// Records the current location (throttled by equality) so startup can
-/// reopen exactly where the user left off.
-Future<void> persistLastLocation(WidgetRef ref, String location) {
-  return ref
-      .read(settingsRepositoryProvider)
-      .set(SettingsKeys.lastLocation, location);
+String? _lastPersistedLocation;
+
+/// Records the current location (skipping repeats) so startup can reopen
+/// exactly where the user left off — including the world, which the
+/// startup code resolves from [SettingsKeys.lastOpenedWorld].
+Future<void> persistLastLocation(WidgetRef ref, String location) async {
+  if (location == _lastPersistedLocation) return;
+  _lastPersistedLocation = location;
+  final settings = ref.read(settingsRepositoryProvider);
+  await settings.set(SettingsKeys.lastLocation, location);
+  final worldId = RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
+  if (worldId != null) {
+    await settings.set(SettingsKeys.lastOpenedWorld, worldId);
+  }
 }
 
 // --------------------------------------------------- list preferences

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
+import '../shell/workspace_tabs.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity_kind.dart';
@@ -173,17 +174,21 @@ class _ManageCategories extends ConsumerWidget {
           router.routerDelegate.currentConfiguration.uri.path ==
               Routes.browseCategory(category.worldId, category.id);
 
+      // Same for services: this tile's ref dies with it.
+      final tabs = ref.read(workspaceTabsProvider.notifier);
+      final search = ref.read(searchRepositoryProvider);
       final movedIds =
           await ref.read(categoryRepositoryProvider).delete(category.id);
       // The converted entries changed kind — without a reindex the search
       // keeps returning them under the deleted category's filter.
-      final search = ref.read(searchRepositoryProvider);
       for (final id in movedIds) {
         await search.reindexEntity(id);
       }
       // If the user was browsing the deleted category, its route is now a
       // dead page (empty list, FAB writing into a ghost category). Move
       // them to the Concept Archive where the entries went.
+      tabs.closeForLocation(
+          Routes.browseCategory(category.worldId, category.id));
       if (wasOnCategory) {
         router.go(Routes.browse(category.worldId, EntityKind.concept));
       }

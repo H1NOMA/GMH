@@ -52,6 +52,11 @@ class WorkspaceTabs extends Notifier<WorkspaceTabsState> {
   /// Wired by the app root to `router.go`.
   void Function(String location)? navigate;
 
+  /// Locations of deleted entries/categories: never recorded into a Back
+  /// stack again (the redirect after a delete would otherwise push the
+  /// dead page as the tab's previous page).
+  final Set<String> _dead = {};
+
   @override
   WorkspaceTabsState build() => const WorkspaceTabsState();
 
@@ -83,7 +88,10 @@ class WorkspaceTabs extends Notifier<WorkspaceTabsState> {
     final active = tabs[state.activeIndex];
     tabs[state.activeIndex] = WorkspaceTab(
       location,
-      back: [...active.back, active.location],
+      back: [
+        ...active.back,
+        if (!_dead.contains(active.location)) active.location,
+      ],
       // A brand-new navigation clears the forward stack, like a browser.
       forward: const [],
     );
@@ -157,6 +165,7 @@ class WorkspaceTabs extends Notifier<WorkspaceTabsState> {
   /// dead location is scrubbed from every tab's history stacks so Back
   /// can no longer resurrect it.
   void closeForLocation(String location) {
+    _dead.add(location);
     if (state.tabs.isEmpty) return;
     final kept = <WorkspaceTab>[];
     var active = state.activeIndex;
