@@ -151,14 +151,22 @@ void main() {
     expect(await h.links.allForWorld(world.id), isEmpty);
   });
 
-  test('lookupByName strips wildcards and matches case-insensitively',
+  test('lookupByName matches case-insensitively in any script, literally',
       () async {
     final world = await h.worlds.createWorld(name: 'W');
-    await h.entities.createEntity(
-        worldId: world.id, kind: EntityKind.character, name: 'Lady Vex');
-    final hits = await h.entities.lookupByName(world.id, 'vex');
-    expect(hits.map((e) => e.name), contains('Lady Vex'));
-    expect(await h.entities.lookupByName(world.id, '%'), isNotEmpty);
+    for (final name in ['Lady Vex', 'Дракон Зимы', 'Old_Mill', 'Mill']) {
+      await h.entities.createEntity(
+          worldId: world.id, kind: EntityKind.character, name: name);
+    }
+    Future<List<String>> find(String q) async =>
+        [for (final e in await h.entities.lookupByName(world.id, q)) e.name];
+    expect(await find('vex'), ['Lady Vex']);
+    expect(await find('дракон'), ['Дракон Зимы']);
+    expect(await find('_'), ['Old_Mill']);
+    expect(await find('%'), isEmpty);
+    // Prefix hits rank first.
+    expect(await find('mill'), ['Mill', 'Old_Mill']);
+    expect(await find(''), hasLength(4));
   });
 
   test('settings round-trip', () async {

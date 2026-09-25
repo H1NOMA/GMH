@@ -6,6 +6,7 @@ import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../domain/models/entity_kind.dart';
+import '../../../domain/services/templates/entity_templates.dart';
 import '../../categories/category_ui.dart';
 
 /// What the "Type" dropdown selects: a built-in kind or a custom category.
@@ -40,12 +41,16 @@ class _CategoryChoice extends _TypeChoice {
 /// Creation dialog used from the dashboard FAB, list screens and the
 /// command palette. Custom categories appear alongside built-in kinds and
 /// behave exactly the same. Returns the new entity's id (and navigates).
+///
+/// [presetAttributes] are applied when the chosen kind's template has a
+/// field by that key — e.g. the campaign a new quest or session belongs to.
 Future<String?> showNewEntityDialog(
   BuildContext context,
   WidgetRef ref,
   String worldId, {
   EntityKind? initialKind,
   String? initialCategoryId,
+  Map<String, Object?> presetAttributes = const {},
 }) async {
   final nameController = TextEditingController();
   final categories =
@@ -139,12 +144,20 @@ Future<String?> showNewEntityDialog(
   if (confirmed != true || name.isEmpty) return null;
 
   final selected = choice;
+  final kind = selected is _KindChoice ? selected.kind : EntityKind.custom;
+  final fieldKeys = kind == EntityKind.custom
+      ? const <String>{}
+      : {for (final f in EntityTemplates.of(kind).allFields) f.key};
   final result = await ref.read(entityServiceProvider).create(
         worldId: worldId,
-        kind: selected is _KindChoice ? selected.kind : EntityKind.custom,
+        kind: kind,
         customCategoryId:
             selected is _CategoryChoice ? selected.categoryId : null,
         name: name,
+        attributes: {
+          for (final MapEntry(:key, :value) in presetAttributes.entries)
+            if (fieldKeys.contains(key)) key: value,
+        },
       );
 
   return result.fold(

@@ -219,23 +219,30 @@ class EntityRepositoryImpl implements EntityRepository {
   @override
   Future<List<Entity>> lookupByName(String worldId, String query,
       {int limit = 12, List<EntityKind> kinds = const []}) async {
-    // Strip LIKE wildcards; a stray broader match is harmless in a picker.
-    final escaped = query.replaceAll('%', '').replaceAll('_', ' ');
+    // SQLite's LIKE folds case for ASCII only ("дракон" would miss
+    // "Дракон") and treats '%'/'_' as wildcards, so match in Dart: a
+    // world's names fit comfortably in memory.
+    final needle = query.trim().toLowerCase();
     final kindNames = kinds.map((k) => k.name).toList();
-    final rows = await (_db.select(_db.entities)
+    final candidates = await (_db.select(_db.entities)
           ..where((e) =>
               e.worldId.equals(worldId) &
               e.deletedAt.isNull() &
-              e.name.like('%$escaped%') &
               (kindNames.isEmpty
                   ? const Constant(true)
-                  : e.kind.isIn(kindNames)))
-          ..orderBy([
-            (e) => OrderingTerm.asc(e.name.length),
-            (e) => OrderingTerm.asc(e.name),
-          ])
-          ..limit(limit))
+                  : e.kind.isIn(kindNames))))
         .get();
-    return rows.map(_map).toList();
+    final rows = [
+      for (final row in candidates)
+        if (row.name.toLowerCase().contains(needle)) row
+    ]..sort((a, b) {
+        // Prefix hits first, then shorter (closer) names.
+        final pa = a.name.toLowerCase().startsWith(needle) ? 0 : 1;
+        final pb = b.name.toLowerCase().startsWith(needle) ? 0 : 1;
+        if (pa != pb) return pa - pb;
+        final byLength = a.name.length - b.name.length;
+        return byLength != 0 ? byLength : a.name.compareTo(b.name);
+      });
+    return rows.take(limit).map(_map).toList();
   }
 }

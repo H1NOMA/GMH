@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
-import '../../core/utils/dates.dart';
 import '../../domain/models/document_model.dart';
 import '../../domain/services/linking/mention_parser.dart';
 
@@ -61,8 +60,8 @@ Future<void> showVersionHistorySheet(
                       leading: const Icon(Icons.history, size: 20),
                       title: Text(
                         version.note.isEmpty
-                            ? formatDateTime(version.createdAt)
-                            : '${version.note} — ${formatDateTime(version.createdAt)}',
+                            ? localizedDateTime(context, version.createdAt)
+                            : '${version.note} — ${localizedDateTime(context, version.createdAt)}',
                         style: const TextStyle(fontSize: 13.5),
                       ),
                       subtitle: Text(

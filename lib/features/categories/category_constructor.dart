@@ -165,8 +165,16 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
     });
     if (saved != true || labelText.isEmpty) return;
 
+    // Values already stored under a key were written for its old type; a
+    // number field reading last week's free text (or a select reading an
+    // option list's leftovers) would show garbage. Changing to a
+    // non-interchangeable type starts a fresh key.
+    const textual = {FieldType.text, FieldType.longText};
+    final keepKey = existing != null &&
+        (existing.type == type ||
+            (textual.contains(existing.type) && textual.contains(type)));
     final field = BlueprintField(
-      key: existing?.key ?? 'f_${newId().substring(0, 8)}',
+      key: keepKey ? existing.key : 'f_${newId().substring(0, 8)}',
       label: labelText,
       type: type,
       options: type == FieldType.select
@@ -186,27 +194,37 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
     });
   }
 
+  bool _saving = false;
+
   Future<void> _save() async {
     final name = _name.text.trim();
-    if (name.isEmpty) return;
+    // A double click must not create the category twice.
+    if (name.isEmpty || _saving) return;
+    setState(() => _saving = true);
     final blueprint =
         CategoryBlueprint(modules: _modules, fields: _fields);
     final repository = ref.read(categoryRepositoryProvider);
-    String id;
-    if (widget.existing == null) {
-      final category = await repository.create(
-          worldId: widget.worldId,
-          name: name,
-          icon: _icon,
-          blueprint: blueprint);
-      id = category.id;
-    } else {
-      await repository.update(widget.existing!
-          .copyWith(name: name, icon: _icon, blueprint: blueprint));
-      id = widget.existing!.id;
+    final String id;
+    try {
+      if (widget.existing == null) {
+        final category = await repository.create(
+            worldId: widget.worldId,
+            name: name,
+            icon: _icon,
+            blueprint: blueprint);
+        id = category.id;
+      } else {
+        await repository.update(widget.existing!
+            .copyWith(name: name, icon: _icon, blueprint: blueprint));
+        id = widget.existing!.id;
+      }
+    } catch (_) {
+      if (mounted) setState(() => _saving = false);
+      rethrow;
     }
     if (mounted) Navigator.pop(context, id);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -419,7 +437,7 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
                   child: Text(l.cancel)),
               const SizedBox(width: 8),
               FilledButton(
-                onPressed: _save,
+                onPressed: _saving ? null : _save,
                 child: Text(
                     widget.existing == null ? l.create : l.save),
               ),

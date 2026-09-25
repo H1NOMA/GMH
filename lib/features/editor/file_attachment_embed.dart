@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/media_item.dart';
 import '../attachments/attachment_preview.dart';
 import '../attachments/attachment_utils.dart';
+import '../shell/ui_providers.dart';
 
 /// Inline file-attachment embed: serialized as
 /// `{"insert": {"fileAttachment": "{\"mediaId\":…,\"name\":…}"}}`.
@@ -75,14 +75,14 @@ class _AttachmentChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<MediaItem?>(
-      future: mediaId == null
-          ? Future.value(null)
-          : ref.read(mediaRepositoryProvider).get(mediaId!),
-      builder: (context, snapshot) {
-        final item = snapshot.data;
-        final broken = snapshot.connectionState == ConnectionState.done &&
-            item == null;
+    // Cached per id: every keystroke rebuilds the editor's embeds, and a
+    // fresh query per rebuild made chips flicker and hammered the DB.
+    final lookup =
+        mediaId == null ? null : ref.watch(mediaItemProvider(mediaId!));
+    return Builder(
+      builder: (context) {
+        final item = lookup?.valueOrNull;
+        final broken = lookup == null || (lookup.hasValue && item == null);
         return GestureDetector(
           onTap: item == null
               ? null

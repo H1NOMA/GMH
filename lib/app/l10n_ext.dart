@@ -122,8 +122,16 @@ String localizedTimeAgo(BuildContext context, int ms) {
   if (diff.inMinutes < 60) return l.minutesAgo(diff.inMinutes);
   if (diff.inHours < 24) return l.hoursAgo(diff.inHours);
   if (diff.inDays < 30) return l.daysAgo(diff.inDays);
-  return formatDate(ms);
+  return localizedDate(context, ms);
 }
+
+/// Date in the UI language ("12 мая 2026 г.", "2026年5月12日").
+String localizedDate(BuildContext context, int ms) =>
+    formatDate(ms, locale: Localizations.localeOf(context).languageCode);
+
+/// Date and time in the UI language.
+String localizedDateTime(BuildContext context, int ms) =>
+    formatDateTime(ms, locale: Localizations.localeOf(context).languageCode);
 
 /// Maps domain exceptions to localized, user-presentable messages.
 String localizedError(BuildContext context, GmhException error) {

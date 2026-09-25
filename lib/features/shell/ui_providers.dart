@@ -82,6 +82,12 @@ final galleryProvider = StreamProvider.autoDispose.family<List<GalleryEntry>, St
 /// embeds resolve through this instead of ad-hoc FutureBuilders, so a
 /// rebuilt card or a keystroke near an inline image no longer re-queries
 /// SQLite for a path that cannot change (the vault is content-addressed).
+/// A vault item by id (null once it is gone); cached while shown.
+final mediaItemProvider =
+    FutureProvider.autoDispose.family<MediaItem?, String>(
+  (ref, mediaId) => ref.watch(mediaRepositoryProvider).get(mediaId),
+);
+
 final mediaPathProvider = FutureProvider.autoDispose.family<String?, String>(
   (ref, mediaId) async {
     final repository = ref.watch(mediaRepositoryProvider);

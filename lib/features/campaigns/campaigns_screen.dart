@@ -9,6 +9,7 @@ import '../../app/template_l10n.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity.dart';
+import '../../core/utils/ids.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/models/link.dart';
 import '../../domain/repositories/repositories.dart';
@@ -83,7 +84,12 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
         label: Text(context.l10n.newButton),
         onPressed: () => showNewEntityDialog(context, ref, widget.worldId,
             initialKind:
-                selected == null ? EntityKind.campaign : EntityKind.quest),
+                selected == null ? EntityKind.campaign : EntityKind.quest,
+            // A quest or session made here belongs to the open campaign.
+            presetAttributes: {
+              if (selected != null)
+                'campaign': '$entityRefPrefix${selected.id}',
+            }),
       ),
       body: campaigns.isEmpty
           ? Center(

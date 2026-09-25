@@ -21,7 +21,6 @@ import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
-import '../../core/utils/dates.dart';
 import '../../core/utils/save_flush.dart';
 import '../../data/backup/backup_service.dart';
 import '../../domain/repositories/repositories.dart';
@@ -510,7 +509,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ListTile(
                       leading: const Icon(Icons.history, size: 20),
                       title: Text(
-                          formatDateTime(
+                          localizedDateTime(context,
                               backup.modifiedAt.millisecondsSinceEpoch),
                           style: const TextStyle(fontSize: 13)),
                       subtitle: Text(

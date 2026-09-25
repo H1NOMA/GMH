@@ -20,6 +20,8 @@ import '../entities/widgets/entity_picker_dialog.dart';
 import 'entity_link_embed.dart';
 import 'file_attachment_embed.dart';
 import 'image_embed.dart';
+import 'unknown_embed.dart';
+import '../../domain/services/linking/mention_parser.dart';
 import 'version_history_sheet.dart';
 
 /// The rich-text lore editor: Quill with entity-link, vault-image and
@@ -88,7 +90,16 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
         jsonDecode(widget.initialContentJson) as List,
       );
     } catch (_) {
+      // Unreadable content (corrupt, or from a newer/other editor). The
+      // first keystroke would overwrite it for good, so snapshot the
+      // stored original into version history before any save can run,
+      // and salvage whatever plain text it holds.
       document = Document();
+      final salvaged = extractPlainText(widget.initialContentJson).trim();
+      if (salvaged.isNotEmpty) document.insert(0, salvaged);
+      _saveChain = _documents
+          .checkpoint(widget.entityId)
+          .then((_) {}, onError: (_) {});
     }
     _lastSavedJson = widget.initialContentJson;
     _controller = QuillController(
@@ -111,6 +122,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   void dispose() {
     saveFlushHooks.remove(_flushNow);
     _changes?.cancel();
+    _retry?.cancel();
     _autosave.flush(_saveAndCheckpointSync);
     // Checkpoint the version history when leaving the editor.
     unawaited(_documents.checkpoint(widget.entityId));
@@ -139,17 +151,31 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     );
     if (result.isErr) {
       // Deliberately NOT marking the content as saved: the next change or
-      // flush retries the write instead of silently losing it.
+      // flush retries the write instead of silently losing it. One notice
+      // per failure streak, retries backing off (2s, 4s … 60s) — a locked
+      // or full disk must not bury the user in snackbars.
+      _failedSaves++;
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(localizedError(context, result.error))),
-        );
-        _autosave(_save);
+        if (_failedSaves == 1) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(localizedError(context, result.error))),
+          );
+        }
+        _retry?.cancel();
+        final seconds = 1 << _failedSaves.clamp(1, 6);
+        _retry = Timer(Duration(seconds: seconds.clamp(2, 60)), () {
+          if (mounted) _save();
+        });
       }
       return;
     }
+    _failedSaves = 0;
+    _retry?.cancel();
     _lastSavedJson = json;
   }
+
+  int _failedSaves = 0;
+  Timer? _retry;
 
   Future<String?> _importPastedImage(Uint8List bytes) async {
     if (bytes.isEmpty) return null;
@@ -175,7 +201,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   }
 
   Future<void> _insertImage() async {
-    final files = await pickAnyFiles(
+    final files = await pickImageFiles(
       dialogTitle: context.l10n.editorInsertImage,
     );
     await _embedFiles(files, imagesOnly: true);
@@ -323,6 +349,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
                     VaultImageEmbedBuilder(),
                     FileAttachmentEmbedBuilder(),
                   ],
+                  unknownEmbedBuilder: const UnknownEmbedBuilder(),
                 ),
               ),
             ),

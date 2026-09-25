@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gmh/app/providers.dart';
 import 'package:gmh/app/router.dart';
@@ -97,5 +98,44 @@ void main() {
     expect(parseFieldNumber(' 1 200 '), 1200);
     expect(parseFieldNumber(''), isNull);
     expect(parseFieldNumber('12a'), isNull);
+  });
+
+  testWidgets('unreadable lore is snapshotted and salvaged, not overwritten',
+      (tester) async {
+    final app = await start(tester);
+    final e = await entry(app, EntityKind.location, 'Ruins');
+    // A retain op is valid Delta JSON but not a valid document.
+    const corrupt = '[{"insert":"Old tale\\n"},{"retain":3}]';
+    await app.run(() => app.container
+        .read(documentServiceProvider)
+        .save(entityId: e.id, contentJson: corrupt));
+    await app.pump(Routes.entity(worldId, e.id));
+
+    final editor = tester.widget<QuillEditor>(find.byType(QuillEditor));
+    expect(editor.controller.document.toPlainText(), contains('Old tale'));
+    final versions = await app.run(() async {
+      final docs = app.container.read(documentRepositoryProvider);
+      final doc = await docs.getOrCreate(e.id);
+      return docs.versions(doc.id);
+    });
+    expect(versions.map((v) => v.contentJson), contains(corrupt));
+  });
+
+  testWidgets('an embed without a builder renders as a chip, not an error',
+      (tester) async {
+    final app = await start(tester);
+    final e = await entry(app, EntityKind.location, 'Theatre');
+    await app.run(() => app.container.read(documentServiceProvider).save(
+        entityId: e.id,
+        contentJson: jsonEncode([
+          {'insert': 'Show: '},
+          {
+            'insert': {'video': 'https://example.com/a.mp4'}
+          },
+          {'insert': '\n'},
+        ])));
+    await app.pump(Routes.entity(worldId, e.id));
+    expect(tester.takeException(), isNull);
+    expect(find.text('video'), findsOneWidget);
   });
 }
