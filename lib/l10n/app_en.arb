@@ -1229,5 +1229,40 @@
         "type": "int"
       }
     }
+  },
+  "timelineEmptyTitle": "No history yet",
+  "timelineEmptyHint": "Eras and events with an in-world date appear here in order. Add an event, or give existing ones a date.",
+  "timelineNewEvent": "New event",
+  "timelineEventName": "Event name",
+  "timelineDateLabel": "In-world date",
+  "timelineDateHint": "e.g. 1492, 12 March 1492, Year 412, 300 BC",
+  "timelineDateUnreadable": "No year found in this date — it will be listed as undated.",
+  "timelineUndated": "Undated",
+  "timelineUndatedHint": "Give these a date to place them on the timeline.",
+  "timelineSetDate": "Set date",
+  "timelineOutsideEras": "Outside any era",
+  "timelineEraSpan": "{start} – {end}",
+  "@timelineEraSpan": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "timelineOngoing": "ongoing",
+  "timelineCalendar": "Calendar",
+  "timelineCalendarHint": "One month per line, optionally with its length: “Frostmoon: 30”. Leave empty for the usual calendar.",
+  "timelineMonths": "Months",
+  "timelineYearSuffix": "Year suffix (e.g. DR)",
+  "timelineEventsCount": "{count, plural, =0{No events} one{1 event} other{{count} events}}",
+  "@timelineEventsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

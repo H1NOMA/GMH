@@ -4129,6 +4129,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Session {number}'**
   String sessionNumberName(int number);
+
+  /// No description provided for @timelineEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet'**
+  String get timelineEmptyTitle;
+
+  /// No description provided for @timelineEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Eras and events with an in-world date appear here in order. Add an event, or give existing ones a date.'**
+  String get timelineEmptyHint;
+
+  /// No description provided for @timelineNewEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'New event'**
+  String get timelineNewEvent;
+
+  /// No description provided for @timelineEventName.
+  ///
+  /// In en, this message translates to:
+  /// **'Event name'**
+  String get timelineEventName;
+
+  /// No description provided for @timelineDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'In-world date'**
+  String get timelineDateLabel;
+
+  /// No description provided for @timelineDateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1492, 12 March 1492, Year 412, 300 BC'**
+  String get timelineDateHint;
+
+  /// No description provided for @timelineDateUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'No year found in this date — it will be listed as undated.'**
+  String get timelineDateUnreadable;
+
+  /// No description provided for @timelineUndated.
+  ///
+  /// In en, this message translates to:
+  /// **'Undated'**
+  String get timelineUndated;
+
+  /// No description provided for @timelineUndatedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Give these a date to place them on the timeline.'**
+  String get timelineUndatedHint;
+
+  /// No description provided for @timelineSetDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Set date'**
+  String get timelineSetDate;
+
+  /// No description provided for @timelineOutsideEras.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside any era'**
+  String get timelineOutsideEras;
+
+  /// No description provided for @timelineEraSpan.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} – {end}'**
+  String timelineEraSpan(String start, String end);
+
+  /// No description provided for @timelineOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'ongoing'**
+  String get timelineOngoing;
+
+  /// No description provided for @timelineCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get timelineCalendar;
+
+  /// No description provided for @timelineCalendarHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One month per line, optionally with its length: “Frostmoon: 30”. Leave empty for the usual calendar.'**
+  String get timelineCalendarHint;
+
+  /// No description provided for @timelineMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Months'**
+  String get timelineMonths;
+
+  /// No description provided for @timelineYearSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'Year suffix (e.g. DR)'**
+  String get timelineYearSuffix;
+
+  /// No description provided for @timelineEventsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No events} one{1 event} other{{count} events}}'**
+  String timelineEventsCount(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -177,4 +177,9 @@ void main() {
     await run(tester, '10_monster_statblock',
         (d) => Routes.entity(d.worldId, d.byName['Harbor Wyrm']!.id));
   });
+
+  testWidgets('11 timeline', skip: !_enabled, (tester) async {
+    await run(tester, '11_timeline',
+        (d) => Routes.tool(d.worldId, 'timeline'));
+  });
 }

@@ -11,6 +11,7 @@ abstract final class WorldObjectTypes {
   static const combatant = 'combatant';
   static const diceRoll = 'diceRoll';
   static const kindExtension = 'kindExtension';
+  static const calendar = 'calendar';
 }
 
 /// A world-scoped object stored in the generic `world_objects` table.

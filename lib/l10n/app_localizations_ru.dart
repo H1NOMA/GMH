@@ -2373,4 +2373,75 @@ class AppLocalizationsRu extends AppLocalizations {
   String sessionNumberName(int number) {
     return 'Сессия $number';
   }
+
+  @override
+  String get timelineEmptyTitle => 'Истории пока нет';
+
+  @override
+  String get timelineEmptyHint =>
+      'Здесь по порядку появятся эпохи и события с датой мира. Добавьте событие или укажите дату у существующих.';
+
+  @override
+  String get timelineNewEvent => 'Новое событие';
+
+  @override
+  String get timelineEventName => 'Название события';
+
+  @override
+  String get timelineDateLabel => 'Дата в мире';
+
+  @override
+  String get timelineDateHint =>
+      'например: 1492, 12 марта 1492, год 412, 300 до н. э.';
+
+  @override
+  String get timelineDateUnreadable =>
+      'В дате не найден год — событие попадёт в «Без даты».';
+
+  @override
+  String get timelineUndated => 'Без даты';
+
+  @override
+  String get timelineUndatedHint =>
+      'Укажите дату, чтобы поместить их на шкалу.';
+
+  @override
+  String get timelineSetDate => 'Указать дату';
+
+  @override
+  String get timelineOutsideEras => 'Вне эпох';
+
+  @override
+  String timelineEraSpan(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get timelineOngoing => 'по сей день';
+
+  @override
+  String get timelineCalendar => 'Календарь';
+
+  @override
+  String get timelineCalendarHint =>
+      'По месяцу на строку, можно с длиной: «Морозник: 30». Оставьте пустым для обычного календаря.';
+
+  @override
+  String get timelineMonths => 'Месяцы';
+
+  @override
+  String get timelineYearSuffix => 'Суффикс года (например, DR)';
+
+  @override
+  String timelineEventsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count событий',
+      few: '$count события',
+      one: '$count событие',
+      zero: 'Нет событий',
+    );
+    return '$_temp0';
+  }
 }

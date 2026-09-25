@@ -2272,4 +2272,67 @@ class AppLocalizationsZh extends AppLocalizations {
   String sessionNumberName(int number) {
     return '第 $number 场';
   }
+
+  @override
+  String get timelineEmptyTitle => '还没有历史';
+
+  @override
+  String get timelineEmptyHint => '带有世界内日期的纪元和事件会按顺序显示在这里。添加一个事件，或为已有条目设置日期。';
+
+  @override
+  String get timelineNewEvent => '新事件';
+
+  @override
+  String get timelineEventName => '事件名称';
+
+  @override
+  String get timelineDateLabel => '世界内日期';
+
+  @override
+  String get timelineDateHint => '例如：1492、1492-03-12、年412、公元前300';
+
+  @override
+  String get timelineDateUnreadable => '未识别到年份——该事件将列为“无日期”。';
+
+  @override
+  String get timelineUndated => '无日期';
+
+  @override
+  String get timelineUndatedHint => '为它们设置日期即可放入时间线。';
+
+  @override
+  String get timelineSetDate => '设置日期';
+
+  @override
+  String get timelineOutsideEras => '不属于任何纪元';
+
+  @override
+  String timelineEraSpan(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get timelineOngoing => '至今';
+
+  @override
+  String get timelineCalendar => '历法';
+
+  @override
+  String get timelineCalendarHint => '每行一个月份，可附天数：“霜月：30”。留空则使用常规历法。';
+
+  @override
+  String get timelineMonths => '月份';
+
+  @override
+  String get timelineYearSuffix => '年份后缀（例如 DR）';
+
+  @override
+  String timelineEventsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个事件',
+    );
+    return '$_temp0';
+  }
 }

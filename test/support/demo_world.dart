@@ -338,6 +338,20 @@ Future<DemoWorld> seedRichWorld() async {
     'locations': [entityRefValue(ravenport.id)],
   });
 
+  // A short history for the timeline: two eras, dated events, one
+  // event waiting for a date.
+  await create(world.id, EntityKind.era, 'The Amber Kingdom',
+      'Crowned merchants and a sea of lamps',
+      attributes: {'startDate': 'Year 120', 'endDate': 'Year 398'});
+  await create(world.id, EntityKind.era, 'The Drowned Years',
+      'Fog, debt and the long quiet', attributes: {'startDate': 'Year 399'});
+  await create(world.id, EntityKind.event, 'The First Toll',
+      'Harbor dues are paid in amber', attributes: {'date': 'Year 211'});
+  await create(world.id, EntityKind.event, 'The Council Fire',
+      'The old council burns its ledgers', attributes: {'date': '12 March 402'});
+  await create(world.id, EntityKind.event, 'The Bell Falls Silent',
+      'Nobody agrees when it stopped');
+
   // The city's ruler ref creates a visible relation + backlink pair.
   await entities.setAttribute(
       ravenport.id, 'ruler', entityRefValue(mira.id));

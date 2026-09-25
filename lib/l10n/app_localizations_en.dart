@@ -2348,4 +2348,73 @@ class AppLocalizationsEn extends AppLocalizations {
   String sessionNumberName(int number) {
     return 'Session $number';
   }
+
+  @override
+  String get timelineEmptyTitle => 'No history yet';
+
+  @override
+  String get timelineEmptyHint =>
+      'Eras and events with an in-world date appear here in order. Add an event, or give existing ones a date.';
+
+  @override
+  String get timelineNewEvent => 'New event';
+
+  @override
+  String get timelineEventName => 'Event name';
+
+  @override
+  String get timelineDateLabel => 'In-world date';
+
+  @override
+  String get timelineDateHint => 'e.g. 1492, 12 March 1492, Year 412, 300 BC';
+
+  @override
+  String get timelineDateUnreadable =>
+      'No year found in this date — it will be listed as undated.';
+
+  @override
+  String get timelineUndated => 'Undated';
+
+  @override
+  String get timelineUndatedHint =>
+      'Give these a date to place them on the timeline.';
+
+  @override
+  String get timelineSetDate => 'Set date';
+
+  @override
+  String get timelineOutsideEras => 'Outside any era';
+
+  @override
+  String timelineEraSpan(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get timelineOngoing => 'ongoing';
+
+  @override
+  String get timelineCalendar => 'Calendar';
+
+  @override
+  String get timelineCalendarHint =>
+      'One month per line, optionally with its length: “Frostmoon: 30”. Leave empty for the usual calendar.';
+
+  @override
+  String get timelineMonths => 'Months';
+
+  @override
+  String get timelineYearSuffix => 'Year suffix (e.g. DR)';
+
+  @override
+  String timelineEventsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count events',
+      one: '1 event',
+      zero: 'No events',
+    );
+    return '$_temp0';
+  }
 }

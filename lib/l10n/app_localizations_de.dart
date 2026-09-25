@@ -2359,4 +2359,73 @@ class AppLocalizationsDe extends AppLocalizations {
   String sessionNumberName(int number) {
     return 'Sitzung $number';
   }
+
+  @override
+  String get timelineEmptyTitle => 'Noch keine Geschichte';
+
+  @override
+  String get timelineEmptyHint =>
+      'Epochen und Ereignisse mit einem Datum der Spielwelt erscheinen hier in Reihenfolge. Füge ein Ereignis hinzu oder datiere vorhandene.';
+
+  @override
+  String get timelineNewEvent => 'Neues Ereignis';
+
+  @override
+  String get timelineEventName => 'Name des Ereignisses';
+
+  @override
+  String get timelineDateLabel => 'Datum in der Spielwelt';
+
+  @override
+  String get timelineDateHint =>
+      'z. B. 1492, 12. März 1492, Jahr 412, 300 v. Chr.';
+
+  @override
+  String get timelineDateUnreadable =>
+      'Kein Jahr gefunden – das Ereignis steht dann unter „Ohne Datum“.';
+
+  @override
+  String get timelineUndated => 'Ohne Datum';
+
+  @override
+  String get timelineUndatedHint => 'Gib ihnen ein Datum, um sie einzuordnen.';
+
+  @override
+  String get timelineSetDate => 'Datum setzen';
+
+  @override
+  String get timelineOutsideEras => 'Außerhalb der Epochen';
+
+  @override
+  String timelineEraSpan(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get timelineOngoing => 'andauernd';
+
+  @override
+  String get timelineCalendar => 'Kalender';
+
+  @override
+  String get timelineCalendarHint =>
+      'Ein Monat pro Zeile, optional mit Länge: „Frostmond: 30“. Leer lassen für den üblichen Kalender.';
+
+  @override
+  String get timelineMonths => 'Monate';
+
+  @override
+  String get timelineYearSuffix => 'Jahreszusatz (z. B. DR)';
+
+  @override
+  String timelineEventsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ereignisse',
+      one: '1 Ereignis',
+      zero: 'Keine Ereignisse',
+    );
+    return '$_temp0';
+  }
 }

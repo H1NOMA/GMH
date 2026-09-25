@@ -2360,4 +2360,73 @@ class AppLocalizationsFr extends AppLocalizations {
   String sessionNumberName(int number) {
     return 'Séance $number';
   }
+
+  @override
+  String get timelineEmptyTitle => 'Pas encore d’histoire';
+
+  @override
+  String get timelineEmptyHint =>
+      'Les ères et événements datés dans le monde apparaissent ici dans l’ordre. Ajoutez un événement ou datez ceux qui existent.';
+
+  @override
+  String get timelineNewEvent => 'Nouvel événement';
+
+  @override
+  String get timelineEventName => 'Nom de l’événement';
+
+  @override
+  String get timelineDateLabel => 'Date dans le monde';
+
+  @override
+  String get timelineDateHint =>
+      'ex. 1492, 12 mars 1492, an 412, 300 av. J.-C.';
+
+  @override
+  String get timelineDateUnreadable =>
+      'Aucune année trouvée — l’événement sera classé « sans date ».';
+
+  @override
+  String get timelineUndated => 'Sans date';
+
+  @override
+  String get timelineUndatedHint => 'Datez-les pour les placer sur la frise.';
+
+  @override
+  String get timelineSetDate => 'Dater';
+
+  @override
+  String get timelineOutsideEras => 'Hors des ères';
+
+  @override
+  String timelineEraSpan(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get timelineOngoing => 'en cours';
+
+  @override
+  String get timelineCalendar => 'Calendrier';
+
+  @override
+  String get timelineCalendarHint =>
+      'Un mois par ligne, avec sa durée si besoin : « Givrelune : 30 ». Laissez vide pour le calendrier usuel.';
+
+  @override
+  String get timelineMonths => 'Mois';
+
+  @override
+  String get timelineYearSuffix => 'Suffixe d’année (ex. DR)';
+
+  @override
+  String timelineEventsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count événements',
+      one: '1 événement',
+      zero: 'Aucun événement',
+    );
+    return '$_temp0';
+  }
 }
