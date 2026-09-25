@@ -62,6 +62,14 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
+  Future<DocumentModel?> getByEntity(String entityId) async {
+    final row = await (_db.select(_db.documents)
+          ..where((d) => d.entityId.equals(entityId)))
+        .getSingleOrNull();
+    return row == null ? null : _map(row);
+  }
+
+  @override
   Stream<DocumentModel?> watchByEntity(String entityId) {
     return (_db.select(_db.documents)
           ..where((d) => d.entityId.equals(entityId)))

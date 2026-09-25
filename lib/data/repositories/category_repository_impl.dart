@@ -143,6 +143,18 @@ class CategoryRepositoryImpl implements CategoryRepository {
             ..where(_db.entities.customCategoryId.equals(categoryId)))
           .map((row) => row.read(_db.entities.id)!)
           .get();
+      // Relations mirrored from the category's reference fields would be
+      // dropped at the next edit (the Concept template has no such
+      // fields): they become manual relations the user owns.
+      for (final id in moved) {
+        await _db.customUpdate(
+          "UPDATE OR IGNORE links SET origin = 'manual' "
+          "WHERE source_id = ? AND origin = 'attribute'",
+          variables: [Variable.withString(id)],
+          updates: {_db.links},
+          updateKind: UpdateKind.update,
+        );
+      }
       await (_db.update(_db.entities)
             ..where((e) => e.customCategoryId.equals(categoryId)))
           .write(EntitiesCompanion(
@@ -157,17 +169,23 @@ class CategoryRepositoryImpl implements CategoryRepository {
     });
   }
 
+  Selectable<QueryRow> _countsQuery(String worldId) => _db.customSelect(
+        'SELECT custom_category_id AS cid, COUNT(*) AS n FROM entities '
+        'WHERE world_id = ? AND deleted_at IS NULL '
+        'AND custom_category_id IS NOT NULL GROUP BY custom_category_id',
+        variables: [Variable.withString(worldId)],
+        readsFrom: {_db.entities},
+      );
+
+  static Map<String, int> _countsFrom(List<QueryRow> rows) => {
+        for (final row in rows) row.read<String>('cid'): row.read<int>('n')
+      };
+
   @override
-  Future<Map<String, int>> countsByCategory(String worldId) async {
-    final rows = await _db.customSelect(
-      'SELECT custom_category_id AS cid, COUNT(*) AS n FROM entities '
-      'WHERE world_id = ? AND deleted_at IS NULL '
-      'AND custom_category_id IS NOT NULL GROUP BY custom_category_id',
-      variables: [Variable.withString(worldId)],
-      readsFrom: {_db.entities},
-    ).get();
-    return {
-      for (final row in rows) row.read<String>('cid'): row.read<int>('n')
-    };
-  }
+  Future<Map<String, int>> countsByCategory(String worldId) async =>
+      _countsFrom(await _countsQuery(worldId).get());
+
+  @override
+  Stream<Map<String, int>> watchCountsByCategory(String worldId) =>
+      _countsQuery(worldId).watch().map(_countsFrom);
 }

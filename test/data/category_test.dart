@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gmh/data/backup/project_archive_service.dart';
 import 'package:gmh/data/repositories/category_repository_impl.dart';
+import 'package:gmh/core/utils/ids.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
+import 'package:gmh/domain/models/link.dart';
 import 'package:path/path.dart' as p;
 
 import '../helpers.dart';
@@ -105,6 +107,37 @@ void main() {
     expect(preserved!.kind, EntityKind.concept,
         reason: 'entries move to the Concept Archive, nothing is lost');
     expect(preserved.customCategoryId, isNull);
+  });
+
+  test('related entries of a deleted category survive the next edit',
+      () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final rituals =
+        await categories.create(worldId: world.id, name: 'Rituals');
+    final altar = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.location, name: 'Altar');
+    final rite = (await h.entityService.create(
+      worldId: world.id,
+      kind: EntityKind.custom,
+      customCategoryId: rituals.id,
+      name: 'Rite of Ash',
+      attributes: {
+        'relatedEntries': [entityRefValue(altar.id)],
+      },
+    ))
+        .value;
+
+    await categories.delete(rituals.id);
+    // An edit re-syncs attribute links against the Concept template.
+    final converted = (await h.entities.getEntity(rite.id))!;
+    await h.entityService.update(converted.copyWith(summary: 'Edited'));
+
+    final links = [
+      for (final l in await h.links.allForWorld(world.id))
+        if (l.sourceId == rite.id) l
+    ];
+    expect(links.map((l) => l.targetId), [altar.id]);
+    expect(links.single.origin, LinkOrigin.manual);
   });
 
   test('categories survive export → import round-trip', () async {

@@ -7,8 +7,6 @@ import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity.dart';
 import '../../domain/models/entity_kind.dart';
-import '../../domain/repositories/repositories.dart';
-import '../shell/ui_providers.dart';
 
 /// Icon set for user-defined categories. Keys are stored in the database, so
 /// they must stay stable; add new keys freely, never repurpose old ones.
@@ -41,23 +39,12 @@ final worldCategoriesProvider =
       ref.watch(categoryRepositoryProvider).watchCategories(worldId),
 );
 
-/// Entry counts per custom category id.
+/// Entry counts per custom category id (live).
 final categoryCountsProvider =
-    FutureProvider.family<Map<String, int>, String>((ref, worldId) {
-  ref.watch(worldCategoriesProvider(worldId));
-  // countsByCategory is a one-shot query; recompute whenever the world's
-  // entity list changes, mirroring entityCountsProvider — otherwise the
-  // sidebar badges and dashboard tiles keep stale numbers.
-  ref.watch(entityListProvider((
-    worldId: worldId,
-    kind: null,
-    customCategoryId: null,
-    tagId: null,
-    favoritesOnly: false,
-    sort: EntitySort.updatedDesc,
-  )));
-  return ref.watch(categoryRepositoryProvider).countsByCategory(worldId);
-});
+    StreamProvider.autoDispose.family<Map<String, int>, String>(
+  (ref, worldId) =>
+      ref.watch(categoryRepositoryProvider).watchCountsByCategory(worldId),
+);
 
 /// Display icon for an entry type: custom entries use their category's
 /// icon, built-ins the kind icon.

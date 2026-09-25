@@ -124,10 +124,11 @@ class PdfExporter {
             (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         final flow = <pw.Widget>[pw.Header(level: 0, text: title)];
         for (final entity in group) {
-          final doc = await _documents.getOrCreate(entity.id);
+          // Read-only: exporting must not create empty documents.
+          final doc = await _documents.getByEntity(entity.id);
           flow.addAll(_entityFlow(
             entity,
-            lore: doc.plainText,
+            lore: doc?.plainText ?? '',
             lines: attributeLines(
               entity,
               sections: sectionsFor(entity) ??

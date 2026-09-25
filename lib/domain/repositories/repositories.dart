@@ -57,6 +57,7 @@ abstract interface class CategoryRepository {
   Future<List<String>> delete(String categoryId);
 
   Future<Map<String, int>> countsByCategory(String worldId);
+  Stream<Map<String, int>> watchCountsByCategory(String worldId);
 }
 
 abstract interface class EntityRepository {
@@ -97,6 +98,10 @@ abstract interface class EntityRepository {
 
   Future<Map<EntityKind, int>> countsByKind(String worldId);
 
+  /// Live [countsByKind]: a cheap aggregate that re-runs on entity writes
+  /// (instead of decoding every row of the world to notice a change).
+  Stream<Map<EntityKind, int>> watchCountsByKind(String worldId);
+
   /// Lightweight name lookup for the mention picker (prefix match).
   /// [kinds] restricts matches in SQL, so the limit budget is spent on the
   /// requested kinds only — same-named entities of other kinds can't crowd
@@ -108,6 +113,9 @@ abstract interface class EntityRepository {
 abstract interface class DocumentRepository {
   /// Returns the entity's document, creating an empty one if missing.
   Future<DocumentModel> getOrCreate(String entityId);
+
+  /// The entity's document if it has one (read-only; never creates).
+  Future<DocumentModel?> getByEntity(String entityId);
   Stream<DocumentModel?> watchByEntity(String entityId);
 
   /// Saves content and returns the updated document. Also updates the

@@ -221,14 +221,14 @@ class EntityRepositoryImpl implements EntityRepository {
     });
   }
 
-  @override
-  Future<Map<EntityKind, int>> countsByKind(String worldId) async {
-    final rows = await _db.customSelect(
-      'SELECT kind, COUNT(*) AS n FROM entities '
-      'WHERE world_id = ? AND deleted_at IS NULL GROUP BY kind',
-      variables: [Variable.withString(worldId)],
-      readsFrom: {_db.entities},
-    ).get();
+  Selectable<QueryRow> _countsQuery(String worldId) => _db.customSelect(
+        'SELECT kind, COUNT(*) AS n FROM entities '
+        'WHERE world_id = ? AND deleted_at IS NULL GROUP BY kind',
+        variables: [Variable.withString(worldId)],
+        readsFrom: {_db.entities},
+      );
+
+  static Map<EntityKind, int> _countsFrom(List<QueryRow> rows) {
     final result = <EntityKind, int>{};
     for (final row in rows) {
       final kind = EntityKind.tryParse(row.read<String>('kind'));
@@ -236,6 +236,14 @@ class EntityRepositoryImpl implements EntityRepository {
     }
     return result;
   }
+
+  @override
+  Future<Map<EntityKind, int>> countsByKind(String worldId) async =>
+      _countsFrom(await _countsQuery(worldId).get());
+
+  @override
+  Stream<Map<EntityKind, int>> watchCountsByKind(String worldId) =>
+      _countsQuery(worldId).watch().map(_countsFrom);
 
   @override
   Future<List<Entity>> lookupByName(String worldId, String query,

@@ -98,19 +98,10 @@ final mediaPathProvider = FutureProvider.autoDispose.family<String?, String>(
 );
 
 final entityCountsProvider =
-    FutureProvider.autoDispose.family<Map<EntityKind, int>, String>(
-        (ref, worldId) {
-  // Recompute whenever the entity list of the world changes.
-  ref.watch(entityListProvider((
-    worldId: worldId,
-    kind: null,
-    customCategoryId: null,
-    tagId: null,
-    favoritesOnly: false,
-    sort: EntitySort.updatedDesc,
-  )));
-  return ref.watch(entityRepositoryProvider).countsByKind(worldId);
-});
+    StreamProvider.autoDispose.family<Map<EntityKind, int>, String>(
+  (ref, worldId) =>
+      ref.watch(entityRepositoryProvider).watchCountsByKind(worldId),
+);
 
 /// Recently opened entries; live, so opening an entry updates the
 /// dashboard and search lists immediately.
