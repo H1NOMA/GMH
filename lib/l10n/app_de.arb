@@ -366,5 +366,13 @@
   "pdfIncludeGmOnly": "Meistergeheimnisse einbeziehen",
   "pdfIncludeGmOnlyHint": "Aus: ein spielersicheres Buch ohne Felder, die nur für die Spielleitung sind.",
   "exportAction": "Exportieren",
-  "tagNameTaken": "Ein Tag mit diesem Namen existiert bereits — nutze stattdessen Zusammenführen."
+  "tagNameTaken": "Ein Tag mit diesem Namen existiert bereits — nutze stattdessen Zusammenführen.",
+  "errorEntryGone": "Dieser Eintrag existiert nicht mehr.",
+  "errorNotFound": "Nicht gefunden — möglicherweise wurde es gelöscht.",
+  "errorStorage": "Eine Datei konnte nicht gelesen oder geschrieben werden. Prüfe freien Speicher und Ordnerrechte.",
+  "errorDatabase": "Die Datenbank konnte den Vorgang nicht abschließen. Deine Daten sind unverändert.",
+  "errorArchiveMissing": "Die Archivdatei wurde nicht gefunden.",
+  "errorArchiveInvalid": "Diese Datei ist kein gültiges GMH-Weltarchiv.",
+  "errorExport": "Export fehlgeschlagen. Prüfe freien Speicher und Schreibrechte des Zielordners.",
+  "errorAiNotConfigured": "Kein KI-Anbieter eingerichtet."
 }

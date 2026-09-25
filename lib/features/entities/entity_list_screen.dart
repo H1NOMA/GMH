@@ -173,7 +173,7 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
                       child: FilterChip(
                         label: Text(tag.name,
                             style: TextStyle(
-                                fontSize: 11.5, color: Color(tag.color))),
+                                fontSize: 11.5, color: adaptiveAccent(Color(tag.color)))),
                         selected: prefs.tagId == tag.id,
                         onSelected: (selected) => prefsController
                             .setTag(selected ? tag.id : null),

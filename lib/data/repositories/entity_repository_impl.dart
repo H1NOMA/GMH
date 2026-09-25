@@ -48,7 +48,7 @@ class EntityRepositoryImpl implements EntityRepository {
     String? tagId,
     bool favoritesOnly = false,
     EntitySort sort = EntitySort.updatedDesc,
-    int limit = 500,
+    int? limit,
   }) {
     if (tagId != null) {
       final join = _db.select(_db.entities).join([
@@ -58,8 +58,8 @@ class EntityRepositoryImpl implements EntityRepository {
         ..where(_db.entities.worldId.equals(worldId) &
             _db.entities.deletedAt.isNull() &
             _db.entityTags.tagId.equals(tagId))
-        ..orderBy([_ordering(sort, _db.entities)])
-        ..limit(limit);
+        ..orderBy([_ordering(sort, _db.entities)]);
+      if (limit != null) join.limit(limit);
       if (kind != null) {
         join.where(_db.entities.kind.equals(kind.name));
       }
@@ -77,8 +77,10 @@ class EntityRepositoryImpl implements EntityRepository {
 
     final query = _db.select(_db.entities)
       ..where((e) => e.worldId.equals(worldId) & e.deletedAt.isNull())
-      ..orderBy([(e) => _ordering(sort, e)])
-      ..limit(limit);
+      ..orderBy([(e) => _ordering(sort, e)]);
+    // Unlimited by default: the lists build lazily, and a silent cap hid
+    // everything past the 500th entry of big archives.
+    if (limit != null) query.limit(limit);
     if (kind != null) {
       query.where((e) => e.kind.equals(kind.name));
     }

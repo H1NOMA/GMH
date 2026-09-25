@@ -7,6 +7,9 @@ import 'entity_kind.dart';
 class SearchResult {
   final String entityId;
   final EntityKind kind;
+
+  /// Set for custom entries: the category they belong to.
+  final String? customCategoryId;
   final String name;
   final String summary;
 
@@ -19,6 +22,7 @@ class SearchResult {
   const SearchResult({
     required this.entityId,
     required this.kind,
+    this.customCategoryId,
     required this.name,
     required this.summary,
     required this.snippet,

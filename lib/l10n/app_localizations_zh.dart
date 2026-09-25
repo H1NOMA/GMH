@@ -1223,4 +1223,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tagNameTaken => '已存在同名标签——请改用合并。';
+
+  @override
+  String get errorEntryGone => '该条目已不存在。';
+
+  @override
+  String get errorNotFound => '未找到——可能已被删除。';
+
+  @override
+  String get errorStorage => '无法读取或写入文件。请检查磁盘空间和文件夹权限。';
+
+  @override
+  String get errorDatabase => '数据库无法完成此操作。你的数据未被更改。';
+
+  @override
+  String get errorArchiveMissing => '未找到归档文件。';
+
+  @override
+  String get errorArchiveInvalid => '该文件不是有效的 GMH 世界归档。';
+
+  @override
+  String get errorExport => '导出失败。请检查磁盘空间以及目标文件夹是否可写。';
+
+  @override
+  String get errorAiNotConfigured => '尚未配置 AI 服务。';
 }

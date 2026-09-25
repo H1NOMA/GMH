@@ -136,9 +136,24 @@ String localizedDateTime(BuildContext context, int ms) =>
 /// Maps domain exceptions to localized, user-presentable messages.
 String localizedError(BuildContext context, GmhException error) {
   final l = context.l10n;
+  // Services throw English diagnostics (kept for logs); users get a
+  // translated sentence chosen by exception type and known message.
   return switch (error) {
     ValidationException(message: 'Name cannot be empty.') => l.errorNameEmpty,
+    ValidationException(message: 'Entry no longer exists.') =>
+      l.errorEntryGone,
+    ValidationException(message: 'Tag name already exists.') =>
+      l.tagNameTaken,
+    ValidationException(message: 'No AI provider is configured.') =>
+      l.errorAiNotConfigured,
+    ValidationException() => error.userMessage,
+    NotFoundException() => l.errorNotFound,
+    StorageException() => l.errorStorage,
+    DatabaseException() => l.errorDatabase,
+    ImportException(message: 'Archive file not found.') =>
+      l.errorArchiveMissing,
+    ImportException() => l.errorArchiveInvalid,
+    ExportException() => l.errorExport,
     UnexpectedException() => l.errorUnexpected,
-    _ => error.userMessage,
   };
 }

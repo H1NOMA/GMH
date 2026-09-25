@@ -397,6 +397,7 @@ class _GraphPainter extends CustomPainter {
         node.position +
             Offset(-textPainter.width / 2, radius + 3),
       );
+      textPainter.dispose();
     }
   }
 

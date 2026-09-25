@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/custom_category.dart';
@@ -58,24 +59,43 @@ final categoryCountsProvider =
   return ref.watch(categoryRepositoryProvider).countsByCategory(worldId);
 });
 
-/// Resolves the display icon for an entity: custom entries use their
-/// category's icon, built-ins use the kind icon.
-IconData entityIcon(Entity entity, Map<String, CustomCategory> categories) {
-  if (entity.kind == EntityKind.custom) {
-    final category = categories[entity.customCategoryId];
+/// Display icon for an entry type: custom entries use their category's
+/// icon, built-ins the kind icon.
+IconData typeIcon(EntityKind kind, String? categoryId,
+    Map<String, CustomCategory> categories) {
+  if (kind == EntityKind.custom) {
+    final category = categories[categoryId];
     if (category != null) return categoryIconFor(category.icon);
   }
-  return entity.kind.icon;
+  return kind.icon;
 }
 
-/// Resolves the display color for an entity (see [entityIcon]).
-Color entityColor(Entity entity, Map<String, CustomCategory> categories) {
-  if (entity.kind == EntityKind.custom) {
-    final category = categories[entity.customCategoryId];
+/// Display color for an entry type (see [typeIcon]).
+Color typeColor(EntityKind kind, String? categoryId,
+    Map<String, CustomCategory> categories) {
+  if (kind == EntityKind.custom) {
+    final category = categories[categoryId];
     if (category != null) return adaptiveAccent(Color(category.color));
   }
-  return entity.kind.color;
+  return kind.color;
 }
+
+/// Display name for an entry type: a custom entry's category name, else
+/// the (pack-skinned, localized) kind label.
+String typeLabel(BuildContext context, EntityKind kind, String? categoryId,
+    Map<String, CustomCategory> categories) {
+  if (kind == EntityKind.custom) {
+    final category = categories[categoryId];
+    if (category != null) return category.name;
+  }
+  return kind.localizedLabel(context);
+}
+
+IconData entityIcon(Entity entity, Map<String, CustomCategory> categories) =>
+    typeIcon(entity.kind, entity.customCategoryId, categories);
+
+Color entityColor(Entity entity, Map<String, CustomCategory> categories) =>
+    typeColor(entity.kind, entity.customCategoryId, categories);
 
 /// Categories of the entity's world as an id-keyed map (for cards/graph).
 final categoryMapProvider =

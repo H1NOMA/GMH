@@ -1269,4 +1269,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tagNameTaken =>
       'A tag with this name already exists — use Merge instead.';
+
+  @override
+  String get errorEntryGone => 'This entry no longer exists.';
+
+  @override
+  String get errorNotFound =>
+      'Couldn’t find what you were looking for — it may have been deleted.';
+
+  @override
+  String get errorStorage =>
+      'Couldn’t read or write a file. Check free disk space and folder permissions.';
+
+  @override
+  String get errorDatabase =>
+      'The database couldn’t complete the operation. Your data is unchanged.';
+
+  @override
+  String get errorArchiveMissing => 'The archive file wasn’t found.';
+
+  @override
+  String get errorArchiveInvalid =>
+      'This file isn’t a valid GMH world archive.';
+
+  @override
+  String get errorExport =>
+      'Export failed. Check free disk space and that the target folder is writable.';
+
+  @override
+  String get errorAiNotConfigured => 'No AI provider is configured.';
 }

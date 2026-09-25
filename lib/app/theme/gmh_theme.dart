@@ -155,23 +155,37 @@ abstract final class GmhColors {
   static Color get danger => palette.danger;
 }
 
+/// Adapts an accent color (entity kinds, custom categories, tags) to the
+/// active palette: lightness is nudged — darker on light palettes,
+/// lighter on dark ones — until it keeps [minContrast] against both the
+/// page background and card surfaces. Hue is preserved, so a yellow tag
+/// stays recognisably yellow-brown on parchment instead of vanishing.
+Color adaptiveAccent(Color base, {double minContrast = 3.2}) {
+  final p = GmhColors.palette;
+  final key = (p.background, p.surface, base, minContrast);
+  return _accentCache[key] ??= () {
+    bool ok(Color c) =>
+        contrastRatio(c, p.background) >= minContrast &&
+        contrastRatio(c, p.surface) >= minContrast;
+    if (ok(base)) return base;
+    final light = p.brightness == Brightness.light;
+    var hsl = HSLColor.fromColor(base);
+    for (var i = 0; i < 40; i++) {
+      final l = (hsl.lightness + (light ? -0.025 : 0.025)).clamp(0.0, 1.0);
+      hsl = hsl.withLightness(l);
+      final c = hsl.toColor();
+      if (ok(c) || l == 0.0 || l == 1.0) return c;
+    }
+    return hsl.toColor();
+  }();
+}
+
+final _accentCache = <(Color, Color, Color, double), Color>{};
+
 /// Facade for the active world style. The shell sets [current] from the open
 /// world (and the world picker resets it), so widgets — including the kind
 /// label slang in `l10n_ext.dart` — follow the world without plumbing the
 /// style through every constructor.
-/// Adapts an accent color that was tuned for the dark theme so it keeps
-/// >=3:1 contrast on light surfaces: darkened and slightly saturated when
-/// the active palette is light, untouched otherwise. Used by entity-kind
-/// and custom-category accents (icons, chips, graph nodes).
-Color adaptiveAccent(Color base) {
-  if (GmhColors.palette.brightness != Brightness.light) return base;
-  final hsl = HSLColor.fromColor(base);
-  return hsl
-      .withLightness((hsl.lightness * 0.58).clamp(0.0, 1.0))
-      .withSaturation((hsl.saturation * 1.1).clamp(0.0, 1.0))
-      .toColor();
-}
-
 abstract final class GmhStyle {
   static WorldStyle current = WorldStyle.fantasy;
 

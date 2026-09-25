@@ -2305,6 +2305,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A tag with this name already exists — use Merge instead.'**
   String get tagNameTaken;
+
+  /// No description provided for @errorEntryGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This entry no longer exists.'**
+  String get errorEntryGone;
+
+  /// No description provided for @errorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t find what you were looking for — it may have been deleted.'**
+  String get errorNotFound;
+
+  /// No description provided for @errorStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t read or write a file. Check free disk space and folder permissions.'**
+  String get errorStorage;
+
+  /// No description provided for @errorDatabase.
+  ///
+  /// In en, this message translates to:
+  /// **'The database couldn’t complete the operation. Your data is unchanged.'**
+  String get errorDatabase;
+
+  /// No description provided for @errorArchiveMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The archive file wasn’t found.'**
+  String get errorArchiveMissing;
+
+  /// No description provided for @errorArchiveInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn’t a valid GMH world archive.'**
+  String get errorArchiveInvalid;
+
+  /// No description provided for @errorExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed. Check free disk space and that the target folder is writable.'**
+  String get errorExport;
+
+  /// No description provided for @errorAiNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'No AI provider is configured.'**
+  String get errorAiNotConfigured;
 }
 
 class _AppLocalizationsDelegate

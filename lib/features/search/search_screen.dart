@@ -272,13 +272,22 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             itemCount: _results.length,
                             itemBuilder: (context, index) {
                               final result = _results[index];
+                              final categories = ref.watch(
+                                  categoryMapProvider(widget.worldId));
                               return Card(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: ListTile(
-                                  leading: Icon(result.kind.icon,
-                                      size: 20, color: result.kind.color),
+                                  leading: Icon(
+                                      typeIcon(result.kind,
+                                          result.customCategoryId, categories),
+                                      size: 20,
+                                      color: typeColor(result.kind,
+                                          result.customCategoryId,
+                                          categories)),
                                   title: Text(result.name),
-                                  subtitle: _SnippetText(result: result),
+                                  subtitle: _SnippetText(
+                                      worldId: widget.worldId,
+                                      result: result),
                                   onTap: () => _open(result.entityId),
                                 ),
                               );
@@ -378,15 +387,18 @@ class _IdleView extends ConsumerWidget {
 }
 
 /// Renders an FTS snippet, highlighting matched terms.
-class _SnippetText extends StatelessWidget {
+class _SnippetText extends ConsumerWidget {
+  final String worldId;
   final SearchResult result;
-  const _SnippetText({required this.result});
+  const _SnippetText({required this.worldId, required this.result});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = result.snippet.isEmpty ? result.summary : result.snippet;
     if (text.isEmpty) {
-      return Text(result.kind.localizedLabel(context),
+      return Text(
+          typeLabel(context, result.kind, result.customCategoryId,
+              ref.watch(categoryMapProvider(worldId))),
           style: const TextStyle(fontSize: 11.5));
     }
 

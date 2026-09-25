@@ -44,7 +44,7 @@ class SearchRepositoryImpl implements SearchRepository {
         customCategoryId == null ? '' : 'AND e.custom_category_id = ? ';
     final rows = await _db.customSelect(
       '''
-      SELECT e.id, e.kind, e.name, e.summary,
+      SELECT e.id, e.kind, e.custom_category_id, e.name, e.summary,
              snippet(entity_search, 3, '${SearchResult.snippetMarkerStart}',
                      '${SearchResult.snippetMarkerEnd}', '…', 14) AS snip,
              bm25(entity_search, 0.0, 4.0, 2.0, 1.0, 2.0) AS rank
@@ -75,6 +75,7 @@ class SearchRepositoryImpl implements SearchRepository {
       results.add(SearchResult(
         entityId: row.read<String>('id'),
         kind: entityKind,
+        customCategoryId: row.read<String?>('custom_category_id'),
         name: row.read<String>('name'),
         summary: row.read<String>('summary'),
         snippet: row.read<String?>('snip') ?? '',

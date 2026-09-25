@@ -1275,4 +1275,33 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get tagNameTaken =>
       'Ein Tag mit diesem Namen existiert bereits — nutze stattdessen Zusammenführen.';
+
+  @override
+  String get errorEntryGone => 'Dieser Eintrag existiert nicht mehr.';
+
+  @override
+  String get errorNotFound =>
+      'Nicht gefunden — möglicherweise wurde es gelöscht.';
+
+  @override
+  String get errorStorage =>
+      'Eine Datei konnte nicht gelesen oder geschrieben werden. Prüfe freien Speicher und Ordnerrechte.';
+
+  @override
+  String get errorDatabase =>
+      'Die Datenbank konnte den Vorgang nicht abschließen. Deine Daten sind unverändert.';
+
+  @override
+  String get errorArchiveMissing => 'Die Archivdatei wurde nicht gefunden.';
+
+  @override
+  String get errorArchiveInvalid =>
+      'Diese Datei ist kein gültiges GMH-Weltarchiv.';
+
+  @override
+  String get errorExport =>
+      'Export fehlgeschlagen. Prüfe freien Speicher und Schreibrechte des Zielordners.';
+
+  @override
+  String get errorAiNotConfigured => 'Kein KI-Anbieter eingerichtet.';
 }

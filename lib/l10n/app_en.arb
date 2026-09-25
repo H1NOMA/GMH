@@ -590,5 +590,13 @@
   "pdfIncludeGmOnly": "Include game-master secrets",
   "pdfIncludeGmOnlyHint": "Off: a player-safe book without fields marked for the GM only.",
   "exportAction": "Export",
-  "tagNameTaken": "A tag with this name already exists — use Merge instead."
+  "tagNameTaken": "A tag with this name already exists — use Merge instead.",
+  "errorEntryGone": "This entry no longer exists.",
+  "errorNotFound": "Couldn’t find what you were looking for — it may have been deleted.",
+  "errorStorage": "Couldn’t read or write a file. Check free disk space and folder permissions.",
+  "errorDatabase": "The database couldn’t complete the operation. Your data is unchanged.",
+  "errorArchiveMissing": "The archive file wasn’t found.",
+  "errorArchiveInvalid": "This file isn’t a valid GMH world archive.",
+  "errorExport": "Export failed. Check free disk space and that the target folder is writable.",
+  "errorAiNotConfigured": "No AI provider is configured."
 }

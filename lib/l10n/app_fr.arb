@@ -366,5 +366,13 @@
   "pdfIncludeGmOnly": "Inclure les secrets du MJ",
   "pdfIncludeGmOnlyHint": "Désactivé : un livre pour les joueurs, sans les champs réservés au MJ.",
   "exportAction": "Exporter",
-  "tagNameTaken": "Un tag porte déjà ce nom — utilisez plutôt Fusionner."
+  "tagNameTaken": "Un tag porte déjà ce nom — utilisez plutôt Fusionner.",
+  "errorEntryGone": "Cette entrée n’existe plus.",
+  "errorNotFound": "Introuvable — l’élément a peut-être été supprimé.",
+  "errorStorage": "Impossible de lire ou d’écrire un fichier. Vérifiez l’espace disque et les droits du dossier.",
+  "errorDatabase": "La base de données n’a pas pu terminer l’opération. Vos données sont inchangées.",
+  "errorArchiveMissing": "Le fichier d’archive est introuvable.",
+  "errorArchiveInvalid": "Ce fichier n’est pas une archive de monde GMH valide.",
+  "errorExport": "L’export a échoué. Vérifiez l’espace disque et les droits d’écriture du dossier.",
+  "errorAiNotConfigured": "Aucun fournisseur d’IA n’est configuré."
 }

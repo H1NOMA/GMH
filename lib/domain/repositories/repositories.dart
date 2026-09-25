@@ -67,7 +67,7 @@ abstract interface class EntityRepository {
     String? tagId,
     bool favoritesOnly = false,
     EntitySort sort = EntitySort.updatedDesc,
-    int limit = 500,
+    int? limit,
   });
 
   Stream<Entity?> watchEntity(String id);

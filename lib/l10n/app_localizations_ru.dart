@@ -1275,4 +1275,33 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get tagNameTaken =>
       'Тег с таким именем уже есть — воспользуйтесь слиянием.';
+
+  @override
+  String get errorEntryGone => 'Эта запись больше не существует.';
+
+  @override
+  String get errorNotFound =>
+      'Не удалось найти объект — возможно, он был удалён.';
+
+  @override
+  String get errorStorage =>
+      'Не удалось прочитать или записать файл. Проверьте свободное место и права доступа к папке.';
+
+  @override
+  String get errorDatabase =>
+      'База данных не смогла выполнить операцию. Данные не изменены.';
+
+  @override
+  String get errorArchiveMissing => 'Файл архива не найден.';
+
+  @override
+  String get errorArchiveInvalid =>
+      'Этот файл не является корректным архивом мира GMH.';
+
+  @override
+  String get errorExport =>
+      'Экспорт не удался. Проверьте свободное место и доступ на запись в папку.';
+
+  @override
+  String get errorAiNotConfigured => 'ИИ-провайдер не настроен.';
 }

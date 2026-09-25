@@ -1277,4 +1277,33 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get tagNameTaken =>
       'Un tag porte déjà ce nom — utilisez plutôt Fusionner.';
+
+  @override
+  String get errorEntryGone => 'Cette entrée n’existe plus.';
+
+  @override
+  String get errorNotFound =>
+      'Introuvable — l’élément a peut-être été supprimé.';
+
+  @override
+  String get errorStorage =>
+      'Impossible de lire ou d’écrire un fichier. Vérifiez l’espace disque et les droits du dossier.';
+
+  @override
+  String get errorDatabase =>
+      'La base de données n’a pas pu terminer l’opération. Vos données sont inchangées.';
+
+  @override
+  String get errorArchiveMissing => 'Le fichier d’archive est introuvable.';
+
+  @override
+  String get errorArchiveInvalid =>
+      'Ce fichier n’est pas une archive de monde GMH valide.';
+
+  @override
+  String get errorExport =>
+      'L’export a échoué. Vérifiez l’espace disque et les droits d’écriture du dossier.';
+
+  @override
+  String get errorAiNotConfigured => 'Aucun fournisseur d’IA n’est configuré.';
 }

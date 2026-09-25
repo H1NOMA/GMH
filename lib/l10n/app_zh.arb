@@ -366,5 +366,13 @@
   "pdfIncludeGmOnly": "包含主持人机密",
   "pdfIncludeGmOnlyHint": "关闭：不含仅限主持人字段的玩家安全版本。",
   "exportAction": "导出",
-  "tagNameTaken": "已存在同名标签——请改用合并。"
+  "tagNameTaken": "已存在同名标签——请改用合并。",
+  "errorEntryGone": "该条目已不存在。",
+  "errorNotFound": "未找到——可能已被删除。",
+  "errorStorage": "无法读取或写入文件。请检查磁盘空间和文件夹权限。",
+  "errorDatabase": "数据库无法完成此操作。你的数据未被更改。",
+  "errorArchiveMissing": "未找到归档文件。",
+  "errorArchiveInvalid": "该文件不是有效的 GMH 世界归档。",
+  "errorExport": "导出失败。请检查磁盘空间以及目标文件夹是否可写。",
+  "errorAiNotConfigured": "尚未配置 AI 服务。"
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/l10n_ext.dart';
+import '../../categories/category_ui.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../core/constants.dart';
@@ -93,8 +94,8 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
                 hintText: widget.kinds.isEmpty
                     ? context.l10n.pickerSearchAll
                     : context.l10n.pickerSearchKinds(widget.kinds
-                        .map((k) =>
-                            k.localizedPlural(context).toLowerCase())
+                        .map((k) => _midSentence(
+                            context, k.localizedPlural(context)))
                         .join(', ')),
                 prefixIcon: const Icon(Icons.search, size: 18),
               ),
@@ -113,13 +114,20 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
                           itemCount: _results.length,
                           itemBuilder: (context, index) {
                             final entity = _results[index];
+                            final categories = ref
+                                .watch(categoryMapProvider(widget.worldId));
                             return ListTile(
-                              leading: Icon(entity.kind.icon,
-                                  size: 19, color: entity.kind.color),
+                              leading: Icon(entityIcon(entity, categories),
+                                  size: 19,
+                                  color: entityColor(entity, categories)),
                               title: Text(entity.name),
                               subtitle: entity.summary.isEmpty
                                   ? Text(
-                                      entity.kind.localizedLabel(context),
+                                      typeLabel(
+                                          context,
+                                          entity.kind,
+                                          entity.customCategoryId,
+                                          categories),
                                       style: const TextStyle(fontSize: 11))
                                   : Text(entity.summary,
                                       maxLines: 1,
@@ -141,3 +149,9 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
     );
   }
 }
+
+/// A kind name as it reads mid-sentence: German keeps noun capitals.
+String _midSentence(BuildContext context, String word) =>
+    Localizations.localeOf(context).languageCode == 'de'
+        ? word
+        : word.toLowerCase();

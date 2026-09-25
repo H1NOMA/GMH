@@ -113,4 +113,32 @@ void main() {
       expect(theme.colorScheme.primary, pack.dark.ember);
     }
   });
+
+  test('accents stay readable on every palette, whatever the hue', () {
+    final saved = GmhColors.palette;
+    addTearDown(() => GmhColors.palette = saved);
+    const awkward = [
+      Color(0xFFFFEB3B), // yellow
+      Color(0xFFFF9800), // orange
+      Color(0xFF0D1B4C), // navy
+      Color(0xFF000000),
+      Color(0xFFFFFFFF),
+    ];
+    for (final pack in SettingPacks.all) {
+      for (final palette in [pack.dark, pack.light]) {
+        GmhColors.palette = palette;
+        for (final base in [
+          ...awkward,
+          for (final k in EntityKind.values) k.color,
+        ]) {
+          final c = adaptiveAccent(base);
+          for (final bg in [palette.background, palette.surface]) {
+            expect(contrastRatio(c, bg), greaterThanOrEqualTo(3.0),
+                reason: '${pack.style.name} ${palette.brightness.name} '
+                    '$base -> $c on $bg');
+          }
+        }
+      }
+    }
+  });
 }
