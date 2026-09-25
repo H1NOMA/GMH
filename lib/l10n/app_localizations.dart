@@ -4057,6 +4057,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} (copy)'**
   String entryCopyName(String name);
+
+  /// No description provided for @helpPacksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings and styles'**
+  String get helpPacksTitle;
+
+  /// No description provided for @helpPacksBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every world has a setting: fantasy, cyberpunk, space opera, gothic or cosmic horror, post-apocalypse, steampunk, urban fantasy, wild west or wuxia. The setting recolors the whole app (light and dark), renames sections in its own vocabulary — Runners and Sectors in cyberpunk, Crew and Waypoints in space opera — and picks the random tables and generators that fit the genre. Change it any time in Settings → World; your data never changes, only how it is presented.'**
+  String get helpPacksBody;
+
+  /// No description provided for @helpToolsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'At the table: GM tools'**
+  String get helpToolsTitle;
+
+  /// No description provided for @helpToolsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The tools live in the sidebar, on the dashboard and in the command palette. Dice Roller: type any notation (4d6kh3, 2d20kl1+5, 8d6!, 5d10>=8) or use a system preset — D&D checks, Call of Cthulhu, PbtA, Blades in the Dark, Fate, Year Zero, Savage Worlds, Cyberpunk RED; every roll is logged, and dice written in stat blocks are clickable. Combat Tracker: build encounters from your creatures and characters (HP, AC and CR come from their fields), roll initiative, apply damage and healing, track conditions with durations, and see encounter difficulty. Random Tables: write your own with dice ranges or weights, nest tables with [[Table name]], or add ready-made tables for your setting from the library. Generators: instant NPCs, names, settlements, taverns, hooks, factions, loot and rumors for your setting — keep the good ones and save them into the world with one click.'**
+  String get helpToolsBody;
+
+  /// No description provided for @helpNavTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast navigation'**
+  String get helpNavTitle;
+
+  /// No description provided for @helpNavBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctrl+P opens the command palette: type part of a name to jump to an entry, a section or a tool, or run a command (new entry, light/dark theme, switch world). Ctrl+K goes to search. Pages open in browser-style tabs: Ctrl+T opens a new tab, Ctrl+W closes one, Ctrl+Tab cycles; right-click a tab to duplicate or close others, middle-click to close. Alt+← / Alt+→ and the mouse side buttons move through each tab\'s own history. Escape opens the pause menu (save, settings, exit).'**
+  String get helpNavBody;
+
+  /// No description provided for @helpFieldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own fields'**
+  String get helpFieldsTitle;
+
+  /// No description provided for @helpFieldsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in sections can carry extra fields for your game: open a section (Characters, Locations…) and click Customize fields in its toolbar. Add text, numbers, dates, lists, checklists or choices; they appear on every entry of that section in this world, after the built-in fields, and are included in search, the PDF book and the Markdown export. Custom sections define all of their fields in the section constructor.'**
+  String get helpFieldsBody;
+
+  /// No description provided for @helpTrashTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trash, copies and exports'**
+  String get helpTrashTitle;
+
+  /// No description provided for @helpTrashBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting an entry moves it to the Trash (sidebar, or Settings → World) — right after deleting you can also press Undo. Restore it later or delete it for good. The entry menu can Duplicate an entry with its fields, tags, pictures and lore. Settings → Export writes a full archive (.gmhw, for backups and moving between devices), JSON, a printable PDF world book, or Markdown notes that open as an Obsidian vault with working [[links]]; GM-only fields are left out unless you include them.'**
+  String get helpTrashBody;
 }
 
 class _AppLocalizationsDelegate

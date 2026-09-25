@@ -87,6 +87,31 @@ class HelpScreen extends ConsumerWidget {
         ],
       ),
       _HelpSection(
+        icon: Icons.palette_outlined,
+        title: l.helpPacksTitle,
+        body: l.helpPacksBody,
+      ),
+      _HelpSection(
+        icon: Icons.handyman_outlined,
+        title: l.helpToolsTitle,
+        body: l.helpToolsBody,
+      ),
+      _HelpSection(
+        icon: Icons.bolt,
+        title: l.helpNavTitle,
+        body: l.helpNavBody,
+      ),
+      _HelpSection(
+        icon: Icons.tune,
+        title: l.helpFieldsTitle,
+        body: l.helpFieldsBody,
+      ),
+      _HelpSection(
+        icon: Icons.delete_outline,
+        title: l.helpTrashTitle,
+        body: l.helpTrashBody,
+      ),
+      _HelpSection(
         icon: Icons.shield_outlined,
         title: l.helpBackupTitle,
         body: l.helpBackupBody,

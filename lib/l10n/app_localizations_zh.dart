@@ -2229,4 +2229,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String entryCopyName(String name) {
     return '$name（副本）';
   }
+
+  @override
+  String get helpPacksTitle => '设定与风格';
+
+  @override
+  String get helpPacksBody =>
+      '每个世界都有一个设定：奇幻、赛博朋克、太空歌剧、哥特或宇宙恐怖、后启示录、蒸汽朋克、都市奇幻、西部或武侠。设定会为整个应用重新配色（浅色和深色），用自己的词汇重新命名分区——赛博朋克里是“行者”和“街区”，太空歌剧里是“船员”和“航点”——并选择契合该类型的随机表和生成器。可随时在“设置 → 世界”中更改；数据不会变，只会改变呈现方式。';
+
+  @override
+  String get helpToolsTitle => '游戏桌边：主持人工具';
+
+  @override
+  String get helpToolsBody =>
+      '工具位于侧边栏、仪表盘和命令面板中。掷骰器：输入任意记法（4d6kh3、2d20kl1+5、8d6!、5d10>=8），或使用系统预设——D&D 检定、克苏鲁的呼唤、PbtA、暗夜刀锋、Fate、Year Zero、野蛮世界、赛博朋克 RED；每次掷骰都会记录，属性块里写的骰子可以直接点击。战斗追踪：用你的生物和角色组建遭遇（生命值、护甲等级和挑战等级取自字段），掷先攻、结算伤害与治疗、追踪带持续时间的状态，并查看遭遇难度。随机表：用骰子区间或权重编写自己的表，用 [[表名]] 嵌套表，或从资料库添加适合你设定的现成表。生成器：为你的设定即时生成 NPC、名字、聚居地、酒馆、剧情钩子、势力、战利品和传闻——留下满意的，一键存入世界。';
+
+  @override
+  String get helpNavTitle => '快速导航';
+
+  @override
+  String get helpNavBody =>
+      'Ctrl+P 打开命令面板：输入名称的一部分即可跳转到条目、分区或工具，或执行命令（新建条目、浅色/深色主题、切换世界）。Ctrl+K 打开搜索。页面在类似浏览器的标签页中打开：Ctrl+T 新建标签页，Ctrl+W 关闭，Ctrl+Tab 切换；右键点击标签页可复制或关闭其他标签页，中键点击可关闭。Alt+← / Alt+→ 和鼠标侧键可浏览每个标签页各自的历史。Esc 打开暂停菜单（保存、设置、退出）。';
+
+  @override
+  String get helpFieldsTitle => '自定义字段';
+
+  @override
+  String get helpFieldsBody =>
+      '内置分区可以添加适合你游戏的额外字段：打开一个分区（角色、地点……），点击工具栏中的“自定义字段”。可添加文本、数字、日期、列表、清单或选项；它们会出现在本世界该分区每个条目的内置字段之后，并包含在搜索、PDF 书和 Markdown 导出中。自定义分区在分区构建器中定义全部字段。';
+
+  @override
+  String get helpTrashTitle => '回收站、副本与导出';
+
+  @override
+  String get helpTrashBody =>
+      '删除的条目会移入回收站（侧边栏或“设置 → 世界”）——删除后也可以立即点击“撤销”。之后可以恢复，或永久删除。条目菜单中的“复制”会连同字段、标签、图片和正文一起复制。“设置 → 导出”可生成完整归档（.gmhw，用于备份和跨设备迁移）、JSON、可打印的 PDF 世界书，或可作为 Obsidian 库打开且 [[链接]] 可用的 Markdown 笔记；仅主持人可见的字段默认不导出，除非你选择包含。';
 }

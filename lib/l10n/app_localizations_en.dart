@@ -2305,4 +2305,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String entryCopyName(String name) {
     return '$name (copy)';
   }
+
+  @override
+  String get helpPacksTitle => 'Settings and styles';
+
+  @override
+  String get helpPacksBody =>
+      'Every world has a setting: fantasy, cyberpunk, space opera, gothic or cosmic horror, post-apocalypse, steampunk, urban fantasy, wild west or wuxia. The setting recolors the whole app (light and dark), renames sections in its own vocabulary — Runners and Sectors in cyberpunk, Crew and Waypoints in space opera — and picks the random tables and generators that fit the genre. Change it any time in Settings → World; your data never changes, only how it is presented.';
+
+  @override
+  String get helpToolsTitle => 'At the table: GM tools';
+
+  @override
+  String get helpToolsBody =>
+      'The tools live in the sidebar, on the dashboard and in the command palette. Dice Roller: type any notation (4d6kh3, 2d20kl1+5, 8d6!, 5d10>=8) or use a system preset — D&D checks, Call of Cthulhu, PbtA, Blades in the Dark, Fate, Year Zero, Savage Worlds, Cyberpunk RED; every roll is logged, and dice written in stat blocks are clickable. Combat Tracker: build encounters from your creatures and characters (HP, AC and CR come from their fields), roll initiative, apply damage and healing, track conditions with durations, and see encounter difficulty. Random Tables: write your own with dice ranges or weights, nest tables with [[Table name]], or add ready-made tables for your setting from the library. Generators: instant NPCs, names, settlements, taverns, hooks, factions, loot and rumors for your setting — keep the good ones and save them into the world with one click.';
+
+  @override
+  String get helpNavTitle => 'Fast navigation';
+
+  @override
+  String get helpNavBody =>
+      'Ctrl+P opens the command palette: type part of a name to jump to an entry, a section or a tool, or run a command (new entry, light/dark theme, switch world). Ctrl+K goes to search. Pages open in browser-style tabs: Ctrl+T opens a new tab, Ctrl+W closes one, Ctrl+Tab cycles; right-click a tab to duplicate or close others, middle-click to close. Alt+← / Alt+→ and the mouse side buttons move through each tab\'s own history. Escape opens the pause menu (save, settings, exit).';
+
+  @override
+  String get helpFieldsTitle => 'Your own fields';
+
+  @override
+  String get helpFieldsBody =>
+      'Built-in sections can carry extra fields for your game: open a section (Characters, Locations…) and click Customize fields in its toolbar. Add text, numbers, dates, lists, checklists or choices; they appear on every entry of that section in this world, after the built-in fields, and are included in search, the PDF book and the Markdown export. Custom sections define all of their fields in the section constructor.';
+
+  @override
+  String get helpTrashTitle => 'Trash, copies and exports';
+
+  @override
+  String get helpTrashBody =>
+      'Deleting an entry moves it to the Trash (sidebar, or Settings → World) — right after deleting you can also press Undo. Restore it later or delete it for good. The entry menu can Duplicate an entry with its fields, tags, pictures and lore. Settings → Export writes a full archive (.gmhw, for backups and moving between devices), JSON, a printable PDF world book, or Markdown notes that open as an Obsidian vault with working [[links]]; GM-only fields are left out unless you include them.';
 }
