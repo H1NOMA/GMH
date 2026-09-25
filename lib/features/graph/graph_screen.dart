@@ -46,7 +46,13 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
 
   GraphSimulation? _simulation;
   Map<String, Entity> _entitiesById = const {};
-  final Set<EntityKind> _hiddenKinds = {};
+  /// Hidden node groups: `kind:<kind>` for built-in kinds,
+  /// `cat:<categoryId>` for custom sections.
+  final Set<String> _hidden = {};
+
+  static String _groupOf(Entity e) => e.kind == EntityKind.custom
+      ? 'cat:${e.customCategoryId}'
+      : 'kind:${e.kind.name}';
   bool _loading = true;
   bool _truncated = false;
   String? _focusId;
@@ -132,7 +138,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
         ..sort((a, b) => (degree[b.id] ?? 0).compareTo(degree[a.id] ?? 0));
       visible = linked.map((e) => e.id).toSet();
     }
-    visible.removeWhere((id) => _hiddenKinds.contains(byId[id]!.kind));
+    visible.removeWhere((id) => _hidden.contains(_groupOf(byId[id]!)));
 
     final truncated = visible.length > _maxGraphNodes;
     if (truncated) {
@@ -228,37 +234,51 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                 _build();
               },
             ),
-          PopupMenuButton<EntityKind>(
+          PopupMenuButton<String>(
             tooltip: context.l10n.graphFilterKinds,
             icon: const Icon(Icons.filter_list),
-            onSelected: (kind) {
+            onSelected: (group) {
               setState(() {
-                if (!_hiddenKinds.remove(kind)) _hiddenKinds.add(kind);
+                if (!_hidden.remove(group)) _hidden.add(group);
               });
               _build();
             },
-            itemBuilder: (context) => [
-              for (final kind in EntityKind.values.where(
-                  (k) => k != EntityKind.custom))
-                PopupMenuItem(
-                  value: kind,
-                  child: Row(
-                    children: [
-                      Icon(
-                        _hiddenKinds.contains(kind)
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        size: 16,
-                        color: _hiddenKinds.contains(kind)
-                            ? GmhColors.parchmentFaint
-                            : kind.color,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(kind.localizedPlural(context)),
-                    ],
-                  ),
-                ),
-            ],
+            itemBuilder: (context) {
+              PopupMenuItem<String> item(
+                      String group, IconData icon, Color color, String label) =>
+                  PopupMenuItem(
+                    value: group,
+                    child: Row(
+                      children: [
+                        Icon(
+                          _hidden.contains(group)
+                              ? Icons.visibility_off_outlined
+                              : icon,
+                          size: 16,
+                          color: _hidden.contains(group)
+                              ? GmhColors.parchmentFaint
+                              : color,
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(label,
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
+                  );
+              return [
+                for (final kind in EntityKind.values
+                    .where((k) => k != EntityKind.custom))
+                  item('kind:${kind.name}', Icons.visibility_outlined,
+                      kind.color, kind.localizedPlural(context)),
+                for (final category in ref
+                    .read(categoryMapProvider(widget.worldId))
+                    .values)
+                  item('cat:${category.id}', categoryIconFor(category.icon),
+                      adaptiveAccent(Color(category.color)), category.name),
+              ];
+            },
           ),
         ],
       ),
