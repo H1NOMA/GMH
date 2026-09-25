@@ -30,7 +30,10 @@ class ToolsHubScreen extends ConsumerWidget {
             crossAxisCount: columns,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            mainAxisExtent: 112,
+            // A title and three description lines: the tile grows with
+            // the text scale instead of clipping them.
+            mainAxisExtent:
+                60 + 52 * MediaQuery.textScalerOf(context).scale(1),
           ),
           itemCount: gmhTools.length,
           itemBuilder: (context, index) {
