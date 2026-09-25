@@ -4981,6 +4981,468 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gray'**
   String get mapsColorGray;
+
+  /// No description provided for @generatorsKindNames.
+  ///
+  /// In en, this message translates to:
+  /// **'Names'**
+  String get generatorsKindNames;
+
+  /// No description provided for @generatorsKindNpc.
+  ///
+  /// In en, this message translates to:
+  /// **'NPC'**
+  String get generatorsKindNpc;
+
+  /// No description provided for @generatorsKindSettlement.
+  ///
+  /// In en, this message translates to:
+  /// **'Settlement'**
+  String get generatorsKindSettlement;
+
+  /// No description provided for @generatorsKindEstablishment.
+  ///
+  /// In en, this message translates to:
+  /// **'Tavern & shop'**
+  String get generatorsKindEstablishment;
+
+  /// No description provided for @generatorsKindHook.
+  ///
+  /// In en, this message translates to:
+  /// **'Adventure hook'**
+  String get generatorsKindHook;
+
+  /// No description provided for @generatorsKindLoot.
+  ///
+  /// In en, this message translates to:
+  /// **'Loot'**
+  String get generatorsKindLoot;
+
+  /// No description provided for @generatorsKindFaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Faction'**
+  String get generatorsKindFaction;
+
+  /// No description provided for @generatorsKindWeather.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather'**
+  String get generatorsKindWeather;
+
+  /// No description provided for @generatorsKindRumor.
+  ///
+  /// In en, this message translates to:
+  /// **'Rumor'**
+  String get generatorsKindRumor;
+
+  /// No description provided for @generatorsPicker.
+  ///
+  /// In en, this message translates to:
+  /// **'Generator'**
+  String get generatorsPicker;
+
+  /// No description provided for @generatorsPack.
+  ///
+  /// In en, this message translates to:
+  /// **'Genre pack'**
+  String get generatorsPack;
+
+  /// No description provided for @generatorsPackWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'{pack} (this world)'**
+  String generatorsPackWorld(String pack);
+
+  /// No description provided for @generatorsGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get generatorsGender;
+
+  /// No description provided for @generatorsGenderAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get generatorsGenderAny;
+
+  /// No description provided for @generatorsGenderFeminine.
+  ///
+  /// In en, this message translates to:
+  /// **'Feminine'**
+  String get generatorsGenderFeminine;
+
+  /// No description provided for @generatorsGenderMasculine.
+  ///
+  /// In en, this message translates to:
+  /// **'Masculine'**
+  String get generatorsGenderMasculine;
+
+  /// No description provided for @generatorsCulture.
+  ///
+  /// In en, this message translates to:
+  /// **'Naming style'**
+  String get generatorsCulture;
+
+  /// No description provided for @generatorsCultureAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed'**
+  String get generatorsCultureAny;
+
+  /// No description provided for @generatorsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'How many'**
+  String get generatorsCount;
+
+  /// No description provided for @generatorsEpithets.
+  ///
+  /// In en, this message translates to:
+  /// **'Add epithets'**
+  String get generatorsEpithets;
+
+  /// No description provided for @generatorsGenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get generatorsGenerate;
+
+  /// No description provided for @generatorsRerollAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Reroll all'**
+  String get generatorsRerollAll;
+
+  /// No description provided for @generatorsRerollField.
+  ///
+  /// In en, this message translates to:
+  /// **'Reroll {field}'**
+  String generatorsRerollField(String field);
+
+  /// No description provided for @generatorsCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy as text'**
+  String get generatorsCopy;
+
+  /// No description provided for @generatorsCopyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy all'**
+  String get generatorsCopyAll;
+
+  /// No description provided for @generatorsCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy name'**
+  String get generatorsCopyName;
+
+  /// No description provided for @generatorsCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get generatorsCopied;
+
+  /// No description provided for @generatorsKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get generatorsKeep;
+
+  /// No description provided for @generatorsUnkeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop keeping'**
+  String get generatorsUnkeep;
+
+  /// No description provided for @generatorsDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get generatorsDismiss;
+
+  /// No description provided for @generatorsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to world'**
+  String get generatorsSave;
+
+  /// No description provided for @generatorsSaveAsCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as character'**
+  String get generatorsSaveAsCharacter;
+
+  /// No description provided for @generatorsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved “{name}” to the world'**
+  String generatorsSaved(String name);
+
+  /// No description provided for @generatorsSavedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get generatorsSavedBadge;
+
+  /// No description provided for @generatorsKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept'**
+  String get generatorsKept;
+
+  /// No description provided for @generatorsHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent, unsaved'**
+  String get generatorsHistory;
+
+  /// No description provided for @generatorsHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Results you replace without saving land here for this session.'**
+  String get generatorsHistoryEmpty;
+
+  /// No description provided for @generatorsRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring back'**
+  String get generatorsRestore;
+
+  /// No description provided for @generatorsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing generated yet'**
+  String get generatorsEmptyTitle;
+
+  /// No description provided for @generatorsEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a generator and press Generate. Reroll any line, keep the good results and save them into the world.'**
+  String get generatorsEmptyHint;
+
+  /// No description provided for @generatorsFieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get generatorsFieldName;
+
+  /// No description provided for @generatorsFieldPlaceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get generatorsFieldPlaceName;
+
+  /// No description provided for @generatorsFieldEpithet.
+  ///
+  /// In en, this message translates to:
+  /// **'Epithet'**
+  String get generatorsFieldEpithet;
+
+  /// No description provided for @generatorsFieldAncestry.
+  ///
+  /// In en, this message translates to:
+  /// **'Ancestry'**
+  String get generatorsFieldAncestry;
+
+  /// No description provided for @generatorsFieldRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get generatorsFieldRole;
+
+  /// No description provided for @generatorsFieldAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get generatorsFieldAge;
+
+  /// No description provided for @generatorsFieldAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get generatorsFieldAppearance;
+
+  /// No description provided for @generatorsFieldTrait.
+  ///
+  /// In en, this message translates to:
+  /// **'Trait'**
+  String get generatorsFieldTrait;
+
+  /// No description provided for @generatorsFieldMotivation.
+  ///
+  /// In en, this message translates to:
+  /// **'Motivation'**
+  String get generatorsFieldMotivation;
+
+  /// No description provided for @generatorsFieldSecret.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret'**
+  String get generatorsFieldSecret;
+
+  /// No description provided for @generatorsFieldVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get generatorsFieldVoice;
+
+  /// No description provided for @generatorsFieldAttributes.
+  ///
+  /// In en, this message translates to:
+  /// **'Attributes'**
+  String get generatorsFieldAttributes;
+
+  /// No description provided for @generatorsFieldSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get generatorsFieldSize;
+
+  /// No description provided for @generatorsFieldFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature'**
+  String get generatorsFieldFeature;
+
+  /// No description provided for @generatorsFieldTrouble.
+  ///
+  /// In en, this message translates to:
+  /// **'Trouble'**
+  String get generatorsFieldTrouble;
+
+  /// No description provided for @generatorsFieldAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'In charge'**
+  String get generatorsFieldAuthority;
+
+  /// No description provided for @generatorsFieldType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get generatorsFieldType;
+
+  /// No description provided for @generatorsFieldOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner'**
+  String get generatorsFieldOwner;
+
+  /// No description provided for @generatorsFieldSpecialty.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialty'**
+  String get generatorsFieldSpecialty;
+
+  /// No description provided for @generatorsFieldPatron.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular'**
+  String get generatorsFieldPatron;
+
+  /// No description provided for @generatorsFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get generatorsFieldTitle;
+
+  /// No description provided for @generatorsFieldWho.
+  ///
+  /// In en, this message translates to:
+  /// **'Who'**
+  String get generatorsFieldWho;
+
+  /// No description provided for @generatorsFieldWants.
+  ///
+  /// In en, this message translates to:
+  /// **'Wants'**
+  String get generatorsFieldWants;
+
+  /// No description provided for @generatorsFieldObstacle.
+  ///
+  /// In en, this message translates to:
+  /// **'Obstacle'**
+  String get generatorsFieldObstacle;
+
+  /// No description provided for @generatorsFieldTwist.
+  ///
+  /// In en, this message translates to:
+  /// **'Twist'**
+  String get generatorsFieldTwist;
+
+  /// No description provided for @generatorsFieldContainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Found in'**
+  String get generatorsFieldContainer;
+
+  /// No description provided for @generatorsFieldCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Coins'**
+  String get generatorsFieldCoins;
+
+  /// No description provided for @generatorsFieldItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get generatorsFieldItem;
+
+  /// No description provided for @generatorsFieldCurio.
+  ///
+  /// In en, this message translates to:
+  /// **'Curio'**
+  String get generatorsFieldCurio;
+
+  /// No description provided for @generatorsFieldGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get generatorsFieldGoal;
+
+  /// No description provided for @generatorsFieldMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Methods'**
+  String get generatorsFieldMethod;
+
+  /// No description provided for @generatorsFieldSymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbol'**
+  String get generatorsFieldSymbol;
+
+  /// No description provided for @generatorsFieldSky.
+  ///
+  /// In en, this message translates to:
+  /// **'Sky'**
+  String get generatorsFieldSky;
+
+  /// No description provided for @generatorsFieldAir.
+  ///
+  /// In en, this message translates to:
+  /// **'Air'**
+  String get generatorsFieldAir;
+
+  /// No description provided for @generatorsFieldOmen.
+  ///
+  /// In en, this message translates to:
+  /// **'Omen'**
+  String get generatorsFieldOmen;
+
+  /// No description provided for @generatorsFieldSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Heard from'**
+  String get generatorsFieldSource;
+
+  /// No description provided for @generatorsFieldTruth.
+  ///
+  /// In en, this message translates to:
+  /// **'Truth'**
+  String get generatorsFieldTruth;
 }
 
 class _AppLocalizationsDelegate
