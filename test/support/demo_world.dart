@@ -19,6 +19,9 @@ import 'package:gmh/data/db/app_database.dart';
 import 'package:gmh/data/storage/media_vault.dart';
 import 'package:gmh/domain/models/entity.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
+import 'package:gmh/domain/models/world_object.dart';
+import 'package:gmh/domain/maps/map_pin.dart';
+import 'package:gmh/domain/maps/game_map.dart';
 import 'package:gmh/domain/models/world.dart';
 import 'package:gmh/domain/repositories/repositories.dart';
 import 'package:path/path.dart' as p;
@@ -107,6 +110,9 @@ class DemoWorld {
   /// A user-defined section ("Guilds") with one entry, so screens that
   /// branch on custom categories are covered too.
   late final String guildCategoryId;
+
+  /// A map of the harbor region with a few pins (one GM-only).
+  late final String mapId;
 
   /// One small world per additional setting pack (everything but fantasy
   /// and the cyberpunk demo): style -> world id, plus the ids of its
@@ -337,6 +343,46 @@ Future<DemoWorld> seedRichWorld() async {
     'date': '3rd Age, Year 409',
     'locations': [entityRefValue(ravenport.id)],
   });
+
+  // A map of the harbor region: pins linked to entries, one GM-only.
+  final objects = container.read(worldObjectRepositoryProvider);
+  final mapArt = await media.import(
+      worldId: world.id,
+      fileName: 'harbor-region.png',
+      bytes: await demoCoverArt(4242));
+  final map = await objects.create(
+    worldId: world.id,
+    type: WorldObjectTypes.map,
+    name: 'The Harbor Reach',
+    data: GameMap(
+      name: 'The Harbor Reach',
+      mediaId: mapArt.id,
+      width: 880,
+      height: 560,
+      description: 'Coast, docks and the drowned quarter',
+      scale: const MapScale(unitsPerCell: 1, unitName: 'miles', cellPx: 40),
+    ).toData(),
+  );
+  demo.mapId = map.id;
+  for (final (x, y, label, entity, icon, gmOnly) in [
+    (0.34, 0.42, '', ravenport, MapPinIcon.town, false),
+    (0.52, 0.61, '', mira, MapPinIcon.npc, false),
+    (0.71, 0.28, 'Wreck of the Tern', null, MapPinIcon.treasure, true),
+  ]) {
+    await objects.create(
+      worldId: world.id,
+      type: WorldObjectTypes.mapPin,
+      parentId: map.id,
+      data: MapPin(
+        x: x,
+        y: y,
+        label: label,
+        entityId: entity?.id,
+        icon: icon,
+        gmOnly: gmOnly,
+      ).toData(),
+    );
+  }
 
   // A short history for the timeline: two eras, dated events, one
   // event waiting for a date.

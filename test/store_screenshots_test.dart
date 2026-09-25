@@ -187,4 +187,8 @@ void main() {
     await run(tester, '12_gm_screen',
         (d) => Routes.tool(d.worldId, 'reference'));
   });
+
+  testWidgets('13 map', skip: !_enabled, (tester) async {
+    await run(tester, '13_map', (d) => Routes.tool(d.worldId, 'maps', d.mapId));
+  });
 }

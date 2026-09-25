@@ -77,6 +77,7 @@ final _routes = <_Route>[
   _Route('settings', (d) => Routes.settings(d.worldId)),
   _Route('help', (d) => Routes.help(d.worldId)),
   _Route('trash', (d) => Routes.trash(d.worldId)),
+  _Route('map', (d) => Routes.tool(d.worldId, 'maps', d.mapId)),
   _Route('tools', (d) => Routes.tools(d.worldId)),
   for (final tool in gmhTools)
     _Route('tool:${tool.id}', (d) => Routes.tool(d.worldId, tool.id)),
