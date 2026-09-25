@@ -86,4 +86,45 @@ void main() {
       expect(countWords(''), 0);
     });
   });
+
+  test('attachment names are part of the plain text', () {
+    final json = jsonEncode([
+      {'insert': 'See '},
+      {
+        'insert': {
+          'fileAttachment': jsonEncode({'mediaId': 'm1', 'name': 'map.pdf'})
+        }
+      },
+      {'insert': '\n'},
+    ]);
+    expect(extractPlainText(json), 'See map.pdf\n');
+  });
+
+  test('relabelMentions rewrites only the renamed entry, keeping shapes', () {
+    final json = jsonEncode([
+      {
+        'insert': {
+          'entityLink': jsonEncode({'id': 'a', 'label': 'Old'})
+        }
+      },
+      {
+        'insert': {
+          'entityLink': {'id': 'a', 'label': 'Old'}
+        }
+      },
+      {
+        'insert': {
+          'entityLink': jsonEncode({'id': 'b', 'label': 'Other'})
+        }
+      },
+      {'insert': '\n'},
+    ]);
+    final out = relabelMentions(json, 'a', 'New')!;
+    expect(extractPlainText(out), 'NewNewOther\n');
+    final ops = jsonDecode(out) as List;
+    expect(ops[0]['insert']['entityLink'], isA<String>());
+    expect(ops[1]['insert']['entityLink'], isA<Map>());
+    expect(relabelMentions(out, 'a', 'New'), isNull);
+    expect(relabelMentions('not json', 'a', 'New'), isNull);
+  });
 }

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 
 import '../../core/constants.dart';
 import '../../core/utils/dates.dart';
@@ -17,12 +18,65 @@ class SearchRepositoryImpl implements SearchRepository {
 
   SearchRepositoryImpl(this._db, this._entities);
 
+  /// Bumped whenever the indexed text format changes; a stale index is
+  /// rebuilt once, on first use.
+  ///  * 2: CJK characters indexed as separate tokens; rows keyed by the
+  ///    entity's rowid.
+  static const _indexVersion = 2;
+  static const _indexVersionKey = 'searchIndexVersion';
+  Future<void>? _ready;
+
+  Future<void> _ensureCurrent() => _ready ??= _upgradeIndex();
+
+  Future<void> _upgradeIndex() async {
+    final row = await (_db.select(_db.settings)
+          ..where((s) => s.key.equals(_indexVersionKey)))
+        .getSingleOrNull();
+    if (int.tryParse(row?.value ?? '') == _indexVersion) return;
+    await _db.transaction(() async {
+      await _db.customStatement('DELETE FROM entity_search');
+      final ids = await _db
+          .customSelect('SELECT id FROM entities WHERE deleted_at IS NULL')
+          .map((r) => r.read<String>('id'))
+          .get();
+      for (final id in ids) {
+        await _reindex(id);
+      }
+      await _db.into(_db.settings).insertOnConflictUpdate(
+          SettingsCompanion.insert(
+              key: _indexVersionKey, value: '$_indexVersion'));
+    });
+  }
+
+  static final _cjk = RegExp(
+      r'[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]');
+
+  /// unicode61 has no word segmentation for Chinese or Japanese: a whole
+  /// run of characters became one token and "城堡" never matched inside
+  /// "龙之谷城堡". Each CJK character is indexed as its own token, and
+  /// queries become phrases over those tokens.
+  @visibleForTesting
+  static String spaceCjk(String text) =>
+      text.replaceAllMapped(_cjk, (m) => ' ${m[0]} ');
+
+  static final _spacedCjk = RegExp(
+      '([\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f])'
+      '(${SearchResult.snippetMarkerEnd})?\\s+(${SearchResult.snippetMarkerStart})?'
+      '(?=[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f])');
+
+  /// Undoes [spaceCjk] in snippets shown to the user.
+  static String _unspaceCjk(String text) => text.replaceAllMapped(
+      _spacedCjk, (m) => '${m[1]}${m[2] ?? ''}${m[3] ?? ''}');
+
   /// Builds a safe FTS5 MATCH expression: each whitespace token is quoted and
-  /// suffixed with `*` for prefix (as-you-type) matching.
+  /// suffixed with `*` for prefix (as-you-type) matching. CJK tokens
+  /// become phrases of single characters (see [spaceCjk]).
   static String buildMatchQuery(String raw) {
     final tokens = raw
         .split(RegExp(r'\s+'))
-        .map((t) => t.replaceAll('"', '').trim())
+        .map((t) => spaceCjk(t.replaceAll('"', ''))
+            .trim()
+            .replaceAll(RegExp(r'\s+'), ' '))
         .where((t) => t.isNotEmpty)
         .toList();
     return tokens.map((t) => '"$t"*').join(' ');
@@ -38,6 +92,7 @@ class SearchRepositoryImpl implements SearchRepository {
   }) async {
     final match = buildMatchQuery(query);
     if (match.isEmpty) return [];
+    await _ensureCurrent();
 
     final kindFilter = kind == null ? '' : 'AND e.kind = ? ';
     final categoryFilter =
@@ -78,7 +133,7 @@ class SearchRepositoryImpl implements SearchRepository {
         customCategoryId: row.read<String?>('custom_category_id'),
         name: row.read<String>('name'),
         summary: row.read<String>('summary'),
-        snippet: row.read<String?>('snip') ?? '',
+        snippet: _unspaceCjk(row.read<String?>('snip') ?? ''),
         rank: row.read<double?>('rank') ?? 0,
       ));
     }
@@ -87,37 +142,55 @@ class SearchRepositoryImpl implements SearchRepository {
 
   @override
   Future<void> reindexEntity(String entityId) async {
-    final entity = await _entities.getEntity(entityId);
-    await _db.customStatement(
-        'DELETE FROM entity_search WHERE entity_id = ?', [entityId]);
-    if (entity == null || entity.isDeleted) return;
-
-    final doc = await (_db.select(_db.documents)
-          ..where((d) => d.entityId.equals(entityId)))
-        .getSingleOrNull();
-
-    final tagRows = await _db.customSelect(
-      'SELECT t.name FROM tags t '
-      'JOIN entity_tags et ON et.tag_id = t.id WHERE et.entity_id = ?',
-      variables: [Variable.withString(entityId)],
-    ).get();
-    final tagText = tagRows.map((r) => r.read<String>('name')).join(' ');
-
-    await _db.customStatement(
-      'INSERT INTO entity_search (entity_id, name, summary, body, tags) '
-      'VALUES (?, ?, ?, ?, ?)',
-      [
-        entityId,
-        entity.name,
-        entity.summary,
-        doc?.plainText ?? '',
-        tagText,
-      ],
-    );
+    await _ensureCurrent();
+    await _reindex(entityId);
   }
+
+  /// Rows are keyed by the entity's rowid, so replacing one is an indexed
+  /// lookup instead of a scan over the whole index (entity_id is an
+  /// UNINDEXED column). Delete + insert run as one transaction: two
+  /// interleaved reindexes of one entry can't leave two rows or none.
+  Future<void> _reindex(String entityId) => _db.transaction(() async {
+        final entity = await _entities.getEntity(entityId);
+        final rowIdRow = await _db
+            .customSelect('SELECT rowid AS r FROM entities WHERE id = ?',
+                variables: [Variable.withString(entityId)])
+            .getSingleOrNull();
+        final rowId = rowIdRow?.read<int>('r');
+        if (rowId != null) {
+          await _db.customStatement(
+              'DELETE FROM entity_search WHERE rowid = ?', [rowId]);
+        }
+        if (entity == null || entity.isDeleted || rowId == null) return;
+
+        final doc = await (_db.select(_db.documents)
+              ..where((d) => d.entityId.equals(entityId)))
+            .getSingleOrNull();
+
+        final tagRows = await _db.customSelect(
+          'SELECT t.name FROM tags t '
+          'JOIN entity_tags et ON et.tag_id = t.id WHERE et.entity_id = ?',
+          variables: [Variable.withString(entityId)],
+        ).get();
+        final tagText = tagRows.map((r) => r.read<String>('name')).join(' ');
+
+        await _db.customStatement(
+          'INSERT INTO entity_search (rowid, entity_id, name, summary, body, tags) '
+          'VALUES (?, ?, ?, ?, ?, ?)',
+          [
+            rowId,
+            entityId,
+            spaceCjk(entity.name),
+            spaceCjk(entity.summary),
+            spaceCjk(doc?.plainText ?? ''),
+            spaceCjk(tagText),
+          ],
+        );
+      });
 
   @override
   Future<void> rebuildIndex(String worldId) async {
+    await _ensureCurrent();
     final entities = await _entities.getAllEntities(worldId);
     await _db.customStatement(
       'DELETE FROM entity_search WHERE entity_id IN '
@@ -125,7 +198,7 @@ class SearchRepositoryImpl implements SearchRepository {
       [worldId],
     );
     for (final entity in entities) {
-      await reindexEntity(entity.id);
+      await _reindex(entity.id);
     }
   }
 

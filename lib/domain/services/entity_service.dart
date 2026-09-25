@@ -3,6 +3,7 @@ import '../../core/result.dart';
 import '../models/entity.dart';
 import '../models/entity_kind.dart';
 import '../repositories/repositories.dart';
+import 'document_service.dart';
 import 'linking/link_sync_service.dart';
 import 'templates/entity_templates.dart';
 
@@ -16,7 +17,21 @@ class EntityService {
   final SearchRepository _search;
   final LinkSyncService _linkSync;
 
-  EntityService(this._entities, this._tags, this._search, this._linkSync);
+  /// Optional so data-only callers (imports, tests) can skip mention
+  /// relabeling; the app always wires it.
+  final DocumentService? _documents;
+
+  EntityService(this._entities, this._tags, this._search, this._linkSync,
+      {DocumentService? documents})
+      : _documents = documents;
+
+  /// Keeps stored mention labels in other documents in step with a
+  /// rename (search, exports and copy use them).
+  Future<void> _afterRename(Entity before, Entity after) async {
+    if (before.name != after.name) {
+      await _documents?.relabelMentionsOf(after.id, after.name);
+    }
+  }
 
   Future<Result<Entity>> create({
     required String worldId,
@@ -54,9 +69,11 @@ class EntityService {
       final template = EntityTemplates.of(entity.kind);
       final sanitized =
           entity.copyWith(attributes: template.sanitize(entity.attributes));
+      final before = await _entities.getEntity(entity.id);
       await _entities.updateEntity(sanitized);
       await _linkSync.syncAttributeRefs(sanitized);
       await _search.reindexEntity(entity.id);
+      if (before != null) await _afterRename(before, sanitized);
       return sanitized;
     });
   }
@@ -105,6 +122,7 @@ class EntityService {
           current.copyWith(name: trimmed, summary: summary.trim());
       await _entities.updateEntity(updated);
       await _search.reindexEntity(entityId);
+      await _afterRename(current, updated);
       return updated;
     });
   }

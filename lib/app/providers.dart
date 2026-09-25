@@ -97,6 +97,7 @@ final entityServiceProvider = Provider<EntityService>(
     ref.watch(tagRepositoryProvider),
     ref.watch(searchRepositoryProvider),
     ref.watch(linkSyncServiceProvider),
+    documents: ref.watch(documentServiceProvider),
   ),
 );
 

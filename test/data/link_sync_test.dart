@@ -157,4 +157,26 @@ void main() {
     await h.entityService.setAttribute(blade.id, 'forgedAt', null);
     expect(await roles(), {LinkRoles.owner});
   });
+
+  test('renaming an entry updates mention labels in search', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final chronicle = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.loreDocument, name: 'Chronicle');
+    final hero = (await h.entityService.create(
+            worldId: world.id, kind: EntityKind.character, name: 'Arden'))
+        .value;
+    await h.documentService.save(
+      entityId: chronicle.id,
+      contentJson: _deltaWithMentions([(id: hero.id, label: 'Arden')]),
+    );
+
+    await h.entityService
+        .rename(hero.id, name: 'Queen Mireth', summary: '');
+
+    final doc = await h.documents.getOrCreate(chronicle.id);
+    expect(doc.plainText, contains('Queen Mireth'));
+    final hits = await h.search.search(world.id, 'Mireth');
+    expect(hits.map((r) => r.name), containsAll(['Queen Mireth', 'Chronicle']));
+    expect(await h.search.search(world.id, 'Arden'), isEmpty);
+  });
 }

@@ -47,4 +47,10 @@ class LinkSyncService {
       targets: refs,
     );
   }
+
+  /// Entries whose documents mention [entityId].
+  Future<Set<String>> mentionSourceIds(String entityId) async => {
+        for (final link in await _links.incoming(entityId))
+          if (link.origin == LinkOrigin.document) link.sourceId
+      };
 }

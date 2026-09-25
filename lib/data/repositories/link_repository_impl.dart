@@ -53,6 +53,14 @@ class LinkRepositoryImpl implements LinkRepository {
   }
 
   @override
+  Future<List<domain.Link>> incoming(String entityId) async {
+    final rows = await (_db.select(_db.links)
+          ..where((l) => l.targetId.equals(entityId)))
+        .get();
+    return rows.map(_map).toList();
+  }
+
+  @override
   Future<List<domain.Link>> allForWorld(String worldId) async {
     final rows = await (_db.select(_db.links)
           ..where((l) => l.worldId.equals(worldId)))

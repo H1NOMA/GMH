@@ -124,6 +124,7 @@ abstract interface class LinkRepository {
   Stream<List<Link>> watchOutgoing(String entityId);
   Stream<List<Link>> watchIncoming(String entityId);
   Future<List<Link>> outgoing(String entityId);
+  Future<List<Link>> incoming(String entityId);
   Future<List<Link>> allForWorld(String worldId);
 
   Future<Link> create({

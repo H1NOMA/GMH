@@ -39,6 +39,22 @@ class DocumentService {
     });
   }
 
+  /// After [entityId] is renamed: updates the stored mention labels in
+  /// every document that links to it, and their search text.
+  Future<void> relabelMentionsOf(String entityId, String name) async {
+    for (final sourceId in await _linkSync.mentionSourceIds(entityId)) {
+      final doc = await _documents.getOrCreate(sourceId);
+      final json = relabelMentions(doc.contentJson, entityId, name);
+      if (json == null) continue;
+      await _documents.save(
+        entityId: sourceId,
+        contentJson: json,
+        plainText: extractPlainText(json),
+      );
+      await _search.reindexEntity(sourceId);
+    }
+  }
+
   /// Manual or automatic version checkpoint.
   Future<Result<void>> checkpoint(String entityId, {String note = ''}) {
     return guard(() async {

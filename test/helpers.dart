@@ -37,7 +37,8 @@ class TestHarness {
   late final categories = CategoryRepositoryImpl(db);
 
   late final linkSync = LinkSyncService(links);
-  late final entityService = EntityService(entities, tags, search, linkSync);
+  late final entityService = EntityService(entities, tags, search, linkSync,
+      documents: documentService);
   late final documentService =
       DocumentService(documents, entities, search, linkSync);
 
