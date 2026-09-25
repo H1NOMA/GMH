@@ -95,7 +95,7 @@ class GeneratorEngine {
     final lib = context.library;
     final given = Grammar.expand('{${c}_given}', context);
     var full = given;
-    if (lib.has('${c}_family')) {
+    if (lib.has(context.resolve('${c}_family'))) {
       context.vars['given'] = given;
       context.vars['family'] = Grammar.expand('{${c}_family}', context);
       full = Grammar.expand(

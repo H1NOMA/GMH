@@ -2,14 +2,31 @@ import '../../models/world.dart';
 import '../content_format.dart';
 import '../grammar.dart';
 import 'common.dart';
+import 'cosmic_horror.dart';
+import 'cyberpunk.dart';
 import 'fantasy.dart';
+import 'gothic_horror.dart';
+import 'post_apocalypse.dart';
+import 'space_opera.dart';
+import 'steampunk.dart';
+import 'urban_fantasy.dart';
+import 'wild_west.dart';
+import 'wuxia.dart';
 
 export 'common.dart' show commonContent;
 
 /// The pack-specific content of [style].
 PackContent packContent(WorldStyle style) => switch (style) {
       WorldStyle.fantasy => fantasyContent,
-      _ => fantasyContent,
+      WorldStyle.cyberpunk => cyberpunkContent,
+      WorldStyle.spaceOpera => spaceOperaContent,
+      WorldStyle.gothicHorror => gothicHorrorContent,
+      WorldStyle.cosmicHorror => cosmicHorrorContent,
+      WorldStyle.postApocalypse => postApocalypseContent,
+      WorldStyle.steampunk => steampunkContent,
+      WorldStyle.urbanFantasy => urbanFantasyContent,
+      WorldStyle.wildWest => wildWestContent,
+      WorldStyle.wuxia => wuxiaContent,
     };
 
 final Map<(WorldStyle, String), FragmentLibrary> _libraries = {};
