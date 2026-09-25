@@ -2335,4 +2335,69 @@ class AppLocalizationsZh extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gmScreenPinned => '固定的条目';
+
+  @override
+  String get gmScreenPinHint => '把今晚场次的 NPC、地点和物品放在触手可及之处。';
+
+  @override
+  String get gmScreenAddPin => '固定条目';
+
+  @override
+  String get gmScreenUnpin => '取消固定';
+
+  @override
+  String get gmScreenNotes => '场次笔记';
+
+  @override
+  String get gmScreenNotesHint => '即兴起的名字、未了的线索、谁欠谁……';
+
+  @override
+  String get gmScreenDice => '快速掷骰';
+
+  @override
+  String get gmScreenRoll => '掷骰';
+
+  @override
+  String get gmScreenTables => '快速随机表';
+
+  @override
+  String get gmScreenAddTable => '固定随机表';
+
+  @override
+  String get gmScreenNoTables => '本世界还没有随机表——在“随机表”中新建，或从资料库添加。';
+
+  @override
+  String get gmScreenEncounter => '当前战斗';
+
+  @override
+  String get gmScreenNoFight => '当前没有进行中的战斗。';
+
+  @override
+  String get gmScreenOpenTracker => '打开追踪器';
+
+  @override
+  String gmScreenRound(int round) {
+    return '第 $round 轮';
+  }
+
+  @override
+  String get gmScreenConditions => '状态';
+
+  @override
+  String get gmScreenRules => '难度与掩护';
+
+  @override
+  String get gmScreenDifficulty => '难度等级';
+
+  @override
+  String get gmScreenCover => '掩护';
+
+  @override
+  String get gmScreenPanels => '面板';
+
+  @override
+  String get gmScreenAttribution => '规则摘要基于 SRD 5.2.1（CC BY 4.0）';
 }

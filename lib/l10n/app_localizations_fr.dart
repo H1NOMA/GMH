@@ -2429,4 +2429,73 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gmScreenPinned => 'Entrées épinglées';
+
+  @override
+  String get gmScreenPinHint =>
+      'Gardez à portée de clic les PNJ, lieux et objets de la séance.';
+
+  @override
+  String get gmScreenAddPin => 'Épingler une entrée';
+
+  @override
+  String get gmScreenUnpin => 'Désépingler';
+
+  @override
+  String get gmScreenNotes => 'Notes de séance';
+
+  @override
+  String get gmScreenNotesHint =>
+      'Noms improvisés, fils à reprendre, qui doit quoi à qui…';
+
+  @override
+  String get gmScreenDice => 'Dés rapides';
+
+  @override
+  String get gmScreenRoll => 'Lancer';
+
+  @override
+  String get gmScreenTables => 'Tables rapides';
+
+  @override
+  String get gmScreenAddTable => 'Épingler une table';
+
+  @override
+  String get gmScreenNoTables =>
+      'Aucune table aléatoire dans ce monde — créez-en ou ajoutez-en depuis la bibliothèque des Tables aléatoires.';
+
+  @override
+  String get gmScreenEncounter => 'Combat en cours';
+
+  @override
+  String get gmScreenNoFight => 'Aucun combat en cours.';
+
+  @override
+  String get gmScreenOpenTracker => 'Ouvrir le suivi';
+
+  @override
+  String gmScreenRound(int round) {
+    return 'Round $round';
+  }
+
+  @override
+  String get gmScreenConditions => 'États';
+
+  @override
+  String get gmScreenRules => 'Difficulté et abris';
+
+  @override
+  String get gmScreenDifficulty => 'Degré de difficulté';
+
+  @override
+  String get gmScreenCover => 'Abri';
+
+  @override
+  String get gmScreenPanels => 'Panneaux';
+
+  @override
+  String get gmScreenAttribution =>
+      'Résumés de règles d’après le SRD 5.2.1 (CC BY 4.0)';
 }

@@ -1264,5 +1264,33 @@
         "type": "int"
       }
     }
-  }
+  },
+  "gmScreenPinned": "Pinned entries",
+  "gmScreenPinHint": "Keep the NPCs, places and items of tonight's session one click away.",
+  "gmScreenAddPin": "Pin an entry",
+  "gmScreenUnpin": "Unpin",
+  "gmScreenNotes": "Session notes",
+  "gmScreenNotesHint": "Names you improvised, loose ends, who owes whom…",
+  "gmScreenDice": "Quick dice",
+  "gmScreenRoll": "Roll",
+  "gmScreenTables": "Quick tables",
+  "gmScreenAddTable": "Pin a table",
+  "gmScreenNoTables": "No random tables in this world yet — create some or add them from the library in Random Tables.",
+  "gmScreenEncounter": "Current fight",
+  "gmScreenNoFight": "No fight in progress.",
+  "gmScreenOpenTracker": "Open tracker",
+  "gmScreenRound": "Round {round}",
+  "@gmScreenRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gmScreenConditions": "Conditions",
+  "gmScreenRules": "Difficulty & cover",
+  "gmScreenDifficulty": "Difficulty class",
+  "gmScreenCover": "Cover",
+  "gmScreenPanels": "Panels",
+  "gmScreenAttribution": "Rules summaries based on the SRD 5.2.1 (CC BY 4.0)"
 }

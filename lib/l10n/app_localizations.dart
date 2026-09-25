@@ -4237,6 +4237,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No events} one{1 event} other{{count} events}}'**
   String timelineEventsCount(int count);
+
+  /// No description provided for @gmScreenPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned entries'**
+  String get gmScreenPinned;
+
+  /// No description provided for @gmScreenPinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the NPCs, places and items of tonight\'s session one click away.'**
+  String get gmScreenPinHint;
+
+  /// No description provided for @gmScreenAddPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin an entry'**
+  String get gmScreenAddPin;
+
+  /// No description provided for @gmScreenUnpin.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin'**
+  String get gmScreenUnpin;
+
+  /// No description provided for @gmScreenNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Session notes'**
+  String get gmScreenNotes;
+
+  /// No description provided for @gmScreenNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Names you improvised, loose ends, who owes whom…'**
+  String get gmScreenNotesHint;
+
+  /// No description provided for @gmScreenDice.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick dice'**
+  String get gmScreenDice;
+
+  /// No description provided for @gmScreenRoll.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll'**
+  String get gmScreenRoll;
+
+  /// No description provided for @gmScreenTables.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick tables'**
+  String get gmScreenTables;
+
+  /// No description provided for @gmScreenAddTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin a table'**
+  String get gmScreenAddTable;
+
+  /// No description provided for @gmScreenNoTables.
+  ///
+  /// In en, this message translates to:
+  /// **'No random tables in this world yet — create some or add them from the library in Random Tables.'**
+  String get gmScreenNoTables;
+
+  /// No description provided for @gmScreenEncounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Current fight'**
+  String get gmScreenEncounter;
+
+  /// No description provided for @gmScreenNoFight.
+  ///
+  /// In en, this message translates to:
+  /// **'No fight in progress.'**
+  String get gmScreenNoFight;
+
+  /// No description provided for @gmScreenOpenTracker.
+  ///
+  /// In en, this message translates to:
+  /// **'Open tracker'**
+  String get gmScreenOpenTracker;
+
+  /// No description provided for @gmScreenRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round}'**
+  String gmScreenRound(int round);
+
+  /// No description provided for @gmScreenConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions'**
+  String get gmScreenConditions;
+
+  /// No description provided for @gmScreenRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty & cover'**
+  String get gmScreenRules;
+
+  /// No description provided for @gmScreenDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty class'**
+  String get gmScreenDifficulty;
+
+  /// No description provided for @gmScreenCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover'**
+  String get gmScreenCover;
+
+  /// No description provided for @gmScreenPanels.
+  ///
+  /// In en, this message translates to:
+  /// **'Panels'**
+  String get gmScreenPanels;
+
+  /// No description provided for @gmScreenAttribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules summaries based on the SRD 5.2.1 (CC BY 4.0)'**
+  String get gmScreenAttribution;
 }
 
 class _AppLocalizationsDelegate

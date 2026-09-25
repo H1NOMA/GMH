@@ -182,4 +182,9 @@ void main() {
     await run(tester, '11_timeline',
         (d) => Routes.tool(d.worldId, 'timeline'));
   });
+
+  testWidgets('12 gm screen', skip: !_enabled, (tester) async {
+    await run(tester, '12_gm_screen',
+        (d) => Routes.tool(d.worldId, 'reference'));
+  });
 }

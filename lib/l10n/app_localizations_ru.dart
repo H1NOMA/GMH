@@ -2444,4 +2444,73 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gmScreenPinned => 'Закреплённые записи';
+
+  @override
+  String get gmScreenPinHint =>
+      'Держите NPC, места и предметы сегодняшней сессии под рукой.';
+
+  @override
+  String get gmScreenAddPin => 'Закрепить запись';
+
+  @override
+  String get gmScreenUnpin => 'Открепить';
+
+  @override
+  String get gmScreenNotes => 'Заметки сессии';
+
+  @override
+  String get gmScreenNotesHint =>
+      'Придуманные на ходу имена, незакрытые нити, кто кому должен…';
+
+  @override
+  String get gmScreenDice => 'Быстрые кубы';
+
+  @override
+  String get gmScreenRoll => 'Бросить';
+
+  @override
+  String get gmScreenTables => 'Быстрые таблицы';
+
+  @override
+  String get gmScreenAddTable => 'Закрепить таблицу';
+
+  @override
+  String get gmScreenNoTables =>
+      'В этом мире пока нет случайных таблиц — создайте их или добавьте из библиотеки в «Случайных таблицах».';
+
+  @override
+  String get gmScreenEncounter => 'Текущий бой';
+
+  @override
+  String get gmScreenNoFight => 'Сейчас боя нет.';
+
+  @override
+  String get gmScreenOpenTracker => 'Открыть трекер';
+
+  @override
+  String gmScreenRound(int round) {
+    return 'Раунд $round';
+  }
+
+  @override
+  String get gmScreenConditions => 'Состояния';
+
+  @override
+  String get gmScreenRules => 'Сложность и укрытия';
+
+  @override
+  String get gmScreenDifficulty => 'Класс сложности';
+
+  @override
+  String get gmScreenCover => 'Укрытие';
+
+  @override
+  String get gmScreenPanels => 'Панели';
+
+  @override
+  String get gmScreenAttribution =>
+      'Краткие правила на основе SRD 5.2.1 (CC BY 4.0)';
 }

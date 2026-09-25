@@ -2428,4 +2428,73 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gmScreenPinned => 'Angeheftete Einträge';
+
+  @override
+  String get gmScreenPinHint =>
+      'Halte NSCs, Orte und Gegenstände der heutigen Sitzung griffbereit.';
+
+  @override
+  String get gmScreenAddPin => 'Eintrag anheften';
+
+  @override
+  String get gmScreenUnpin => 'Lösen';
+
+  @override
+  String get gmScreenNotes => 'Sitzungsnotizen';
+
+  @override
+  String get gmScreenNotesHint =>
+      'Improvisierte Namen, lose Enden, wer wem was schuldet…';
+
+  @override
+  String get gmScreenDice => 'Schnelle Würfel';
+
+  @override
+  String get gmScreenRoll => 'Würfeln';
+
+  @override
+  String get gmScreenTables => 'Schnelle Tabellen';
+
+  @override
+  String get gmScreenAddTable => 'Tabelle anheften';
+
+  @override
+  String get gmScreenNoTables =>
+      'Noch keine Zufallstabellen in dieser Welt – erstelle welche oder füge sie aus der Bibliothek in „Zufallstabellen“ hinzu.';
+
+  @override
+  String get gmScreenEncounter => 'Laufender Kampf';
+
+  @override
+  String get gmScreenNoFight => 'Kein Kampf im Gange.';
+
+  @override
+  String get gmScreenOpenTracker => 'Tracker öffnen';
+
+  @override
+  String gmScreenRound(int round) {
+    return 'Runde $round';
+  }
+
+  @override
+  String get gmScreenConditions => 'Zustände';
+
+  @override
+  String get gmScreenRules => 'Schwierigkeit & Deckung';
+
+  @override
+  String get gmScreenDifficulty => 'Schwierigkeitsgrad';
+
+  @override
+  String get gmScreenCover => 'Deckung';
+
+  @override
+  String get gmScreenPanels => 'Bereiche';
+
+  @override
+  String get gmScreenAttribution =>
+      'Regelübersicht nach dem SRD 5.2.1 (CC BY 4.0)';
 }

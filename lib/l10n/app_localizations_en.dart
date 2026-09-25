@@ -2417,4 +2417,73 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gmScreenPinned => 'Pinned entries';
+
+  @override
+  String get gmScreenPinHint =>
+      'Keep the NPCs, places and items of tonight\'s session one click away.';
+
+  @override
+  String get gmScreenAddPin => 'Pin an entry';
+
+  @override
+  String get gmScreenUnpin => 'Unpin';
+
+  @override
+  String get gmScreenNotes => 'Session notes';
+
+  @override
+  String get gmScreenNotesHint =>
+      'Names you improvised, loose ends, who owes whom…';
+
+  @override
+  String get gmScreenDice => 'Quick dice';
+
+  @override
+  String get gmScreenRoll => 'Roll';
+
+  @override
+  String get gmScreenTables => 'Quick tables';
+
+  @override
+  String get gmScreenAddTable => 'Pin a table';
+
+  @override
+  String get gmScreenNoTables =>
+      'No random tables in this world yet — create some or add them from the library in Random Tables.';
+
+  @override
+  String get gmScreenEncounter => 'Current fight';
+
+  @override
+  String get gmScreenNoFight => 'No fight in progress.';
+
+  @override
+  String get gmScreenOpenTracker => 'Open tracker';
+
+  @override
+  String gmScreenRound(int round) {
+    return 'Round $round';
+  }
+
+  @override
+  String get gmScreenConditions => 'Conditions';
+
+  @override
+  String get gmScreenRules => 'Difficulty & cover';
+
+  @override
+  String get gmScreenDifficulty => 'Difficulty class';
+
+  @override
+  String get gmScreenCover => 'Cover';
+
+  @override
+  String get gmScreenPanels => 'Panels';
+
+  @override
+  String get gmScreenAttribution =>
+      'Rules summaries based on the SRD 5.2.1 (CC BY 4.0)';
 }
