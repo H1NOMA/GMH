@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,6 +51,49 @@ class _WorkspaceTabStripState extends ConsumerState<WorkspaceTabStrip> {
     });
   }
 
+  Future<void> _showTabMenu(
+    BuildContext context,
+    Offset position,
+    int index,
+    int count,
+  ) async {
+    final controller = ref.read(workspaceTabsProvider.notifier);
+    final l = context.l10n;
+    final overlay =
+        Overlay.of(context).context.findRenderObject()! as RenderBox;
+    final choice = await showMenu<String>(
+      context: context,
+      position: RelativeRect.fromRect(
+        position & const Size(1, 1),
+        Offset.zero & overlay.size,
+      ),
+      items: [
+        PopupMenuItem(value: 'duplicate', child: Text(l.tabDuplicate)),
+        PopupMenuItem(value: 'close', child: Text(l.tabClose)),
+        PopupMenuItem(
+          value: 'others',
+          enabled: count > 1,
+          child: Text(l.tabCloseOthers),
+        ),
+        PopupMenuItem(
+          value: 'right',
+          enabled: index < count - 1,
+          child: Text(l.tabCloseRight),
+        ),
+      ],
+    );
+    switch (choice) {
+      case 'duplicate':
+        controller.duplicate(index);
+      case 'close':
+        controller.close(index, fallbackLocation: Routes.home(widget.worldId));
+      case 'others':
+        controller.closeOthers(index);
+      case 'right':
+        controller.closeToRight(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final tabs = ref.watch(workspaceTabsProvider);
@@ -82,6 +126,8 @@ class _WorkspaceTabStripState extends ConsumerState<WorkspaceTabStrip> {
                   index,
                   fallbackLocation: Routes.home(widget.worldId),
                 ),
+                onMenu: (position) =>
+                    _showTabMenu(context, position, index, tabs.tabs.length),
               ),
             IconButton(
               tooltip: context.l10n.newTab,
@@ -105,6 +151,7 @@ class _WorkspaceTab extends ConsumerWidget {
   final bool active;
   final VoidCallback onTap;
   final VoidCallback onClose;
+  final void Function(Offset globalPosition) onMenu;
 
   const _WorkspaceTab({
     super.key,
@@ -112,6 +159,7 @@ class _WorkspaceTab extends ConsumerWidget {
     required this.active,
     required this.onTap,
     required this.onClose,
+    required this.onMenu,
   });
 
   /// Resolves a display icon + label for a location.
@@ -145,8 +193,9 @@ class _WorkspaceTab extends ConsumerWidget {
       }
       return (Icons.folder_outlined, '…');
     }
-    final toolMatch = RegExp(r'^/w/[^/]+/tools(?:/([^/]+))?(?:/([^/]+))?$')
-        .firstMatch(location);
+    final toolMatch = RegExp(
+      r'^/w/[^/]+/tools(?:/([^/]+))?(?:/([^/]+))?$',
+    ).firstMatch(location);
     if (toolMatch != null) {
       final tool = toolById(toolMatch.group(1) ?? '');
       if (tool == null) return (Icons.handyman_outlined, l.navTools);
@@ -188,68 +237,81 @@ class _WorkspaceTab extends ConsumerWidget {
     final color = active ? GmhColors.parchment : GmhColors.parchmentDim;
     return Padding(
       padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 190),
-          decoration: BoxDecoration(
-            color: active ? GmhColors.background : Colors.transparent,
+      // Browser habits: middle-click closes, right-click (or long-press)
+      // opens the tab menu.
+      child: Listener(
+        onPointerDown: (event) {
+          if (event.buttons == kMiddleMouseButton) onClose();
+        },
+        child: GestureDetector(
+          onSecondaryTapUp: (details) => onMenu(details.globalPosition),
+          onLongPressStart: (details) => onMenu(details.globalPosition),
+          child: InkWell(
+            onTap: onTap,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-            // A rounded box only accepts a uniform border; the ember
-            // accent is painted separately as the strip below.
-            border: active ? Border.all(color: GmhColors.border) : null,
-          ),
-          clipBehavior: active ? Clip.antiAlias : Clip.none,
-          // centerLeft keeps the icon+label row vertically centered in the
-          // tab; the default topLeft pushed text against the top border.
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 2),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(icon, size: 14, color: color),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: color,
-                          fontWeight: active
-                              ? FontWeight.w600
-                              : FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 2),
-                    IconButton(
-                      icon: const Icon(Icons.close, size: 13),
-                      color: GmhColors.parchmentFaint,
-                      visualDensity: VisualDensity.compact,
-                      constraints: const BoxConstraints(
-                        minWidth: 26,
-                        minHeight: 26,
-                      ),
-                      padding: EdgeInsets.zero,
-                      onPressed: onClose,
-                    ),
-                  ],
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 190),
+              decoration: BoxDecoration(
+                color: active ? GmhColors.background : Colors.transparent,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(8),
                 ),
+                // A rounded box only accepts a uniform border; the ember
+                // accent is painted separately as the strip below.
+                border: active ? Border.all(color: GmhColors.border) : null,
               ),
-              if (active)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(height: 2, color: GmhColors.ember),
-                ),
-            ],
+              clipBehavior: active ? Clip.antiAlias : Clip.none,
+              // centerLeft keeps the icon+label row vertically centered in the
+              // tab; the default topLeft pushed text against the top border.
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon, size: 14, color: color),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: color,
+                              fontWeight: active
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        IconButton(
+                          icon: const Icon(Icons.close, size: 13),
+                          color: GmhColors.parchmentFaint,
+                          visualDensity: VisualDensity.compact,
+                          constraints: const BoxConstraints(
+                            minWidth: 26,
+                            minHeight: 26,
+                          ),
+                          padding: EdgeInsets.zero,
+                          onPressed: onClose,
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (active)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(height: 2, color: GmhColors.ember),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

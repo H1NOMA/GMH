@@ -956,5 +956,9 @@
       }
     }
   },
-  "undo": "Undo"
+  "undo": "Undo",
+  "tabDuplicate": "Duplicate tab",
+  "tabClose": "Close tab",
+  "tabCloseOthers": "Close other tabs",
+  "tabCloseRight": "Close tabs to the right"
 }

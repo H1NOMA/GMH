@@ -552,5 +552,9 @@
   "trashDeletedOn": "Удалено {date}",
   "trashMovedSnack": "«{name}» перемещено в корзину",
   "trashRestoredSnack": "«{name}» восстановлено",
-  "undo": "Отменить"
+  "undo": "Отменить",
+  "tabDuplicate": "Дублировать вкладку",
+  "tabClose": "Закрыть вкладку",
+  "tabCloseOthers": "Закрыть другие вкладки",
+  "tabCloseRight": "Закрыть вкладки справа"
 }

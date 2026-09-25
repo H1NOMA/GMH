@@ -1925,4 +1925,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get undo => 'Rückgängig';
+
+  @override
+  String get tabDuplicate => 'Tab duplizieren';
+
+  @override
+  String get tabClose => 'Tab schließen';
+
+  @override
+  String get tabCloseOthers => 'Andere Tabs schließen';
+
+  @override
+  String get tabCloseRight => 'Tabs rechts schließen';
 }

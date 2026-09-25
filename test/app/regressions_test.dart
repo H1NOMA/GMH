@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,8 @@ import 'package:gmh/domain/models/entity.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/features/editor/lore_editor.dart';
 import 'package:gmh/features/entities/widgets/attribute_form.dart';
+import 'package:gmh/features/shell/tab_strip.dart';
+import 'package:gmh/features/shell/workspace_tabs.dart';
 
 import '../support/app_harness.dart';
 
@@ -137,5 +140,34 @@ void main() {
     await app.pump(Routes.entity(worldId, e.id));
     expect(tester.takeException(), isNull);
     expect(find.text('video'), findsOneWidget);
+  });
+
+  testWidgets('tab keys and the tab menu work like a browser', (tester) async {
+    final app = await start(tester);
+    await app.pump(Routes.home(worldId));
+    int tabCount() =>
+        app.container.read(workspaceTabsProvider).tabs.length;
+    expect(tabCount(), 1);
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.keyT);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await app.settle();
+    expect(tabCount(), 2);
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.keyW);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await app.settle();
+    expect(tabCount(), 1);
+
+    // Right-click the tab: duplicate it from the menu.
+    final tab = find.descendant(
+        of: find.byType(WorkspaceTabStrip), matching: find.byType(InkWell));
+    await tester.tap(tab.first, buttons: kSecondaryButton);
+    await app.settle();
+    await tester.tap(find.text('Duplicate tab'));
+    await app.settle();
+    expect(tabCount(), 2);
   });
 }

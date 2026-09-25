@@ -1931,4 +1931,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get undo => 'Отменить';
+
+  @override
+  String get tabDuplicate => 'Дублировать вкладку';
+
+  @override
+  String get tabClose => 'Закрыть вкладку';
+
+  @override
+  String get tabCloseOthers => 'Закрыть другие вкладки';
+
+  @override
+  String get tabCloseRight => 'Закрыть вкладки справа';
 }

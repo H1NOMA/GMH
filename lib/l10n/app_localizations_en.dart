@@ -1915,4 +1915,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get undo => 'Undo';
+
+  @override
+  String get tabDuplicate => 'Duplicate tab';
+
+  @override
+  String get tabClose => 'Close tab';
+
+  @override
+  String get tabCloseOthers => 'Close other tabs';
+
+  @override
+  String get tabCloseRight => 'Close tabs to the right';
 }

@@ -552,5 +552,9 @@
   "trashDeletedOn": "Supprimé le {date}",
   "trashMovedSnack": "« {name} » placé dans la corbeille",
   "trashRestoredSnack": "« {name} » restauré",
-  "undo": "Annuler"
+  "undo": "Annuler",
+  "tabDuplicate": "Dupliquer l’onglet",
+  "tabClose": "Fermer l’onglet",
+  "tabCloseOthers": "Fermer les autres onglets",
+  "tabCloseRight": "Fermer les onglets à droite"
 }

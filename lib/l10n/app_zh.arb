@@ -552,5 +552,9 @@
   "trashDeletedOn": "删除于 {date}",
   "trashMovedSnack": "“{name}”已移至回收站",
   "trashRestoredSnack": "“{name}”已恢复",
-  "undo": "撤销"
+  "undo": "撤销",
+  "tabDuplicate": "复制标签页",
+  "tabClose": "关闭标签页",
+  "tabCloseOthers": "关闭其他标签页",
+  "tabCloseRight": "关闭右侧标签页"
 }

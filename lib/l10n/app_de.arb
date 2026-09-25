@@ -552,5 +552,9 @@
   "trashDeletedOn": "Gelöscht am {date}",
   "trashMovedSnack": "„{name}“ in den Papierkorb verschoben",
   "trashRestoredSnack": "„{name}“ wiederhergestellt",
-  "undo": "Rückgängig"
+  "undo": "Rückgängig",
+  "tabDuplicate": "Tab duplizieren",
+  "tabClose": "Tab schließen",
+  "tabCloseOthers": "Andere Tabs schließen",
+  "tabCloseRight": "Tabs rechts schließen"
 }

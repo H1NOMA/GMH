@@ -1851,4 +1851,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get undo => '撤销';
+
+  @override
+  String get tabDuplicate => '复制标签页';
+
+  @override
+  String get tabClose => '关闭标签页';
+
+  @override
+  String get tabCloseOthers => '关闭其他标签页';
+
+  @override
+  String get tabCloseRight => '关闭右侧标签页';
 }

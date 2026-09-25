@@ -154,4 +154,45 @@ void main() {
     expect(state().locations, ['/w/1/home']);
     expect(visited.last, '/w/1/home');
   });
+
+  test('duplicate, close others and close to the right', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.openInNewTab('/w/1/search');
+    tabs.openInNewTab('/w/1/graph');
+    tabs.openInNewTab('/w/1/campaigns');
+
+    tabs.duplicate(1);
+    expect(state().locations, [
+      '/w/1/home',
+      '/w/1/search',
+      '/w/1/search',
+      '/w/1/graph',
+      '/w/1/campaigns',
+    ]);
+    expect(state().activeIndex, 2);
+    expect(visited.last, '/w/1/search');
+
+    // Closing to the right of an earlier tab drops the active one too:
+    // the kept tab becomes active and is opened.
+    tabs.activate(4);
+    tabs.closeToRight(1);
+    expect(state().locations, ['/w/1/home', '/w/1/search']);
+    expect(state().activeIndex, 1);
+    expect(visited.last, '/w/1/search');
+
+    tabs.closeOthers(0);
+    expect(state().locations, ['/w/1/home']);
+    expect(visited.last, '/w/1/home');
+  });
+
+  test('Ctrl+Tab cycles through tabs and wraps', () {
+    tabs.onLocationChanged('/w/1/home');
+    tabs.openInNewTab('/w/1/search');
+    tabs.openInNewTab('/w/1/graph');
+    tabs.activateRelative(1);
+    expect(state().activeIndex, 0);
+    tabs.activateRelative(-1);
+    expect(state().activeIndex, 2);
+    expect(visited.last, '/w/1/graph');
+  });
 }

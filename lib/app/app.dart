@@ -41,6 +41,19 @@ class _QuickSearchIntent extends Intent {
   const _QuickSearchIntent();
 }
 
+class _CloseTabIntent extends Intent {
+  const _CloseTabIntent();
+}
+
+class _NewTabIntent extends Intent {
+  const _NewTabIntent();
+}
+
+class _CycleTabIntent extends Intent {
+  final int delta;
+  const _CycleTabIntent(this.delta);
+}
+
 
 /// A shortcut action that stands down while any modal is open, so the key
 /// falls through to the dialog/popup instead of changing the page behind
@@ -145,6 +158,14 @@ class _GmhAppState extends ConsumerState<GmhApp> {
     return KeyEventResult.handled;
   }
 
+  /// Runs [action] with the open world's id (tab shortcuts do nothing on
+  /// the world picker).
+  void _withWorld(void Function(String worldId) action) {
+    final location = _router.routerDelegate.currentConfiguration.uri.path;
+    final worldId = RegExp(r'^/w/([^/]+)/').firstMatch(location)?.group(1);
+    if (worldId != null) action(worldId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeControllerProvider);
@@ -163,6 +184,19 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             const _QuickSearchIntent(),
         LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyK):
             const _QuickSearchIntent(),
+        // Browser tab keys.
+        const SingleActivator(LogicalKeyboardKey.keyW, control: true):
+            const _CloseTabIntent(),
+        const SingleActivator(LogicalKeyboardKey.keyW, meta: true):
+            const _CloseTabIntent(),
+        const SingleActivator(LogicalKeyboardKey.keyT, control: true):
+            const _NewTabIntent(),
+        const SingleActivator(LogicalKeyboardKey.keyT, meta: true):
+            const _NewTabIntent(),
+        const SingleActivator(LogicalKeyboardKey.tab, control: true):
+            const _CycleTabIntent(1),
+        const SingleActivator(LogicalKeyboardKey.tab,
+            control: true, shift: true): const _CycleTabIntent(-1),
       },
       actions: {
         ...WidgetsApp.defaultActions,
@@ -176,6 +210,23 @@ class _GmhAppState extends ConsumerState<GmhApp> {
                 ref.read(workspaceTabsProvider.notifier).goForward()),
         _QuickSearchIntent: _PageAction<_QuickSearchIntent>(
             modalOpen: _modalOpen, onInvoke: (_) => _goToSearch()),
+        _CloseTabIntent: _PageAction<_CloseTabIntent>(
+            modalOpen: _modalOpen,
+            onInvoke: (_) => _withWorld((worldId) {
+                  final tabs = ref.read(workspaceTabsProvider.notifier);
+                  tabs.close(ref.read(workspaceTabsProvider).activeIndex,
+                      fallbackLocation: Routes.home(worldId));
+                })),
+        _NewTabIntent: _PageAction<_NewTabIntent>(
+            modalOpen: _modalOpen,
+            onInvoke: (_) => _withWorld((worldId) => ref
+                .read(workspaceTabsProvider.notifier)
+                .openInNewTab(Routes.home(worldId)))),
+        _CycleTabIntent: _PageAction<_CycleTabIntent>(
+            modalOpen: _modalOpen,
+            onInvoke: (intent) => ref
+                .read(workspaceTabsProvider.notifier)
+                .activateRelative(intent.delta)),
       },
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.light(),

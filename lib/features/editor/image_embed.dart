@@ -48,6 +48,30 @@ class _VaultImage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // The path is cached per media id — the editor rebuilds this embed on
     // every keystroke around it, which used to mean a query per keypress.
+    // Pasted from a web page: the embed holds the image's URL. Shown
+    // straight from the web (it simply shows a placeholder offline).
+    if (source.startsWith('https://') || source.startsWith('http://')) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 420),
+          child: Image.network(
+            source,
+            fit: BoxFit.contain,
+            errorBuilder: (_, _, _) => Container(
+              height: 120,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: GmhColors.surfaceHigh,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(Icons.cloud_off_outlined,
+                  color: GmhColors.parchmentFaint),
+            ),
+          ),
+        ),
+      );
+    }
     final AsyncValue<String?> resolved;
     if (source.startsWith(mediaImagePrefix)) {
       resolved = ref

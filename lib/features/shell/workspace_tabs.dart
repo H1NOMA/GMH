@@ -142,6 +142,41 @@ class WorkspaceTabs extends Notifier<WorkspaceTabsState> {
     navigate?.call(state.tabs[index].location);
   }
 
+  /// Ctrl+Tab / Ctrl+Shift+Tab: the next or previous tab, wrapping.
+  void activateRelative(int delta) {
+    final count = state.tabs.length;
+    if (count < 2) return;
+    activate((state.activeIndex + delta) % count);
+  }
+
+  /// A new tab on the same page right after [index] (fresh history).
+  void duplicate(int index) {
+    if (index < 0 || index >= state.tabs.length) return;
+    final location = state.tabs[index].location;
+    final tabs = List.of(state.tabs)..insert(index + 1, WorkspaceTab(location));
+    state = WorkspaceTabsState(tabs: tabs, activeIndex: index + 1);
+    navigate?.call(location);
+  }
+
+  /// Keeps only the tab at [index].
+  void closeOthers(int index) {
+    if (index < 0 || index >= state.tabs.length) return;
+    final kept = state.tabs[index];
+    final wasActive = index == state.activeIndex;
+    state = WorkspaceTabsState(tabs: [kept]);
+    if (!wasActive) navigate?.call(kept.location);
+  }
+
+  /// Closes every tab after [index].
+  void closeToRight(int index) {
+    if (index < 0 || index >= state.tabs.length - 1) return;
+    final tabs = state.tabs.sublist(0, index + 1);
+    final activeClosed = state.activeIndex > index;
+    state = WorkspaceTabsState(
+        tabs: tabs, activeIndex: activeClosed ? index : state.activeIndex);
+    if (activeClosed) navigate?.call(tabs[index].location);
+  }
+
   /// Closes a tab. The last remaining tab is reset to [fallbackLocation]
   /// (the dashboard) instead of disappearing.
   void close(int index, {required String fallbackLocation}) {

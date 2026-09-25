@@ -3421,6 +3421,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Undo'**
   String get undo;
+
+  /// No description provided for @tabDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate tab'**
+  String get tabDuplicate;
+
+  /// No description provided for @tabClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close tab'**
+  String get tabClose;
+
+  /// No description provided for @tabCloseOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Close other tabs'**
+  String get tabCloseOthers;
+
+  /// No description provided for @tabCloseRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Close tabs to the right'**
+  String get tabCloseRight;
 }
 
 class _AppLocalizationsDelegate

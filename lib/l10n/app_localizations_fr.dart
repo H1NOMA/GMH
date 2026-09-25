@@ -1927,4 +1927,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get undo => 'Annuler';
+
+  @override
+  String get tabDuplicate => 'Dupliquer l’onglet';
+
+  @override
+  String get tabClose => 'Fermer l’onglet';
+
+  @override
+  String get tabCloseOthers => 'Fermer les autres onglets';
+
+  @override
+  String get tabCloseRight => 'Fermer les onglets à droite';
 }
