@@ -18,8 +18,10 @@ Future<RandomTable?> showTableDetailsDialog(
   List<String> folders = const [],
 }) async {
   final name = TextEditingController(text: initial.name)
-    ..selection =
-        TextSelection(baseOffset: 0, extentOffset: initial.name.length);
+    ..selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: initial.name.length,
+    );
   final description = TextEditingController(text: initial.description);
   final folder = TextEditingController(text: initial.folder);
   final formula = TextEditingController(text: initial.formula);
@@ -65,8 +67,9 @@ Future<RandomTable?> showTableDetailsDialog(
                       controller: description,
                       minLines: 1,
                       maxLines: 3,
-                      decoration:
-                          InputDecoration(labelText: l.tablesDescriptionLabel),
+                      decoration: InputDecoration(
+                        labelText: l.tablesDescriptionLabel,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextField(
@@ -90,8 +93,7 @@ Future<RandomTable?> showTableDetailsDialog(
                       decoration: InputDecoration(
                         labelText: l.tablesFolderLabel,
                         hintText: l.tablesFolderHint,
-                        prefixIcon:
-                            const Icon(Icons.folder_outlined, size: 20),
+                        prefixIcon: const Icon(Icons.folder_outlined, size: 20),
                       ),
                     ),
                     if (folders.isNotEmpty) ...[
@@ -102,9 +104,11 @@ Future<RandomTable?> showTableDetailsDialog(
                         children: [
                           for (final f in folders)
                             ActionChip(
-                              label: Text(f,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis),
+                              label: Text(
+                                f,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               visualDensity: VisualDensity.compact,
                               onPressed: () =>
                                   setDialogState(() => folder.text = f),
@@ -118,11 +122,13 @@ Future<RandomTable?> showTableDetailsDialog(
             ),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(l.cancel)),
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(l.cancel),
+              ),
               FilledButton(
-                  onPressed: error == null ? submit : null,
-                  child: Text(confirmLabel)),
+                onPressed: error == null ? submit : null,
+                child: Text(confirmLabel),
+              ),
             ],
           );
         },
@@ -160,8 +166,10 @@ Future<({String name, List<RandomTableRow> rows})?> showTableTextDialog(
   final name = initialName == null
       ? null
       : (TextEditingController(text: initialName)
-        ..selection =
-            TextSelection(baseOffset: 0, extentOffset: initialName.length));
+          ..selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: initialName.length,
+          ));
   final text = TextEditingController(text: initialText);
   ModalRoute<Object?>? dialogRoute;
   final confirmed = await showDialog<bool>(
@@ -169,68 +177,78 @@ Future<({String name, List<RandomTableRow> rows})?> showTableTextDialog(
     builder: (context) {
       dialogRoute ??= ModalRoute.of(context);
       final l = context.l10n;
-      return StatefulBuilder(builder: (context, setDialogState) {
-        final count = parseTableText(text.text).length;
-        final nameOk = name == null || name.text.trim().isNotEmpty;
-        return AlertDialog(
-          title: Text(title),
-          content: SizedBox(
-            width: 620,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (name != null) ...[
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final count = parseTableText(text.text).length;
+          final nameOk = name == null || name.text.trim().isNotEmpty;
+          return AlertDialog(
+            title: Text(title),
+            content: SizedBox(
+              width: 620,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (name != null) ...[
+                      TextField(
+                        key: const ValueKey('tables-import-name'),
+                        controller: name,
+                        decoration: InputDecoration(labelText: l.nameLabel),
+                        onChanged: (_) => setDialogState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    Text(
+                      l.tablesTextFormatHelp,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.4,
+                        color: GmhColors.parchmentDim,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     TextField(
-                      key: const ValueKey('tables-import-name'),
-                      controller: name,
-                      decoration: InputDecoration(labelText: l.nameLabel),
+                      key: const ValueKey('tables-text-field'),
+                      controller: text,
+                      autofocus: name == null,
+                      minLines: 8,
+                      maxLines: 16,
+                      keyboardType: TextInputType.multiline,
+                      style: const TextStyle(fontSize: 13.5, height: 1.4),
+                      decoration: InputDecoration(
+                        labelText: l.tablesImportRows,
+                        alignLabelWithHint: true,
+                      ),
                       onChanged: (_) => setDialogState(() {}),
                     ),
-                    const SizedBox(height: 12),
-                  ],
-                  Text(l.tablesTextFormatHelp,
-                      style: TextStyle(
-                          fontSize: 12.5,
-                          height: 1.4,
-                          color: GmhColors.parchmentDim)),
-                  const SizedBox(height: 10),
-                  TextField(
-                    key: const ValueKey('tables-text-field'),
-                    controller: text,
-                    autofocus: name == null,
-                    minLines: 8,
-                    maxLines: 16,
-                    keyboardType: TextInputType.multiline,
-                    style: const TextStyle(fontSize: 13.5, height: 1.4),
-                    decoration: InputDecoration(
-                      labelText: l.tablesImportRows,
-                      alignLabelWithHint: true,
-                    ),
-                    onChanged: (_) => setDialogState(() {}),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(l.tablesImportFound(count),
+                    const SizedBox(height: 8),
+                    Text(
+                      l.tablesImportFound(count),
                       key: const ValueKey('tables-text-count'),
                       style: TextStyle(
-                          fontSize: 12.5, color: GmhColors.parchmentDim)),
-                ],
+                        fontSize: 12.5,
+                        color: GmhColors.parchmentDim,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          actions: [
-            TextButton(
+            actions: [
+              TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: Text(l.cancel)),
-            FilledButton(
+                child: Text(l.cancel),
+              ),
+              FilledButton(
                 key: const ValueKey('tables-text-confirm'),
-                onPressed:
-                    nameOk ? () => Navigator.pop(context, true) : null,
-                child: Text(confirmLabel)),
-          ],
-        );
-      });
+                onPressed: nameOk ? () => Navigator.pop(context, true) : null,
+                child: Text(confirmLabel),
+              ),
+            ],
+          );
+        },
+      );
     },
   );
   final result = confirmed == true
@@ -247,10 +265,7 @@ Future<({String name, List<RandomTableRow> rows})?> showTableTextDialog(
 /// rows all carry ranges gets the matching formula.
 RandomTable withImportedRows(RandomTable table, List<RandomTableRow> rows) {
   final suggested = table.usesFormula ? null : suggestFormula(rows);
-  return table.copyWith(
-    rows: rows,
-    formula: suggested ?? table.formula,
-  );
+  return table.copyWith(rows: rows, formula: suggested ?? table.formula);
 }
 
 Future<bool> confirmDeleteTable(BuildContext context, String name) async {
@@ -258,17 +273,22 @@ Future<bool> confirmDeleteTable(BuildContext context, String name) async {
   final result = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text(l.tablesDeleteTitle(name),
-          maxLines: 3, overflow: TextOverflow.ellipsis),
+      title: Text(
+        l.tablesDeleteTitle(name),
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+      ),
       content: SizedBox(width: 420, child: Text(l.tablesDeleteBody)),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l.cancel)),
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(l.cancel),
+        ),
         FilledButton(
           key: const ValueKey('tables-delete-confirm'),
           style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
           onPressed: () => Navigator.pop(context, true),
           child: Text(l.delete),
         ),
@@ -301,9 +321,14 @@ Future<List<LibraryTable>?> showLibraryDependenciesDialog(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(l.tablesAddDepsBody(table.name.of(lang)),
-                      style: TextStyle(
-                          fontSize: 13, height: 1.4, color: GmhColors.parchmentDim)),
+                  Text(
+                    l.tablesAddDepsBody(table.name.of(lang)),
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.4,
+                      color: GmhColors.parchmentDim,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   for (final dep in dependencies)
                     CheckboxListTile(
@@ -311,11 +336,16 @@ Future<List<LibraryTable>?> showLibraryDependenciesDialog(
                       contentPadding: EdgeInsets.zero,
                       controlAffinity: ListTileControlAffinity.leading,
                       value: selected.contains(dep.id),
-                      title: Text(dep.name.of(lang),
-                          maxLines: 2, overflow: TextOverflow.ellipsis),
-                      onChanged: (on) => setDialogState(() => on == true
-                          ? selected.add(dep.id)
-                          : selected.remove(dep.id)),
+                      title: Text(
+                        dep.name.of(lang),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onChanged: (on) => setDialogState(
+                        () => on == true
+                            ? selected.add(dep.id)
+                            : selected.remove(dep.id),
+                      ),
                     ),
                 ],
               ),
@@ -323,8 +353,9 @@ Future<List<LibraryTable>?> showLibraryDependenciesDialog(
           ),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(l.cancel)),
+              onPressed: () => Navigator.pop(context),
+              child: Text(l.cancel),
+            ),
             FilledButton(
               key: const ValueKey('tables-deps-confirm'),
               onPressed: () => Navigator.pop(context, [

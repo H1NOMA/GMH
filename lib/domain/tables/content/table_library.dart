@@ -54,12 +54,33 @@ class LibraryRow {
 
 enum LibraryFolder {
   encounters(Tx('Encounters', 'Встречи', 'Begegnungen', 'Rencontres', '遭遇')),
-  rumors(Tx('Rumors & hooks', 'Слухи и зацепки', 'Gerüchte & Aufhänger',
-      'Rumeurs & accroches', '传闻与线索')),
-  loot(Tx('Loot & salvage', 'Добыча', 'Beute & Fundstücke', 'Butin & récup',
-      '战利品')),
-  locale(Tx('Places & complications', 'Места и осложнения',
-      'Orte & Komplikationen', 'Lieux & complications', '场景与变数')),
+  rumors(
+    Tx(
+      'Rumors & hooks',
+      'Слухи и зацепки',
+      'Gerüchte & Aufhänger',
+      'Rumeurs & accroches',
+      '传闻与线索',
+    ),
+  ),
+  loot(
+    Tx(
+      'Loot & salvage',
+      'Добыча',
+      'Beute & Fundstücke',
+      'Butin & récup',
+      '战利品',
+    ),
+  ),
+  locale(
+    Tx(
+      'Places & complications',
+      'Места и осложнения',
+      'Orte & Komplikationen',
+      'Lieux & complications',
+      '场景与变数',
+    ),
+  ),
   people(Tx('People', 'Персонажи', 'Personen', 'Personnages', '人物'));
 
   final Tx label;
@@ -98,9 +119,9 @@ class LibraryTable {
   /// Local ids referenced by any row (in English; the content tests check
   /// every language references the same tables).
   Set<String> get references => {
-        for (final row in rows)
-          for (final m in refPattern.allMatches(row.text.en)) m[1]!,
-      };
+    for (final row in rows)
+      for (final m in refPattern.allMatches(row.text.en)) m[1]!,
+  };
 }
 
 /// Every library table, grouped by setting pack.
@@ -118,8 +139,9 @@ abstract final class TableLibrary {
     WorldStyle.wuxia: wuxiaTables,
   };
 
-  static List<LibraryTable> get all =>
-      [for (final style in WorldStyle.values) ...?byStyle[style]];
+  static List<LibraryTable> get all => [
+    for (final style in WorldStyle.values) ...?byStyle[style],
+  ];
 
   static List<LibraryTable> forStyle(WorldStyle style) =>
       byStyle[style] ?? const [];
@@ -140,8 +162,11 @@ abstract final class TableLibrary {
   }
 
   /// Packs in display order with [first] (the world's own pack) leading.
-  static List<WorldStyle> packOrder(WorldStyle first) =>
-      [first, for (final s in WorldStyle.values) if (s != first) s];
+  static List<WorldStyle> packOrder(WorldStyle first) => [
+    first,
+    for (final s in WorldStyle.values)
+      if (s != first) s,
+  ];
 
   /// Row text in [lang] with `[[@id]]` turned into `[[Localized name]]`.
   static String rowText(LibraryTable table, LibraryRow row, String lang) =>
@@ -152,14 +177,16 @@ abstract final class TableLibrary {
 
   /// [table] as an editable world table in [lang]; ranges are spread over
   /// the formula by row weight.
-  static RandomTable materialize(LibraryTable table, String lang,
-      {String worldId = ''}) {
+  static RandomTable materialize(
+    LibraryTable table,
+    String lang, {
+    String worldId = '',
+  }) {
     var rows = [
       for (final row in table.rows)
         RandomTableRow(rowText(table, row, lang), weight: row.weight),
     ];
-    final bounds =
-        table.formula.isEmpty ? null : formulaBounds(table.formula);
+    final bounds = table.formula.isEmpty ? null : formulaBounds(table.formula);
     if (bounds != null) rows = autoRanges(rows, bounds);
     return RandomTable(
       id: table.id,

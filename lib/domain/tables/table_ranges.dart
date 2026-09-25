@@ -32,7 +32,8 @@ FormulaBounds? formulaBounds(String formula) {
       var dice = node.count;
       final keep = node.keep;
       if (keep != null) {
-        final isKeep = keep.mode == KeepMode.keepHighest ||
+        final isKeep =
+            keep.mode == KeepMode.keepHighest ||
             keep.mode == KeepMode.keepLowest;
         dice = isKeep
             ? min(keep.count, node.count)
@@ -74,7 +75,9 @@ FormulaBounds? formulaBounds(String formula) {
 /// row gets at least one value while there are enough values). Rows that
 /// cannot get a value keep no range.
 List<RandomTableRow> autoRanges(
-    List<RandomTableRow> rows, FormulaBounds bounds) {
+  List<RandomTableRow> rows,
+  FormulaBounds bounds,
+) {
   if (rows.isEmpty) return const [];
   final span = bounds.max - bounds.min + 1;
   if (span <= 0) return [for (final r in rows) r.withoutRange()];
@@ -86,8 +89,7 @@ List<RandomTableRow> autoRanges(
   } else {
     // Proportional shares (at least one value each), then hand out the
     // difference by largest remainder / take it back from the largest.
-    final totalWeight =
-        rows.fold<int>(0, (sum, r) => sum + max(1, r.weight));
+    final totalWeight = rows.fold<int>(0, (sum, r) => sum + max(1, r.weight));
     final remainders = <(double, int)>[];
     var given = 0;
     for (var i = 0; i < rows.length; i++) {
@@ -120,8 +122,14 @@ List<RandomTableRow> autoRanges(
       out.add(r.withoutRange());
       continue;
     }
-    out.add(RandomTableRow(r.text,
-        weight: r.weight, from: next, to: next + sizes[i] - 1));
+    out.add(
+      RandomTableRow(
+        r.text,
+        weight: r.weight,
+        from: next,
+        to: next + sizes[i] - 1,
+      ),
+    );
     next += sizes[i];
   }
   return out;
@@ -202,7 +210,9 @@ List<TableIssue> validateTable(RandomTable table) {
 
 /// Range problems of [rows] for a formula rolling [bounds].
 List<TableIssue> validateRanges(
-    List<RandomTableRow> rows, FormulaBounds bounds) {
+  List<RandomTableRow> rows,
+  FormulaBounds bounds,
+) {
   final issues = <TableIssue>[];
   final ranged = <(int, int, int)>[]; // (from, to, row)
   for (var i = 0; i < rows.length; i++) {
@@ -212,13 +222,25 @@ List<TableIssue> validateRanges(
       continue;
     }
     if (r.from! > r.to!) {
-      issues.add(TableIssue(TableIssueKind.invertedRange,
-          rows: [i], from: r.from, to: r.to));
+      issues.add(
+        TableIssue(
+          TableIssueKind.invertedRange,
+          rows: [i],
+          from: r.from,
+          to: r.to,
+        ),
+      );
       continue;
     }
     if (r.from! < bounds.min || r.to! > bounds.max) {
-      issues.add(TableIssue(TableIssueKind.outOfBounds,
-          rows: [i], from: r.from, to: r.to));
+      issues.add(
+        TableIssue(
+          TableIssueKind.outOfBounds,
+          rows: [i],
+          from: r.from,
+          to: r.to,
+        ),
+      );
     }
     ranged.add((r.from!, r.to!, i));
   }
@@ -233,10 +255,14 @@ List<TableIssue> validateRanges(
       if (ranged[b].$1 > ranged[a].$2) break;
       final ia = ranged[a].$3;
       final ib = ranged[b].$3;
-      issues.add(TableIssue(TableIssueKind.overlap,
+      issues.add(
+        TableIssue(
+          TableIssueKind.overlap,
           rows: ia < ib ? [ia, ib] : [ib, ia],
           from: ranged[b].$1,
-          to: min(ranged[a].$2, ranged[b].$2)));
+          to: min(ranged[a].$2, ranged[b].$2),
+        ),
+      );
     }
   }
 
@@ -245,10 +271,14 @@ List<TableIssue> validateRanges(
   int? previousRow;
   for (final (from, to, row) in ranged) {
     if (from > covered + 1 && covered + 1 <= bounds.max) {
-      issues.add(TableIssue(TableIssueKind.gap,
+      issues.add(
+        TableIssue(
+          TableIssueKind.gap,
           rows: [?previousRow, row],
           from: covered + 1,
-          to: min(from - 1, bounds.max)));
+          to: min(from - 1, bounds.max),
+        ),
+      );
     }
     if (to > covered) {
       covered = to;
@@ -256,8 +286,14 @@ List<TableIssue> validateRanges(
     }
   }
   if (covered < bounds.max) {
-    issues.add(TableIssue(TableIssueKind.gap,
-        rows: [?previousRow], from: covered + 1, to: bounds.max));
+    issues.add(
+      TableIssue(
+        TableIssueKind.gap,
+        rows: [?previousRow],
+        from: covered + 1,
+        to: bounds.max,
+      ),
+    );
   }
   return issues;
 }

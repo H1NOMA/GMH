@@ -154,14 +154,18 @@ class TableRoller {
 
   /// A roller whose `[[references]]` resolve among [tables]; with duplicate
   /// names the first one wins.
-  factory TableRoller.forTables(Iterable<RandomTable> tables,
-      {required Random random}) {
+  factory TableRoller.forTables(
+    Iterable<RandomTable> tables, {
+    required Random random,
+  }) {
     final byName = <String, RandomTable>{};
     for (final t in tables) {
       byName.putIfAbsent(tableNameKey(t.name), () => t);
     }
     return TableRoller(
-        random: random, resolve: (name) => byName[tableNameKey(name)]);
+      random: random,
+      resolve: (name) => byName[tableNameKey(name)],
+    );
   }
 
   TableRollResult roll(RandomTable table) {
@@ -214,8 +218,7 @@ class TableRoller {
 
     final rowText = table.rows[index].text;
     final parts = <TableRollPart>[];
-    final text =
-        _expand(rowText, depth, [...path, _key(table)], parts);
+    final text = _expand(rowText, depth, [...path, _key(table)], parts);
     return TableRollResult(
       tableId: table.id,
       tableName: table.name,
@@ -231,8 +234,10 @@ class TableRoller {
   }
 
   int _pickByWeight(RandomTable table, List<int> candidates) {
-    final sum =
-        candidates.fold<int>(0, (s, i) => s + max(1, table.rows[i].weight));
+    final sum = candidates.fold<int>(
+      0,
+      (s, i) => s + max(1, table.rows[i].weight),
+    );
     var r = random.nextInt(sum);
     for (final i in candidates) {
       r -= max(1, table.rows[i].weight);
@@ -244,7 +249,10 @@ class TableRoller {
   /// The row whose range contains [total]; outside every range, the
   /// nearest row (ties go to the earlier row) with `clamped` set.
   (int, bool)? _pickByTotal(
-      RandomTable table, List<int> candidates, int total) {
+    RandomTable table,
+    List<int> candidates,
+    int total,
+  ) {
     var ranges = <(int, int, int)>[
       for (final i in candidates)
         if (table.rows[i].hasRange && table.rows[i].from! <= table.rows[i].to!)
@@ -254,8 +262,9 @@ class TableRoller {
       // No ranges written yet: spread the rows over the formula's totals.
       final bounds = formulaBounds(table.formula);
       if (bounds == null) return null;
-      final rows = autoRanges(
-          [for (final i in candidates) table.rows[i].withoutRange()], bounds);
+      final rows = autoRanges([
+        for (final i in candidates) table.rows[i].withoutRange(),
+      ], bounds);
       ranges = [
         for (var k = 0; k < rows.length; k++)
           if (rows[k].hasRange) (rows[k].from!, rows[k].to!, candidates[k]),
@@ -279,7 +288,11 @@ class TableRoller {
   }
 
   String _expand(
-      String text, int depth, List<String> path, List<TableRollPart> parts) {
+    String text,
+    int depth,
+    List<String> path,
+    List<TableRollPart> parts,
+  ) {
     final out = StringBuffer();
     var i = 0;
     while (i < text.length) {
@@ -293,9 +306,7 @@ class TableRoller {
         }
         final part = _rollReference(name, depth, path);
         parts.add(part);
-        out.write(part.result.ok
-            ? part.result.text
-            : '$failureMark[[$name]]');
+        out.write(part.result.ok ? part.result.text : '$failureMark[[$name]]');
         i = end + 2;
         continue;
       }
@@ -341,9 +352,13 @@ class TableRoller {
 
   TablePart _rollReference(String name, int depth, List<String> path) {
     TablePart fail(TableRollFailure f, [RandomTable? t]) => TablePart(
-        name,
-        TableRollResult(
-            tableId: t?.id ?? '', tableName: t?.name ?? name, failure: f));
+      name,
+      TableRollResult(
+        tableId: t?.id ?? '',
+        tableName: t?.name ?? name,
+        failure: f,
+      ),
+    );
     final table = resolve(name);
     if (table == null) return fail(TableRollFailure.notFound);
     if (path.contains(_key(table))) return fail(TableRollFailure.cycle, table);
@@ -396,11 +411,12 @@ class TableRoller {
 
 /// Every table of [worldId].
 Future<List<RandomTable>> loadWorldTables(
-        WorldObjectRepository repo, String worldId) async =>
-    [
-      for (final o in await repo.list(worldId, WorldObjectTypes.randomTable))
-        RandomTable.fromObject(o),
-    ];
+  WorldObjectRepository repo,
+  String worldId,
+) async => [
+  for (final o in await repo.list(worldId, WorldObjectTypes.randomTable))
+    RandomTable.fromObject(o),
+];
 
 /// Rolls the world's table called [name] (case-insensitive) and returns
 /// the expanded text, or null when the world has no such table or it

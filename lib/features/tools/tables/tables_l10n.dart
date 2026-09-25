@@ -9,8 +9,11 @@ String tableRangeText(int? from, int? to) {
 }
 
 /// One readable sentence per validation issue (row numbers are 1-based).
-String tableIssueText(AppLocalizations l, TableIssue issue,
-    {FormulaBounds? bounds}) {
+String tableIssueText(
+  AppLocalizations l,
+  TableIssue issue, {
+  FormulaBounds? bounds,
+}) {
   int row(int i) => issue.rows.length > i ? issue.rows[i] + 1 : 0;
   final range = tableRangeText(issue.from, issue.to);
   return switch (issue.kind) {
@@ -19,8 +22,10 @@ String tableIssueText(AppLocalizations l, TableIssue issue,
     TableIssueKind.emptyRow => l.tablesIssueEmptyRow(row(0)),
     TableIssueKind.missingRange => l.tablesIssueMissingRange(row(0)),
     TableIssueKind.invertedRange => l.tablesIssueInverted(row(0)),
-    TableIssueKind.outOfBounds => l.tablesIssueOutOfBounds(row(0),
-        bounds == null ? range : tableRangeText(bounds.min, bounds.max)),
+    TableIssueKind.outOfBounds => l.tablesIssueOutOfBounds(
+      row(0),
+      bounds == null ? range : tableRangeText(bounds.min, bounds.max),
+    ),
     TableIssueKind.gap => l.tablesIssueGap(range),
     TableIssueKind.overlap => l.tablesIssueOverlap(row(0), row(1), range),
   };

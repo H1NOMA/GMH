@@ -33,18 +33,25 @@ class RandomTablesScreen extends StatelessWidget {
 }
 
 /// Distinct non-empty folders, sorted.
-List<String> tableFolders(Iterable<RandomTable> tables) =>
-    ({for (final t in tables) if (t.folder.isNotEmpty) t.folder}.toList()
-      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
+List<String> tableFolders(Iterable<RandomTable> tables) => ({
+  for (final t in tables)
+    if (t.folder.isNotEmpty) t.folder,
+}.toList()..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
 
-Future<void> createTableFlow(BuildContext context, WidgetRef ref,
-    String worldId, List<RandomTable> existing) async {
+Future<void> createTableFlow(
+  BuildContext context,
+  WidgetRef ref,
+  String worldId,
+  List<RandomTable> existing,
+) async {
   final l = context.l10n;
   final draft = await showTableDetailsDialog(
     context,
     title: l.tablesNewTable,
     initial: RandomTable(
-        worldId: worldId, name: l.tablesDefaultName(existing.length + 1)),
+      worldId: worldId,
+      name: l.tablesDefaultName(existing.length + 1),
+    ),
     confirmLabel: l.create,
     folders: tableFolders(existing),
   );
@@ -54,8 +61,12 @@ Future<void> createTableFlow(BuildContext context, WidgetRef ref,
   context.go(Routes.tool(worldId, 'tables', table.id));
 }
 
-Future<void> importTableFlow(BuildContext context, WidgetRef ref,
-    String worldId, List<RandomTable> existing) async {
+Future<void> importTableFlow(
+  BuildContext context,
+  WidgetRef ref,
+  String worldId,
+  List<RandomTable> existing,
+) async {
   final l = context.l10n;
   final actions = ref.read(tablesActionsProvider);
   final imported = await showTableTextDialog(
@@ -67,9 +78,12 @@ Future<void> importTableFlow(BuildContext context, WidgetRef ref,
   );
   if (imported == null || imported.name.isEmpty || !context.mounted) return;
   final table = await actions.create(
-      worldId,
-      withImportedRows(
-          RandomTable(worldId: worldId, name: imported.name), imported.rows));
+    worldId,
+    withImportedRows(
+      RandomTable(worldId: worldId, name: imported.name),
+      imported.rows,
+    ),
+  );
   if (!context.mounted) return;
   context.go(Routes.tool(worldId, 'tables', table.id));
 }
@@ -148,54 +162,60 @@ class _TableListState extends ConsumerState<_TableList> {
           if (a.isEmpty != b.isEmpty) return a.isEmpty ? 1 : -1;
           return a.toLowerCase().compareTo(b.toLowerCase());
         });
-      body = LayoutBuilder(builder: (context, constraints) {
-        final side =
-            ((constraints.maxWidth - 900) / 2).clamp(16.0, double.infinity);
-        return ListView(
-          padding: EdgeInsets.fromLTRB(side, 12, side, 40),
-          children: [
-            TextField(
-              key: const ValueKey('tables-search'),
-              controller: _search,
-              decoration: InputDecoration(
-                hintText: l.tablesSearchHint,
-                prefixIcon: const Icon(Icons.search, size: 20),
-                isDense: true,
-                suffixIcon: _query.isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: l.clear,
-                        icon: const Icon(Icons.close, size: 18),
-                        onPressed: () {
-                          _search.clear();
-                          setState(() => _query = '');
-                        },
-                      ),
-              ),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-            const SizedBox(height: 8),
-            if (visible.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Text(l.tablesNoMatches,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: GmhColors.parchmentDim)),
-              ),
-            for (final folder in folders) ...[
-              _FolderHeader(
-                label: folder.isEmpty ? l.tablesNoFolder : folder,
-                count: groups[folder]!.length,
-              ),
-              for (final t in groups[folder]!)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: _TableCard(table: t),
+      body = LayoutBuilder(
+        builder: (context, constraints) {
+          final side = ((constraints.maxWidth - 900) / 2).clamp(
+            16.0,
+            double.infinity,
+          );
+          return ListView(
+            padding: EdgeInsets.fromLTRB(side, 12, side, 40),
+            children: [
+              TextField(
+                key: const ValueKey('tables-search'),
+                controller: _search,
+                decoration: InputDecoration(
+                  hintText: l.tablesSearchHint,
+                  prefixIcon: const Icon(Icons.search, size: 20),
+                  isDense: true,
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: l.clear,
+                          icon: const Icon(Icons.close, size: 18),
+                          onPressed: () {
+                            _search.clear();
+                            setState(() => _query = '');
+                          },
+                        ),
                 ),
+                onChanged: (value) => setState(() => _query = value),
+              ),
+              const SizedBox(height: 8),
+              if (visible.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Text(
+                    l.tablesNoMatches,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: GmhColors.parchmentDim),
+                  ),
+                ),
+              for (final folder in folders) ...[
+                _FolderHeader(
+                  label: folder.isEmpty ? l.tablesNoFolder : folder,
+                  count: groups[folder]!.length,
+                ),
+                for (final t in groups[folder]!)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _TableCard(table: t),
+                  ),
+              ],
             ],
-          ],
-        );
-      });
+          );
+        },
+      );
     }
 
     return ToolScaffold(
@@ -239,18 +259,23 @@ class _FolderHeader extends StatelessWidget {
           Icon(Icons.folder_outlined, size: 16, color: GmhColors.parchmentDim),
           const SizedBox(width: 8),
           Flexible(
-            child: Text(label.toUpperCase(),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.4,
-                    color: GmhColors.parchmentDim)),
+            child: Text(
+              label.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.4,
+                color: GmhColors.parchmentDim,
+              ),
+            ),
           ),
           const SizedBox(width: 8),
-          Text('$count',
-              style: TextStyle(fontSize: 12, color: GmhColors.parchmentFaint)),
+          Text(
+            '$count',
+            style: TextStyle(fontSize: 12, color: GmhColors.parchmentFaint),
+          ),
         ],
       ),
     );
@@ -283,11 +308,16 @@ class TableTag extends StatelessWidget {
             const SizedBox(width: 4),
           ],
           Flexible(
-            child: Text(label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 11.5, fontWeight: FontWeight.w600, color: c)),
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11.5,
+                fontWeight: FontWeight.w600,
+                color: c,
+              ),
+            ),
           ),
         ],
       ),
@@ -297,16 +327,15 @@ class TableTag extends StatelessWidget {
 
 /// Row count, formula (or "by weight") and library origin of [table].
 List<Widget> tableTags(AppLocalizations l, RandomTable table) => [
-      TableTag(
-        label: table.usesFormula ? table.formula : l.tablesWeighted,
-        icon: table.usesFormula ? Icons.casino_outlined : Icons.balance,
-        color: table.usesFormula ? GmhColors.ember : null,
-      ),
-      TableTag(label: l.tablesRowCount(table.rows.length)),
-      if (RandomTableSource.libraryId(table.source) != null)
-        TableTag(
-            label: l.tablesFromLibrary, icon: Icons.local_library_outlined),
-    ];
+  TableTag(
+    label: table.usesFormula ? table.formula : l.tablesWeighted,
+    icon: table.usesFormula ? Icons.casino_outlined : Icons.balance,
+    color: table.usesFormula ? GmhColors.ember : null,
+  ),
+  TableTag(label: l.tablesRowCount(table.rows.length)),
+  if (RandomTableSource.libraryId(table.source) != null)
+    TableTag(label: l.tablesFromLibrary, icon: Icons.local_library_outlined),
+];
 
 class _TableCard extends StatelessWidget {
   final RandomTable table;
@@ -320,8 +349,7 @@ class _TableCard extends StatelessWidget {
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () =>
-            context.go(Routes.tool(table.worldId, 'tables', table.id)),
+        onTap: () => context.go(Routes.tool(table.worldId, 'tables', table.id)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(14, 12, 4, 12),
           child: Row(
@@ -333,29 +361,41 @@ class _TableCard extends StatelessWidget {
                   color: GmhColors.ember.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(toolById('tables')!.icon,
-                    size: 22, color: GmhColors.ember),
+                child: Icon(
+                  toolById('tables')!.icon,
+                  size: 22,
+                  color: GmhColors.ember,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(table.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      table.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                     if (table.description.isNotEmpty) ...[
                       const SizedBox(height: 2),
-                      Text(table.description,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 12.5, color: GmhColors.parchmentDim)),
+                      Text(
+                        table.description,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          color: GmhColors.parchmentDim,
+                        ),
+                      ),
                     ],
                     const SizedBox(height: 6),
                     Wrap(
-                        spacing: 6, runSpacing: 4, children: tableTags(l, table)),
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: tableTags(l, table),
+                    ),
                   ],
                 ),
               ),
@@ -387,13 +427,18 @@ class TableMenu extends ConsumerWidget {
   });
 
   Future<void> _handle(
-      BuildContext context, WidgetRef ref, String action) async {
+    BuildContext context,
+    WidgetRef ref,
+    String action,
+  ) async {
     final l = context.l10n;
     final actions = ref.read(tablesActionsProvider);
     switch (action) {
       case 'duplicate':
-        final copy =
-            await actions.duplicate(table, l.tablesCopyName(table.name));
+        final copy = await actions.duplicate(
+          table,
+          l.tablesCopyName(table.name),
+        );
         if (!context.mounted) return;
         context.go(Routes.tool(table.worldId, 'tables', copy.id));
       case 'delete':

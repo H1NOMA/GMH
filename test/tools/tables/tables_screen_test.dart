@@ -27,7 +27,8 @@ import '../dice/scripted_random.dart';
 Future<void> _settle(WidgetTester tester) async {
   for (var i = 0; i < 10; i++) {
     await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 30)));
+      () => Future<void>.delayed(const Duration(milliseconds: 30)),
+    );
     await tester.pump(const Duration(milliseconds: 60));
   }
 }
@@ -38,11 +39,11 @@ class _Harness {
   _Harness(this.container, this.worldId);
 
   Future<List<RandomTable>> tables(WidgetTester tester) async =>
-      (await tester.runAsync(() => container
-              .read(worldObjectRepositoryProvider)
-              .list(worldId, WorldObjectTypes.randomTable)))!
-          .map(RandomTable.fromObject)
-          .toList();
+      (await tester.runAsync(
+        () => container
+            .read(worldObjectRepositoryProvider)
+            .list(worldId, WorldObjectTypes.randomTable),
+      ))!.map(RandomTable.fromObject).toList();
 }
 
 Future<_Harness> _pumpApp(
@@ -57,12 +58,14 @@ Future<_Harness> _pumpApp(
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   final dir = Directory.systemTemp.createTempSync('gmh_tables_');
   final db = AppDatabase(NativeDatabase.memory());
-  final container = ProviderContainer(overrides: [
-    appRootDirProvider.overrideWithValue(dir.path),
-    databaseProvider.overrideWithValue(db),
-    mediaVaultProvider.overrideWithValue(MediaVault(dir.path)),
-    diceRandomProvider.overrideWithValue(random),
-  ]);
+  final container = ProviderContainer(
+    overrides: [
+      appRootDirProvider.overrideWithValue(dir.path),
+      databaseProvider.overrideWithValue(db),
+      mediaVaultProvider.overrideWithValue(MediaVault(dir.path)),
+      diceRandomProvider.overrideWithValue(random),
+    ],
+  );
   container.read(localeControllerProvider.notifier).seed(locale);
   container.read(themeModeProvider.notifier).seed(theme);
   final worldId = (await tester.runAsync(() async {
@@ -72,10 +75,12 @@ Future<_Harness> _pumpApp(
     await seed?.call(container, world.id);
     return world.id;
   }))!;
-  await tester.pumpWidget(UncontrolledProviderScope(
-    container: container,
-    child: GmhApp(initialLocation: location(worldId)),
-  ));
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: container,
+      child: GmhApp(initialLocation: location(worldId)),
+    ),
+  );
   await _settle(tester);
   addTearDown(() async {
     await tester.pumpWidget(const SizedBox());
@@ -102,9 +107,11 @@ Future<void> _enter(WidgetTester tester, String key, String text) async {
   await tester.pump();
 }
 
-Future<RandomTable> _seedTable(ProviderContainer c, String worldId,
-        RandomTable table) =>
-    c.read(tablesActionsProvider).create(worldId, table);
+Future<RandomTable> _seedTable(
+  ProviderContainer c,
+  String worldId,
+  RandomTable table,
+) => c.read(tablesActionsProvider).create(worldId, table);
 
 void _useSize(WidgetTester tester, Size size) {
   tester.view.physicalSize = size;
@@ -113,15 +120,19 @@ void _useSize(WidgetTester tester, Size size) {
 }
 
 void main() {
-  testWidgets('create a table, import rows as text, roll, edit and delete',
-      (tester) async {
+  testWidgets('create a table, import rows as text, roll, edit and delete', (
+    tester,
+  ) async {
     _useSize(tester, const Size(1400, 1000));
     final random = ScriptedRandom([
       2, 1, // 1d6 → 3 (Rain), {1d4} → 2
       5, // roll again: 1d6 → 6 (Fog)
     ]);
-    final h = await _pumpApp(tester,
-        random: random, location: (w) => Routes.tool(w, 'tables'));
+    final h = await _pumpApp(
+      tester,
+      random: random,
+      location: (w) => Routes.tool(w, 'tables'),
+    );
 
     // Empty state → new table.
     expect(find.text('No random tables yet'), findsOneWidget);
@@ -140,8 +151,11 @@ void main() {
 
     // Bulk edit with the text format.
     await _tap(tester, find.byKey(const ValueKey('tables-bulk-edit')));
-    await _enter(tester, 'tables-text-field',
-        '# weather\n1-2 | Sun\n3–4 Rain for {1d4} hours\n5-6: Fog');
+    await _enter(
+      tester,
+      'tables-text-field',
+      '# weather\n1-2 | Sun\n3–4 Rain for {1d4} hours\n5-6: Fog',
+    );
     expect(find.text('3 rows found'), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('tables-text-confirm')));
     tables = await h.tables(tester);
@@ -156,11 +170,11 @@ void main() {
     // Roll: the formula total picks the row, inline dice expand.
     await _tap(tester, find.byKey(const ValueKey('tables-roll')));
     expect(find.text('Rain for 2 hours'), findsOneWidget);
-    expect(find.text('1d6 → 3'), findsOneWidget);
+    expect(find.text('1d6 = 3'), findsOneWidget);
     expect(find.textContaining('{1d4} = 2'), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('tables-roll-again')));
     expect(find.text('Fog'), findsWidgets);
-    expect(find.text('1d6 → 6'), findsOneWidget);
+    expect(find.text('1d6 = 6'), findsOneWidget);
     // The earlier roll moved to the log.
     expect(find.text('Rain for 2 hours'), findsOneWidget);
     expect(random.remaining, 0);
@@ -179,25 +193,31 @@ void main() {
     expect(find.text('Row 4 has no range.'), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('tables-auto-ranges')));
     tables = await h.tables(tester);
-    expect([for (final r in tables.single.rows) (r.from, r.to, r.text)], [
-      (1, 2, 'Sun'),
-      (3, 4, 'Rain for {1d4} hours'),
-      (5, 5, 'Thick fog'),
-      (6, 6, 'Snow'),
-    ]);
+    expect(
+      [for (final r in tables.single.rows) (r.from, r.to, r.text)],
+      [
+        (1, 2, 'Sun'),
+        (3, 4, 'Rain for {1d4} hours'),
+        (5, 5, 'Thick fog'),
+        (6, 6, 'Snow'),
+      ],
+    );
     expect(find.byKey(const ValueKey('tables-issues')), findsNothing);
     expect(
-        tester
-            .widget<TextField>(find.byKey(const ValueKey('tables-row-from-3')))
-            .controller!
-            .text,
-        '6');
+      tester
+          .widget<TextField>(find.byKey(const ValueKey('tables-row-from-3')))
+          .controller!
+          .text,
+      '6',
+    );
 
     // Delete a row.
     await _tap(tester, find.byKey(const ValueKey('tables-row-delete-0')));
     tables = await h.tables(tester);
-    expect([for (final r in tables.single.rows) r.text],
-        ['Rain for {1d4} hours', 'Thick fog', 'Snow']);
+    expect(
+      [for (final r in tables.single.rows) r.text],
+      ['Rain for {1d4} hours', 'Thick fog', 'Snow'],
+    );
     expect(find.textContaining('Nothing covers 1–2'), findsOneWidget);
 
     // Edit details through the dialog.
@@ -233,8 +253,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('import a table from text, search and roll nested tables',
-      (tester) async {
+  testWidgets('import a table from text, search and roll nested tables', (
+    tester,
+  ) async {
     _useSize(tester, const Size(1280, 800));
     final random = ScriptedRandom([
       1, // weights 1+2+1: value 1 → "Merchant [[Quirks]]"
@@ -246,22 +267,28 @@ void main() {
       random: random,
       location: (w) => Routes.tool(w, 'tables'),
       seed: (c, worldId) => _seedTable(
-          c,
-          worldId,
-          const RandomTable(
-              name: 'Quirks',
-              folder: 'People',
-              rows: [RandomTableRow('wears a {red|blue} hat')])),
+        c,
+        worldId,
+        const RandomTable(
+          name: 'Quirks',
+          folder: 'People',
+          rows: [RandomTableRow('wears a {red|blue} hat')],
+        ),
+      ),
     );
 
     await _tap(tester, find.byKey(const ValueKey('tables-import')));
     await _enter(tester, 'tables-import-name', 'Market');
-    await _enter(tester, 'tables-text-field',
-        'Pickpocket\nx2 Merchant [[Quirks]]\n\nStray dog');
+    await _enter(
+      tester,
+      'tables-text-field',
+      'Pickpocket\nx2 Merchant [[Quirks]]\n\nStray dog',
+    );
     expect(find.text('3 rows found'), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('tables-text-confirm')));
-    final market =
-        (await h.tables(tester)).firstWhere((t) => t.name == 'Market');
+    final market = (await h.tables(
+      tester,
+    )).firstWhere((t) => t.name == 'Market');
     expect(market.formula, isEmpty);
     expect([for (final r in market.rows) r.weight], [1, 2, 1]);
     expect(find.text('By weight'), findsWidgets);
@@ -272,6 +299,19 @@ void main() {
     // The tree explains the nested roll.
     expect(find.textContaining('Quirks'), findsWidgets);
     expect(find.text('How it was rolled'.toUpperCase()), findsOneWidget);
+
+    // Reorder by dragging the first row's handle below the second.
+    await tester.timedDrag(find.byIcon(Icons.drag_indicator).first,
+        const Offset(0, 70), const Duration(milliseconds: 400));
+    await _settle(tester);
+    expect(
+        [
+          for (final r in (await h.tables(tester))
+              .firstWhere((t) => t.name == 'Market')
+              .rows)
+            r.text,
+        ],
+        ['Merchant [[Quirks]]', 'Pickpocket', 'Stray dog']);
 
     // Back to the list: folders and search.
     await _tap(tester, find.byKey(const ValueKey('tables-back')));
@@ -285,36 +325,53 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('add library tables to the world with their references',
-      (tester) async {
+  testWidgets('add library tables to the world with their references', (
+    tester,
+  ) async {
     _useSize(tester, const Size(1280, 900));
-    final h = await _pumpApp(tester,
-        random: Random(3), location: (w) => Routes.tool(w, 'tables'));
+    final h = await _pumpApp(
+      tester,
+      random: Random(3),
+      location: (w) => Routes.tool(w, 'tables'),
+    );
 
     await _tap(tester, find.byKey(const ValueKey('tables-empty-library')));
     expect(find.text('Table library'), findsWidgets);
-    expect(find.byKey(const ValueKey('tables-lib-fantasy.tavern_rumors')),
-        findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('tables-lib-fantasy.tavern_rumors')),
+      findsOneWidget,
+    );
     // Other packs are grouped and collapsed.
-    expect(find.byKey(const ValueKey('tables-lib-wuxia.manuals')),
-        findsNothing);
+    expect(
+      find.byKey(const ValueKey('tables-lib-wuxia.manuals')),
+      findsNothing,
+    );
 
     // Tavern rumors reference road encounters, which reference three more.
-    await _tap(tester,
-        find.byKey(const ValueKey('tables-lib-add-fantasy.tavern_rumors')));
-    expect(find.text('Add the referenced tables too?'), findsOneWidget);
-    expect(find.byKey(const ValueKey('tables-dep-fantasy.road_encounters')),
-        findsOneWidget);
     await _tap(
-        tester, find.byKey(const ValueKey('tables-dep-fantasy.weather')));
+      tester,
+      find.byKey(const ValueKey('tables-lib-add-fantasy.tavern_rumors')),
+    );
+    expect(find.text('Add the referenced tables too?'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('tables-dep-fantasy.road_encounters')),
+      findsOneWidget,
+    );
+    await _tap(
+      tester,
+      find.byKey(const ValueKey('tables-dep-fantasy.weather')),
+    );
     await _tap(tester, find.byKey(const ValueKey('tables-deps-confirm')));
     var tables = await h.tables(tester);
-    expect({for (final t in tables) t.source}, {
-      'library:fantasy.tavern_rumors',
-      'library:fantasy.road_encounters',
-      'library:fantasy.treasure',
-      'library:fantasy.quirks',
-    });
+    expect(
+      {for (final t in tables) t.source},
+      {
+        'library:fantasy.tavern_rumors',
+        'library:fantasy.road_encounters',
+        'library:fantasy.treasure',
+        'library:fantasy.quirks',
+      },
+    );
     final rumors = tables.firstWhere((t) => t.name == 'Tavern Rumors');
     expect(rumors.formula, '1d10');
     expect(rumors.folder, 'Rumors & hooks');
@@ -323,22 +380,28 @@ void main() {
     expect(rumors.rows.last.to, 10);
     expect(find.text('Added 4 tables'), findsOneWidget);
     expect(
-        find.byKey(
-            const ValueKey('tables-lib-in-world-fantasy.tavern_rumors')),
-        findsOneWidget);
+      find.byKey(const ValueKey('tables-lib-in-world-fantasy.tavern_rumors')),
+      findsOneWidget,
+    );
 
     // Weather only references tables already in the world: no question.
     await _tap(
-        tester, find.byKey(const ValueKey('tables-lib-add-fantasy.weather')));
+      tester,
+      find.byKey(const ValueKey('tables-lib-add-fantasy.weather')),
+    );
     expect(find.text('Add the referenced tables too?'), findsNothing);
     tables = await h.tables(tester);
     expect(tables, hasLength(5));
 
     // Preview a table of another pack and try a roll.
     await _tap(
-        tester, find.byKey(const ValueKey('tables-pack-cyberpunk-false')));
-    await _tap(tester,
-        find.byKey(const ValueKey('tables-lib-preview-cyberpunk.corp_rumors')));
+      tester,
+      find.byKey(const ValueKey('tables-pack-cyberpunk-false')),
+    );
+    await _tap(
+      tester,
+      find.byKey(const ValueKey('tables-lib-preview-cyberpunk.corp_rumors')),
+    );
     expect(find.text('Corp Rumors'), findsWidgets);
     await _tap(tester, find.byKey(const ValueKey('tables-preview-roll')));
     expect(find.byKey(const ValueKey('tables-result-text')), findsOneWidget);
@@ -347,31 +410,40 @@ void main() {
     await _tap(tester, find.byKey(const ValueKey('tables-deps-confirm')));
     tables = await h.tables(tester);
     expect(
-        {for (final t in tables) t.source}
-            .where((s) => s.startsWith('library:cyberpunk.')),
-        {
-          'library:cyberpunk.corp_rumors',
-          'library:cyberpunk.street_encounters',
-          'library:cyberpunk.loot',
-          'library:cyberpunk.complications',
-          'library:cyberpunk.quirks',
-        });
+      {
+        for (final t in tables) t.source,
+      }.where((s) => s.startsWith('library:cyberpunk.')),
+      {
+        'library:cyberpunk.corp_rumors',
+        'library:cyberpunk.street_encounters',
+        'library:cyberpunk.loot',
+        'library:cyberpunk.complications',
+        'library:cyberpunk.quirks',
+      },
+    );
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('library tables follow the UI language and world pack',
-      (tester) async {
+  testWidgets('library tables follow the UI language and world pack', (
+    tester,
+  ) async {
     _useSize(tester, const Size(1280, 900));
-    final h = await _pumpApp(tester,
-        random: Random(1),
-        locale: const Locale('de'),
-        style: WorldStyle.wuxia,
-        location: (w) => Routes.tool(w, 'tables', tablesLibraryObjectId));
+    final h = await _pumpApp(
+      tester,
+      random: Random(1),
+      locale: const Locale('de'),
+      style: WorldStyle.wuxia,
+      location: (w) => Routes.tool(w, 'tables', tablesLibraryObjectId),
+    );
     // The world's own pack is expanded first.
-    expect(find.byKey(const ValueKey('tables-lib-wuxia.manuals')),
-        findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('tables-lib-wuxia.manuals')),
+      findsOneWidget,
+    );
     await _tap(
-        tester, find.byKey(const ValueKey('tables-lib-add-wuxia.manuals')));
+      tester,
+      find.byKey(const ValueKey('tables-lib-add-wuxia.manuals')),
+    );
     final table = (await h.tables(tester)).single;
     expect(table.name, 'Kampfkunst-Handbücher');
     expect(table.source, 'library:wuxia.manuals');
@@ -379,8 +451,11 @@ void main() {
 
   testWidgets('a missing table shows a way back', (tester) async {
     _useSize(tester, const Size(1280, 720));
-    await _pumpApp(tester,
-        random: Random(1), location: (w) => Routes.tool(w, 'tables', 'nope'));
+    await _pumpApp(
+      tester,
+      random: Random(1),
+      location: (w) => Routes.tool(w, 'tables', 'nope'),
+    );
     expect(find.text('This table no longer exists.'), findsOneWidget);
     await _tap(tester, find.widgetWithText(FilledButton, 'All tables'));
     expect(find.text('No random tables yet'), findsOneWidget);
@@ -389,16 +464,41 @@ void main() {
   // Layout: table page with a result, the list and the library, from phone
   // to 1440p, long locales and raised text scale.
   final variants = <(String, Size, Locale, double, ThemeMode)>[
-    ('phone de x1.3', const Size(400, 780), const Locale('de'), 1.3,
-        ThemeMode.dark),
-    ('phone fr light', const Size(400, 600), const Locale('fr'), 1.0,
-        ThemeMode.light),
-    ('900x600 ru x1.3', const Size(900, 600), const Locale('ru'), 1.3,
-        ThemeMode.dark),
-    ('1280x720 zh', const Size(1280, 720), const Locale('zh'), 1.0,
-        ThemeMode.light),
-    ('2560x1440 en', const Size(2560, 1440), const Locale('en'), 1.0,
-        ThemeMode.dark),
+    (
+      'phone de x1.3',
+      const Size(400, 780),
+      const Locale('de'),
+      1.3,
+      ThemeMode.dark,
+    ),
+    (
+      'phone fr light',
+      const Size(400, 600),
+      const Locale('fr'),
+      1.0,
+      ThemeMode.light,
+    ),
+    (
+      '900x600 ru x1.3',
+      const Size(900, 600),
+      const Locale('ru'),
+      1.3,
+      ThemeMode.dark,
+    ),
+    (
+      '1280x720 zh',
+      const Size(1280, 720),
+      const Locale('zh'),
+      1.0,
+      ThemeMode.light,
+    ),
+    (
+      '2560x1440 en',
+      const Size(2560, 1440),
+      const Locale('en'),
+      1.0,
+      ThemeMode.dark,
+    ),
   ];
   for (final (name, size, locale, scale, theme) in variants) {
     testWidgets('layout · $name', (tester) async {
@@ -422,11 +522,13 @@ void main() {
         location: (w) => Routes.tool(w, 'tables', tableId),
         seed: (c, worldId) async {
           await _seedTable(
-              c,
-              worldId,
-              const RandomTable(
-                  name: 'Unbelievably long complication table name',
-                  rows: [RandomTableRow('bad {luck|weather} for {1d4} days')]));
+            c,
+            worldId,
+            const RandomTable(
+              name: 'Unbelievably long complication table name',
+              rows: [RandomTableRow('bad {luck|weather} for {1d4} days')],
+            ),
+          );
           final t = await _seedTable(
             c,
             worldId,
@@ -438,11 +540,12 @@ void main() {
               rows: [
                 for (var i = 0; i < 12; i++)
                   RandomTableRow(
-                      'Encounter number $i with a rather verbose text and '
-                      '{2d6} wolves, then [[Unbelievably long complication '
-                      'table name]] and [[Missing table]]',
-                      from: i + 1,
-                      to: i + 1),
+                    'Encounter number $i with a rather verbose text and '
+                    '{2d6} wolves, then [[Unbelievably long complication '
+                    'table name]] and [[Missing table]]',
+                    from: i + 1,
+                    to: i + 1,
+                  ),
               ],
             ),
           );
@@ -463,8 +566,10 @@ void main() {
       await _tap(tester, find.byKey(const ValueKey('tables-back')));
       expect(find.byKey(const ValueKey('tables-search')), findsOneWidget);
       await _tap(tester, find.byKey(const ValueKey('tables-open-library')));
-      expect(find.byKey(const ValueKey('tables-library-search')),
-          findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('tables-library-search')),
+        findsOneWidget,
+      );
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -3000));
       await _settle(tester);
       expect(tester.takeException(), isNull);

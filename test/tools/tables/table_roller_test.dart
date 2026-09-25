@@ -31,8 +31,7 @@ TableRoller _roller(Random random, [List<RandomTable> tables = const []]) =>
 
 void main() {
   group('weights', () {
-    final table =
-        _weighted('W', ['low', 'heavy', 'last'], weights: [1, 2, 1]);
+    final table = _weighted('W', ['low', 'heavy', 'last'], weights: [1, 2, 1]);
 
     test('picks by cumulative weight', () {
       final expected = ['low', 'heavy', 'heavy', 'last'];
@@ -123,11 +122,15 @@ void main() {
     });
 
     test('rows without ranges are spread over the formula', () {
-      final t = RandomTable(name: 'T', formula: '1d6', rows: const [
-        RandomTableRow('a'),
-        RandomTableRow('b'),
-        RandomTableRow('c'),
-      ]);
+      final t = RandomTable(
+        name: 'T',
+        formula: '1d6',
+        rows: const [
+          RandomTableRow('a'),
+          RandomTableRow('b'),
+          RandomTableRow('c'),
+        ],
+      );
       expect(_roller(ScriptedRandom.dice([5])).roll(t).text, 'c');
       expect(_roller(ScriptedRandom.dice([2])).roll(t).text, 'a');
     });
@@ -138,10 +141,14 @@ void main() {
     });
 
     test('weights do not matter when a formula is set', () {
-      final t = RandomTable(name: 'T', formula: '1d4', rows: const [
-        RandomTableRow('a', weight: 100, from: 1, to: 1),
-        RandomTableRow('b', from: 2, to: 4),
-      ]);
+      final t = RandomTable(
+        name: 'T',
+        formula: '1d4',
+        rows: const [
+          RandomTableRow('a', weight: 100, from: 1, to: 1),
+          RandomTableRow('b', from: 2, to: 4),
+        ],
+      );
       expect(_roller(ScriptedRandom.dice([3])).roll(t).text, 'b');
     });
 
@@ -156,22 +163,26 @@ void main() {
     RandomTable one(String text) => _weighted('One', [text]);
 
     test('rolls dice in braces', () {
-      final result =
-          _roller(ScriptedRandom([0, 2, 3])).roll(one('Found {2d6} coins'));
+      final result = _roller(
+        ScriptedRandom([0, 2, 3]),
+      ).roll(one('Found {2d6} coins'));
       expect(result.text, 'Found 7 coins');
       final dice = result.parts.single as DicePart;
       expect((dice.expression, dice.total), ('2d6', 7));
     });
 
     test('supports modifiers and several dice groups', () {
-      final result = _roller(ScriptedRandom([0, 2, 0]))
-          .roll(one('{1d4+1} wolves and {1d6} crows'));
+      final result = _roller(
+        ScriptedRandom([0, 2, 0]),
+      ).roll(one('{1d4+1} wolves and {1d6} crows'));
       expect(result.text, '4 wolves and 1 crows');
       expect(result.parts, hasLength(2));
     });
 
     test('leaves braces that are not dice untouched', () {
-      final result = _roller(ScriptedRandom([0])).roll(one('a {not dice} b {}'));
+      final result = _roller(
+        ScriptedRandom([0]),
+      ).roll(one('a {not dice} b {}'));
       expect(result.text, 'a {not dice} b {}');
       expect(result.parts, isEmpty);
     });
@@ -195,8 +206,9 @@ void main() {
 
     test('alternatives may be empty and may contain dice', () {
       expect(_roller(ScriptedRandom([0, 0])).roll(one('x{|!}y')).text, 'xy');
-      final result =
-          _roller(ScriptedRandom([0, 0, 1])).roll(one('{{1d4} rats|a cat}'));
+      final result = _roller(
+        ScriptedRandom([0, 0, 1]),
+      ).roll(one('{{1d4} rats|a cat}'));
       expect(result.text, '2 rats');
       final choice = result.parts.single as ChoicePart;
       expect(choice.parts.single, isA<DicePart>());
@@ -221,16 +233,20 @@ void main() {
       final main = _weighted('Main', ['See [[Missing]] now']);
       final result = _roller(ScriptedRandom([0]), [main]).roll(main);
       expect(result.text, 'See ${TableRoller.failureMark}[[Missing]] now');
-      expect(result.nestedTables.single.result.failure,
-          TableRollFailure.notFound);
+      expect(
+        result.nestedTables.single.result.failure,
+        TableRollFailure.notFound,
+      );
       expect(result.hasFailure, isTrue);
       expect(result.ok, isTrue);
     });
 
     test('empty brackets stay literal', () {
       final main = _weighted('Main', ['[[ ]] and [[open']);
-      expect(_roller(ScriptedRandom([0]), [main]).roll(main).text,
-          '[[ ]] and [[open');
+      expect(
+        _roller(ScriptedRandom([0]), [main]).roll(main).text,
+        '[[ ]] and [[open',
+      );
     });
 
     test('a table referencing itself is a cycle', () {
@@ -252,7 +268,10 @@ void main() {
 
     test('the same table may appear twice when it is not an ancestor', () {
       final main = _weighted('Main', ['[[Other Table]] and [[Other Table]]']);
-      final result = _roller(ScriptedRandom([0, 0, 0]), [main, other]).roll(main);
+      final result = _roller(ScriptedRandom([0, 0, 0]), [
+        main,
+        other,
+      ]).roll(main);
       expect(result.text, 'a goblin and a goblin');
       expect(result.hasFailure, isFalse);
     });
@@ -262,8 +281,7 @@ void main() {
         for (var i = 0; i < 10; i++) _weighted('T$i', ['$i [[T${i + 1}]]']),
         _weighted('T10', ['end']),
       ];
-      final result =
-          _roller(Random(3), chain).roll(chain.first);
+      final result = _roller(Random(3), chain).roll(chain.first);
       var node = result;
       var depth = 0;
       while (node.nestedTables.isNotEmpty &&
@@ -272,9 +290,14 @@ void main() {
         depth++;
       }
       expect(depth, TableRoller.maxDepth);
-      expect(node.nestedTables.single.result.failure,
-          TableRollFailure.depthLimit);
-      expect(result.text, startsWith('0 1 2 3 4 5 6 ${TableRoller.failureMark}'));
+      expect(
+        node.nestedTables.single.result.failure,
+        TableRollFailure.depthLimit,
+      );
+      expect(
+        result.text,
+        startsWith('0 1 2 3 4 5 6 ${TableRoller.failureMark}'),
+      );
     });
 
     test('a runaway fan-out is capped', () {
@@ -301,7 +324,10 @@ void main() {
 
     test('references inside alternatives are rolled', () {
       final main = _weighted('Main', ['{[[Other Table]]|nobody}']);
-      final result = _roller(ScriptedRandom([0, 0, 0]), [main, other]).roll(main);
+      final result = _roller(ScriptedRandom([0, 0, 0]), [
+        main,
+        other,
+      ]).roll(main);
       expect(result.text, 'a goblin');
       expect(result.nestedTables.single.result.tableName, 'Other Table');
     });
@@ -309,7 +335,11 @@ void main() {
     test('nested formula tables keep their own totals', () {
       final loot = _ranged('1d4', [(1, 2, 'copper'), (3, 4, 'gold')]);
       final named = RandomTable(
-          id: 'loot', name: 'Loot', formula: loot.formula, rows: loot.rows);
+        id: 'loot',
+        name: 'Loot',
+        formula: loot.formula,
+        rows: loot.rows,
+      );
       final main = _weighted('Main', ['Chest: [[Loot]]']);
       final result = _roller(ScriptedRandom([0, 3]), [main, named]).roll(main);
       expect(result.text, 'Chest: gold');
@@ -348,21 +378,29 @@ void main() {
     tearDown(() => h.dispose());
 
     test('rolls a world table by name, nested references included', () async {
-      expect(await rollTableByName(h.objects, worldId, 'weather', Random(1)),
-          'Rain on the old road');
+      expect(
+        await rollTableByName(h.objects, worldId, 'weather', Random(1)),
+        'Rain on the old road',
+      );
     });
 
     test('returns null for unknown names and unrollable tables', () async {
-      expect(await rollTableByName(h.objects, worldId, 'Nope', Random(1)),
-          isNull);
-      expect(await rollTableByName(h.objects, worldId, 'Empty', Random(1)),
-          isNull);
+      expect(
+        await rollTableByName(h.objects, worldId, 'Nope', Random(1)),
+        isNull,
+      );
+      expect(
+        await rollTableByName(h.objects, worldId, 'Empty', Random(1)),
+        isNull,
+      );
     });
 
     test('only sees tables of the given world', () async {
       final other = (await h.worlds.createWorld(name: 'Other')).id;
-      expect(await rollTableByName(h.objects, other, 'Weather', Random(1)),
-          isNull);
+      expect(
+        await rollTableByName(h.objects, other, 'Weather', Random(1)),
+        isNull,
+      );
     });
   });
 }

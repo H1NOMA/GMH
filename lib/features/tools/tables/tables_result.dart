@@ -5,9 +5,9 @@ import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/tables/table_roller.dart';
 import 'tables_l10n.dart';
 
-/// `1d20 → 14` for formula rolls; null for weighted ones.
+/// `1d20 = 14` for formula rolls; null for weighted ones.
 String? tableTotalText(TableRollResult r) =>
-    r.total == null ? null : '${r.formula} → ${r.total}';
+    r.total == null ? null : '${r.formula} = ${r.total}';
 
 /// The latest roll: final text, dice total and the tree of nested rolls
 /// that produced it.
@@ -16,8 +16,12 @@ class TableResultCard extends StatelessWidget {
   final VoidCallback? onRollAgain;
   final VoidCallback? onCopy;
 
-  const TableResultCard(
-      {super.key, this.result, this.onRollAgain, this.onCopy});
+  const TableResultCard({
+    super.key,
+    this.result,
+    this.onRollAgain,
+    this.onCopy,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +38,17 @@ class TableResultCard extends StatelessWidget {
         decoration: decoration,
         child: Column(
           children: [
-            Icon(Icons.table_rows_outlined,
-                size: 40, color: GmhColors.parchmentFaint),
+            Icon(
+              Icons.table_rows_outlined,
+              size: 40,
+              color: GmhColors.parchmentFaint,
+            ),
             const SizedBox(height: 10),
-            Text(l.tablesResultEmpty,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13, color: GmhColors.parchmentDim)),
+            Text(
+              l.tablesResultEmpty,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: GmhColors.parchmentDim),
+            ),
           ],
         ),
       );
@@ -62,14 +71,16 @@ class TableResultCard extends StatelessWidget {
               children: [
                 if (total != null)
                   _Pill(
-                      key: const ValueKey('tables-result-total'),
-                      label: total,
-                      color: GmhColors.ember),
+                    key: const ValueKey('tables-result-total'),
+                    label: total,
+                    color: GmhColors.ember,
+                  ),
                 if (result.clamped)
                   _Pill(
-                      label: l.tablesClamped,
-                      color: GmhColors.danger,
-                      icon: Icons.warning_amber_rounded),
+                    label: l.tablesClamped,
+                    color: GmhColors.danger,
+                    icon: Icons.warning_amber_rounded,
+                  ),
               ],
             ),
           ),
@@ -77,23 +88,31 @@ class TableResultCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: failure != null
-                ? Text(tableFailureText(l, failure),
-                    style: TextStyle(fontSize: 15, color: GmhColors.danger))
+                ? Text(
+                    tableFailureText(l, failure),
+                    style: TextStyle(fontSize: 15, color: GmhColors.danger),
+                  )
                 : SelectableText(
                     result.text,
                     key: const ValueKey('tables-result-text'),
                     style: const TextStyle(
-                        fontSize: 17, height: 1.45, fontWeight: FontWeight.w500),
+                      fontSize: 17,
+                      height: 1.45,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
           ),
           if (hasTree) ...[
             const SizedBox(height: 12),
-            Text(l.tablesWhy.toUpperCase(),
-                style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.4,
-                    color: GmhColors.parchmentFaint)),
+            Text(
+              l.tablesWhy.toUpperCase(),
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.4,
+                color: GmhColors.parchmentFaint,
+              ),
+            ),
             const SizedBox(height: 4),
             Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -141,32 +160,38 @@ class RollTree extends StatelessWidget {
       for (final part in parts) {
         switch (part) {
           case DicePart():
-            lines.add(_TreeLine(
-              depth: depth,
-              icon: Icons.casino_outlined,
-              lead: '{${part.expression}} = ${part.total}',
-              text: part.breakdown,
-            ));
+            lines.add(
+              _TreeLine(
+                depth: depth,
+                icon: Icons.casino_outlined,
+                lead: '{${part.expression}} = ${part.total}',
+                text: part.breakdown,
+              ),
+            );
           case ChoicePart():
-            lines.add(_TreeLine(
-              depth: depth,
-              icon: Icons.call_split,
-              lead: l.tablesChoice(part.options.length),
-              text: part.text,
-            ));
+            lines.add(
+              _TreeLine(
+                depth: depth,
+                icon: Icons.call_split,
+                lead: l.tablesChoice(part.options.length),
+                text: part.text,
+              ),
+            );
             add(part.parts, depth + 1);
           case TablePart():
             final r = part.result;
             final failure = r.failure;
-            lines.add(_TreeLine(
-              depth: depth,
-              icon: failure == null
-                  ? Icons.subdirectory_arrow_right
-                  : Icons.warning_amber_rounded,
-              lead: [r.tableName, ?tableTotalText(r)].join(' · '),
-              text: failure == null ? r.text : tableFailureText(l, failure),
-              failed: failure != null,
-            ));
+            lines.add(
+              _TreeLine(
+                depth: depth,
+                icon: failure == null
+                    ? Icons.subdirectory_arrow_right
+                    : Icons.warning_amber_rounded,
+                lead: [r.tableName, ?tableTotalText(r)].join(' · '),
+                text: failure == null ? r.text : tableFailureText(l, failure),
+                failed: failure != null,
+              ),
+            );
             add(r.parts, depth + 1);
         }
       }
@@ -174,7 +199,9 @@ class RollTree extends StatelessWidget {
 
     add(parts, depth);
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch, children: lines);
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: lines,
+    );
   }
 }
 
@@ -208,15 +235,20 @@ class _TreeLine extends StatelessWidget {
           const SizedBox(width: 6),
           Expanded(
             child: Text.rich(
-              TextSpan(children: [
-                TextSpan(
+              TextSpan(
+                children: [
+                  TextSpan(
                     text: lead,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, color: color)),
-                if (text.isNotEmpty) TextSpan(text: '  $text'),
-              ]),
+                    style: TextStyle(fontWeight: FontWeight.w600, color: color),
+                  ),
+                  if (text.isNotEmpty) TextSpan(text: '  $text'),
+                ],
+              ),
               style: TextStyle(
-                  fontSize: 12.5, height: 1.35, color: GmhColors.parchmentDim),
+                fontSize: 12.5,
+                height: 1.35,
+                color: GmhColors.parchmentDim,
+              ),
             ),
           ),
         ],
@@ -249,11 +281,16 @@ class _Pill extends StatelessWidget {
             const SizedBox(width: 4),
           ],
           Flexible(
-            child: Text(label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
           ),
         ],
       ),
@@ -288,11 +325,14 @@ class TableLogTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (total != null)
-                  Text(total,
-                      style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w700,
-                          color: GmhColors.ember)),
+                  Text(
+                    total,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: GmhColors.ember,
+                    ),
+                  ),
                 Text(
                   failure == null ? result.text : tableFailureText(l, failure),
                   maxLines: 4,

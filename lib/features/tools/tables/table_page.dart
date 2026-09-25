@@ -25,7 +25,9 @@ import 'tables_screen.dart';
 
 const _saveDelay = Duration(milliseconds: 400);
 const _maxLog = 50;
-final _rangeFormatter = FilteringTextInputFormatter.allow(RegExp(r'^-?\d{0,6}'));
+final _rangeFormatter = FilteringTextInputFormatter.allow(
+  RegExp(r'^-?\d{0,6}'),
+);
 
 /// Editable text fields of one row; [key] survives reordering.
 class _RowFields {
@@ -36,10 +38,10 @@ class _RowFields {
   final TextEditingController weight;
 
   _RowFields(this.key, RandomTableRow row)
-      : text = TextEditingController(text: row.text),
-        from = TextEditingController(text: row.from?.toString() ?? ''),
-        to = TextEditingController(text: row.to?.toString() ?? ''),
-        weight = TextEditingController(text: '${row.weight}');
+    : text = TextEditingController(text: row.text),
+      from = TextEditingController(text: row.from?.toString() ?? ''),
+      to = TextEditingController(text: row.to?.toString() ?? ''),
+      weight = TextEditingController(text: '${row.weight}');
 
   void sync(RandomTableRow row) {
     void set(TextEditingController c, String value) {
@@ -114,8 +116,10 @@ class _TablePageState extends ConsumerState<TablePage> {
     super.initState();
     _actions = ref.read(tablesActionsProvider);
     _subscription = ref.listenManual(
-        worldObjectProvider(widget.tableId), _onObject,
-        fireImmediately: true);
+      worldObjectProvider(widget.tableId),
+      _onObject,
+      fireImmediately: true,
+    );
     _ready = true;
   }
 
@@ -230,8 +234,10 @@ class _TablePageState extends ConsumerState<TablePage> {
       _rows.add(fields);
       _focusKey = fields.key;
     });
-    _commit(table.copyWith(rows: [for (final f in _rows) f.toRow()]),
-        immediate: true);
+    _commit(
+      table.copyWith(rows: [for (final f in _rows) f.toRow()]),
+      immediate: true,
+    );
   }
 
   void _deleteRow(int index) {
@@ -239,8 +245,10 @@ class _TablePageState extends ConsumerState<TablePage> {
     if (table == null) return;
     final removed = _rows.removeAt(index);
     _disposeLater([removed]);
-    _commit(table.copyWith(rows: [for (final f in _rows) f.toRow()]),
-        immediate: true);
+    _commit(
+      table.copyWith(rows: [for (final f in _rows) f.toRow()]),
+      immediate: true,
+    );
   }
 
   void _reorder(int oldIndex, int newIndex) {
@@ -250,16 +258,21 @@ class _TablePageState extends ConsumerState<TablePage> {
     if (newIndex == oldIndex) return;
     final moved = _rows.removeAt(oldIndex);
     _rows.insert(newIndex, moved);
-    _commit(table.copyWith(rows: [for (final f in _rows) f.toRow()]),
-        immediate: true);
+    _commit(
+      table.copyWith(rows: [for (final f in _rows) f.toRow()]),
+      immediate: true,
+    );
   }
 
   void _autoRanges() {
     final table = _table;
     final bounds = table == null ? null : formulaBounds(table.formula);
     if (table == null || bounds == null) return;
-    _replaceRows(table.copyWith(
-        rows: autoRanges([for (final f in _rows) f.toRow()], bounds)));
+    _replaceRows(
+      table.copyWith(
+        rows: autoRanges([for (final f in _rows) f.toRow()], bounds),
+      ),
+    );
   }
 
   Future<void> _bulkEdit() async {
@@ -291,13 +304,14 @@ class _TablePageState extends ConsumerState<TablePage> {
     final current = _table;
     if (edited == null || current == null || !mounted) return;
     _commit(
-        current.copyWith(
-          name: edited.name,
-          description: edited.description,
-          folder: edited.folder,
-          formula: edited.formula,
-        ),
-        immediate: true);
+      current.copyWith(
+        name: edited.name,
+        description: edited.description,
+        folder: edited.folder,
+        formula: edited.formula,
+      ),
+      immediate: true,
+    );
   }
 
   void _roll() {
@@ -305,10 +319,11 @@ class _TablePageState extends ConsumerState<TablePage> {
     if (table == null) return;
     // The page's own (possibly unsaved) version first: references to its
     // name resolve to what is on screen.
-    final roller = TableRoller.forTables(
-      [table, for (final t in _worldTables) if (t.id != table.id) t],
-      random: ref.read(diceRandomProvider),
-    );
+    final roller = TableRoller.forTables([
+      table,
+      for (final t in _worldTables)
+        if (t.id != table.id) t,
+    ], random: ref.read(diceRandomProvider));
     final result = roller.roll(table);
     setState(() {
       _log.insert(0, result);
@@ -317,9 +332,11 @@ class _TablePageState extends ConsumerState<TablePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cardContext = _resultKey.currentContext;
       if (!mounted || cardContext == null) return;
-      Scrollable.ensureVisible(cardContext,
-          duration: const Duration(milliseconds: 200),
-          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd);
+      Scrollable.ensureVisible(
+        cardContext,
+        duration: const Duration(milliseconds: 200),
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      );
     });
   }
 
@@ -347,7 +364,9 @@ class _TablePageState extends ConsumerState<TablePage> {
     );
     if (!_loaded) {
       return const ToolScaffold(
-          toolId: 'tables', body: Center(child: CircularProgressIndicator()));
+        toolId: 'tables',
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
     if (_missing || table == null) {
       return ToolScaffold(
@@ -357,7 +376,9 @@ class _TablePageState extends ConsumerState<TablePage> {
           title: l.tablesMissing,
           hint: '',
           action: FilledButton(
-              onPressed: _toList, child: Text(l.tablesAllTables)),
+            onPressed: _toList,
+            child: Text(l.tablesAllTables),
+          ),
         ),
       );
     }
@@ -377,59 +398,69 @@ class _TablePageState extends ConsumerState<TablePage> {
           onExtra: (action) => action == 'edit' ? _editDetails() : _bulkEdit(),
         ),
       ],
-      body: LayoutBuilder(builder: (context, constraints) {
-        final wide = constraints.maxWidth >= 900;
-        final header = _Header(table: table, onEdit: _editDetails);
-        final rollPanel = _rollPanel(context, table);
-        if (wide) {
-          final panelWidth =
-              (constraints.maxWidth * 0.38).clamp(340.0, 560.0);
-          final side = ((constraints.maxWidth - panelWidth - 1 - 900) / 2)
-              .clamp(20.0, double.infinity);
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: EdgeInsets.fromLTRB(side, 16, side, 0),
-                      sliver: SliverToBoxAdapter(child: header),
-                    ),
-                    ..._editorSlivers(context, table,
-                        EdgeInsets.fromLTRB(side, 0, side, 0)),
-                    const SliverToBoxAdapter(child: SizedBox(height: 40)),
-                  ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = constraints.maxWidth >= 900;
+          final header = _Header(table: table, onEdit: _editDetails);
+          final rollPanel = _rollPanel(context, table);
+          if (wide) {
+            final panelWidth = (constraints.maxWidth * 0.38).clamp(
+              340.0,
+              560.0,
+            );
+            final side = ((constraints.maxWidth - panelWidth - 1 - 900) / 2)
+                .clamp(20.0, double.infinity);
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: EdgeInsets.fromLTRB(side, 16, side, 0),
+                        sliver: SliverToBoxAdapter(child: header),
+                      ),
+                      ..._editorSlivers(
+                        context,
+                        table,
+                        EdgeInsets.fromLTRB(side, 0, side, 0),
+                      ),
+                      const SliverToBoxAdapter(child: SizedBox(height: 40)),
+                    ],
+                  ),
+                ),
+                const VerticalDivider(width: 1),
+                SizedBox(
+                  width: panelWidth,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                    child: rollPanel,
+                  ),
+                ),
+              ],
+            );
+          }
+          return CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [header, const SizedBox(height: 16), rollPanel],
+                  ),
                 ),
               ),
-              const VerticalDivider(width: 1),
-              SizedBox(
-                width: panelWidth,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-                  child: rollPanel,
-                ),
+              ..._editorSlivers(
+                context,
+                table,
+                const EdgeInsets.symmetric(horizontal: 16),
               ),
+              const SliverToBoxAdapter(child: SizedBox(height: 40)),
             ],
           );
-        }
-        return CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [header, const SizedBox(height: 16), rollPanel],
-                ),
-              ),
-            ),
-            ..._editorSlivers(
-                context, table, const EdgeInsets.symmetric(horizontal: 16)),
-            const SliverToBoxAdapter(child: SizedBox(height: 40)),
-          ],
-        );
-      }),
+        },
+      ),
     );
   }
 
@@ -443,13 +474,12 @@ class _TablePageState extends ConsumerState<TablePage> {
         FilledButton.icon(
           key: const ValueKey('tables-roll'),
           onPressed: _roll,
-          style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(52),
-            textStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          ),
+          style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52)),
           icon: const Icon(Icons.casino_outlined),
-          label: Text(l.tablesRoll),
+          label: Text(
+            l.tablesRoll,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          ),
         ),
         const SizedBox(height: 12),
         TableResultCard(
@@ -464,10 +494,12 @@ class _TablePageState extends ConsumerState<TablePage> {
             Icon(Icons.history, size: 18, color: GmhColors.parchmentDim),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(l.tablesRollLog,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleSmall),
+              child: Text(
+                l.tablesRollLog,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ),
             if (_log.isNotEmpty)
               TextButton(
@@ -479,8 +511,10 @@ class _TablePageState extends ConsumerState<TablePage> {
         ),
         const SizedBox(height: 6),
         if (earlier.isEmpty)
-          Text(l.tablesRollLogEmpty,
-              style: TextStyle(fontSize: 12.5, color: GmhColors.parchmentDim))
+          Text(
+            l.tablesRollLogEmpty,
+            style: TextStyle(fontSize: 12.5, color: GmhColors.parchmentDim),
+          )
         else
           for (final r in earlier)
             Padding(
@@ -492,7 +526,10 @@ class _TablePageState extends ConsumerState<TablePage> {
   }
 
   List<Widget> _editorSlivers(
-      BuildContext context, RandomTable table, EdgeInsets padding) {
+    BuildContext context,
+    RandomTable table,
+    EdgeInsets padding,
+  ) {
     final l = context.l10n;
     final bounds = table.usesFormula ? formulaBounds(table.formula) : null;
     final issues = validateTable(table);
@@ -505,8 +542,10 @@ class _TablePageState extends ConsumerState<TablePage> {
             runSpacing: 8,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Text('${l.tablesRows} · ${table.rows.length}',
-                  style: Theme.of(context).textTheme.titleSmall),
+              Text(
+                '${l.tablesRows} · ${table.rows.length}',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
               const SizedBox(width: 4),
               OutlinedButton.icon(
                 key: const ValueKey('tables-add-row'),
@@ -541,21 +580,27 @@ class _TablePageState extends ConsumerState<TablePage> {
           padding: padding.copyWith(bottom: 8),
           sliver: SliverToBoxAdapter(
             child: _Issues(
-                lines: [
-              for (final issue in issues.take(6))
-                tableIssueText(l, issue, bounds: bounds),
-              if (issues.length > 6) '…',
-            ]),
+              lines: [
+                for (final issue in issues.take(6))
+                  tableIssueText(l, issue, bounds: bounds),
+                if (issues.length > 6) '…',
+              ],
+            ),
           ),
         ),
       if (_rows.isEmpty)
         SliverPadding(
           padding: padding.copyWith(top: 8),
           sliver: SliverToBoxAdapter(
-            child: Text(l.tablesRowsEmpty,
-                key: const ValueKey('tables-rows-empty'),
-                style: TextStyle(
-                    fontSize: 13, height: 1.4, color: GmhColors.parchmentDim)),
+            child: Text(
+              l.tablesRowsEmpty,
+              key: const ValueKey('tables-rows-empty'),
+              style: TextStyle(
+                fontSize: 13,
+                height: 1.4,
+                color: GmhColors.parchmentDim,
+              ),
+            ),
           ),
         )
       else
@@ -601,11 +646,13 @@ class _Header extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Text(table.name,
-                  key: const ValueKey('tables-title'),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge),
+              child: Text(
+                table.name,
+                key: const ValueKey('tables-title'),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
             IconButton(
               key: const ValueKey('tables-edit-details'),
@@ -617,9 +664,14 @@ class _Header extends StatelessWidget {
         ),
         if (table.description.isNotEmpty) ...[
           const SizedBox(height: 4),
-          Text(table.description,
-              style: TextStyle(
-                  fontSize: 13.5, height: 1.4, color: GmhColors.parchmentDim)),
+          Text(
+            table.description,
+            style: TextStyle(
+              fontSize: 13.5,
+              height: 1.4,
+              color: GmhColors.parchmentDim,
+            ),
+          ),
         ],
         const SizedBox(height: 8),
         Wrap(
@@ -662,13 +714,18 @@ class _Issues extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 1),
-                    child: Icon(Icons.warning_amber_rounded,
-                        size: 15, color: color),
+                    child: Icon(
+                      Icons.warning_amber_rounded,
+                      size: 15,
+                      color: color,
+                    ),
                   ),
                   const SizedBox(width: 6),
                   Expanded(
-                    child: Text(line,
-                        style: TextStyle(fontSize: 12.5, color: color)),
+                    child: Text(
+                      line,
+                      style: TextStyle(fontSize: 12.5, color: color),
+                    ),
                   ),
                 ],
               ),
@@ -699,28 +756,94 @@ class _RowEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    Widget number(TextEditingController c, String key, String label,
-            {String? prefix}) =>
-        SizedBox(
-          width: 54,
-          child: TextField(
-            key: ValueKey(key),
-            controller: c,
-            textAlign: TextAlign.center,
-            keyboardType:
-                const TextInputType.numberWithOptions(signed: true),
-            inputFormatters: [_rangeFormatter],
-            style: const TextStyle(fontSize: 13.5),
-            decoration: InputDecoration(
-              isDense: true,
-              hintText: label,
-              prefixText: prefix,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-            ),
-            onChanged: (_) => onChanged(),
+    Widget number(
+      TextEditingController c,
+      String key,
+      String label, {
+      String? prefix,
+    }) => SizedBox(
+      width: 54,
+      child: TextField(
+        key: ValueKey(key),
+        controller: c,
+        textAlign: TextAlign.center,
+        keyboardType: const TextInputType.numberWithOptions(signed: true),
+        inputFormatters: [_rangeFormatter],
+        style: const TextStyle(fontSize: 13.5),
+        decoration: InputDecoration(
+          isDense: true,
+          hintText: label,
+          prefixText: prefix,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 10,
           ),
-        );
+        ),
+        onChanged: (_) => onChanged(),
+      ),
+    );
+
+    final handle = ReorderableDragStartListener(
+      index: index,
+      child: Tooltip(
+        message: l.tablesDragToReorder,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.grab,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+            child: Icon(
+              Icons.drag_indicator,
+              size: 20,
+              color: GmhColors.parchmentFaint,
+            ),
+          ),
+        ),
+      ),
+    );
+    final range = <Widget>[
+      if (usesFormula) ...[
+        number(fields.from, 'tables-row-from-$index', l.tablesFrom),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3),
+          child: Text('–', style: TextStyle(color: GmhColors.parchmentDim)),
+        ),
+        number(fields.to, 'tables-row-to-$index', l.tablesTo),
+      ] else
+        Tooltip(
+          message: l.tablesWeight,
+          child: number(
+            fields.weight,
+            'tables-row-weight-$index',
+            l.tablesWeight,
+            prefix: '×',
+          ),
+        ),
+    ];
+    final text = TextField(
+      key: ValueKey('tables-row-text-$index'),
+      controller: fields.text,
+      autofocus: autofocus,
+      minLines: 1,
+      maxLines: 6,
+      style: const TextStyle(fontSize: 13.5, height: 1.35),
+      decoration: InputDecoration(
+        isDense: true,
+        hintText: l.tablesRowTextHint('{2d6}', '{a|b}', '[[…]]'),
+        hintMaxLines: 1,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
+      ),
+      onChanged: (_) => onChanged(),
+    );
+    final delete = IconButton(
+      key: ValueKey('tables-row-delete-$index'),
+      tooltip: l.tablesDeleteRow,
+      visualDensity: VisualDensity.compact,
+      icon: const Icon(Icons.close, size: 18),
+      onPressed: onDelete,
+    );
 
     return Material(
       color: GmhColors.surface,
@@ -732,64 +855,33 @@ class _RowEditor extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: GmhColors.border),
         ),
-        child: Row(
-          children: [
-            ReorderableDragStartListener(
-              index: index,
-              child: Tooltip(
-                message: l.tablesDragToReorder,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.grab,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Icon(Icons.drag_indicator,
-                        size: 20, color: GmhColors.parchmentFaint),
+        // Narrow screens stack the text under the range so it keeps the
+        // full width.
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 520) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(children: [handle, ...range, const Spacer(), delete]),
+                  const SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6, right: 8),
+                    child: text,
                   ),
-                ),
-              ),
-            ),
-            if (usesFormula) ...[
-              number(fields.from, 'tables-row-from-$index', l.tablesFrom),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: Text('–',
-                    style: TextStyle(color: GmhColors.parchmentDim)),
-              ),
-              number(fields.to, 'tables-row-to-$index', l.tablesTo),
-            ] else
-              Tooltip(
-                message: l.tablesWeight,
-                child: number(fields.weight, 'tables-row-weight-$index',
-                    l.tablesWeight,
-                    prefix: '×'),
-              ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: TextField(
-                key: ValueKey('tables-row-text-$index'),
-                controller: fields.text,
-                autofocus: autofocus,
-                minLines: 1,
-                maxLines: 4,
-                style: const TextStyle(fontSize: 13.5, height: 1.35),
-                decoration: InputDecoration(
-                  isDense: true,
-                  hintText: l.tablesRowTextHint('{2d6}', '{a|b}', '[[…]]'),
-                  hintMaxLines: 1,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                ),
-                onChanged: (_) => onChanged(),
-              ),
-            ),
-            IconButton(
-              key: ValueKey('tables-row-delete-$index'),
-              tooltip: l.tablesDeleteRow,
-              visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.close, size: 18),
-              onPressed: onDelete,
-            ),
-          ],
+                ],
+              );
+            }
+            return Row(
+              children: [
+                handle,
+                ...range,
+                const SizedBox(width: 8),
+                Expanded(child: text),
+                delete,
+              ],
+            );
+          },
         ),
       ),
     );

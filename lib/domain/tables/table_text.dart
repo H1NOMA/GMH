@@ -12,7 +12,8 @@ import 'random_table.dart';
 // `00` as the upper end of a range means 100 (percentile tables).
 
 final _range = RegExp(
-    r'^(\d{1,6})\s*[-–—]\s*(\d{1,6})(?:\s*[|:]\s*|\s*[.)]\s+|\s+)(.*)$');
+  r'^(\d{1,6})\s*[-–—]\s*(\d{1,6})(?:\s*[|:]\s*|\s*[.)]\s+|\s+)(.*)$',
+);
 final _single = RegExp(r'^(\d{1,6})(?:\s*[|:]\s*|\s*[.)]\s+)(.*)$');
 final _weight = RegExp(r'^[xX×](\d{1,6})(?:\s*[|:]\s*|\s+)(.*)$');
 
@@ -55,9 +56,8 @@ RandomTableRow? parseTableLine(String line) {
 
 /// Every row in [text], in order.
 List<RandomTableRow> parseTableText(String text) => [
-      for (final line in text.split(RegExp(r'\r\n|\r|\n')))
-        ?parseTableLine(line),
-    ];
+  for (final line in text.split(RegExp(r'\r\n|\r|\n'))) ?parseTableLine(line),
+];
 
 /// [rows] in the format [parseTableText] reads back. Ranged rows are
 /// written with their range; the others with their weight. Rows whose text
@@ -75,7 +75,10 @@ String exportTableText(List<RandomTableRow> rows) {
       lines.add('x${r.weight} $text');
     } else {
       final plain = parseTableLine(text);
-      final ambiguous = plain == null || plain.hasRange || plain.weight != 1 ||
+      final ambiguous =
+          plain == null ||
+          plain.hasRange ||
+          plain.weight != 1 ||
           plain.text != text;
       lines.add(ambiguous ? 'x1 $text' : text);
     }

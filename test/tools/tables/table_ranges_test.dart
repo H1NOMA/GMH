@@ -3,21 +3,22 @@ import 'package:gmh/domain/tables/random_table.dart';
 import 'package:gmh/domain/tables/table_ranges.dart';
 
 List<RandomTableRow> _rows(int n, {List<int>? weights}) => [
-      for (var i = 0; i < n; i++)
-        RandomTableRow('row $i', weight: weights?[i] ?? 1),
-    ];
+  for (var i = 0; i < n; i++)
+    RandomTableRow('row $i', weight: weights?[i] ?? 1),
+];
 
-List<(int?, int?)> _ranges(List<RandomTableRow> rows) =>
-    [for (final r in rows) (r.from, r.to)];
+List<(int?, int?)> _ranges(List<RandomTableRow> rows) => [
+  for (final r in rows) (r.from, r.to),
+];
 
 RandomTable _table(String formula, List<(int?, int?)> ranges) => RandomTable(
-      name: 'T',
-      formula: formula,
-      rows: [
-        for (var i = 0; i < ranges.length; i++)
-          RandomTableRow('r$i', from: ranges[i].$1, to: ranges[i].$2),
-      ],
-    );
+  name: 'T',
+  formula: formula,
+  rows: [
+    for (var i = 0; i < ranges.length; i++)
+      RandomTableRow('r$i', from: ranges[i].$1, to: ranges[i].$2),
+  ],
+);
 
 void main() {
   group('formulaBounds', () {
@@ -52,18 +53,25 @@ void main() {
 
   group('autoRanges', () {
     test('equal weights split the die evenly', () {
-      expect(_ranges(autoRanges(_rows(4), (min: 1, max: 20))),
-          [(1, 5), (6, 10), (11, 15), (16, 20)]);
+      expect(_ranges(autoRanges(_rows(4), (min: 1, max: 20))), [
+        (1, 5),
+        (6, 10),
+        (11, 15),
+        (16, 20),
+      ]);
     });
 
     test('weights share the die proportionally', () {
       expect(
-          _ranges(autoRanges(_rows(2, weights: [1, 3]), (min: 1, max: 20))),
-          [(1, 5), (6, 20)]);
+        _ranges(autoRanges(_rows(2, weights: [1, 3]), (min: 1, max: 20))),
+        [(1, 5), (6, 20)],
+      );
       expect(
-          _ranges(autoRanges(
-              _rows(3, weights: [50, 30, 20]), (min: 1, max: 100))),
-          [(1, 50), (51, 80), (81, 100)]);
+        _ranges(
+          autoRanges(_rows(3, weights: [50, 30, 20]), (min: 1, max: 100)),
+        ),
+        [(1, 50), (51, 80), (81, 100)],
+      );
     });
 
     test('remainders go to the earlier rows', () {
@@ -74,24 +82,32 @@ void main() {
     });
 
     test('every row gets a value even with tiny weights', () {
-      final rows =
-          autoRanges(_rows(3, weights: [1000, 1, 1]), (min: 1, max: 10));
+      final rows = autoRanges(_rows(3, weights: [1000, 1, 1]), (
+        min: 1,
+        max: 10,
+      ));
       expect(_ranges(rows), [(1, 8), (9, 9), (10, 10)]);
     });
 
     test('non-1 starts such as 2d6', () {
-      expect(_ranges(autoRanges(_rows(11), (min: 2, max: 12))),
-          [for (var v = 2; v <= 12; v++) (v, v)]);
+      expect(_ranges(autoRanges(_rows(11), (min: 2, max: 12))), [
+        for (var v = 2; v <= 12; v++) (v, v),
+      ]);
     });
 
     test('more rows than totals leaves the extra rows without a range', () {
-      expect(_ranges(autoRanges(_rows(3), (min: 1, max: 2))),
-          [(1, 1), (2, 2), (null, null)]);
+      expect(_ranges(autoRanges(_rows(3), (min: 1, max: 2))), [
+        (1, 1),
+        (2, 2),
+        (null, null),
+      ]);
     });
 
     test('keeps text and weight, handles an empty list', () {
       final rows = autoRanges(
-          const [RandomTableRow('a', weight: 3)], (min: 1, max: 6));
+        const [RandomTableRow('a', weight: 3)],
+        (min: 1, max: 6),
+      );
       expect(rows.single, const RandomTableRow('a', weight: 3, from: 1, to: 6));
       expect(autoRanges(const [], (min: 1, max: 6)), isEmpty);
     });
@@ -99,10 +115,14 @@ void main() {
     test('the result always validates cleanly', () {
       for (var n = 1; n <= 20; n++) {
         final rows = autoRanges(
-            _rows(n, weights: [for (var i = 0; i < n; i++) i % 4 + 1]),
-            (min: 1, max: 20));
-        expect(validateRanges(rows, (min: 1, max: 20)), isEmpty,
-            reason: '$n rows');
+          _rows(n, weights: [for (var i = 0; i < n; i++) i % 4 + 1]),
+          (min: 1, max: 20),
+        );
+        expect(
+          validateRanges(rows, (min: 1, max: 20)),
+          isEmpty,
+          reason: '$n rows',
+        );
       }
     });
   });
@@ -115,19 +135,28 @@ void main() {
     test('weighted tables only check row texts', () {
       expect(validateTable(_table('', [(null, null), (5, 1)])), isEmpty);
       expect(
-          validateTable(const RandomTable(
-              name: 'T', rows: [RandomTableRow('a'), RandomTableRow(' ')])),
-          [const TableIssue(TableIssueKind.emptyRow, rows: [1])]);
+        validateTable(
+          const RandomTable(
+            name: 'T',
+            rows: [RandomTableRow('a'), RandomTableRow(' ')],
+          ),
+        ),
+        [
+          const TableIssue(TableIssueKind.emptyRow, rows: [1]),
+        ],
+      );
     });
 
     test('empty tables', () {
-      expect(validateTable(const RandomTable(name: 'T')),
-          [const TableIssue(TableIssueKind.empty)]);
+      expect(validateTable(const RandomTable(name: 'T')), [
+        const TableIssue(TableIssueKind.empty),
+      ]);
     });
 
     test('a broken formula', () {
-      expect(validateTable(_table('2d', [(1, 2)])),
-          [const TableIssue(TableIssueKind.badFormula)]);
+      expect(validateTable(_table('2d', [(1, 2)])), [
+        const TableIssue(TableIssueKind.badFormula),
+      ]);
     });
 
     test('gaps name the neighbouring rows', () {
@@ -156,11 +185,17 @@ void main() {
     });
 
     test('missing, inverted and out-of-bounds ranges', () {
-      final issues =
-          validateTable(_table('1d6', [(1, 3), (null, null), (6, 4), (4, 8)]));
+      final issues = validateTable(
+        _table('1d6', [(1, 3), (null, null), (6, 4), (4, 8)]),
+      );
       expect(issues, [
         const TableIssue(TableIssueKind.missingRange, rows: [1]),
-        const TableIssue(TableIssueKind.invertedRange, rows: [2], from: 6, to: 4),
+        const TableIssue(
+          TableIssueKind.invertedRange,
+          rows: [2],
+          from: 6,
+          to: 4,
+        ),
         const TableIssue(TableIssueKind.outOfBounds, rows: [3], from: 4, to: 8),
       ]);
     });

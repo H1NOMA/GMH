@@ -32,24 +32,23 @@ class RandomTableRow {
   }
 
   Map<String, Object?> toJson() => {
-        'text': text,
-        'weight': weight,
-        if (from != null) 'from': from,
-        if (to != null) 'to': to,
-      };
+    'text': text,
+    'weight': weight,
+    if (from != null) 'from': from,
+    if (to != null) 'to': to,
+  };
 
   RandomTableRow copyWith({
     String? text,
     int? weight,
     int? Function()? from,
     int? Function()? to,
-  }) =>
-      RandomTableRow(
-        text ?? this.text,
-        weight: weight ?? this.weight,
-        from: from != null ? from() : this.from,
-        to: to != null ? to() : this.to,
-      );
+  }) => RandomTableRow(
+    text ?? this.text,
+    weight: weight ?? this.weight,
+    from: from != null ? from() : this.from,
+    to: to != null ? to() : this.to,
+  );
 
   /// Same row without a range.
   RandomTableRow withoutRange() => RandomTableRow(text, weight: weight);
@@ -66,8 +65,7 @@ class RandomTableRow {
   int get hashCode => Object.hash(text, weight, from, to);
 
   @override
-  String toString() =>
-      'Row(${hasRange ? '$from-$to ' : ''}x$weight "$text")';
+  String toString() => 'Row(${hasRange ? '$from-$to ' : ''}x$weight "$text")';
 }
 
 /// Where a table came from: written by the user or copied from the
@@ -78,10 +76,9 @@ abstract final class RandomTableSource {
 
   static String library(String id) => '$libraryPrefix$id';
 
-  static String? libraryId(String source) =>
-      source.startsWith(libraryPrefix)
-          ? source.substring(libraryPrefix.length)
-          : null;
+  static String? libraryId(String source) => source.startsWith(libraryPrefix)
+      ? source.substring(libraryPrefix.length)
+      : null;
 }
 
 /// A rollable table ([WorldObjectTypes.randomTable]).
@@ -138,23 +135,23 @@ class RandomTable {
   }
 
   Map<String, Object?> toData() => {
-        'description': description,
-        'folder': folder,
-        'formula': formula,
-        'rows': [for (final r in rows) r.toJson()],
-        'source': source,
-      };
+    'description': description,
+    'folder': folder,
+    'formula': formula,
+    'rows': [for (final r in rows) r.toJson()],
+    'source': source,
+  };
 
   WorldObject toObject() => WorldObject(
-        id: id,
-        worldId: worldId,
-        type: WorldObjectTypes.randomTable,
-        name: name,
-        data: toData(),
-        sortOrder: sortOrder,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+    id: id,
+    worldId: worldId,
+    type: WorldObjectTypes.randomTable,
+    name: name,
+    data: toData(),
+    sortOrder: sortOrder,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 
   RandomTable copyWith({
     String? name,
@@ -163,18 +160,17 @@ class RandomTable {
     String? formula,
     List<RandomTableRow>? rows,
     String? source,
-  }) =>
-      RandomTable(
-        id: id,
-        worldId: worldId,
-        name: name ?? this.name,
-        description: description ?? this.description,
-        folder: folder ?? this.folder,
-        formula: formula ?? this.formula,
-        rows: rows ?? this.rows,
-        source: source ?? this.source,
-        sortOrder: sortOrder,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+  }) => RandomTable(
+    id: id,
+    worldId: worldId,
+    name: name ?? this.name,
+    description: description ?? this.description,
+    folder: folder ?? this.folder,
+    formula: formula ?? this.formula,
+    rows: rows ?? this.rows,
+    source: source ?? this.source,
+    sortOrder: sortOrder,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 }

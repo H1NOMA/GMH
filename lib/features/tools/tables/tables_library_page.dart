@@ -58,31 +58,42 @@ class _TablesLibraryPageState extends ConsumerState<TablesLibraryPage> {
     final deps = missingDependencies(table, worldTables, lang);
     var extra = const <LibraryTable>[];
     if (deps.isNotEmpty) {
-      final chosen = await showLibraryDependenciesDialog(context,
-          table: table, dependencies: deps, lang: lang);
+      final chosen = await showLibraryDependenciesDialog(
+        context,
+        table: table,
+        dependencies: deps,
+        lang: lang,
+      );
       if (chosen == null || !mounted) return;
       extra = chosen;
     }
-    final added = await actions
-        .addFromLibrary(widget.worldId, [table, ...extra], lang);
+    final added = await actions.addFromLibrary(widget.worldId, [
+      table,
+      ...extra,
+    ], lang);
     if (!mounted || added.isEmpty) return;
     final router = GoRouter.of(context);
     final target = Routes.tool(widget.worldId, 'tables', added.first.id);
-    messenger.showSnackBar(SnackBar(
-      content: Text(l.tablesAddedCount(added.length)),
-      action: SnackBarAction(label: l.open, onPressed: () => router.go(target)),
-    ));
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l.tablesAddedCount(added.length)),
+        action: SnackBarAction(
+          label: l.open,
+          onPressed: () => router.go(target),
+        ),
+      ),
+    );
   }
 
-  Future<void> _preview(LibraryTable table, bool inWorld,
-      List<RandomTable> worldTables) async {
+  Future<void> _preview(
+    LibraryTable table,
+    bool inWorld,
+    List<RandomTable> worldTables,
+  ) async {
     final add = await showDialog<bool>(
       context: context,
-      builder: (context) => _PreviewDialog(
-        table: table,
-        lang: _lang,
-        inWorld: inWorld,
-      ),
+      builder: (context) =>
+          _PreviewDialog(table: table, lang: _lang, inWorld: inWorld),
     );
     if (add == true && mounted) await _add(table, worldTables);
   }
@@ -92,10 +103,10 @@ class _TablesLibraryPageState extends ConsumerState<TablesLibraryPage> {
     final l = context.l10n;
     final style =
         ref.watch(worldProvider(widget.worldId)).valueOrNull?.style ??
-            WorldStyle.fantasy;
+        WorldStyle.fantasy;
     final worldTables =
         ref.watch(worldTablesProvider(widget.worldId)).valueOrNull ??
-            const <RandomTable>[];
+        const <RandomTable>[];
     final sources = {for (final t in worldTables) t.source};
     final order = TableLibrary.packOrder(style);
     final searching = _query.trim().isNotEmpty;
@@ -116,9 +127,14 @@ class _TablesLibraryPageState extends ConsumerState<TablesLibraryPage> {
 
     final own = TableLibrary.forStyle(style).where(_matches).toList();
     final children = <Widget>[
-      Text(l.tablesLibraryHint,
-          style: TextStyle(
-              fontSize: 13, height: 1.4, color: GmhColors.parchmentDim)),
+      Text(
+        l.tablesLibraryHint,
+        style: TextStyle(
+          fontSize: 13,
+          height: 1.4,
+          color: GmhColors.parchmentDim,
+        ),
+      ),
       const SizedBox(height: 12),
       TextField(
         key: const ValueKey('tables-library-search'),
@@ -140,16 +156,16 @@ class _TablesLibraryPageState extends ConsumerState<TablesLibraryPage> {
       for (final other in order.skip(1))
         if (TableLibrary.forStyle(other).any(_matches))
           Theme(
-            data: Theme.of(context)
-                .copyWith(dividerColor: Colors.transparent),
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
               key: ValueKey('tables-pack-${other.name}-$searching'),
               initiallyExpanded: searching,
               tilePadding: const EdgeInsets.symmetric(horizontal: 4),
               childrenPadding: const EdgeInsets.only(bottom: 8),
               title: _PackHeader(
-                  style: other,
-                  count: TableLibrary.forStyle(other).where(_matches).length),
+                style: other,
+                count: TableLibrary.forStyle(other).where(_matches).length,
+              ),
               children: [
                 for (final t in TableLibrary.forStyle(other).where(_matches))
                   card(t),
@@ -169,14 +185,18 @@ class _TablesLibraryPageState extends ConsumerState<TablesLibraryPage> {
           onPressed: () => context.go(Routes.tool(widget.worldId, 'tables')),
         ),
       ],
-      body: LayoutBuilder(builder: (context, constraints) {
-        final side =
-            ((constraints.maxWidth - 900) / 2).clamp(16.0, double.infinity);
-        return ListView(
-          padding: EdgeInsets.fromLTRB(side, 16, side, 40),
-          children: children,
-        );
-      }),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final side = ((constraints.maxWidth - 900) / 2).clamp(
+            16.0,
+            double.infinity,
+          );
+          return ListView(
+            padding: EdgeInsets.fromLTRB(side, 16, side, 40),
+            children: children,
+          );
+        },
+      ),
     );
   }
 }
@@ -187,14 +207,17 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Text(label.toUpperCase(),
-            style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.4,
-                color: GmhColors.parchmentDim)),
-      );
+    padding: const EdgeInsets.only(bottom: 6),
+    child: Text(
+      label.toUpperCase(),
+      style: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.4,
+        color: GmhColors.parchmentDim,
+      ),
+    ),
+  );
 }
 
 class _PackHeader extends StatelessWidget {
@@ -209,14 +232,18 @@ class _PackHeader extends StatelessWidget {
         Icon(SettingPacks.of(style).icon, size: 20, color: GmhColors.ember),
         const SizedBox(width: 10),
         Flexible(
-          child: Text(style.localizedName(context),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleSmall),
+          child: Text(
+            style.localizedName(context),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
         ),
         const SizedBox(width: 8),
-        Text(context.l10n.tablesTableCount(count),
-            style: TextStyle(fontSize: 12, color: GmhColors.parchmentFaint)),
+        Text(
+          context.l10n.tablesTableCount(count),
+          style: TextStyle(fontSize: 12, color: GmhColors.parchmentFaint),
+        ),
       ],
     );
   }
@@ -251,18 +278,23 @@ class _LibraryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(table.name.of(lang),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleSmall),
+              Text(
+                table.name.of(lang),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
               const SizedBox(height: 4),
-              Text(table.description.of(lang),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 12.5,
-                      height: 1.35,
-                      color: GmhColors.parchmentDim)),
+              Text(
+                table.description.of(lang),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  height: 1.35,
+                  color: GmhColors.parchmentDim,
+                ),
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 6,
@@ -280,37 +312,41 @@ class _LibraryCard extends StatelessWidget {
                   ),
                   TableTag(label: l.tablesRowCount(table.rows.length)),
                   TableTag(
-                      label: table.folder.label.of(lang),
-                      icon: Icons.folder_outlined),
+                    label: table.folder.label.of(lang),
+                    icon: Icons.folder_outlined,
+                  ),
                 ],
               ),
               const SizedBox(height: 6),
-              Wrap(
-                alignment: WrapAlignment.end,
-                spacing: 8,
-                runSpacing: 4,
-                children: [
-                  TextButton.icon(
-                    key: ValueKey('tables-lib-preview-${table.id}'),
-                    onPressed: onPreview,
-                    icon: const Icon(Icons.visibility_outlined, size: 18),
-                    label: Text(l.tablesPreview),
-                  ),
-                  if (inWorld)
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  alignment: WrapAlignment.end,
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [
                     TextButton.icon(
-                      key: ValueKey('tables-lib-in-world-${table.id}'),
-                      onPressed: null,
-                      icon: const Icon(Icons.check, size: 18),
-                      label: Text(l.tablesInWorld),
-                    )
-                  else
-                    FilledButton.tonalIcon(
-                      key: ValueKey('tables-lib-add-${table.id}'),
-                      onPressed: onAdd,
-                      icon: const Icon(Icons.add, size: 18),
-                      label: Text(l.tablesAddToWorld),
+                      key: ValueKey('tables-lib-preview-${table.id}'),
+                      onPressed: onPreview,
+                      icon: const Icon(Icons.visibility_outlined, size: 18),
+                      label: Text(l.tablesPreview),
                     ),
-                ],
+                    if (inWorld)
+                      TextButton.icon(
+                        key: ValueKey('tables-lib-in-world-${table.id}'),
+                        onPressed: null,
+                        icon: const Icon(Icons.check, size: 18),
+                        label: Text(l.tablesInWorld),
+                      )
+                    else
+                      FilledButton.tonalIcon(
+                        key: ValueKey('tables-lib-add-${table.id}'),
+                        onPressed: onAdd,
+                        icon: const Icon(Icons.add, size: 18),
+                        label: Text(l.tablesAddToWorld),
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -326,8 +362,11 @@ class _PreviewDialog extends ConsumerStatefulWidget {
   final String lang;
   final bool inWorld;
 
-  const _PreviewDialog(
-      {required this.table, required this.lang, required this.inWorld});
+  const _PreviewDialog({
+    required this.table,
+    required this.lang,
+    required this.inWorld,
+  });
 
   @override
   ConsumerState<_PreviewDialog> createState() => _PreviewDialogState();
@@ -335,8 +374,10 @@ class _PreviewDialog extends ConsumerStatefulWidget {
 
 class _PreviewDialogState extends ConsumerState<_PreviewDialog> {
   TableRollResult? _result;
-  late final RandomTable _table =
-      TableLibrary.materialize(widget.table, widget.lang);
+  late final RandomTable _table = TableLibrary.materialize(
+    widget.table,
+    widget.lang,
+  );
 
   void _roll() {
     final pack = [
@@ -344,8 +385,10 @@ class _PreviewDialogState extends ConsumerState<_PreviewDialog> {
       for (final t in TableLibrary.forStyle(widget.table.style))
         if (t.id != widget.table.id) TableLibrary.materialize(t, widget.lang),
     ];
-    final roller =
-        TableRoller.forTables(pack, random: ref.read(diceRandomProvider));
+    final roller = TableRoller.forTables(
+      pack,
+      random: ref.read(diceRandomProvider),
+    );
     setState(() => _result = roller.roll(_table));
   }
 
@@ -362,9 +405,14 @@ class _PreviewDialogState extends ConsumerState<_PreviewDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(table.description,
-                  style: TextStyle(
-                      fontSize: 13, height: 1.4, color: GmhColors.parchmentDim)),
+              Text(
+                table.description,
+                style: TextStyle(
+                  fontSize: 13,
+                  height: 1.4,
+                  color: GmhColors.parchmentDim,
+                ),
+              ),
               const SizedBox(height: 10),
               Wrap(spacing: 6, runSpacing: 6, children: tableTags(l, table)),
               const SizedBox(height: 12),
@@ -381,14 +429,17 @@ class _PreviewDialogState extends ConsumerState<_PreviewDialog> {
                               ? tableRangeText(row.from, row.to)
                               : '×${row.weight}',
                           style: TextStyle(
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w700,
-                              color: GmhColors.ember),
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w700,
+                            color: GmhColors.ember,
+                          ),
                         ),
                       ),
                       Expanded(
-                        child: Text(row.text,
-                            style: const TextStyle(fontSize: 13, height: 1.35)),
+                        child: Text(
+                          row.text,
+                          style: const TextStyle(fontSize: 13, height: 1.35),
+                        ),
                       ),
                     ],
                   ),
@@ -410,8 +461,9 @@ class _PreviewDialogState extends ConsumerState<_PreviewDialog> {
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l.close)),
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(l.close),
+        ),
         if (!widget.inWorld)
           FilledButton(
             key: const ValueKey('tables-preview-add'),
