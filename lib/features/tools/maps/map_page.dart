@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -313,9 +314,10 @@ class _MapPageState extends ConsumerState<MapPage> {
   }
 
   void _onDragStart(MapPin pin) {
+    final start = _positionOf(pin);
     setState(() {
       _dragPinId = pin.id;
-      _dragStart = _positionOf(pin);
+      _dragStart = start;
       _dragDelta = Offset.zero;
       _selectedPinId = pin.id;
     });
@@ -802,6 +804,8 @@ class _MapPageState extends ConsumerState<MapPage> {
             cursor: canDrag ? SystemMouseCursors.grab : SystemMouseCursors.click,
             child: GestureDetector(
               key: ValueKey('maps-pin-${pin.id}'),
+              // Count the slop too, so the pin stays under the pointer.
+              dragStartBehavior: DragStartBehavior.down,
               onTap: () => _onPinTap(pin, map, entities),
               onPanStart: canDrag ? (_) => _onDragStart(pin) : null,
               onPanUpdate: canDrag ? (d) => _onDragUpdate(d.delta) : null,

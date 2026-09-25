@@ -17,9 +17,12 @@ const _maxDecodeWidth = 4096;
 ViewTransform viewOf(Matrix4 m) =>
     (scale: m.getMaxScaleOnAxis(), dx: m.storage[12], dy: m.storage[13]);
 
+/// InteractiveViewer scales all three axes (and reads the scale back with
+/// getMaxScaleOnAxis), so z is scaled too.
 Matrix4 matrixOf(ViewTransform v) => Matrix4.identity()
   ..setEntry(0, 0, v.scale)
   ..setEntry(1, 1, v.scale)
+  ..setEntry(2, 2, v.scale)
   ..setEntry(0, 3, v.dx)
   ..setEntry(1, 3, v.dy);
 
