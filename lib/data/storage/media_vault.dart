@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
@@ -31,7 +32,11 @@ class MediaVault {
     required List<int> bytes,
   }) async {
     try {
-      final hash = sha256.convert(bytes).toString();
+      // Hashing a 50 MB map on the UI isolate stalls frames; big files
+      // are hashed on a background isolate.
+      final hash = bytes.length > 512 * 1024
+          ? await Isolate.run(() => sha256.convert(bytes).toString())
+          : sha256.convert(bytes).toString();
       var ext = p.extension(fileName).toLowerCase();
       if (ext.isEmpty ||
           ext.length > 10 ||

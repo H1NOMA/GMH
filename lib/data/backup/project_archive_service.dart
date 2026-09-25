@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:archive/archive_io.dart';
 import 'package:drift/drift.dart';
@@ -223,28 +224,25 @@ class ProjectArchiveService {
         'worldName': world['name'],
       };
 
-      final archive = Archive();
-      archive.addFile(_jsonFile('manifest.json', manifest));
-      archive.addFile(_jsonFile('data.json', data));
-
       // Several rows can share one stored file (same picture in two
-      // entries): each file goes in once. Images and PDFs are already
-      // compressed, so deflating them again only costs time.
-      final packed = <String>{};
+      // entries): each file goes in once.
+      final files = <String, Uint8List>{
+        'manifest.json': utf8.encode(jsonEncode(manifest)),
+        'data.json': utf8.encode(jsonEncode(data)),
+      };
       for (final m in (data['media'] as List).cast<Map<String, Object?>>()) {
         final relativePath = m['relativePath'] as String;
-        if (!packed.add(relativePath)) continue;
+        final name = 'media/$relativePath';
+        if (files.containsKey(name)) continue;
         if (await _vault.exists(worldId, relativePath)) {
-          final bytes = await _vault.read(worldId, relativePath);
-          archive.addFile(
-              ArchiveFile('media/$relativePath', bytes.length, bytes)
-                ..compression = CompressionType.none);
+          files[name] = Uint8List.fromList(
+              await _vault.read(worldId, relativePath));
         }
       }
 
       final out = File(outputPath);
       await out.parent.create(recursive: true);
-      final encoded = ZipEncoder().encode(archive);
+      final encoded = await _zip(files);
       // Write next to the target, then rename: an interrupted write (crash,
       // full disk) never leaves a truncated archive under the final name,
       // where it would show up as a restorable backup.
@@ -268,11 +266,6 @@ class ProjectArchiveService {
     });
   }
 
-  ArchiveFile _jsonFile(String name, Object data) {
-    final bytes = utf8.encode(jsonEncode(data));
-    return ArchiveFile(name, bytes.length, bytes);
-  }
-
   // ---------------------------------------------------------------- import
 
   static final _safeId = RegExp(r'^[A-Za-z0-9_-]{1,64}$');
@@ -289,19 +282,17 @@ class ProjectArchiveService {
   /// so the UI can warn before an import replaces an existing world.
   Future<Result<ArchiveManifest>> inspectArchive(String archivePath) {
     return guard(() async {
-      final Archive archive;
+      final Map<String, Uint8List> files;
       try {
-        archive =
-            ZipDecoder().decodeBytes(await File(archivePath).readAsBytes());
+        files = await _unzip(archivePath, only: {'manifest.json'});
       } catch (e) {
         throw ImportException('Not a valid GMH archive: $e');
       }
-      final manifestFile = archive.findFile('manifest.json');
+      final manifestFile = files['manifest.json'];
       if (manifestFile == null) {
         throw const ImportException('Archive is missing manifest.json.');
       }
-      final manifest =
-          jsonDecode(utf8.decode(manifestFile.content as List<int>)) as Map;
+      final manifest = jsonDecode(utf8.decode(manifestFile)) as Map;
       return ArchiveManifest(
         worldId: manifest['worldId'] as String? ?? '',
         worldName: manifest['worldName'] as String? ?? '',
@@ -319,22 +310,21 @@ class ProjectArchiveService {
         throw const ImportException('Archive file not found.');
       }
 
-      final Archive archive;
+      final Map<String, Uint8List> files;
       try {
-        archive = ZipDecoder().decodeBytes(await file.readAsBytes());
+        files = await _unzip(archivePath);
       } catch (e) {
         throw ImportException('Not a valid GMH archive: $e');
       }
 
-      final manifestFile = archive.findFile('manifest.json');
-      final dataFile = archive.findFile('data.json');
+      final manifestFile = files['manifest.json'];
+      final dataFile = files['data.json'];
       if (manifestFile == null || dataFile == null) {
         throw const ImportException(
             'Archive is missing manifest.json or data.json.');
       }
 
-      final manifest =
-          jsonDecode(utf8.decode(manifestFile.content as List<int>)) as Map;
+      final manifest = jsonDecode(utf8.decode(manifestFile)) as Map;
       final formatVersion = manifest['formatVersion'];
       if (formatVersion is! int ||
           formatVersion > GmhConstants.exportFormatVersion) {
@@ -343,8 +333,7 @@ class ProjectArchiveService {
             'Please update GMH.');
       }
 
-      final data =
-          jsonDecode(utf8.decode(dataFile.content as List<int>)) as Map;
+      final data = jsonDecode(utf8.decode(dataFile)) as Map;
       final worldId = (data['world'] as Map)['id'];
       if (worldId is! String || !_safeId.hasMatch(worldId)) {
         throw const ImportException('Archive has an invalid world id.');
@@ -359,14 +348,14 @@ class ProjectArchiveService {
       }
 
       // Restore media files first (idempotent: content-addressed names).
-      for (final entry in archive.files) {
-        if (!entry.isFile || !entry.name.startsWith('media/')) continue;
-        final relativePath = p.basename(entry.name);
+      for (final MapEntry(key: name, value: bytes) in files.entries) {
+        if (!name.startsWith('media/')) continue;
+        final relativePath = p.basename(name);
         if (!_isPlainFileName(relativePath)) continue;
         final target =
             File(_vault.absolutePath(worldId, relativePath));
         await target.parent.create(recursive: true);
-        await target.writeAsBytes(entry.content as List<int>, flush: true);
+        await target.writeAsBytes(bytes, flush: true);
       }
 
       await _restoreData(data.cast<String, Object?>());
@@ -543,3 +532,31 @@ class ArchiveManifest {
   final String worldName;
   const ArchiveManifest({required this.worldId, required this.worldName});
 }
+
+/// Zips [files] on a background isolate: compressing a world with its
+/// media must not freeze the UI (the startup auto-backup runs while the
+/// user works). Media is stored as-is — images and PDFs are already
+/// compressed, deflating them again only costs time.
+Future<List<int>> _zip(Map<String, Uint8List> files) => Isolate.run(() {
+      final archive = Archive();
+      for (final MapEntry(key: name, value: bytes) in files.entries) {
+        archive.addFile(ArchiveFile(name, bytes.length, bytes)
+          ..compression = name.startsWith('media/')
+              ? CompressionType.none
+              : CompressionType.deflate);
+      }
+      return ZipEncoder().encode(archive);
+    });
+
+/// Reads a zip into name -> bytes on a background isolate; [only] limits
+/// extraction to those names (inspecting a manifest needn't inflate
+/// every image).
+Future<Map<String, Uint8List>> _unzip(String path, {Set<String>? only}) =>
+    Isolate.run(() {
+      final archive = ZipDecoder().decodeBytes(File(path).readAsBytesSync());
+      return {
+        for (final entry in archive.files)
+          if (entry.isFile && (only == null || only.contains(entry.name)))
+            entry.name: Uint8List.fromList(entry.content as List<int>),
+      };
+    });

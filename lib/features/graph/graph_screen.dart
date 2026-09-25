@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -128,8 +129,8 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     }
     visible.removeWhere((id) => _hiddenKinds.contains(byId[id]!.kind));
 
-    _truncated = visible.length > _maxGraphNodes;
-    if (_truncated) {
+    final truncated = visible.length > _maxGraphNodes;
+    if (truncated) {
       final ranked = visible.toList()
         ..sort((a, b) => (degree[b] ?? 0).compareTo(degree[a] ?? 0));
       visible = ranked.take(_maxGraphNodes).toSet();
@@ -154,12 +155,21 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
           ),
     ];
 
-    final simulation = GraphSimulation(nodes: nodes, edges: edges)..settle();
+    // The initial layout is O(n²) per tick for up to 300 ticks: on a big
+    // graph that is a visible freeze, so it runs on a background isolate
+    // (small graphs settle faster than an isolate spawns).
+    final unsettled = GraphSimulation(nodes: nodes, edges: edges);
+    final simulation = nodes.length > 60
+        ? await Isolate.run(() => unsettled..settle())
+        : (unsettled..settle());
 
     if (!mounted || generation != _buildGeneration) return;
     setState(() {
       _entitiesById = byId;
       _simulation = simulation;
+      // Published with the result it describes: a superseded build must
+      // not flip the banner for the current one.
+      _truncated = truncated;
       _loading = false;
     });
   }
