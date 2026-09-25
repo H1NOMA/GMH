@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../domain/models/entity_kind.dart';
+import '../../../domain/models/kind_extension.dart';
 
 import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
@@ -44,11 +46,20 @@ class AttributeForm extends ConsumerWidget {
     Future<void> commit(String key, Object? value) =>
         service.setAttribute(entity.id, key, value);
     final template = EntityTemplates.of(entity.kind);
+    // Built-in kinds carry the world's own extra fields in a trailing
+    // section (see KindExtensions).
+    final all = entity.kind == EntityKind.custom
+        ? template.sections
+        : KindExtensions.sections(
+            template.sections,
+            ref.watch(kindExtensionFieldsProvider(
+                (worldId: entity.worldId, kind: entity.kind))),
+            KindExtensions.sectionTitle);
     final sections = sectionsOverride ??
         (sectionTitles == null
-            ? template.sections
+            ? all
             : [
-                for (final s in template.sections)
+                for (final s in all)
                   if (sectionTitles!.contains(s.title)) s
               ]);
     return Column(

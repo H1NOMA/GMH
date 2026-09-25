@@ -7,9 +7,11 @@ import 'package:archive/archive_io.dart';
 import 'package:path/path.dart' as p;
 
 import '../../core/result.dart';
+import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/entity.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/models/entity_template.dart';
+import '../../domain/models/kind_extension.dart';
 import '../../domain/models/link.dart';
 import '../../domain/repositories/repositories.dart';
 import '../../domain/services/templates/entity_templates.dart';
@@ -44,6 +46,7 @@ class MarkdownExporter {
     bool includeGmOnly = false,
     String relationsTitle = 'Relations',
     String Function(String role)? roleLabel,
+    Map<EntityKind, List<BlueprintField>> extraFields = const {},
   }) {
     final l = labels ?? PdfBookLabels.english;
     return guard(() async {
@@ -111,7 +114,10 @@ class MarkdownExporter {
                     ?.blueprint
                     .toSections(l.fieldsSection) ??
                 const <FieldSection>[]
-            : EntityTemplates.of(entity.kind).sections;
+            : KindExtensions.sections(
+                EntityTemplates.of(entity.kind).sections,
+                extraFields[entity.kind] ?? const [],
+                l.term(KindExtensions.sectionTitle));
         final fields = PdfExporter.attributeLines(entity,
             sections: sections,
             namesById: namesById,

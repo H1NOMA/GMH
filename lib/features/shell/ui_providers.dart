@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/providers.dart';
 import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
+import '../../domain/models/kind_extension.dart';
+import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/models/link.dart';
 import '../../domain/models/media_item.dart';
@@ -134,3 +136,18 @@ final trashProvider =
     StreamProvider.autoDispose.family<List<Entity>, String>(
   (ref, worldId) => ref.watch(entityRepositoryProvider).watchTrash(worldId),
 );
+
+/// The world's own extra fields for a built-in kind (empty when none).
+final kindExtensionFieldsProvider = Provider.autoDispose
+    .family<List<BlueprintField>, ({String worldId, EntityKind kind})>(
+        (ref, q) {
+  final objects = ref
+          .watch(worldObjectsProvider((
+            worldId: q.worldId,
+            type: WorldObjectTypes.kindExtension,
+            parentId: null,
+          )))
+          .valueOrNull ??
+      const [];
+  return KindExtensions.fieldsOf(KindExtensions.objectFor(objects, q.kind));
+});

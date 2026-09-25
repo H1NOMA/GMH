@@ -1876,4 +1876,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get relationsTitle => '关联';
+
+  @override
+  String kindFieldsTitle(String kind) {
+    return '自定义字段：$kind';
+  }
+
+  @override
+  String get kindFieldsHint => '此处添加的字段会显示在本世界中该类型的每个条目上，位于内置字段之后。';
+
+  @override
+  String get kindFieldsAction => '自定义字段';
 }

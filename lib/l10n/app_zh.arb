@@ -560,5 +560,8 @@
   "exportMarkdownTitle": "Markdown 笔记（Obsidian）",
   "exportMarkdownSubtitle": "包含图片的互链笔记文件夹压缩包——可作为 Obsidian 库或在任意编辑器中打开。",
   "shareMarkdownText": "GMH 世界笔记（Markdown）",
-  "relationsTitle": "关联"
+  "relationsTitle": "关联",
+  "kindFieldsTitle": "自定义字段：{kind}",
+  "kindFieldsHint": "此处添加的字段会显示在本世界中该类型的每个条目上，位于内置字段之后。",
+  "kindFieldsAction": "自定义字段"
 }

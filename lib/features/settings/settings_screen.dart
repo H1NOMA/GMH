@@ -12,6 +12,9 @@ import '../../app/template_l10n.dart';
 import '../../data/backup/pdf_exporter.dart';
 import '../../data/backup/pdf_fonts.dart';
 import '../../domain/models/entity_kind.dart';
+import '../../domain/models/world_object.dart';
+import '../../domain/models/kind_extension.dart';
+import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/link.dart';
 import '../../domain/models/world.dart';
 import '../../app/packs/setting_packs.dart';
@@ -161,6 +164,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               fonts: fonts,
               labels: labels,
               includeGmOnly: includeGmOnly,
+              extraFields: await _extraFields(),
             );
         if (!mounted) return;
         await result.fold(
@@ -207,6 +211,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   includeGmOnly: includeGmOnly,
                   relationsTitle: relationsTitle,
                   roleLabel: (role) => roleLabels[role] ?? role,
+                  extraFields: await _extraFields(),
                 );
         if (!mounted) return;
         await result.fold(
@@ -214,6 +219,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           (error) async => _notify(localizedError(context, error)),
         );
       });
+
+  /// The world's extra fields per built-in kind, for exports.
+  Future<Map<EntityKind, List<BlueprintField>>> _extraFields() async {
+    final objects = await ref
+        .read(worldObjectRepositoryProvider)
+        .list(widget.worldId, WorldObjectTypes.kindExtension);
+    return {
+      for (final kind in EntityKind.values)
+        if (KindExtensions.fieldsOf(KindExtensions.objectFor(objects, kind))
+            case final fields when fields.isNotEmpty)
+          kind: fields,
+    };
+  }
 
   /// null = cancelled; otherwise whether GM-only fields go into the export.
   Future<bool?> _askIncludeGmOnly({String? title}) {

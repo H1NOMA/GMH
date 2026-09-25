@@ -560,5 +560,8 @@
   "exportMarkdownTitle": "Markdown-Notizen (Obsidian)",
   "exportMarkdownSubtitle": "Ein ZIP-Ordner verknüpfter Notizen mit Bildern – als Obsidian-Vault oder in jedem Editor öffnen.",
   "shareMarkdownText": "GMH-Weltnotizen (Markdown)",
-  "relationsTitle": "Beziehungen"
+  "relationsTitle": "Beziehungen",
+  "kindFieldsTitle": "Eigene Felder: {kind}",
+  "kindFieldsHint": "Hier hinzugefügte Felder erscheinen bei jedem Eintrag dieser Art in dieser Welt, nach den eingebauten.",
+  "kindFieldsAction": "Felder anpassen"
 }

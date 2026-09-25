@@ -1952,4 +1952,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get relationsTitle => 'Relations';
+
+  @override
+  String kindFieldsTitle(String kind) {
+    return 'Champs personnalisés : $kind';
+  }
+
+  @override
+  String get kindFieldsHint =>
+      'Les champs ajoutés ici apparaissent sur chaque entrée de ce type dans ce monde, après les champs intégrés.';
+
+  @override
+  String get kindFieldsAction => 'Personnaliser les champs';
 }

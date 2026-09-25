@@ -3469,6 +3469,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Relations'**
   String get relationsTitle;
+
+  /// No description provided for @kindFieldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields: {kind}'**
+  String kindFieldsTitle(String kind);
+
+  /// No description provided for @kindFieldsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fields added here appear on every entry of this kind in this world, after the built-in ones.'**
+  String get kindFieldsHint;
+
+  /// No description provided for @kindFieldsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize fields'**
+  String get kindFieldsAction;
 }
 
 class _AppLocalizationsDelegate

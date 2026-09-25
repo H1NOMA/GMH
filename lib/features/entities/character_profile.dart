@@ -10,6 +10,7 @@ import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
 import '../attachments/attachments_panel.dart';
 import '../editor/lore_editor.dart';
+import '../../domain/models/kind_extension.dart';
 import 'widgets/attribute_form.dart';
 import 'widgets/cover_square.dart';
 import 'widgets/relations_panel.dart';
@@ -71,7 +72,10 @@ class _CharacterProfileState extends ConsumerState<CharacterProfile>
             const SizedBox(height: 6),
             AttributeForm(
               entity: entity,
-              sectionTitles: const ['General Information'],
+              sectionTitles: const [
+                'General Information',
+                KindExtensions.sectionTitle,
+              ],
             ),
           ],
         ),

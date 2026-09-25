@@ -964,5 +964,15 @@
   "exportMarkdownTitle": "Markdown notes (Obsidian)",
   "exportMarkdownSubtitle": "A zipped folder of linked notes with images — open it as an Obsidian vault or in any editor.",
   "shareMarkdownText": "GMH world notes (Markdown)",
-  "relationsTitle": "Relations"
+  "relationsTitle": "Relations",
+  "kindFieldsTitle": "Custom fields: {kind}",
+  "@kindFieldsTitle": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "kindFieldsHint": "Fields added here appear on every entry of this kind in this world, after the built-in ones.",
+  "kindFieldsAction": "Customize fields"
 }

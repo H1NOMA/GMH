@@ -6,6 +6,7 @@ import '../../app/nav_state.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/repositories/repositories.dart';
+import '../categories/category_constructor.dart';
 import '../categories/category_ui.dart';
 import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
@@ -116,6 +117,15 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
           ],
         ),
         actions: [
+          // Built-in kinds take extra per-world fields; custom sections
+          // edit theirs in the section constructor.
+          if (widget.kind != EntityKind.custom)
+            IconButton(
+              tooltip: context.l10n.kindFieldsAction,
+              icon: const Icon(Icons.tune),
+              onPressed: () => showKindFieldsEditor(context, ref,
+                  worldId: widget.worldId, kind: widget.kind),
+            ),
           IconButton(
             tooltip: grid ? context.l10n.viewAsList : context.l10n.viewAsGrid,
             icon: Icon(grid ? Icons.view_list_outlined : Icons.grid_view),

@@ -22,7 +22,8 @@ class SearchRepositoryImpl implements SearchRepository {
   /// rebuilt once, on first use.
   ///  * 2: CJK characters indexed as separate tokens; rows keyed by the
   ///    entity's rowid.
-  static const _indexVersion = 2;
+  ///  * 3: structured field values are searchable too.
+  static const _indexVersion = 3;
   static const _indexVersionKey = 'searchIndexVersion';
   Future<void>? _ready;
 
@@ -63,6 +64,30 @@ class SearchRepositoryImpl implements SearchRepository {
       '([\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f])'
       '(${SearchResult.snippetMarkerEnd})?\\s+(${SearchResult.snippetMarkerStart})?'
       '(?=[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f])');
+
+  /// Free-text values of an entry's fields (race, occupation, notes,
+  /// list items, checklist lines…) — entity references are links, not
+  /// words, and are left out.
+  static Iterable<String> _attributeText(Map<String, Object?> attributes) sync* {
+    Iterable<String> texts(Object? value) sync* {
+      switch (value) {
+        case String s when s.isNotEmpty && !s.startsWith('entity:'):
+          yield s;
+        case num n:
+          yield '$n';
+        case Map m when m['text'] is String:
+          yield m['text'] as String;
+        case List items:
+          for (final item in items) {
+            yield* texts(item);
+          }
+      }
+    }
+
+    for (final value in attributes.values) {
+      yield* texts(value);
+    }
+  }
 
   /// Undoes [spaceCjk] in snippets shown to the user.
   static String _unspaceCjk(String text) => text.replaceAllMapped(
@@ -182,7 +207,10 @@ class SearchRepositoryImpl implements SearchRepository {
             entityId,
             spaceCjk(entity.name),
             spaceCjk(entity.summary),
-            spaceCjk(doc?.plainText ?? ''),
+            spaceCjk([
+              doc?.plainText ?? '',
+              ..._attributeText(entity.attributes),
+            ].where((t) => t.isNotEmpty).join('\n')),
             spaceCjk(tagText),
           ],
         );

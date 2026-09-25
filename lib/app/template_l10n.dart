@@ -339,4 +339,5 @@ const _ru = <String, String>{
   'Type / Subtype': 'Тип / подтип',
   'Related Entries': 'Связанные записи',
   'CR': 'ПО',
+  'Custom Fields': 'Дополнительные поля',
 };

@@ -6,9 +6,11 @@ import 'package:pdf/widgets.dart' as pw;
 
 import '../../core/result.dart';
 import '../../core/utils/ids.dart';
+import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/entity.dart';
 import '../../domain/models/entity_kind.dart';
 import '../../domain/models/entity_template.dart';
+import '../../domain/models/kind_extension.dart';
 import '../../domain/repositories/repositories.dart';
 import '../../domain/services/templates/entity_templates.dart';
 import 'pdf_fonts.dart';
@@ -66,84 +68,108 @@ class PdfExporter {
     PdfBookLabels? labels,
     bool includeGmOnly = false,
     List<EntityKind>? kinds,
+    Map<EntityKind, List<BlueprintField>> extraFields = const {},
   }) {
     final l = labels ?? PdfBookLabels.english;
     return guard(() async {
-      final selectedKinds = kinds ??
-          [...EntityKind.worldKinds, ...EntityKind.libraryKinds];
-      final all = (await _entities.getAllEntities(worldId))
-          .where((e) => !e.isDeleted)
-          .toList();
+      final selectedKinds =
+          kinds ?? [...EntityKind.worldKinds, ...EntityKind.libraryKinds];
+      final all = (await _entities.getAllEntities(
+        worldId,
+      )).where((e) => !e.isDeleted).toList();
       final namesById = {for (final e in all) e.id: e.name};
       final theme = fonts.theme;
 
       final pdf = pw.Document(title: worldName);
-      pdf.addPage(pw.Page(
-        theme: theme,
-        pageFormat: PdfPageFormat.a4,
-        build: (context) => pw.Center(
-          child: pw.Column(
-            mainAxisAlignment: pw.MainAxisAlignment.center,
-            children: [
-              pw.Text(worldName,
+      pdf.addPage(
+        pw.Page(
+          theme: theme,
+          pageFormat: PdfPageFormat.a4,
+          build: (context) => pw.Center(
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text(
+                  worldName,
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
-                      fontSize: 38, fontWeight: pw.FontWeight.bold)),
-              pw.SizedBox(height: 16),
-              pw.Text(l.subtitle,
+                    fontSize: 38,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.SizedBox(height: 16),
+                pw.Text(
+                  l.subtitle,
                   style: const pw.TextStyle(
-                      fontSize: 16, color: PdfColors.grey700)),
-            ],
+                    fontSize: 16,
+                    color: PdfColors.grey700,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ));
+      );
 
       final customCategories = await _categories.categories(worldId);
-      final chapters = <(String, List<Entity>, List<FieldSection>? Function(Entity))>[
-        for (final kind in selectedKinds)
-          (
-            l.chapterTitle(kind),
-            all.where((e) => e.kind == kind).toList(),
-            (_) => null,
-          ),
-        for (final category in customCategories)
-          (
-            category.name,
-            all
-                .where((e) =>
-                    e.kind == EntityKind.custom &&
-                    e.customCategoryId == category.id)
-                .toList(),
-            (_) => category.blueprint.toSections(l.fieldsSection),
-          ),
-      ];
+      final chapters =
+          <(String, List<Entity>, List<FieldSection>? Function(Entity))>[
+            for (final kind in selectedKinds)
+              (
+                l.chapterTitle(kind),
+                all.where((e) => e.kind == kind).toList(),
+                (_) => KindExtensions.sections(
+                  EntityTemplates.of(kind).sections,
+                  extraFields[kind] ?? const [],
+                  l.term(KindExtensions.sectionTitle),
+                ),
+              ),
+            for (final category in customCategories)
+              (
+                category.name,
+                all
+                    .where(
+                      (e) =>
+                          e.kind == EntityKind.custom &&
+                          e.customCategoryId == category.id,
+                    )
+                    .toList(),
+                (_) => category.blueprint.toSections(l.fieldsSection),
+              ),
+          ];
 
       for (final (title, group, sectionsFor) in chapters) {
         if (group.isEmpty) continue;
         group.sort(
-            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+        );
         final flow = <pw.Widget>[pw.Header(level: 0, text: title)];
         for (final entity in group) {
           // Read-only: exporting must not create empty documents.
           final doc = await _documents.getByEntity(entity.id);
-          flow.addAll(_entityFlow(
-            entity,
-            lore: doc?.plainText ?? '',
-            lines: attributeLines(
+          flow.addAll(
+            _entityFlow(
               entity,
-              sections: sectionsFor(entity) ??
-                  EntityTemplates.of(entity.kind).sections,
-              namesById: namesById,
-              term: l.term,
-              includeGmOnly: includeGmOnly,
+              lore: doc?.plainText ?? '',
+              lines: attributeLines(
+                entity,
+                sections:
+                    sectionsFor(entity) ??
+                    EntityTemplates.of(entity.kind).sections,
+                namesById: namesById,
+                term: l.term,
+                includeGmOnly: includeGmOnly,
+              ),
             ),
-          ));
+          );
         }
-        pdf.addPage(pw.MultiPage(
-          theme: theme,
-          pageFormat: PdfPageFormat.a4,
-          build: (context) => flow,
-        ));
+        pdf.addPage(
+          pw.MultiPage(
+            theme: theme,
+            pageFormat: PdfPageFormat.a4,
+            build: (context) => flow,
+          ),
+        );
       }
 
       final file = File(outputPath);
@@ -158,26 +184,37 @@ class PdfExporter {
 
   /// A flat list of widgets for one entry — never one tall column, so a
   /// long entry flows across as many pages as it needs.
-  List<pw.Widget> _entityFlow(Entity entity,
-      {required String lore, required List<PdfAttributeLine> lines}) {
+  List<pw.Widget> _entityFlow(
+    Entity entity, {
+    required String lore,
+    required List<PdfAttributeLine> lines,
+  }) {
     return [
       pw.Header(level: 1, text: entity.name),
       if (entity.summary.isNotEmpty)
         pw.Paragraph(
-            text: entity.summary,
-            style: pw.TextStyle(fontSize: 11, fontStyle: pw.FontStyle.italic)),
+          text: entity.summary,
+          style: pw.TextStyle(fontSize: 11, fontStyle: pw.FontStyle.italic),
+        ),
       for (final line in lines)
         pw.Padding(
           padding: const pw.EdgeInsets.only(bottom: 2),
           child: pw.RichText(
-            text: pw.TextSpan(children: [
-              pw.TextSpan(
+            text: pw.TextSpan(
+              children: [
+                pw.TextSpan(
                   text: '${line.label}: ',
                   style: pw.TextStyle(
-                      fontSize: 10, fontWeight: pw.FontWeight.bold)),
-              pw.TextSpan(
-                  text: line.value, style: const pw.TextStyle(fontSize: 10)),
-            ]),
+                    fontSize: 10,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.TextSpan(
+                  text: line.value,
+                  style: const pw.TextStyle(fontSize: 10),
+                ),
+              ],
+            ),
           ),
         ),
       if (lines.isNotEmpty) pw.SizedBox(height: 6),

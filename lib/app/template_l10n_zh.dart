@@ -303,4 +303,5 @@ const templateZh = <String, String>{
   'Type / Subtype': '类型 / 子类型',
   'Related Entries': '相关条目',
   'CR': '挑战等级',
+  'Custom Fields': '自定义字段',
 };

@@ -1950,4 +1950,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get relationsTitle => 'Beziehungen';
+
+  @override
+  String kindFieldsTitle(String kind) {
+    return 'Eigene Felder: $kind';
+  }
+
+  @override
+  String get kindFieldsHint =>
+      'Hier hinzugefügte Felder erscheinen bei jedem Eintrag dieser Art in dieser Welt, nach den eingebauten.';
+
+  @override
+  String get kindFieldsAction => 'Felder anpassen';
 }

@@ -86,4 +86,22 @@ void main() {
         ['雪山神殿']);
     expect(await indexRows(), 1);
   });
+
+  test('field values are searchable, references are not', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final city = (await h.entityService.create(
+            worldId: world.id, kind: EntityKind.location, name: 'Ravenport'))
+        .value;
+    await h.entityService.create(
+      worldId: world.id,
+      kind: EntityKind.character,
+      name: 'Mira',
+      attributes: {
+        'occupation': 'Lighthouse keeper',
+        'homeLocation': 'entity:${city.id}',
+      },
+    );
+    expect(await find(world.id, 'lighthouse'), ['Mira']);
+    expect(await find(world.id, city.id), isEmpty);
+  });
 }

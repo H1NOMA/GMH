@@ -560,5 +560,8 @@
   "exportMarkdownTitle": "Notes Markdown (Obsidian)",
   "exportMarkdownSubtitle": "Un dossier zippé de notes liées avec images — à ouvrir comme coffre Obsidian ou dans tout éditeur.",
   "shareMarkdownText": "Notes du monde GMH (Markdown)",
-  "relationsTitle": "Relations"
+  "relationsTitle": "Relations",
+  "kindFieldsTitle": "Champs personnalisés : {kind}",
+  "kindFieldsHint": "Les champs ajoutés ici apparaissent sur chaque entrée de ce type dans ce monde, après les champs intégrés.",
+  "kindFieldsAction": "Personnaliser les champs"
 }

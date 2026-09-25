@@ -8,6 +8,9 @@ import '../../core/utils/ids.dart';
 import '../../domain/models/category_blueprint.dart';
 import '../../domain/models/custom_category.dart';
 import '../../domain/models/entity_template.dart';
+import '../../domain/models/world_object.dart';
+import '../../domain/models/kind_extension.dart';
+import '../../domain/models/entity_kind.dart';
 import 'category_ui.dart';
 
 /// The section constructor: a full builder for custom sections. Pick name
@@ -32,11 +35,49 @@ Future<String?> showCategoryConstructor(
   );
 }
 
+/// The constructor's field list alone, for a built-in kind: the world's
+/// own fields added after the kind's template fields (see KindExtensions).
+Future<void> showKindFieldsEditor(
+  BuildContext context,
+  WidgetRef ref, {
+  required String worldId,
+  required EntityKind kind,
+}) async {
+  final objects = await ref
+      .read(worldObjectRepositoryProvider)
+      .list(worldId, WorldObjectTypes.kindExtension);
+  if (!context.mounted) return;
+  await showDialog<String>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => Dialog(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 620, maxHeight: 680),
+        child: _CategoryConstructor(
+          worldId: worldId,
+          extensionKind: kind,
+          extensionFields:
+              KindExtensions.fieldsOf(KindExtensions.objectFor(objects, kind)),
+        ),
+      ),
+    ),
+  );
+}
+
 class _CategoryConstructor extends ConsumerStatefulWidget {
   final String worldId;
   final CustomCategory? existing;
 
-  const _CategoryConstructor({required this.worldId, this.existing});
+  /// Set in fields-only mode: editing a built-in kind's extra fields.
+  final EntityKind? extensionKind;
+  final List<BlueprintField> extensionFields;
+
+  const _CategoryConstructor({
+    required this.worldId,
+    this.existing,
+    this.extensionKind,
+    this.extensionFields = const [],
+  });
 
   @override
   ConsumerState<_CategoryConstructor> createState() =>
@@ -50,9 +91,9 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
   late Set<CategoryModule> _modules = {
     ...(widget.existing?.blueprint ?? CategoryBlueprint.standard).modules
   };
-  late List<BlueprintField> _fields = [
-    ...(widget.existing?.blueprint ?? CategoryBlueprint.standard).fields
-  ];
+  late List<BlueprintField> _fields = widget.extensionKind != null
+      ? [...widget.extensionFields]
+      : [...(widget.existing?.blueprint ?? CategoryBlueprint.standard).fields];
 
   @override
   void dispose() {
@@ -198,9 +239,21 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
 
   Future<void> _save() async {
     final name = _name.text.trim();
+    final kind = widget.extensionKind;
     // A double click must not create the category twice.
-    if (name.isEmpty || _saving) return;
+    if ((kind == null && name.isEmpty) || _saving) return;
     setState(() => _saving = true);
+    if (kind != null) {
+      try {
+        await KindExtensions.save(ref.read(worldObjectRepositoryProvider),
+            worldId: widget.worldId, kind: kind, fields: _fields);
+      } catch (_) {
+        if (mounted) setState(() => _saving = false);
+        rethrow;
+      }
+      if (mounted) Navigator.pop(context);
+      return;
+    }
     final blueprint =
         CategoryBlueprint(modules: _modules, fields: _fields);
     final repository = ref.read(categoryRepositoryProvider);
@@ -241,9 +294,12 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                    widget.existing == null
-                        ? l.constructorTitleNew
-                        : l.constructorTitleEdit,
+                    widget.extensionKind != null
+                        ? l.kindFieldsTitle(
+                            widget.extensionKind!.localizedPlural(context))
+                        : widget.existing == null
+                            ? l.constructorTitleNew
+                            : l.constructorTitleEdit,
                     style: Theme.of(context).textTheme.titleLarge),
               ),
               IconButton(
@@ -258,6 +314,11 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
             children: [
+              if (widget.extensionKind != null)
+                Text(l.kindFieldsHint,
+                    style: TextStyle(
+                        fontSize: 12, color: GmhColors.parchmentDim))
+              else ...[
               TextField(
                 controller: _name,
                 autofocus: widget.existing == null,
@@ -337,6 +398,7 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
                     }
                   }),
                 ),
+              ],
               if (_modules.contains(CategoryModule.fields)) ...[
                 const SizedBox(height: 14),
                 Row(
@@ -438,8 +500,10 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
               const SizedBox(width: 8),
               FilledButton(
                 onPressed: _saving ? null : _save,
-                child: Text(
-                    widget.existing == null ? l.create : l.save),
+                child: Text(widget.existing == null &&
+                        widget.extensionKind == null
+                    ? l.create
+                    : l.save),
               ),
             ],
           ),

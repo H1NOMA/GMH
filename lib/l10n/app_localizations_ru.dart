@@ -1956,4 +1956,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get relationsTitle => 'Связи';
+
+  @override
+  String kindFieldsTitle(String kind) {
+    return 'Свои поля: $kind';
+  }
+
+  @override
+  String get kindFieldsHint =>
+      'Добавленные здесь поля появятся у каждой записи этого типа в этом мире — после встроенных.';
+
+  @override
+  String get kindFieldsAction => 'Настроить поля';
 }

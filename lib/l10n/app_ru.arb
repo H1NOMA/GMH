@@ -560,5 +560,8 @@
   "exportMarkdownTitle": "Заметки Markdown (Obsidian)",
   "exportMarkdownSubtitle": "Архив папки со связанными заметками и изображениями — откройте как хранилище Obsidian или в любом редакторе.",
   "shareMarkdownText": "Заметки мира GMH (Markdown)",
-  "relationsTitle": "Связи"
+  "relationsTitle": "Связи",
+  "kindFieldsTitle": "Свои поля: {kind}",
+  "kindFieldsHint": "Добавленные здесь поля появятся у каждой записи этого типа в этом мире — после встроенных.",
+  "kindFieldsAction": "Настроить поля"
 }

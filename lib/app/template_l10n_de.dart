@@ -304,4 +304,5 @@ const templateDe = <String, String>{
   'Type / Subtype': 'Typ / Untertyp',
   'Related Entries': 'Verknüpfte Einträge',
   'CR': 'HG',
+  'Custom Fields': 'Eigene Felder',
 };

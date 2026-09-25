@@ -304,4 +304,5 @@ const templateFr = <String, String>{
   'Type / Subtype': 'Type / sous-type',
   'Related Entries': 'Entrées liées',
   'CR': 'FP',
+  'Custom Fields': 'Champs personnalisés',
 };

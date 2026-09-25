@@ -170,4 +170,30 @@ void main() {
     await app.settle();
     expect(tabCount(), 2);
   });
+
+  testWidgets('a custom field added to a kind shows on its entries',
+      (tester) async {
+    final app = await start(tester);
+    final mira = await entry(app, EntityKind.character, 'Mira');
+    await app.pump(Routes.browse(worldId, EntityKind.character));
+
+    await tester.tap(find.byTooltip('Customize fields'));
+    await app.settle();
+    await tester.tap(find.text('Add field').first);
+    await app.settle();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField))
+            .first,
+        'Sanity');
+    await tester.tap(find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.widgetWithText(FilledButton, 'Add field')));
+    await app.settle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await app.settle();
+
+    await app.go(Routes.entity(worldId, mira.id));
+    expect(find.text('Sanity'), findsWidgets);
+  });
 }

@@ -1940,4 +1940,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get relationsTitle => 'Relations';
+
+  @override
+  String kindFieldsTitle(String kind) {
+    return 'Custom fields: $kind';
+  }
+
+  @override
+  String get kindFieldsHint =>
+      'Fields added here appear on every entry of this kind in this world, after the built-in ones.';
+
+  @override
+  String get kindFieldsAction => 'Customize fields';
 }
