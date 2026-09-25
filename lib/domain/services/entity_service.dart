@@ -89,6 +89,40 @@ class EntityService {
     });
   }
 
+  /// Renames against the freshest row (only name and summary change).
+  Future<Result<Entity>> rename(String entityId,
+      {required String name, required String summary}) {
+    return guard(() async {
+      final trimmed = name.trim();
+      if (trimmed.isEmpty) {
+        throw const ValidationException('Name cannot be empty.');
+      }
+      final current = await _entities.getEntity(entityId);
+      if (current == null) {
+        throw const ValidationException('Entry no longer exists.');
+      }
+      final updated =
+          current.copyWith(name: trimmed, summary: summary.trim());
+      await _entities.updateEntity(updated);
+      await _search.reindexEntity(entityId);
+      return updated;
+    });
+  }
+
+  /// Sets (or clears) the cover image against the freshest row. With
+  /// [onlyIfEmpty], an existing cover is kept — used when the first image
+  /// added to an entry becomes its cover.
+  Future<Result<void>> setCover(String entityId, String? mediaId,
+      {bool onlyIfEmpty = false}) {
+    return guard(() async {
+      final current = await _entities.getEntity(entityId);
+      if (current == null) return;
+      if (onlyIfEmpty && current.coverMediaId != null) return;
+      await _entities.updateEntity(
+          current.copyWith(coverMediaId: () => mediaId));
+    });
+  }
+
   Future<Result<void>> setFavorite(String id, bool favorite) =>
       guard(() => _entities.setFavorite(id, favorite));
 

@@ -1255,4 +1255,7 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get searchIndexFailed =>
       'Die Welt wurde wiederhergestellt, aber die Suche konnte nicht neu aufgebaut werden. Starte die App neu, um es erneut zu versuchen.';
+
+  @override
+  String get fieldNotANumber => 'Zahl eingeben';
 }

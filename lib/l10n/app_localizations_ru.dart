@@ -1255,4 +1255,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get searchIndexFailed =>
       'Мир восстановлен, но поиск перестроить не удалось. Перезапустите приложение, чтобы повторить.';
+
+  @override
+  String get fieldNotANumber => 'Введите число';
 }

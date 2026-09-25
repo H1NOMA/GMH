@@ -253,7 +253,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
       case 'cover':
         await ref
             .read(entityServiceProvider)
-            .update(entity.copyWith(coverMediaId: () => item.id));
+            .setCover(entity.id, item.id);
       case 'rename':
         final name = await _promptText(
             title: context.l10n.renameAttachmentTitle,
@@ -305,7 +305,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
           if (entity.coverMediaId == item.id) {
             await ref
                 .read(entityServiceProvider)
-                .update(entity.copyWith(coverMediaId: () => null));
+                .setCover(entity.id, null);
           }
           await media.deleteIfUnreferenced(item.id);
         }

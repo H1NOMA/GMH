@@ -34,14 +34,15 @@ class _EditableCoverSquareState extends ConsumerState<EditableCoverSquare> {
         await pickImageFiles(dialogTitle: title, allowMultiple: false);
     final file = files.firstOrNull;
     if (file == null) return;
-    final imported =
-        await importXFiles(ref, worldId: entity.worldId, files: [file]);
-    final item = imported.firstOrNull;
-    if (item == null) return;
-    await ref.read(mediaRepositoryProvider).addToGallery(entity.id, item.id);
-    await ref
-        .read(entityServiceProvider)
-        .update(entity.copyWith(coverMediaId: () => item.id));
+    if (!mounted) return;
+    final media = ref.read(mediaRepositoryProvider);
+    final entities = ref.read(entityServiceProvider);
+    final bytes = await file.readAsBytes();
+    if (bytes.isEmpty) return;
+    final item = await media.import(
+        worldId: entity.worldId, fileName: file.name, bytes: bytes);
+    await media.addToGallery(entity.id, item.id);
+    await entities.setCover(entity.id, item.id);
   }
 
   @override

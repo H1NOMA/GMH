@@ -22,19 +22,25 @@ class EntityGalleryStrip extends ConsumerWidget {
 
   Future<void> _addImages(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
+    // Resolve services up front: the page may be gone by the time the
+    // picker and the import return, and a dead WidgetRef throws.
+    final media = ref.read(mediaRepositoryProvider);
+    final entities = ref.read(entityServiceProvider);
     final files = await pickImageFiles(dialogTitle: l10n.addImage);
     if (files.isEmpty) return;
-    final imported =
-        await importXFiles(ref, worldId: entity.worldId, files: files);
-    final media = ref.read(mediaRepositoryProvider);
+    final imported = [
+      for (final file in files)
+        if ((await file.readAsBytes()) case final bytes when bytes.isNotEmpty)
+          await media.import(
+              worldId: entity.worldId, fileName: file.name, bytes: bytes),
+    ];
     for (final item in imported) {
       await media.addToGallery(entity.id, item.id);
     }
-    // First image attached to a bare entry doubles as its cover.
-    if (entity.coverMediaId == null && imported.isNotEmpty) {
-      await ref
-          .read(entityServiceProvider)
-          .update(entity.copyWith(coverMediaId: () => imported.first.id));
+    // The first image attached to a bare entry doubles as its cover —
+    // decided against the freshest row, not this widget's snapshot.
+    if (imported.isNotEmpty) {
+      await entities.setCover(entity.id, imported.first.id, onlyIfEmpty: true);
     }
   }
 

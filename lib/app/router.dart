@@ -51,7 +51,13 @@ Page<void> _toolPage(GoRouterState state, {required String? objectId}) {
   );
 }
 
-GoRouter createRouter({required String initialLocation}) {
+/// [shellNavigatorKey] lets the app tell whether a popup, dropdown or
+/// bottom sheet is open inside the shell (pages are always replaced via
+/// go(), so the shell stack holds more than one route only then).
+GoRouter createRouter({
+  required String initialLocation,
+  GlobalKey<NavigatorState>? shellNavigatorKey,
+}) {
   return GoRouter(
     initialLocation: initialLocation,
     // A location that matches no route (e.g. restored from an older app
@@ -67,6 +73,7 @@ GoRouter createRouter({required String initialLocation}) {
         builder: (context, state) => const WorldPickerScreen(),
       ),
       ShellRoute(
+        navigatorKey: shellNavigatorKey,
         builder: (context, state, child) {
           final worldId = state.pathParameters['worldId']!;
           return AppShell(worldId: worldId, child: child);
@@ -121,6 +128,9 @@ GoRouter createRouter({required String initialLocation}) {
             path: '/w/:worldId/graph',
             pageBuilder: (context, state) => NoTransitionPage(
               child: GraphScreen(
+                // /graph and /graph?focus=X are different views: a fresh
+                // state per URL instead of a reused local-graph state.
+                key: ValueKey(state.uri.toString()),
                 worldId: state.pathParameters['worldId']!,
                 focusEntityId: state.uri.queryParameters['focus'],
               ),

@@ -1205,4 +1205,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchIndexFailed => '世界已恢复，但搜索索引重建失败。请重启应用重试。';
+
+  @override
+  String get fieldNotANumber => '请输入数字';
 }

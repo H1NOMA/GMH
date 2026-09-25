@@ -41,9 +41,31 @@ class _QuickSearchIntent extends Intent {
 }
 
 
+/// A shortcut action that stands down while any modal is open, so the key
+/// falls through to the dialog/popup instead of changing the page behind
+/// it.
+class _PageAction<T extends Intent> extends CallbackAction<T> {
+  final bool Function() modalOpen;
+  _PageAction({required this.modalOpen, required super.onInvoke});
+
+  @override
+  bool isEnabled(T intent) => !modalOpen();
+}
+
 class _GmhAppState extends ConsumerState<GmhApp> {
-  late final GoRouter _router =
-      createRouter(initialLocation: widget.initialLocation);
+  final _shellNavigatorKey = GlobalKey<NavigatorState>();
+  late final GoRouter _router = createRouter(
+    initialLocation: widget.initialLocation,
+    shellNavigatorKey: _shellNavigatorKey,
+  );
+
+  /// True while a dialog (root navigator) or a popup menu, dropdown or
+  /// bottom sheet (shell navigator) is open.
+  bool _modalOpen() {
+    final root = _router.routerDelegate.navigatorKey.currentState;
+    final shell = _shellNavigatorKey.currentState;
+    return (root?.canPop() ?? false) || (shell?.canPop() ?? false);
+  }
 
   @override
   void initState() {
@@ -107,7 +129,7 @@ class _GmhAppState extends ConsumerState<GmhApp> {
       return KeyEventResult.ignored;
     }
     final navigator = _router.routerDelegate.navigatorKey.currentState;
-    if (navigator == null || navigator.canPop()) {
+    if (navigator == null || _modalOpen()) {
       return KeyEventResult.ignored;
     }
     final location = _router.routerDelegate.currentConfiguration.uri.path;
@@ -138,14 +160,16 @@ class _GmhAppState extends ConsumerState<GmhApp> {
       },
       actions: {
         ...WidgetsApp.defaultActions,
-        _BackIntent: CallbackAction<_BackIntent>(
+        _BackIntent: _PageAction<_BackIntent>(
+            modalOpen: _modalOpen,
             onInvoke: (_) =>
                 ref.read(workspaceTabsProvider.notifier).goBack()),
-        _ForwardIntent: CallbackAction<_ForwardIntent>(
+        _ForwardIntent: _PageAction<_ForwardIntent>(
+            modalOpen: _modalOpen,
             onInvoke: (_) =>
                 ref.read(workspaceTabsProvider.notifier).goForward()),
-        _QuickSearchIntent: CallbackAction<_QuickSearchIntent>(
-            onInvoke: (_) => _goToSearch()),
+        _QuickSearchIntent: _PageAction<_QuickSearchIntent>(
+            modalOpen: _modalOpen, onInvoke: (_) => _goToSearch()),
       },
       debugShowCheckedModeBanner: false,
       theme: GmhTheme.light(),
@@ -167,7 +191,9 @@ class _GmhAppState extends ConsumerState<GmhApp> {
           child: Listener(
             behavior: HitTestBehavior.translucent,
             onPointerDown: (event) {
-              if (event.kind != PointerDeviceKind.mouse) return;
+              if (event.kind != PointerDeviceKind.mouse || _modalOpen()) {
+                return;
+              }
               if (event.buttons == kBackMouseButton) {
                 ref.read(workspaceTabsProvider.notifier).goBack();
               } else if (event.buttons == kForwardMouseButton) {

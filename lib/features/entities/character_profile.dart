@@ -377,16 +377,12 @@ class _AbilityScoreGrid extends ConsumerWidget {
     // Release the controller only once the dialog route is fully gone.
     dialogRoute?.completed.whenComplete(controller.dispose);
     if (saved != true) return;
-    final attributes = Map<String, Object?>.of(entity.attributes);
-    final parsed = num.tryParse(text);
-    if (parsed == null) {
-      attributes.remove(key);
-    } else {
-      attributes[key] = parsed;
-    }
+    // Single-attribute write against the freshest row: a full-row update
+    // from this snapshot would revert fields committed moments ago (e.g.
+    // Hit Points committed by focus loss when this dialog opened).
     await ref
         .read(entityServiceProvider)
-        .update(entity.copyWith(attributes: attributes));
+        .setAttribute(entity.id, key, num.tryParse(text.replaceAll(',', '.')));
   }
 
   @override

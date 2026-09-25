@@ -116,9 +116,13 @@ class _EntityScaffold extends ConsumerWidget {
       summaryController.dispose();
     });
     if (saved != true) return;
-    await ref
+    final result = await ref
         .read(entityServiceProvider)
-        .update(entity.copyWith(name: name, summary: summary));
+        .rename(entity.id, name: name, summary: summary);
+    if (result.isErr && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(localizedError(context, result.error))));
+    }
   }
 
   Future<void> _delete(BuildContext context, WidgetRef ref) async {

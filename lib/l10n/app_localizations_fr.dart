@@ -1257,4 +1257,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get searchIndexFailed =>
       'Le monde a été restauré, mais la recherche n\'a pas pu être reconstruite. Relancez l\'application pour réessayer.';
+
+  @override
+  String get fieldNotANumber => 'Saisissez un nombre';
 }

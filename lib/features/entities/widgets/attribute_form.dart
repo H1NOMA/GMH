@@ -33,18 +33,16 @@ class AttributeForm extends ConsumerWidget {
     this.sectionsOverride,
   });
 
-  Future<void> _setValue(
-      WidgetRef ref, String key, Object? value) async {
-    // Single-field write through the service, which re-reads the freshest
-    // row: this widget's build-time snapshot must not roll back another
-    // field committed a moment ago (e.g. via a dispose-commit).
-    await ref
-        .read(entityServiceProvider)
-        .setAttribute(entity.id, key, value);
-  }
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Captured while the element is alive: text fields commit from
+    // dispose (e.g. Ctrl+K away with the cursor still in a field), when
+    // this ref can no longer be read.
+    final service = ref.read(entityServiceProvider);
+    Future<void> commit(String key, Object? value) =>
+        service.setAttribute(entity.id, key, value);
     final template = EntityTemplates.of(entity.kind);
     final sections = sectionsOverride ??
         (sectionTitles == null
@@ -76,7 +74,7 @@ class AttributeForm extends ConsumerWidget {
                 key: ValueKey('${entity.id}:${field.key}'),
                 entity: entity,
                 field: field,
-                onChanged: (value) => _setValue(ref, field.key, value),
+                onChanged: (value) => commit(field.key, value),
               ),
             ),
         ],
@@ -123,8 +121,8 @@ class _FieldEditor extends ConsumerWidget {
           hint: trTemplate(context, field.hint),
           initialValue: value?.toString() ?? '',
           keyboardType: TextInputType.number,
-          onCommitted: (text) =>
-              onChanged(text.isEmpty ? null : num.tryParse(text)),
+          numeric: true,
+          onCommitted: (text) => onChanged(parseFieldNumber(text)),
         );
       case FieldType.select:
         return DropdownButtonFormField<String>(
@@ -197,6 +195,10 @@ class _TextValueField extends StatefulWidget {
   final TextInputType? keyboardType;
   final ValueChanged<String> onCommitted;
 
+  /// Number field: invalid input is flagged and never committed (a typo
+  /// must not silently erase the stored value).
+  final bool numeric;
+
   const _TextValueField({
     required this.label,
     required this.hint,
@@ -204,6 +206,7 @@ class _TextValueField extends StatefulWidget {
     required this.onCommitted,
     this.maxLines = 1,
     this.keyboardType,
+    this.numeric = false,
   });
 
   @override
@@ -215,23 +218,45 @@ class _TextValueFieldState extends State<_TextValueField> {
       TextEditingController(text: widget.initialValue);
   final _focusNode = FocusNode();
 
+  /// The last value this field wrote (or received from the database):
+  /// only real edits are committed, never a stale echo.
+  late String _lastCommitted = widget.initialValue;
+
+  bool get _invalid =>
+      widget.numeric &&
+      _controller.text.trim().isNotEmpty &&
+      parseFieldNumber(_controller.text) == null;
+
+  void _commit() {
+    final text = _controller.text.trim();
+    if (text == _lastCommitted || _invalid) return;
+    _lastCommitted = text;
+    widget.onCommitted(text);
+  }
+
   @override
   void initState() {
     super.initState();
     // Commit on focus loss — avoids a DB write per keystroke.
     _focusNode.addListener(() {
-      if (!_focusNode.hasFocus &&
-          _controller.text.trim() != widget.initialValue) {
-        widget.onCommitted(_controller.text.trim());
-      }
+      if (!_focusNode.hasFocus) _commit();
     });
   }
 
   @override
-  void dispose() {
-    if (_controller.text.trim() != widget.initialValue) {
-      widget.onCommitted(_controller.text.trim());
+  void didUpdateWidget(covariant _TextValueField old) {
+    super.didUpdateWidget(old);
+    // Adopt changes made elsewhere (another field's write, a layout switch,
+    // a restore) unless the user is typing here right now.
+    if (widget.initialValue != old.initialValue && !_focusNode.hasFocus) {
+      _controller.text = widget.initialValue;
+      _lastCommitted = widget.initialValue;
     }
+  }
+
+  @override
+  void dispose() {
+    _commit();
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -245,11 +270,13 @@ class _TextValueFieldState extends State<_TextValueField> {
       maxLines: widget.maxLines,
       keyboardType: widget.keyboardType,
       style: const TextStyle(fontSize: 13.5),
+      onChanged: widget.numeric ? (_) => setState(() {}) : null,
       decoration: InputDecoration(
         labelText: widget.label,
         hintText: widget.hint.isEmpty ? null : widget.hint,
+        errorText: _invalid ? context.l10n.fieldNotANumber : null,
       ),
-      onSubmitted: widget.onCommitted,
+      onSubmitted: (_) => _commit(),
     );
   }
 }
@@ -621,4 +648,13 @@ class _EmptyHint extends StatelessWidget {
             style: TextStyle(
                 fontSize: 12, color: GmhColors.parchmentFaint)),
       );
+}
+
+/// Parses a number typed into a field; accepts a decimal comma ("2,5").
+/// Empty -> null (clears the field); unparsable -> null as well, but the
+/// field never commits unparsable input in the first place.
+num? parseFieldNumber(String text) {
+  final t = text.trim().replaceAll(' ', '').replaceAll(',', '.');
+  if (t.isEmpty) return null;
+  return num.tryParse(t);
 }

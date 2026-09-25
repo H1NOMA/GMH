@@ -360,5 +360,6 @@
   "importReplaceTitle": "Remplacer « {name} » ?",
   "importReplaceBody": "Cette archive contient un monde qui existe déjà ici. L'import remplace entièrement sa version actuelle.",
   "importReplaceAction": "Remplacer",
-  "searchIndexFailed": "Le monde a été restauré, mais la recherche n'a pas pu être reconstruite. Relancez l'application pour réessayer."
+  "searchIndexFailed": "Le monde a été restauré, mais la recherche n'a pas pu être reconstruite. Relancez l'application pour réessayer.",
+  "fieldNotANumber": "Saisissez un nombre"
 }

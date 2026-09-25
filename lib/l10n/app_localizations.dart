@@ -2269,6 +2269,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The world was restored, but search could not be rebuilt. Restart the app to retry.'**
   String get searchIndexFailed;
+
+  /// No description provided for @fieldNotANumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number'**
+  String get fieldNotANumber;
 }
 
 class _AppLocalizationsDelegate

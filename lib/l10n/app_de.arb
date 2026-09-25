@@ -360,5 +360,6 @@
   "importReplaceTitle": "„{name}“ ersetzen?",
   "importReplaceBody": "Dieses Archiv enthält eine Welt, die hier bereits existiert. Der Import ersetzt ihre aktuelle Fassung vollständig.",
   "importReplaceAction": "Ersetzen",
-  "searchIndexFailed": "Die Welt wurde wiederhergestellt, aber die Suche konnte nicht neu aufgebaut werden. Starte die App neu, um es erneut zu versuchen."
+  "searchIndexFailed": "Die Welt wurde wiederhergestellt, aber die Suche konnte nicht neu aufgebaut werden. Starte die App neu, um es erneut zu versuchen.",
+  "fieldNotANumber": "Zahl eingeben"
 }

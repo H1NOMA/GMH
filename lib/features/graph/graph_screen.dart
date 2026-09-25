@@ -164,13 +164,17 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     });
   }
 
+  final _paintKey = GlobalKey();
+
   void _onTapUp(TapUpDetails details) {
     final simulation = _simulation;
     if (simulation == null) return;
     final scenePoint =
         _transformController.toScene(details.localPosition);
-    // Canvas origin is centered by the painter.
-    final size = context.size ?? Size.zero;
+    // Canvas origin is centered by the painter — on the painted area, not
+    // the whole screen (which includes the app bar and would shift every
+    // hit by half its height).
+    final size = _paintKey.currentContext?.size ?? Size.zero;
     final point =
         scenePoint - Offset(size.width / 2, size.height / 2);
 
@@ -271,6 +275,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
                           constrained: true,
                           child: SizedBox.expand(
                             child: CustomPaint(
+                              key: _paintKey,
                               painter: _GraphPainter(
                                 simulation: simulation,
                                 entitiesById: _entitiesById,

@@ -1249,4 +1249,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get searchIndexFailed =>
       'The world was restored, but search could not be rebuilt. Restart the app to retry.';
+
+  @override
+  String get fieldNotANumber => 'Enter a number';
 }
