@@ -1863,4 +1863,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tabCloseRight => '关闭右侧标签页';
+
+  @override
+  String get exportMarkdownTitle => 'Markdown 笔记（Obsidian）';
+
+  @override
+  String get exportMarkdownSubtitle =>
+      '包含图片的互链笔记文件夹压缩包——可作为 Obsidian 库或在任意编辑器中打开。';
+
+  @override
+  String get shareMarkdownText => 'GMH 世界笔记（Markdown）';
+
+  @override
+  String get relationsTitle => '关联';
 }

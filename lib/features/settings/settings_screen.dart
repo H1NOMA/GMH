@@ -12,6 +12,7 @@ import '../../app/template_l10n.dart';
 import '../../data/backup/pdf_exporter.dart';
 import '../../data/backup/pdf_fonts.dart';
 import '../../domain/models/entity_kind.dart';
+import '../../domain/models/link.dart';
 import '../../domain/models/world.dart';
 import '../../app/packs/setting_packs.dart';
 import '../worlds/world_editor_dialog.dart';
@@ -168,14 +169,60 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
       });
 
-  /// null = cancelled; otherwise whether GM-only fields go into the book.
-  Future<bool?> _askIncludeGmOnly() {
+  Future<void> _exportMarkdown() => _run(() async {
+        final includeGmOnly =
+            await _askIncludeGmOnly(title: context.l10n.exportMarkdownTitle);
+        if (includeGmOnly == null || !mounted) return;
+        await flushPendingSaves();
+        if (!mounted) return;
+        final l = context.l10n;
+        final lang = Localizations.localeOf(context).languageCode;
+        final chapterTitles = {
+          for (final kind in EntityKind.values)
+            kind: kind.localizedPlural(context),
+        };
+        final roleLabels = <String, String>{};
+        String roleLabel(String role) =>
+            roleLabels[role] ??= localizedRoleLabel(context, role);
+        for (final role in LinkRoles.suggestions) {
+          roleLabel(role);
+        }
+        final labels = PdfBookLabels(
+          subtitle: l.pdfBookSubtitle,
+          chapterTitle: (kind) => chapterTitles[kind] ?? kind.pluralLabel,
+          term: (term) => trTemplateFor(lang, term),
+          fieldsSection: l.blueprintFieldsSection,
+        );
+        final relationsTitle = l.relationsTitle;
+        final world =
+            await ref.read(worldRepositoryProvider).getWorld(widget.worldId);
+        final dir = await _exportsDir();
+        final path = p.join(dir, '${_fileStem(world)}-notes.zip');
+        final result =
+            await ref.read(markdownExporterProvider).exportVault(
+                  worldId: widget.worldId,
+                  worldName: world?.name ?? 'World',
+                  outputPath: path,
+                  labels: labels,
+                  includeGmOnly: includeGmOnly,
+                  relationsTitle: relationsTitle,
+                  roleLabel: (role) => roleLabels[role] ?? role,
+                );
+        if (!mounted) return;
+        await result.fold(
+          (path) => _shareFile(path, context.l10n.shareMarkdownText),
+          (error) async => _notify(localizedError(context, error)),
+        );
+      });
+
+  /// null = cancelled; otherwise whether GM-only fields go into the export.
+  Future<bool?> _askIncludeGmOnly({String? title}) {
     var include = false;
     return showDialog<bool>(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text(context.l10n.exportPdfTitle),
+          title: Text(title ?? context.l10n.exportPdfTitle),
           content: SizedBox(
             width: 440,
             child: SwitchListTile(
@@ -481,6 +528,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   subtitle: Text(l.exportPdfSubtitle,
                       style: const TextStyle(fontSize: 11.5)),
                   onTap: _exportPdf,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.notes_outlined),
+                  title: Text(l.exportMarkdownTitle),
+                  subtitle: Text(l.exportMarkdownSubtitle,
+                      style: const TextStyle(fontSize: 11.5)),
+                  onTap: _exportMarkdown,
                 ),
               ],
             ),

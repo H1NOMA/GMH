@@ -30,6 +30,11 @@ class GraphScreen extends ConsumerStatefulWidget {
   ConsumerState<GraphScreen> createState() => _GraphScreenState();
 }
 
+/// Top-level on purpose: a closure made inside the State would capture it
+/// (and its ref) into the isolate message, which cannot be sent.
+Future<GraphSimulation> _settleInBackground(GraphSimulation simulation) =>
+    Isolate.run(() => simulation..settle());
+
 /// Display cap so layout and painting stay smooth far past 10k entities —
 /// the graph shows the most connected nodes and the UI says so.
 const _maxGraphNodes = 400;
@@ -160,7 +165,7 @@ class _GraphScreenState extends ConsumerState<GraphScreen>
     // (small graphs settle faster than an isolate spawns).
     final unsettled = GraphSimulation(nodes: nodes, edges: edges);
     final simulation = nodes.length > 60
-        ? await Isolate.run(() => unsettled..settle())
+        ? await _settleInBackground(unsettled)
         : (unsettled..settle());
 
     if (!mounted || generation != _buildGeneration) return;

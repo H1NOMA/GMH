@@ -556,5 +556,9 @@
   "tabDuplicate": "Dupliquer l’onglet",
   "tabClose": "Fermer l’onglet",
   "tabCloseOthers": "Fermer les autres onglets",
-  "tabCloseRight": "Fermer les onglets à droite"
+  "tabCloseRight": "Fermer les onglets à droite",
+  "exportMarkdownTitle": "Notes Markdown (Obsidian)",
+  "exportMarkdownSubtitle": "Un dossier zippé de notes liées avec images — à ouvrir comme coffre Obsidian ou dans tout éditeur.",
+  "shareMarkdownText": "Notes du monde GMH (Markdown)",
+  "relationsTitle": "Relations"
 }

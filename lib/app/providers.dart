@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/backup/backup_service.dart';
+import '../data/backup/markdown_exporter.dart';
 import '../data/backup/pdf_exporter.dart';
 import '../data/backup/project_archive_service.dart';
 import '../data/db/app_database.dart';
@@ -120,6 +121,17 @@ final backupServiceProvider = Provider<BackupService>(
     ref.watch(projectArchiveServiceProvider),
     ref.watch(mediaVaultProvider),
     ref.watch(settingsRepositoryProvider),
+  ),
+);
+
+final markdownExporterProvider = Provider<MarkdownExporter>(
+  (ref) => MarkdownExporter(
+    ref.watch(entityRepositoryProvider),
+    ref.watch(documentRepositoryProvider),
+    ref.watch(categoryRepositoryProvider),
+    ref.watch(linkRepositoryProvider),
+    ref.watch(mediaRepositoryProvider),
+    ref.watch(tagRepositoryProvider),
   ),
 );
 

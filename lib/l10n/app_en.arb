@@ -960,5 +960,9 @@
   "tabDuplicate": "Duplicate tab",
   "tabClose": "Close tab",
   "tabCloseOthers": "Close other tabs",
-  "tabCloseRight": "Close tabs to the right"
+  "tabCloseRight": "Close tabs to the right",
+  "exportMarkdownTitle": "Markdown notes (Obsidian)",
+  "exportMarkdownSubtitle": "A zipped folder of linked notes with images — open it as an Obsidian vault or in any editor.",
+  "shareMarkdownText": "GMH world notes (Markdown)",
+  "relationsTitle": "Relations"
 }

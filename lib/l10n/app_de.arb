@@ -556,5 +556,9 @@
   "tabDuplicate": "Tab duplizieren",
   "tabClose": "Tab schließen",
   "tabCloseOthers": "Andere Tabs schließen",
-  "tabCloseRight": "Tabs rechts schließen"
+  "tabCloseRight": "Tabs rechts schließen",
+  "exportMarkdownTitle": "Markdown-Notizen (Obsidian)",
+  "exportMarkdownSubtitle": "Ein ZIP-Ordner verknüpfter Notizen mit Bildern – als Obsidian-Vault oder in jedem Editor öffnen.",
+  "shareMarkdownText": "GMH-Weltnotizen (Markdown)",
+  "relationsTitle": "Beziehungen"
 }

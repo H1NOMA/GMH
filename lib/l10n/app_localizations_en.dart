@@ -1927,4 +1927,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tabCloseRight => 'Close tabs to the right';
+
+  @override
+  String get exportMarkdownTitle => 'Markdown notes (Obsidian)';
+
+  @override
+  String get exportMarkdownSubtitle =>
+      'A zipped folder of linked notes with images — open it as an Obsidian vault or in any editor.';
+
+  @override
+  String get shareMarkdownText => 'GMH world notes (Markdown)';
+
+  @override
+  String get relationsTitle => 'Relations';
 }

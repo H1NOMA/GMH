@@ -189,8 +189,7 @@ class PdfExporter {
 
   /// Structured fields in template order with translated labels; entity
   /// references resolved to names; GM-only fields dropped unless
-  /// [includeGmOnly].
-  @visibleForTesting
+  /// [includeGmOnly]. Shared with the Markdown export.
   static List<PdfAttributeLine> attributeLines(
     Entity entity, {
     required List<FieldSection> sections,

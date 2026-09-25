@@ -1939,4 +1939,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tabCloseRight => 'Fermer les onglets à droite';
+
+  @override
+  String get exportMarkdownTitle => 'Notes Markdown (Obsidian)';
+
+  @override
+  String get exportMarkdownSubtitle =>
+      'Un dossier zippé de notes liées avec images — à ouvrir comme coffre Obsidian ou dans tout éditeur.';
+
+  @override
+  String get shareMarkdownText => 'Notes du monde GMH (Markdown)';
+
+  @override
+  String get relationsTitle => 'Relations';
 }

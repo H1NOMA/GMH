@@ -3445,6 +3445,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close tabs to the right'**
   String get tabCloseRight;
+
+  /// No description provided for @exportMarkdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Markdown notes (Obsidian)'**
+  String get exportMarkdownTitle;
+
+  /// No description provided for @exportMarkdownSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A zipped folder of linked notes with images — open it as an Obsidian vault or in any editor.'**
+  String get exportMarkdownSubtitle;
+
+  /// No description provided for @shareMarkdownText.
+  ///
+  /// In en, this message translates to:
+  /// **'GMH world notes (Markdown)'**
+  String get shareMarkdownText;
+
+  /// No description provided for @relationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Relations'**
+  String get relationsTitle;
 }
 
 class _AppLocalizationsDelegate

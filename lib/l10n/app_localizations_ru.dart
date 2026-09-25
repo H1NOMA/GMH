@@ -1943,4 +1943,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tabCloseRight => 'Закрыть вкладки справа';
+
+  @override
+  String get exportMarkdownTitle => 'Заметки Markdown (Obsidian)';
+
+  @override
+  String get exportMarkdownSubtitle =>
+      'Архив папки со связанными заметками и изображениями — откройте как хранилище Obsidian или в любом редакторе.';
+
+  @override
+  String get shareMarkdownText => 'Заметки мира GMH (Markdown)';
+
+  @override
+  String get relationsTitle => 'Связи';
 }

@@ -556,5 +556,9 @@
   "tabDuplicate": "复制标签页",
   "tabClose": "关闭标签页",
   "tabCloseOthers": "关闭其他标签页",
-  "tabCloseRight": "关闭右侧标签页"
+  "tabCloseRight": "关闭右侧标签页",
+  "exportMarkdownTitle": "Markdown 笔记（Obsidian）",
+  "exportMarkdownSubtitle": "包含图片的互链笔记文件夹压缩包——可作为 Obsidian 库或在任意编辑器中打开。",
+  "shareMarkdownText": "GMH 世界笔记（Markdown）",
+  "relationsTitle": "关联"
 }

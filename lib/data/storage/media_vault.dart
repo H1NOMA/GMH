@@ -35,7 +35,7 @@ class MediaVault {
       // Hashing a 50 MB map on the UI isolate stalls frames; big files
       // are hashed on a background isolate.
       final hash = bytes.length > 512 * 1024
-          ? await Isolate.run(() => sha256.convert(bytes).toString())
+          ? await _hashInBackground(bytes)
           : sha256.convert(bytes).toString();
       var ext = p.extension(fileName).toLowerCase();
       if (ext.isEmpty ||
@@ -111,3 +111,7 @@ class MediaVault {
     return removed;
   }
 }
+
+/// Top-level so the isolate message carries only the bytes.
+Future<String> _hashInBackground(List<int> bytes) =>
+    Isolate.run(() => sha256.convert(bytes).toString());
