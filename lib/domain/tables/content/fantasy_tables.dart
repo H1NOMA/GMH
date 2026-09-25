@@ -1,0 +1,587 @@
+import '../../models/world.dart';
+import 'table_library.dart';
+
+const _s = WorldStyle.fantasy;
+
+const fantasyTables = <LibraryTable>[
+  LibraryTable(
+    localId: 'road_encounters',
+    style: _s,
+    folder: LibraryFolder.encounters,
+    formula: '2d6',
+    name: Tx(
+      'Road Encounters',
+      'Встречи на дороге',
+      'Begegnungen unterwegs',
+      'Rencontres sur la route',
+      '旅途遭遇',
+    ),
+    description: Tx(
+      'Who or what the party meets between two towns. Common results sit in the middle.',
+      'Кого или что отряд встречает между двумя городами. Частые исходы — в середине.',
+      'Wem oder was die Gruppe zwischen zwei Städten begegnet. Häufige Ergebnisse liegen in der Mitte.',
+      'Qui ou quoi le groupe croise entre deux villes. Les résultats courants sont au milieu.',
+      '队伍在两座城镇之间遇到的人或事。常见结果位于中段。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'A wyvern circles overhead, then dives at the pack animals.',
+          'Над головой кружит виверна — и вдруг пикирует на вьючных животных.',
+          'Ein Wyvern kreist über euch und stößt dann auf die Packtiere herab.',
+          'Une vouivre tournoie au-dessus, puis plonge sur les bêtes de somme.',
+          '一头双足飞龙在头顶盘旋，随后俯冲扑向驮兽。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          '{1d4+1} bandits block the bridge and demand a toll of {2d6} silver each.',
+          '{1d4+1} разбойника перекрыли мост и требуют по {2d6} серебряных с каждого.',
+          '{1d4+1} Banditen sperren die Brücke und fordern {2d6} Silber Wegzoll pro Kopf.',
+          '{1d4+1} bandits bloquent le pont et exigent {2d6} pièces d\'argent chacun.',
+          '{1d4+1}名强盗拦住桥头，要求每人交{2d6}枚银币的过路费。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A pilgrim with a lantern at noon. [[@quirks]]',
+          'Паломник с фонарём посреди дня. [[@quirks]]',
+          'Ein Pilger mit Laterne am helllichten Mittag. [[@quirks]]',
+          'Un pèlerin qui porte une lanterne en plein midi. [[@quirks]]',
+          '正午时分提着灯笼的朝圣者。[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A merchant\'s wagon with a broken axle. The merchant: [[@quirks]]',
+          'Купеческая телега со сломанной осью. Купец: [[@quirks]]',
+          'Ein Händlerwagen mit gebrochener Achse. Der Händler: [[@quirks]]',
+          'Une charrette de marchand à l\'essieu brisé. Le marchand : [[@quirks]]',
+          '一辆车轴断裂的商队马车。商人：[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A patrol of {1d6+2} town guards, suspicious and tired.',
+          'Патруль из {1d6+2} городских стражников — подозрительных и усталых.',
+          'Eine Streife aus {1d6+2} Stadtwachen, misstrauisch und müde.',
+          'Une patrouille de {1d6+2} gardes, méfiants et fatigués.',
+          '一支{1d6+2}人的城镇巡逻队，满腹疑心又疲惫不堪。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The weather turns: [[@weather]]',
+          'Погода меняется: [[@weather]]',
+          'Das Wetter schlägt um: [[@weather]]',
+          'Le temps change : [[@weather]]',
+          '天气骤变：[[@weather]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A fresh grave by the road. Buried with it: [[@treasure]]',
+          'Свежая могила у обочины. В ней: [[@treasure]]',
+          'Ein frisches Grab am Wegesrand. Mit begraben: [[@treasure]]',
+          'Une tombe fraîche au bord du chemin. Enterré avec le corps : [[@treasure]]',
+          '路边一座新坟。随葬之物：[[@treasure]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A herd of {2d6} wild goats that follows the party for a mile.',
+          'Стадо из {2d6} диких коз, которое целую милю идёт за отрядом.',
+          'Eine Herde von {2d6} wilden Ziegen folgt der Gruppe eine Meile lang.',
+          'Un troupeau de {2d6} chèvres sauvages suit le groupe sur un mille.',
+          '一群{2d6}只野山羊跟着队伍走了一里路。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A {young|lost|wounded} knight asks for directions to a castle that burned years ago.',
+          '{Юный|Заблудившийся|Раненый} рыцарь спрашивает дорогу к замку, сгоревшему много лет назад.',
+          'Ein {junger|verirrter|verwundeter} Ritter fragt nach einer Burg, die vor Jahren abbrannte.',
+          'Un chevalier {jeune|égaré|blessé} demande le chemin d\'un château brûlé il y a des années.',
+          '一位{年轻的|迷路的|负伤的}骑士打听一座多年前就已焚毁的城堡。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An ogre fishing in the river, in no mood to be disturbed.',
+          'Огр рыбачит на реке и не желает, чтобы его беспокоили.',
+          'Ein Oger angelt am Fluss und will nicht gestört werden.',
+          'Un ogre pêche dans la rivière et n\'aime pas qu\'on le dérange.',
+          '一个食人魔在河边钓鱼，不想被人打扰。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A fey circle of mushrooms, humming softly. Stepping in costs a memory.',
+          'Волшебный круг грибов тихо гудит. Шагнувший внутрь теряет одно воспоминание.',
+          'Ein Feenring aus Pilzen summt leise. Wer hineintritt, verliert eine Erinnerung.',
+          'Un cercle de champignons féerique bourdonne. Y entrer coûte un souvenir.',
+          '一圈低声嗡鸣的仙灵蘑菇环。踏入者会失去一段记忆。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'tavern_rumors',
+    style: _s,
+    folder: LibraryFolder.rumors,
+    formula: '1d10',
+    name: Tx(
+      'Tavern Rumors',
+      'Слухи из таверны',
+      'Gerüchte aus der Taverne',
+      'Rumeurs de taverne',
+      '酒馆传闻',
+    ),
+    description: Tx(
+      'Half-truths overheard over ale. Some lead to adventure, some to trouble.',
+      'Полуправда, услышанная за кружкой эля. Одни ведут к приключениям, другие — к беде.',
+      'Halbwahrheiten beim Bier. Manche führen zum Abenteuer, manche in Schwierigkeiten.',
+      'Des demi-vérités entendues autour d\'une bière. Certaines mènent à l\'aventure, d\'autres aux ennuis.',
+      '酒桌上听来的半真半假之言。有的通向冒险，有的招来麻烦。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'The miller\'s daughter has been seen talking to crows, and the crows answer.',
+          'Дочь мельника разговаривает с воронами — и вороны ей отвечают.',
+          'Die Müllerstochter spricht mit Krähen, und die Krähen antworten.',
+          'La fille du meunier parle aux corbeaux, et les corbeaux répondent.',
+          '有人看到磨坊主的女儿和乌鸦说话，而乌鸦会回答。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A tax collector vanished on the old forest road with a chest of coin.',
+          'Сборщик податей пропал на старой лесной дороге вместе с сундуком монет.',
+          'Ein Steuereintreiber verschwand mit einer Münztruhe auf der alten Waldstraße.',
+          'Un collecteur d\'impôts a disparu sur la vieille route forestière avec un coffre de pièces.',
+          '一名税吏带着一箱钱币在旧林道上失踪了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The duke is hiring sellswords, no questions asked, {50|100|200} gold a head.',
+          'Герцог набирает наёмников без лишних вопросов — по {50|100|200} золотых за голову.',
+          'Der Herzog heuert Söldner an, ohne Fragen, {50|100|200} Gold pro Kopf.',
+          'Le duc engage des mercenaires sans poser de questions, {50|100|200} pièces d\'or par tête.',
+          '公爵在招募雇佣兵，不问来历，每人{50|100|200}金币。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Something lives in the old well. Travelers who camp nearby meet [[@road_encounters]]',
+          'В старом колодце что-то живёт. Кто ночует рядом, встречает: [[@road_encounters]]',
+          'Im alten Brunnen haust etwas. Wer dort lagert, trifft auf: [[@road_encounters]]',
+          'Quelque chose vit dans le vieux puits. Ceux qui campent près de lui croisent : [[@road_encounters]]',
+          '老井里住着什么东西。在附近扎营的旅人遇到了：[[@road_encounters]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A dwarf paid for his drinks with a gem the size of a thumb and left laughing.',
+          'Гном расплатился за выпивку самоцветом размером с палец и ушёл, хохоча.',
+          'Ein Zwerg zahlte mit einem daumengroßen Edelstein und ging lachend davon.',
+          'Un nain a payé ses verres avec une gemme grosse comme un pouce et il est parti en riant.',
+          '一个矮人用拇指大的宝石付了酒钱，大笑着离开了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The temple bells rang by themselves at midnight, three nights running.',
+          'Храмовые колокола три ночи подряд звонили в полночь сами собой.',
+          'Die Tempelglocken läuteten drei Nächte hintereinander um Mitternacht von selbst.',
+          'Les cloches du temple ont sonné seules à minuit, trois nuits de suite.',
+          '神殿的钟连续三晚在午夜自己响了起来。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An old map to a barrow is for sale. The seller swears it holds [[@treasure]]',
+          'Продаётся старая карта кургана. Продавец клянётся, что там лежит: [[@treasure]]',
+          'Eine alte Karte zu einem Hügelgrab steht zum Verkauf. Darin soll liegen: [[@treasure]]',
+          'Une vieille carte d\'un tertre est à vendre. Le vendeur jure qu\'on y trouve : [[@treasure]]',
+          '有人在卖一张古冢的旧地图，卖主发誓里面有：[[@treasure]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The river ferryman refuses to cross after dark, and will not say why.',
+          'Паромщик не переправляет людей после заката и не объясняет почему.',
+          'Der Fährmann setzt nach Einbruch der Dunkelheit nicht über und sagt nicht, warum.',
+          'Le passeur refuse de traverser après la nuit tombée et ne dit pas pourquoi.',
+          '渡口的船夫天黑后拒绝摆渡，也不肯说原因。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A wizard\'s tower on the hill has had its door open for {1d6} days now.',
+          'Дверь башни волшебника на холме открыта уже {1d6} дн.',
+          'Die Tür des Zauberturms auf dem Hügel steht seit {1d6} Tagen offen.',
+          'La porte de la tour du magicien, sur la colline, est ouverte depuis {1d6} jours.',
+          '山丘上法师塔的门已经敞开{1d6}天了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The innkeeper waters the ale, but the stew is the best in three counties.',
+          'Трактирщик разбавляет эль, зато похлёбка у него лучшая в трёх графствах.',
+          'Der Wirt verdünnt das Bier, aber sein Eintopf ist der beste in drei Grafschaften.',
+          'L\'aubergiste coupe sa bière, mais son ragoût est le meilleur de trois comtés.',
+          '店主往麦酒里掺水，但他的炖菜是三郡之内最好的。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'treasure',
+    style: _s,
+    folder: LibraryFolder.loot,
+    formula: '1d20',
+    name: Tx(
+      'Pocket Treasure',
+      'Карманные сокровища',
+      'Taschenschätze',
+      'Trésors de poche',
+      '随身宝物',
+    ),
+    description: Tx(
+      'What turns up in a purse, a chest or a dead man\'s boot. Coins are common, marvels rare.',
+      'Что найдётся в кошеле, сундуке или сапоге мертвеца. Монеты часты, чудеса редки.',
+      'Was in Beuteln, Truhen oder Stiefeln Toter steckt. Münzen sind häufig, Wunder selten.',
+      'Ce qu\'on trouve dans une bourse, un coffre ou la botte d\'un mort. Les pièces sont courantes, les merveilles rares.',
+      '钱袋、箱子或死人靴子里能找到的东西。钱币常见，奇物罕见。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          '{2d6} copper coins and a button.',
+          '{2d6} медных монет и пуговица.',
+          '{2d6} Kupfermünzen und ein Knopf.',
+          '{2d6} pièces de cuivre et un bouton.',
+          '{2d6}枚铜币和一颗纽扣。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          '{3d6} silver coins in a greasy purse.',
+          '{3d6} серебряных монет в засаленном кошеле.',
+          '{3d6} Silbermünzen in einem speckigen Beutel.',
+          '{3d6} pièces d\'argent dans une bourse graisseuse.',
+          '油腻钱袋里的{3d6}枚银币。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          'A {silver|bone|copper} ring engraved with someone else\'s name.',
+          '{Серебряное|Костяное|Медное} кольцо с чужим именем.',
+          'Ein Ring aus {Silber|Knochen|Kupfer} mit fremdem Namen.',
+          'Une bague {d\'argent|d\'os|de cuivre} gravée au nom d\'un autre.',
+          '一枚刻着别人名字的{银|骨|铜}戒指。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A letter of credit worth {1d4*10} gold, if the bank still honors it.',
+          'Вексель на {1d4*10} золотых, если банк ещё его принимает.',
+          'Ein Kreditbrief über {1d4*10} Gold, falls die Bank ihn noch einlöst.',
+          'Une lettre de change de {1d4*10} pièces d\'or, si la banque l\'honore encore.',
+          '一张价值{1d4*10}金币的汇票——如果钱庄还认账的话。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A healing potion that tastes of pine needles.',
+          'Лечебное зелье со вкусом хвои.',
+          'Ein Heiltrank, der nach Tannennadeln schmeckt.',
+          'Une potion de soins au goût d\'aiguilles de pin.',
+          '一瓶带着松针味的治疗药水。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A dagger whose blade is always cold to the touch.',
+          'Кинжал, клинок которого всегда холоден на ощупь.',
+          'Ein Dolch, dessen Klinge sich immer kalt anfühlt.',
+          'Une dague dont la lame est toujours froide au toucher.',
+          '一把刀刃摸起来永远冰凉的匕首。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A gemstone worth {2d4*10} gold, badly cut.',
+          'Плохо огранённый самоцвет стоимостью {2d4*10} золотых.',
+          'Ein schlecht geschliffener Edelstein im Wert von {2d4*10} Gold.',
+          'Une gemme mal taillée valant {2d4*10} pièces d\'or.',
+          '一颗切工粗糙、价值{2d4*10}金币的宝石。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A tiny wooden box that plays a lullaby when opened.',
+          'Крошечная деревянная шкатулка, играющая колыбельную.',
+          'Ein winziges Holzkästchen, das beim Öffnen ein Wiegenlied spielt.',
+          'Une minuscule boîte en bois qui joue une berceuse à l\'ouverture.',
+          '一个打开就会奏出摇篮曲的小木盒。',
+        ),
+        weight: 1,
+      ),
+      LibraryRow(
+        Tx(
+          'A spell scroll, half its words smudged by rain.',
+          'Свиток заклинания, наполовину размытый дождём.',
+          'Eine Zauberschriftrolle, halb vom Regen verwischt.',
+          'Un parchemin de sort dont la pluie a effacé la moitié des mots.',
+          '一卷法术卷轴，一半字迹被雨水晕开。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A key of black iron that fits no lock in this land.',
+          'Ключ из чёрного железа, не подходящий ни к одному замку в этих краях.',
+          'Ein Schlüssel aus schwarzem Eisen, der in kein Schloss dieses Landes passt.',
+          'Une clé de fer noir qui n\'ouvre aucune serrure de ce pays.',
+          '一把黑铁钥匙，这片土地上没有它能打开的锁。',
+        ),
+        weight: 1,
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'weather',
+    style: _s,
+    folder: LibraryFolder.locale,
+    formula: '1d10',
+    name: Tx(
+      'Weather on the Road',
+      'Погода в пути',
+      'Wetter unterwegs',
+      'Météo du voyage',
+      '路上天气',
+    ),
+    description: Tx(
+      'The sky over the next day of travel, with a twist for the game master.',
+      'Небо на следующий день пути — с поворотом для мастера.',
+      'Der Himmel für den nächsten Reisetag, mit einer Wendung für die Spielleitung.',
+      'Le ciel du prochain jour de voyage, avec un rebondissement pour le MJ.',
+      '下一天旅途的天色，附带给主持人的小变数。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Clear and bright. Travel is swift; {1d4} extra miles covered.',
+          'Ясно и солнечно. Путь спорится — пройдено на {1d4} мили больше.',
+          'Klar und sonnig. Ihr kommt {1d4} Meilen weiter als geplant.',
+          'Ciel clair. Le voyage file ; {1d4} milles de plus parcourus.',
+          '晴空万里，行程顺利，多走了{1d4}里。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Morning fog so thick the road vanishes ten paces ahead.',
+          'Утренний туман так густ, что дорога исчезает в десяти шагах.',
+          'Morgennebel so dicht, dass der Weg nach zehn Schritten verschwindet.',
+          'Un brouillard matinal si épais que la route disparaît à dix pas.',
+          '晨雾浓得十步之外就看不见路。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Steady drizzle. Bowstrings slacken and tempers fray.',
+          'Затяжная морось. Тетивы ослабевают, нервы — тоже.',
+          'Stetiger Nieselregen. Bogensehnen erschlaffen, die Laune auch.',
+          'Crachin continu. Les cordes d\'arc se détendent, les nerfs se tendent.',
+          '连绵细雨。弓弦变松，人心烦躁。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A thunderstorm rolls in by afternoon; lightning strikes a lone tree nearby.',
+          'К полудню приходит гроза; молния бьёт в одинокое дерево рядом.',
+          'Am Nachmittag zieht ein Gewitter auf; ein Blitz trifft einen nahen Baum.',
+          'Un orage éclate l\'après-midi ; la foudre frappe un arbre isolé tout près.',
+          '午后雷雨袭来，闪电劈中了附近一棵孤树。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Hot and still. Water runs low and flies gather.',
+          'Жарко и безветренно. Вода на исходе, слетаются мухи.',
+          'Heiß und windstill. Das Wasser wird knapp, die Fliegen kommen.',
+          'Chaleur immobile. L\'eau se fait rare, les mouches s\'assemblent.',
+          '闷热无风。饮水见底，苍蝇成群。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Gale-force winds from the {north|east|west}; flying creatures stay grounded.',
+          'Штормовой ветер с {севера|востока|запада}; летающие твари сидят на земле.',
+          'Sturmwind aus {Norden|Osten|Westen}; fliegende Wesen bleiben am Boden.',
+          'Vent de tempête venu {du nord|de l\'est|de l\'ouest} ; les créatures volantes restent au sol.',
+          '{北|东|西}方刮来狂风，飞行生物都不敢起飞。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An early frost. Breath steams and the puddles crack underfoot.',
+          'Ранние заморозки. Дыхание парит, лужи хрустят под ногами.',
+          'Früher Frost. Der Atem dampft, Pfützen knacken unter den Stiefeln.',
+          'Gelée précoce. Le souffle fume, les flaques craquent sous les pas.',
+          '早霜。呵气成雾，脚下水洼咔咔作响。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A red sunset that locals call an ill omen. A stranger asks to share your fire: [[@quirks]]',
+          'Багровый закат — местные зовут его дурным знаком. К костру просится незнакомец: [[@quirks]]',
+          'Ein roter Sonnenuntergang, laut Einheimischen ein böses Omen. Ein Fremder bittet ans Feuer: [[@quirks]]',
+          'Un coucher de soleil rouge, de mauvais augure selon les gens du coin. Un inconnu demande à partager votre feu : [[@quirks]]',
+          '血红的晚霞，当地人说是凶兆。一个陌生人请求共用你们的篝火：[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Hail the size of marbles for {1d6*10} minutes. Find shelter or take bruises.',
+          'Град величиной с горошину {1d6*10} минут. Ищите укрытие или ждите синяков.',
+          'Murmelgroßer Hagel für {1d6*10} Minuten. Schutz suchen oder blaue Flecken kassieren.',
+          'Grêle grosse comme des billes pendant {1d6*10} minutes. Abritez-vous ou gare aux bleus.',
+          '弹珠大的冰雹下了{1d6*10}分钟。要么找地方躲，要么挨一身淤青。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A strange warm wind that smells of the sea, though the coast is weeks away.',
+          'Странный тёплый ветер пахнет морем, хотя до берега недели пути.',
+          'Ein seltsam warmer Wind riecht nach Meer, obwohl die Küste Wochen entfernt ist.',
+          'Un étrange vent chaud qui sent la mer, alors que la côte est à des semaines.',
+          '一阵奇异的暖风带着海的气息，而海岸远在数周路程之外。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'quirks',
+    style: _s,
+    folder: LibraryFolder.people,
+    name: Tx(
+      'NPC Quirks',
+      'Причуды персонажей',
+      'Marotten von NSC',
+      'Manies de PNJ',
+      'NPC怪癖',
+    ),
+    description: Tx(
+      'One memorable detail to hang a minor character on.',
+      'Одна запоминающаяся деталь для второстепенного персонажа.',
+      'Ein einprägsames Detail für eine Nebenfigur.',
+      'Un détail marquant pour camper un personnage secondaire.',
+      '给小角色安上一个令人难忘的细节。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Speaks only in questions.',
+          'Говорит только вопросами.',
+          'Spricht nur in Fragen.',
+          'Ne parle que par questions.',
+          '说话只用问句。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Constantly {whittling|knitting|polishing a coin}.',
+          'Всё время {что-то строгает|вяжет|полирует монету}.',
+          'Ist ständig am {Schnitzen|Stricken|Münzpolieren}.',
+          'Passe son temps à {tailler du bois|tricoter|polir une pièce}.',
+          '手里总在{削木头|织毛线|擦硬币}。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Owes money to half the town and is cheerful about it.',
+          'Должен половине города и совершенно этим не смущён.',
+          'Schuldet der halben Stadt Geld und ist bester Laune.',
+          'Doit de l\'argent à la moitié de la ville et s\'en porte très bien.',
+          '欠了半个镇子的钱，却乐呵呵的。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Has a pet {raven|ferret|toad} that they consult before every decision.',
+          'Держит {ворона|хорька|жабу} и советуется с питомцем перед каждым решением.',
+          'Hat {einen Raben|ein Frettchen|eine Kröte} und fragt das Tier vor jeder Entscheidung.',
+          'A {un corbeau|un furet|un crapaud} qu\'il consulte avant chaque décision.',
+          '养着一只{渡鸦|雪貂|蟾蜍}，每次做决定前都要问问它。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Tells the same war story, differently each time.',
+          'Рассказывает одну и ту же военную байку — каждый раз по-новому.',
+          'Erzählt dieselbe Kriegsgeschichte, jedes Mal anders.',
+          'Raconte la même histoire de guerre, différemment à chaque fois.',
+          '总讲同一个打仗的故事，每次版本都不一样。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Refuses to say their own name aloud.',
+          'Отказывается произносить своё имя вслух.',
+          'Weigert sich, den eigenen Namen laut zu sagen.',
+          'Refuse de prononcer son propre nom.',
+          '拒绝大声说出自己的名字。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Collects teeth. Only from animals, they insist.',
+          'Собирает зубы. Только звериные, уверяет он.',
+          'Sammelt Zähne. Nur von Tieren, wie beteuert wird.',
+          'Collectionne les dents. D\'animaux seulement, jure-t-il.',
+          '收集牙齿——坚称只收动物的。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Laughs a beat too late at every joke.',
+          'Смеётся над каждой шуткой с опозданием.',
+          'Lacht bei jedem Witz einen Tick zu spät.',
+          'Rit à chaque blague avec un temps de retard.',
+          '每个笑话都慢半拍才笑。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Is secretly a retired adventurer and critiques the party\'s tactics.',
+          'Втайне отставной искатель приключений — и критикует тактику отряда.',
+          'Ist heimlich ein Abenteurer im Ruhestand und kritisiert eure Taktik.',
+          'Ancien aventurier en secret, il critique la tactique du groupe.',
+          '其实是退隐的冒险者，对队伍的战术指指点点。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Smells strongly of {lavender|smoke|onions} and apologizes for it.',
+          'Сильно пахнет {лавандой|дымом|луком} и извиняется за это.',
+          'Riecht stark nach {Lavendel|Rauch|Zwiebeln} und entschuldigt sich dafür.',
+          'Sent fort {la lavande|la fumée|l\'oignon} et s\'en excuse.',
+          '身上有浓重的{薰衣草|烟|洋葱}味，还为此道歉。',
+        ),
+      ),
+    ],
+  ),
+];

@@ -1962,4 +1962,320 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get kindFieldsAction => 'Felder anpassen';
+
+  @override
+  String get tablesSearchHint => 'Tabellen suchen';
+
+  @override
+  String get tablesNewTable => 'Neue Tabelle';
+
+  @override
+  String get tablesImport => 'Aus Text importieren';
+
+  @override
+  String get tablesLibrary => 'Bibliothek';
+
+  @override
+  String get tablesOpenLibrary => 'Bibliothek öffnen';
+
+  @override
+  String get tablesEmptyTitle => 'Noch keine Zufallstabellen';
+
+  @override
+  String get tablesEmptyHint =>
+      'Starte mit einer fertigen Tabelle aus der Bibliothek, schreib eine eigene oder füge eine Liste aus einem Buch ein.';
+
+  @override
+  String get tablesNoMatches => 'Keine Tabelle passt zur Suche.';
+
+  @override
+  String get tablesNoFolder => 'Weitere Tabellen';
+
+  @override
+  String tablesRowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Zeilen',
+      one: '1 Zeile',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesWeighted => 'Nach Gewicht';
+
+  @override
+  String tablesDefaultName(int number) {
+    return 'Tabelle $number';
+  }
+
+  @override
+  String get tablesDescriptionLabel => 'Beschreibung';
+
+  @override
+  String get tablesFolderLabel => 'Ordner';
+
+  @override
+  String get tablesFolderHint => 'z. B. Begegnungen';
+
+  @override
+  String get tablesFormulaLabel => 'Würfelformel';
+
+  @override
+  String get tablesFormulaHint => 'z. B. 1d20 – leer: nach Gewicht';
+
+  @override
+  String get tablesFormulaInvalid => 'Keine gültige Würfelformel';
+
+  @override
+  String get tablesEditTitle => 'Tabelle bearbeiten';
+
+  @override
+  String get tablesEdit => 'Details bearbeiten';
+
+  @override
+  String get tablesDuplicate => 'Duplizieren';
+
+  @override
+  String tablesCopyName(String name) {
+    return '$name (Kopie)';
+  }
+
+  @override
+  String tablesDeleteTitle(String name) {
+    return '„$name“ löschen?';
+  }
+
+  @override
+  String get tablesDeleteBody =>
+      'Die Tabelle und alle Zeilen werden aus dieser Welt entfernt.';
+
+  @override
+  String get tablesActions => 'Tabellenaktionen';
+
+  @override
+  String get tablesAllTables => 'Alle Tabellen';
+
+  @override
+  String get tablesMissing => 'Diese Tabelle existiert nicht mehr.';
+
+  @override
+  String get tablesRoll => 'Würfeln';
+
+  @override
+  String get tablesRollAgain => 'Nochmal';
+
+  @override
+  String get tablesCopy => 'Kopieren';
+
+  @override
+  String get tablesCopied => 'In die Zwischenablage kopiert';
+
+  @override
+  String get tablesResultEmpty => 'Würfle für ein Ergebnis.';
+
+  @override
+  String get tablesClamped =>
+      'Außerhalb aller Bereiche – nächste Zeile genommen';
+
+  @override
+  String get tablesRollLog => 'Wurfprotokoll';
+
+  @override
+  String get tablesRollLogEmpty => 'Würfe auf dieser Seite erscheinen hier.';
+
+  @override
+  String get tablesClearLog => 'Protokoll leeren';
+
+  @override
+  String get tablesRows => 'Zeilen';
+
+  @override
+  String get tablesAddRow => 'Zeile hinzufügen';
+
+  @override
+  String get tablesDeleteRow => 'Zeile löschen';
+
+  @override
+  String get tablesAutoRanges => 'Auto-Bereiche';
+
+  @override
+  String get tablesAutoRangesHint =>
+      'Zeilen nach Gewicht auf die Formel verteilen';
+
+  @override
+  String get tablesBulkEdit => 'Als Text bearbeiten';
+
+  @override
+  String get tablesBulkEditTitle => 'Zeilen als Text bearbeiten';
+
+  @override
+  String get tablesTextFormatHelp =>
+      'Ein Eintrag pro Zeile: „1-3 | Text“, „4: Text“, „x3 Text“ für ein Gewicht oder reiner Text. Zeilen mit # werden ignoriert.';
+
+  @override
+  String get tablesImportTitle => 'Tabelle aus Text importieren';
+
+  @override
+  String get tablesImportRows => 'Zeilen';
+
+  @override
+  String tablesImportFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Zeilen gefunden',
+      one: '1 Zeile gefunden',
+      zero: 'Keine Zeilen gefunden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesImportAction => 'Importieren';
+
+  @override
+  String get tablesApply => 'Übernehmen';
+
+  @override
+  String get tablesRowsEmpty =>
+      'Noch keine Zeilen. Füge eine hinzu oder füge mit „Als Text bearbeiten“ eine ganze Liste ein.';
+
+  @override
+  String tablesRowTextHint(String dice, String choice, String table) {
+    return 'Text, Würfel $dice, Auswahl $choice, Würfe $table';
+  }
+
+  @override
+  String get tablesFrom => 'Von';
+
+  @override
+  String get tablesTo => 'Bis';
+
+  @override
+  String get tablesWeight => 'Gewicht';
+
+  @override
+  String get tablesDragToReorder => 'Zum Sortieren ziehen';
+
+  @override
+  String get tablesIssueBadFormula => 'Die Würfelformel ist ungültig.';
+
+  @override
+  String get tablesIssueEmpty => 'Die Tabelle hat keine Zeilen mit Text.';
+
+  @override
+  String tablesIssueEmptyRow(int row) {
+    return 'Zeile $row hat keinen Text.';
+  }
+
+  @override
+  String tablesIssueMissingRange(int row) {
+    return 'Zeile $row hat keinen Bereich.';
+  }
+
+  @override
+  String tablesIssueInverted(int row) {
+    return 'Zeile $row: Der Bereich ist verkehrt herum.';
+  }
+
+  @override
+  String tablesIssueOutOfBounds(int row, String range) {
+    return 'Zeile $row liegt außerhalb der Formel ($range).';
+  }
+
+  @override
+  String tablesIssueGap(String range) {
+    return 'Nichts deckt $range ab.';
+  }
+
+  @override
+  String tablesIssueOverlap(int first, int second, String range) {
+    return 'Zeilen $first und $second überschneiden sich bei $range.';
+  }
+
+  @override
+  String get tablesFailNotFound => 'Keine Tabelle mit diesem Namen';
+
+  @override
+  String get tablesFailCycle => 'Verweist auf sich selbst – gestoppt';
+
+  @override
+  String get tablesFailDepth => 'Zu tief verschachtelt – gestoppt';
+
+  @override
+  String get tablesFailTooMany => 'Zu viele verschachtelte Würfe – gestoppt';
+
+  @override
+  String get tablesFailEmpty => 'Die Tabelle hat keine Zeilen';
+
+  @override
+  String get tablesFailBadFormula => 'Die Formel ist ungültig';
+
+  @override
+  String tablesChoice(int count) {
+    return 'eins von $count';
+  }
+
+  @override
+  String get tablesFromLibrary => 'Aus der Bibliothek';
+
+  @override
+  String get tablesLibraryTitle => 'Tabellenbibliothek';
+
+  @override
+  String get tablesLibraryHint =>
+      'Fertige Tabellen für jedes Setting. Sieh sie dir an und füge sie dieser Welt hinzu, um sie zu bearbeiten.';
+
+  @override
+  String get tablesYourSetting => 'Setting dieser Welt';
+
+  @override
+  String get tablesOtherSettings => 'Andere Settings';
+
+  @override
+  String tablesTableCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Tabellen',
+      one: '1 Tabelle',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreview => 'Vorschau';
+
+  @override
+  String get tablesAddToWorld => 'Zur Welt hinzufügen';
+
+  @override
+  String get tablesInWorld => 'In dieser Welt';
+
+  @override
+  String get tablesAddDepsTitle => 'Verknüpfte Tabellen mit hinzufügen?';
+
+  @override
+  String tablesAddDepsBody(String name) {
+    return '„$name“ würfelt auf diesen Tabellen. Ohne sie zeigen die Ergebnisse ein Warnzeichen.';
+  }
+
+  @override
+  String tablesAddedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Tabellen hinzugefügt',
+      one: '1 Tabelle hinzugefügt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreviewRoll => 'Probewurf';
+
+  @override
+  String get tablesWhy => 'So wurde gewürfelt';
 }

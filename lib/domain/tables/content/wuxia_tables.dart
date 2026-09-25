@@ -1,0 +1,587 @@
+import '../../models/world.dart';
+import 'table_library.dart';
+
+const _s = WorldStyle.wuxia;
+
+const wuxiaTables = <LibraryTable>[
+  LibraryTable(
+    localId: 'jianghu_encounters',
+    style: _s,
+    folder: LibraryFolder.encounters,
+    formula: '2d6',
+    name: Tx(
+      'Jianghu Encounters',
+      'Встречи в цзянху',
+      'Begegnungen im Jianghu',
+      'Rencontres du jianghu',
+      '江湖遭遇',
+    ),
+    description: Tx(
+      'Who you meet on the rivers and lakes, where martial artists settle scores.',
+      'Кого встречаешь на реках и озёрах, где мастера боевых искусств сводят счёты.',
+      'Wem man an Flüssen und Seen begegnet, wo Kampfkünstler ihre Fehden austragen.',
+      'Qui l\'on croise sur les fleuves et les lacs, là où les artistes martiaux règlent leurs comptes.',
+      '在江湖上会遇到谁——那里是武林中人了结恩怨的地方。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'A masked assassin from the Blood Lotus sect, bearing a death warrant with your name.',
+          'Убийца в маске из секты Кровавого Лотоса несёт смертный приговор с вашим именем.',
+          'Ein maskierter Assassine der Blutlotus-Sekte trägt ein Todesurteil mit eurem Namen.',
+          'Un assassin masqué de la secte du Lotus de Sang porte un arrêt de mort à votre nom.',
+          '血莲教的蒙面刺客，手持写着你名字的追杀令。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          '{1d4+2} bandits of the Black Wind stronghold demand a toll at the mountain pass.',
+          '{1d4+2} разбойника из крепости Чёрного Ветра требуют дань на горном перевале.',
+          '{1d4+2} Banditen der Festung des Schwarzen Windes fordern am Bergpass Wegzoll.',
+          '{1d4+2} brigands de la forteresse du Vent Noir exigent un péage au col.',
+          '黑风寨的{1d4+2}名山贼在山口拦路收买路钱。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A wandering swordsman drinking alone at a roadside stall. [[@quirks]]',
+          'Странствующий мечник пьёт в одиночестве в придорожной харчевне. [[@quirks]]',
+          'Ein wandernder Schwertkämpfer trinkt allein an einem Straßenstand. [[@quirks]]',
+          'Un épéiste errant boit seul à une échoppe au bord de la route. [[@quirks]]',
+          '一个浪迹天涯的剑客独自在路边摊喝酒。[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Disciples of {Shaolin|Wudang|Emei} escorting a wounded elder back to the mountain.',
+          'Ученики {Шаолиня|Удана|Эмэя} сопровождают раненого старейшину обратно в горы.',
+          'Schüler von {Shaolin|Wudang|Emei} geleiten einen verwundeten Ältesten zurück in die Berge.',
+          'Des disciples de {Shaolin|Wudang|Emei} escortent un ancien blessé jusqu\'à la montagne.',
+          '{少林|武当|峨眉}弟子护送一位受伤的长老回山。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A dying master presses a scroll into your hands: [[@manuals]]',
+          'Умирающий мастер вкладывает вам в руки свиток: [[@manuals]]',
+          'Ein sterbender Meister drückt euch eine Schriftrolle in die Hand: [[@manuals]]',
+          'Un maître mourant vous glisse un rouleau entre les mains : [[@manuals]]',
+          '一位垂死的高手把一卷秘籍塞进你手里：[[@manuals]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An imperial constable hunting a rebel who looks like one of you.',
+          'Императорский сыщик охотится на мятежника, похожего на одного из вас.',
+          'Ein kaiserlicher Häscher jagt einen Rebellen, der einem von euch ähnelt.',
+          'Un sergent impérial traque un rebelle qui ressemble à l\'un de vous.',
+          '一名朝廷捕快在追捕一个与你们中某人长相相似的反贼。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A beggar with remarkable footwork, who belongs to the Beggars\' Sect.',
+          'Нищий с поразительной работой ног — член Секты Нищих.',
+          'Ein Bettler mit bemerkenswerter Beinarbeit, der zur Bettlersekte gehört.',
+          'Un mendiant au jeu de jambes remarquable, membre de la Secte des Mendiants.',
+          '一个步法惊人的乞丐，原来是丐帮中人。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Two rival schools duel on a bridge; neither will let you pass.',
+          'Две соперничающие школы бьются на мосту; ни одна не даёт вам пройти.',
+          'Zwei rivalisierende Schulen duellieren sich auf einer Brücke; keine lässt euch vorbei.',
+          'Deux écoles rivales s\'affrontent sur un pont ; aucune ne vous laisse passer.',
+          '两个敌对门派在桥上决斗，谁都不让你们过去。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A merchant\'s convoy carrying tribute to the capital, and [[@treasures]]',
+          'Обоз купца везёт дань в столицу, а с ним: [[@treasures]]',
+          'Ein Kaufmannszug bringt Tribut in die Hauptstadt, dazu: [[@treasures]]',
+          'Un convoi marchand porte le tribut à la capitale, ainsi que : [[@treasures]]',
+          '一支商队押送贡品进京，还带着：[[@treasures]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A young noblewoman in disguise, fleeing an arranged marriage with a sword she cannot use.',
+          'Переодетая юная аристократка бежит от договорного брака с мечом, которым не умеет владеть.',
+          'Eine verkleidete junge Adlige flieht vor einer arrangierten Ehe, mit einem Schwert, das sie nicht führen kann.',
+          'Une jeune noble déguisée fuit un mariage arrangé, armée d\'une épée qu\'elle ne sait pas manier.',
+          '一位女扮男装的千金小姐逃婚出走，带着一把她根本不会用的剑。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An old woman sweeping leaves at a temple. Every leaf lands exactly where she wants it.',
+          'Старуха подметает листья у храма. Каждый лист ложится именно туда, куда она хочет.',
+          'Eine alte Frau fegt Laub vor einem Tempel. Jedes Blatt landet genau dort, wo sie es will.',
+          'Une vieille femme balaie les feuilles devant un temple. Chaque feuille tombe exactement où elle le veut.',
+          '寺前一位扫落叶的老妇人，每片叶子都恰好落在她想要的位置。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'manuals',
+    style: _s,
+    folder: LibraryFolder.loot,
+    formula: '1d10',
+    name: Tx(
+      'Martial Manuals',
+      'Боевые трактаты',
+      'Kampfkunst-Handbücher',
+      'Manuels martiaux',
+      '武功秘籍',
+    ),
+    description: Tx(
+      'Secret techniques found in caves, tombs and library ruins. Most have a catch.',
+      'Тайные техники из пещер, гробниц и руин библиотек. У большинства есть подвох.',
+      'Geheime Techniken aus Höhlen, Gräbern und Bibliotheksruinen. Die meisten haben einen Haken.',
+      'Des techniques secrètes trouvées dans les grottes, les tombeaux et les bibliothèques en ruine. La plupart cachent un piège.',
+      '在山洞、古墓和藏经阁废墟中找到的秘传功法。大多暗藏玄机。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Nine Shadows Palm: strike from {three|five|nine} directions at once. Practicing it chills the blood.',
+          'Ладонь Девяти Теней: удар сразу с {трёх|пяти|девяти} сторон. Практика студит кровь.',
+          'Handfläche der Neun Schatten: Angriff aus {drei|fünf|neun} Richtungen zugleich. Das Üben kühlt das Blut.',
+          'Paume des Neuf Ombres : frapper de {trois|cinq|neuf} directions à la fois. La pratiquer glace le sang.',
+          '九影掌：同时从{三|五|九}个方向出掌。修习者血液渐寒。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Drunken Immortal Steps: dodge anything while intoxicated, nothing while sober.',
+          'Шаги Пьяного Бессмертного: уклоняешься от всего, пока пьян, и ни от чего — трезвым.',
+          'Schritte des Betrunkenen Unsterblichen: Betrunken weicht man allem aus, nüchtern nichts.',
+          'Pas de l\'Immortel Ivre : on esquive tout en état d\'ivresse, rien à jeun.',
+          '醉仙步：醉时万般皆可躲，醒时一招也躲不开。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Iron Shirt Classic, missing its last {1d4} pages.',
+          'Канон Железной Рубашки без последних {1d4} страниц.',
+          'Der Klassiker des Eisernen Hemdes, es fehlen die letzten {1d4} Seiten.',
+          'Le Classique de la Chemise de Fer, auquel manquent les {1d4} dernières pages.',
+          '《铁布衫经》，缺了最后{1d4}页。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Heart of the Silent Lake: perfect inner calm, but the user can no longer weep.',
+          'Сердце Безмолвного Озера: совершенный внутренний покой, но плакать больше нельзя.',
+          'Herz des Stillen Sees: vollkommene innere Ruhe, doch man kann nie wieder weinen.',
+          'Cœur du Lac Silencieux : un calme intérieur parfait, mais on ne peut plus pleurer.',
+          '静湖心法：内心绝对平静，但修习者再也流不出眼泪。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Thousand-Mile Lightness Art, written in a cipher only the sect\'s abbot can read.',
+          'Искусство Лёгкости на Тысячу Ли, записанное шифром, который может прочесть лишь настоятель секты.',
+          'Die Kunst der Tausend-Meilen-Leichtigkeit, in einer Geheimschrift, die nur der Abt der Sekte lesen kann.',
+          'L\'Art de la Légèreté des Mille Lieues, écrit dans un chiffre que seul l\'abbé de la secte sait lire.',
+          '《千里轻功》，用只有本门掌门才能读懂的密文写成。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Serpent Sword Form, stolen from the {Tang clan|Five Poisons Cult|imperial archive}. They want it back.',
+          'Форма Змеиного Меча, украденная у {клана Тан|культа Пяти Ядов|императорского архива}. Её хотят вернуть.',
+          'Die Schlangenschwert-Form, gestohlen {dem Tang-Clan|dem Kult der Fünf Gifte|dem kaiserlichen Archiv}. Man will sie zurück.',
+          'La Forme de l\'Épée Serpent, volée {au clan Tang|au culte des Cinq Poisons|aux archives impériales}. Ils veulent la récupérer.',
+          '《蛇形剑法》，是从{唐门|五毒教|皇家典籍库}偷出来的。他们想要回去。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Golden Bell Cover: the body becomes hard as bronze, but the user must fast for a month.',
+          'Покров Золотого Колокола: тело твердеет, как бронза, но месяц нужно поститься.',
+          'Goldene Glockenhülle: Der Körper wird hart wie Bronze, doch man muss einen Monat fasten.',
+          'Cloche d\'Or : le corps devient dur comme le bronze, mais il faut jeûner un mois.',
+          '金钟罩：身体坚如青铜，但修炼者须斋戒一个月。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A beginner\'s primer, mislabeled. Or is it? Every master started here.',
+          'Букварь для начинающих с неверной надписью. Или верной? Каждый мастер начинал с него.',
+          'Eine falsch beschriftete Anfängerfibel. Oder doch nicht? Jeder Meister begann hier.',
+          'Un abécédaire pour débutants, mal étiqueté. Ou pas ? Chaque maître a commencé là.',
+          '一本贴错标签的入门图谱。又或许没贴错？每一位宗师都是从这里起步的。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Moonlit Flute Technique: sound waves that cut, playable {1d4} times a night.',
+          'Техника Лунной Флейты: режущие звуковые волны, можно сыграть {1d4} раза за ночь.',
+          'Technik der Mondscheinflöte: schneidende Klangwellen, {1d4}-mal pro Nacht spielbar.',
+          'Technique de la Flûte au Clair de Lune : des ondes sonores tranchantes, jouables {1d4} fois par nuit.',
+          '月下笛法：以音波伤人，每夜可奏{1d4}次。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The Nameless Scripture: whoever finishes reading it forgets their own name.',
+          'Безымянный канон: дочитавший до конца забывает собственное имя.',
+          'Die Namenlose Schrift: Wer sie zu Ende liest, vergisst den eigenen Namen.',
+          'L\'Écriture sans Nom : quiconque la lit jusqu\'au bout oublie son propre nom.',
+          '《无名经》：读完之人会忘记自己的名字。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'teahouse_rumors',
+    style: _s,
+    folder: LibraryFolder.rumors,
+    formula: '1d10',
+    name: Tx(
+      'Teahouse Rumors',
+      'Слухи из чайной',
+      'Gerüchte im Teehaus',
+      'Rumeurs de maison de thé',
+      '茶馆传闻',
+    ),
+    description: Tx(
+      'Tales told by storytellers and gossiping guests over green tea.',
+      'Байки рассказчиков и сплетни гостей за зелёным чаем.',
+      'Geschichten von Erzählern und klatschenden Gästen bei grünem Tee.',
+      'Les récits des conteurs et les commérages des clients autour d\'un thé vert.',
+      '说书人讲的故事和茶客们的闲言碎语。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'The Martial Alliance will elect a new leader at the next full moon; every sect is scheming.',
+          'В следующее полнолуние Боевой союз изберёт нового главу; все секты плетут интриги.',
+          'Beim nächsten Vollmond wählt die Kampfallianz ein neues Oberhaupt; jede Sekte schmiedet Ränke.',
+          'À la prochaine pleine lune, l\'Alliance martiale élira un nouveau chef ; toutes les sectes intriguent.',
+          '下个月圆之夜武林盟要推选新盟主，各大门派都在暗中谋划。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A legendary blade surfaced at the bottom of Sword-Washing Pool.',
+          'Легендарный клинок всплыл на дне Пруда Омовения Мечей.',
+          'Eine legendäre Klinge ist am Grund des Schwertwaschteichs aufgetaucht.',
+          'Une lame légendaire est apparue au fond de l\'Étang où l\'on lave les épées.',
+          '洗剑池底浮现出一柄传说中的神兵。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The hermit on Cloud Peak takes one disciple every {10|20|60} years. The time is now.',
+          'Отшельник на Облачной вершине берёт одного ученика раз в {10|20|60} лет. Время пришло.',
+          'Der Einsiedler auf dem Wolkengipfel nimmt alle {10|20|60} Jahre einen Schüler. Jetzt ist es so weit.',
+          'L\'ermite du Pic des Nuages prend un disciple tous les {10|20|60} ans. Le moment est venu.',
+          '云峰上的隐士每{十|二十|六十}年收一个徒弟，如今正是时候。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Someone stole a page from the Shaolin library. Monks are searching every inn.',
+          'Кто-то украл страницу из библиотеки Шаолиня. Монахи обыскивают каждый постоялый двор.',
+          'Jemand hat eine Seite aus der Shaolin-Bibliothek gestohlen. Mönche durchsuchen jedes Gasthaus.',
+          'Quelqu\'un a volé une page de la bibliothèque de Shaolin. Les moines fouillent chaque auberge.',
+          '有人从少林藏经阁偷走了一页经书，僧人们正挨家搜查客栈。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Those who travel the old salt road at night meet [[@jianghu_encounters]]',
+          'Кто идёт старой соляной дорогой ночью, встречает: [[@jianghu_encounters]]',
+          'Wer nachts die alte Salzstraße nimmt, begegnet: [[@jianghu_encounters]]',
+          'Ceux qui empruntent la vieille route du sel la nuit croisent : [[@jianghu_encounters]]',
+          '夜走古盐道的人会遇到：[[@jianghu_encounters]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A wealthy family is offering {1d6*100} taels for a bodyguard who has never lost.',
+          'Богатая семья предлагает {1d6*100} лянов телохранителю, не знавшему поражений.',
+          'Eine reiche Familie bietet {1d6*100} Tael für einen Leibwächter, der nie verloren hat.',
+          'Une riche famille offre {1d6*100} taels pour un garde du corps jamais vaincu.',
+          '一户富贵人家悬赏{1d6*100}两银子，聘请一位从未败过的保镖。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The demonic cult\'s leader was reported dead three times this year.',
+          'О смерти главы демонического культа в этом году сообщали трижды.',
+          'Der Anführer des dämonischen Kults wurde dieses Jahr schon dreimal für tot erklärt.',
+          'Le chef du culte démoniaque a été déclaré mort trois fois cette année.',
+          '魔教教主今年已经被传死了三次。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A cave behind the waterfall holds a manual. Some say it is [[@manuals]]',
+          'В пещере за водопадом хранится трактат. Говорят, это: [[@manuals]]',
+          'In einer Höhle hinter dem Wasserfall liegt ein Handbuch. Manche sagen, es sei: [[@manuals]]',
+          'Une grotte derrière la cascade abrite un manuel. Certains disent que c\'est : [[@manuals]]',
+          '瀑布后的山洞里藏着一本秘籍，有人说是：[[@manuals]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The magistrate\'s new advisor never casts a shadow at noon.',
+          'Новый советник судьи никогда не отбрасывает тени в полдень.',
+          'Der neue Berater des Präfekten wirft mittags nie einen Schatten.',
+          'Le nouveau conseiller du magistrat ne projette jamais d\'ombre à midi.',
+          '县太爷新来的师爷正午时从来没有影子。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The famous storyteller in this very teahouse is a retired grandmaster in hiding.',
+          'Знаменитый рассказчик этой самой чайной — скрывающийся великий мастер на покое.',
+          'Der berühmte Erzähler in genau diesem Teehaus ist ein untergetauchter Großmeister im Ruhestand.',
+          'Le célèbre conteur de cette maison de thé est un grand maître retiré qui se cache.',
+          '就在这间茶馆里说书的那位名嘴，其实是隐退江湖的一代宗师。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'treasures',
+    style: _s,
+    folder: LibraryFolder.loot,
+    formula: '1d20',
+    name: Tx(
+      'Hidden Treasures',
+      'Скрытые сокровища',
+      'Verborgene Schätze',
+      'Trésors cachés',
+      '隐秘宝物',
+    ),
+    description: Tx(
+      'Valuables found in tombs, bandit hideouts and the sleeves of defeated foes.',
+      'Ценности из гробниц, разбойничьих логовищ и рукавов поверженных врагов.',
+      'Wertsachen aus Gräbern, Banditenverstecken und den Ärmeln besiegter Gegner.',
+      'Des objets de valeur trouvés dans les tombeaux, les repaires de brigands et les manches des ennemis vaincus.',
+      '在古墓、贼窝和败敌袖中找到的宝物。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          '{2d6} taels of silver wrapped in oiled paper.',
+          '{2d6} лянов серебра, завёрнутых в промасленную бумагу.',
+          '{2d6} Tael Silber in geöltem Papier.',
+          '{2d6} taels d\'argent enveloppés de papier huilé.',
+          '用油纸包着的{2d6}两银子。',
+        ),
+        weight: 4,
+      ),
+      LibraryRow(
+        Tx(
+          'A jade token of the {Beggars\' Sect|Imperial Guard|Wudang School} that opens many doors.',
+          'Нефритовый знак {Секты Нищих|Императорской стражи|школы Удан}, открывающий многие двери.',
+          'Eine Jadeplakette {der Bettlersekte|der Kaisergarde|der Wudang-Schule}, die viele Türen öffnet.',
+          'Un jeton de jade {de la Secte des Mendiants|de la Garde impériale|de l\'école Wudang} qui ouvre bien des portes.',
+          '一枚{丐帮|御林军|武当派}的玉牌，能打开许多门路。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Pills of the Nine Revolutions, {1d4} of them, that restore inner energy.',
+          'Пилюли Девяти Превращений, {1d4} шт., восстанавливающие внутреннюю энергию.',
+          '{1d4} Pillen der Neun Umwandlungen, die die innere Energie wiederherstellen.',
+          '{1d4} pilules des Neuf Révolutions, qui restaurent l\'énergie interne.',
+          '{1d4}颗九转丹，可恢复内力。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          'A fan with steel ribs and a poem that is also a map.',
+          'Веер со стальными спицами и стихотворением, которое заодно карта.',
+          'Ein Fächer mit Stahlrippen und einem Gedicht, das zugleich eine Karte ist.',
+          'Un éventail aux baleines d\'acier orné d\'un poème qui est aussi une carte.',
+          '一把铁骨折扇，扇面上的诗同时也是一张地图。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A vial of antidote for the Five Poisons, labeled in a dead man\'s hand.',
+          'Флакон противоядия от Пяти Ядов, подписанный рукой мертвеца.',
+          'Eine Phiole Gegengift gegen die Fünf Gifte, beschriftet in der Handschrift eines Toten.',
+          'Une fiole d\'antidote aux Cinq Poisons, étiquetée de la main d\'un mort.',
+          '一小瓶五毒解药，标签是一个死人的笔迹。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A plain-looking sword that cuts iron like silk.',
+          'Невзрачный меч, режущий железо, как шёлк.',
+          'Ein schlicht aussehendes Schwert, das Eisen wie Seide schneidet.',
+          'Une épée d\'apparence ordinaire qui tranche le fer comme de la soie.',
+          '一把其貌不扬、却能削铁如丝的剑。',
+        ),
+        weight: 1,
+      ),
+      LibraryRow(
+        Tx(
+          'A pouch of {1d6} flying needles, tips blackened.',
+          'Мешочек с {1d6} метательными иглами с почерневшими остриями.',
+          'Ein Beutel mit {1d6} Wurfnadeln, die Spitzen geschwärzt.',
+          'Une bourse de {1d6} aiguilles volantes aux pointes noircies.',
+          '一袋{1d6}枚针尖发黑的飞针。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A letter of debt from a sect elder, payable in a favor.',
+          'Долговая расписка старейшины секты, оплачиваемая услугой.',
+          'Ein Schuldschein eines Sektenältesten, zahlbar in Form eines Gefallens.',
+          'Une reconnaissance de dette d\'un ancien de secte, payable en service.',
+          '一张门派长老的欠条，以人情偿还。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A thousand-year ginseng root, worth a fortune to the right healer.',
+          'Тысячелетний корень женьшеня — целое состояние для правильного лекаря.',
+          'Eine tausendjährige Ginsengwurzel, ein Vermögen wert für den richtigen Heiler.',
+          'Une racine de ginseng millénaire, qui vaut une fortune pour le bon guérisseur.',
+          '一株千年人参，遇到识货的大夫便价值连城。',
+        ),
+        weight: 1,
+      ),
+      LibraryRow(
+        Tx(
+          'Half of a broken bronze mirror. Someone out there has the other half.',
+          'Половина разбитого бронзового зеркала. У кого-то есть вторая.',
+          'Die Hälfte eines zerbrochenen Bronzespiegels. Irgendwo hat jemand die andere.',
+          'La moitié d\'un miroir de bronze brisé. Quelqu\'un possède l\'autre moitié.',
+          '半面破碎的铜镜，另一半在某个人手中。',
+        ),
+        weight: 1,
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'quirks',
+    style: _s,
+    folder: LibraryFolder.people,
+    name: Tx(
+      'Wanderer Quirks',
+      'Причуды странников',
+      'Marotten der Wanderer',
+      'Manies de vagabonds',
+      '江湖客怪癖',
+    ),
+    description: Tx(
+      'Habits of swordsmen, monks, innkeepers and heroes of the rivers and lakes.',
+      'Привычки мечников, монахов, трактирщиков и героев рек и озёр.',
+      'Eigenheiten von Schwertkämpfern, Mönchen, Wirten und Helden der Flüsse und Seen.',
+      'Habitudes d\'épéistes, de moines, d\'aubergistes et de héros des fleuves et des lacs.',
+      '剑客、僧人、掌柜和江湖豪杰的习惯。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Drinks wine by the jar and never seems drunk.',
+          'Пьёт вино кувшинами и никогда не пьянеет.',
+          'Trinkt Wein krugweise und wirkt nie betrunken.',
+          'Boit le vin à la jarre et ne semble jamais ivre.',
+          '整坛整坛地喝酒，却从不见醉意。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Answers every insult with a line of {poetry|scripture|a proverb}.',
+          'На любое оскорбление отвечает {стихотворной строкой|цитатой из канона|пословицей}.',
+          'Beantwortet jede Beleidigung mit {einem Gedichtvers|einem Schriftzitat|einem Sprichwort}.',
+          'Répond à chaque insulte par {un vers|une citation des classiques|un proverbe}.',
+          '无论被怎么辱骂，都用一句{诗|经文|谚语}回应。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Keeps a vow of silence, but only on odd-numbered days.',
+          'Держит обет молчания — но только по нечётным дням.',
+          'Hält ein Schweigegelübde, aber nur an ungeraden Tagen.',
+          'Observe un vœu de silence, mais seulement les jours impairs.',
+          '立了禁语之誓，但只在单日遵守。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Carries a sword wrapped in cloth and has never drawn it.',
+          'Носит меч, обёрнутый тканью, и ни разу его не обнажал.',
+          'Trägt ein in Tuch gewickeltes Schwert und hat es nie gezogen.',
+          'Porte une épée enveloppée de tissu et ne l\'a jamais dégainée.',
+          '背着一把用布裹着的剑，从未拔出过。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Owes a life-debt to a stranger and asks everyone about them.',
+          'Обязан жизнью незнакомцу и расспрашивает о нём каждого.',
+          'Schuldet einem Fremden sein Leben und fragt jeden nach ihm.',
+          'Doit la vie à un inconnu et interroge tout le monde à son sujet.',
+          '欠一位陌生人救命之恩，逢人便打听此人下落。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Plays the guqin at dawn, badly and with great feeling.',
+          'На рассвете играет на гуцине — плохо, но с большим чувством.',
+          'Spielt bei Tagesanbruch Guqin, schlecht, aber voller Gefühl.',
+          'Joue du guqin à l\'aube, mal mais avec beaucoup d\'âme.',
+          '每天黎明弹古琴，弹得很差，却饱含深情。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Bows to every opponent, then fights dirty.',
+          'Кланяется каждому противнику, а потом дерётся нечестно.',
+          'Verbeugt sich vor jedem Gegner und kämpft dann unfair.',
+          'S\'incline devant chaque adversaire, puis se bat salement.',
+          '对每个对手都先行礼，然后再使阴招。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Is secretly a woman disguised as a man, or a man disguised as a monk.',
+          'Втайне — женщина, переодетая мужчиной, или мужчина, переодетый монахом.',
+          'Ist heimlich eine als Mann verkleidete Frau, oder ein als Mönch verkleideter Mann.',
+          'Est en secret une femme déguisée en homme, ou un homme déguisé en moine.',
+          '其实是女扮男装，或是男扮僧装。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Collects the names of every master they have defeated in a small book.',
+          'Записывает в книжечку имена всех мастеров, которых победил.',
+          'Notiert in einem Büchlein die Namen aller besiegten Meister.',
+          'Consigne dans un petit carnet le nom de chaque maître vaincu.',
+          '把每一个击败过的高手名字都记在一本小册子上。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Eats only plain rice and water, yet has the strength of an ox.',
+          'Ест лишь пустой рис и воду, но силён, как бык.',
+          'Isst nur Reis und Wasser und hat doch die Kraft eines Ochsen.',
+          'Ne mange que du riz nature et de l\'eau, mais a la force d\'un bœuf.',
+          '只吃白米饭、喝清水，却力大如牛。',
+        ),
+      ),
+    ],
+  ),
+];

@@ -1964,4 +1964,319 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get kindFieldsAction => 'Personnaliser les champs';
+
+  @override
+  String get tablesSearchHint => 'Rechercher des tables';
+
+  @override
+  String get tablesNewTable => 'Nouvelle table';
+
+  @override
+  String get tablesImport => 'Importer du texte';
+
+  @override
+  String get tablesLibrary => 'Bibliothèque';
+
+  @override
+  String get tablesOpenLibrary => 'Ouvrir la bibliothèque';
+
+  @override
+  String get tablesEmptyTitle => 'Aucune table aléatoire';
+
+  @override
+  String get tablesEmptyHint =>
+      'Partez d’une table toute prête de la bibliothèque, écrivez la vôtre ou collez une liste tirée d’un livre.';
+
+  @override
+  String get tablesNoMatches => 'Aucune table ne correspond.';
+
+  @override
+  String get tablesNoFolder => 'Autres tables';
+
+  @override
+  String tablesRowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lignes',
+      one: '1 ligne',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesWeighted => 'Par poids';
+
+  @override
+  String tablesDefaultName(int number) {
+    return 'Table $number';
+  }
+
+  @override
+  String get tablesDescriptionLabel => 'Description';
+
+  @override
+  String get tablesFolderLabel => 'Dossier';
+
+  @override
+  String get tablesFolderHint => 'ex. Rencontres';
+
+  @override
+  String get tablesFormulaLabel => 'Formule de dés';
+
+  @override
+  String get tablesFormulaHint => 'ex. 1d20 — vide : par poids';
+
+  @override
+  String get tablesFormulaInvalid => 'Formule de dés invalide';
+
+  @override
+  String get tablesEditTitle => 'Modifier la table';
+
+  @override
+  String get tablesEdit => 'Modifier les détails';
+
+  @override
+  String get tablesDuplicate => 'Dupliquer';
+
+  @override
+  String tablesCopyName(String name) {
+    return '$name (copie)';
+  }
+
+  @override
+  String tablesDeleteTitle(String name) {
+    return 'Supprimer « $name » ?';
+  }
+
+  @override
+  String get tablesDeleteBody =>
+      'La table et toutes ses lignes seront retirées de ce monde.';
+
+  @override
+  String get tablesActions => 'Actions de la table';
+
+  @override
+  String get tablesAllTables => 'Toutes les tables';
+
+  @override
+  String get tablesMissing => 'Cette table n’existe plus.';
+
+  @override
+  String get tablesRoll => 'Lancer';
+
+  @override
+  String get tablesRollAgain => 'Relancer';
+
+  @override
+  String get tablesCopy => 'Copier';
+
+  @override
+  String get tablesCopied => 'Copié dans le presse-papiers';
+
+  @override
+  String get tablesResultEmpty => 'Lancez pour obtenir un résultat.';
+
+  @override
+  String get tablesClamped => 'Hors de toute plage — ligne la plus proche';
+
+  @override
+  String get tablesRollLog => 'Journal des lancers';
+
+  @override
+  String get tablesRollLogEmpty => 'Les lancers de cette page s’affichent ici.';
+
+  @override
+  String get tablesClearLog => 'Vider le journal';
+
+  @override
+  String get tablesRows => 'Lignes';
+
+  @override
+  String get tablesAddRow => 'Ajouter une ligne';
+
+  @override
+  String get tablesDeleteRow => 'Supprimer la ligne';
+
+  @override
+  String get tablesAutoRanges => 'Plages auto';
+
+  @override
+  String get tablesAutoRangesHint =>
+      'Répartir les lignes sur la formule selon leur poids';
+
+  @override
+  String get tablesBulkEdit => 'Éditer en texte';
+
+  @override
+  String get tablesBulkEditTitle => 'Lignes en mode texte';
+
+  @override
+  String get tablesTextFormatHelp =>
+      'Une entrée par ligne : « 1-3 | texte », « 4: texte », « x3 texte » pour un poids, ou du texte simple. Les lignes commençant par # sont ignorées.';
+
+  @override
+  String get tablesImportTitle => 'Importer une table depuis du texte';
+
+  @override
+  String get tablesImportRows => 'Lignes';
+
+  @override
+  String tablesImportFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lignes trouvées',
+      one: '1 ligne trouvée',
+      zero: 'Aucune ligne trouvée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesImportAction => 'Importer';
+
+  @override
+  String get tablesApply => 'Appliquer';
+
+  @override
+  String get tablesRowsEmpty =>
+      'Aucune ligne. Ajoutez-en une, ou collez toute une liste avec « Éditer en texte ».';
+
+  @override
+  String tablesRowTextHint(String dice, String choice, String table) {
+    return 'Texte, dés $dice, choix $choice, jets $table';
+  }
+
+  @override
+  String get tablesFrom => 'De';
+
+  @override
+  String get tablesTo => 'À';
+
+  @override
+  String get tablesWeight => 'Poids';
+
+  @override
+  String get tablesDragToReorder => 'Glisser pour réordonner';
+
+  @override
+  String get tablesIssueBadFormula => 'La formule de dés est invalide.';
+
+  @override
+  String get tablesIssueEmpty => 'La table n’a aucune ligne avec du texte.';
+
+  @override
+  String tablesIssueEmptyRow(int row) {
+    return 'La ligne $row est vide.';
+  }
+
+  @override
+  String tablesIssueMissingRange(int row) {
+    return 'La ligne $row n’a pas de plage.';
+  }
+
+  @override
+  String tablesIssueInverted(int row) {
+    return 'Ligne $row : la plage est inversée.';
+  }
+
+  @override
+  String tablesIssueOutOfBounds(int row, String range) {
+    return 'La ligne $row dépasse ce que la formule peut donner ($range).';
+  }
+
+  @override
+  String tablesIssueGap(String range) {
+    return 'Rien ne couvre $range.';
+  }
+
+  @override
+  String tablesIssueOverlap(int first, int second, String range) {
+    return 'Les lignes $first et $second se chevauchent sur $range.';
+  }
+
+  @override
+  String get tablesFailNotFound => 'Aucune table de ce nom';
+
+  @override
+  String get tablesFailCycle => 'Renvoie à elle-même — arrêté';
+
+  @override
+  String get tablesFailDepth => 'Imbrication trop profonde — arrêté';
+
+  @override
+  String get tablesFailTooMany => 'Trop de jets imbriqués — arrêté';
+
+  @override
+  String get tablesFailEmpty => 'La table n’a pas de lignes';
+
+  @override
+  String get tablesFailBadFormula => 'La formule est invalide';
+
+  @override
+  String tablesChoice(int count) {
+    return 'un parmi $count';
+  }
+
+  @override
+  String get tablesFromLibrary => 'De la bibliothèque';
+
+  @override
+  String get tablesLibraryTitle => 'Bibliothèque de tables';
+
+  @override
+  String get tablesLibraryHint =>
+      'Des tables prêtes pour chaque univers. Prévisualisez-les, puis ajoutez-les à ce monde pour les modifier.';
+
+  @override
+  String get tablesYourSetting => 'Univers de ce monde';
+
+  @override
+  String get tablesOtherSettings => 'Autres univers';
+
+  @override
+  String tablesTableCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tables',
+      one: '1 table',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreview => 'Aperçu';
+
+  @override
+  String get tablesAddToWorld => 'Ajouter au monde';
+
+  @override
+  String get tablesInWorld => 'Dans ce monde';
+
+  @override
+  String get tablesAddDepsTitle => 'Ajouter aussi les tables liées ?';
+
+  @override
+  String tablesAddDepsBody(String name) {
+    return '« $name » lance sur ces tables. Sans elles, ses résultats afficheront un avertissement.';
+  }
+
+  @override
+  String tablesAddedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tables ajoutées',
+      one: '1 table ajoutée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreviewRoll => 'Essayer un lancer';
+
+  @override
+  String get tablesWhy => 'Détail du tirage';
 }

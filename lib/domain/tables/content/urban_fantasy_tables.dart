@@ -1,0 +1,587 @@
+import '../../models/world.dart';
+import 'table_library.dart';
+
+const _s = WorldStyle.urbanFantasy;
+
+const urbanFantasyTables = <LibraryTable>[
+  LibraryTable(
+    localId: 'hidden_encounters',
+    style: _s,
+    folder: LibraryFolder.encounters,
+    formula: '2d6',
+    name: Tx(
+      'Hidden-World Encounters',
+      'Встречи из скрытого мира',
+      'Begegnungen der verborgenen Welt',
+      'Rencontres du monde caché',
+      '隐秘世界遭遇',
+    ),
+    description: Tx(
+      'The supernatural side of the city, just past the edge of what ordinary people notice.',
+      'Сверхъестественная сторона города — сразу за гранью того, что замечают обычные люди.',
+      'Die übernatürliche Seite der Stadt, knapp jenseits dessen, was normale Menschen bemerken.',
+      'Le côté surnaturel de la ville, juste au-delà de ce que remarquent les gens ordinaires.',
+      '城市的超自然一面，就在普通人察觉不到的边缘之外。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'A vampire in a hospital scrub top buying {1d4+1} bags of blood from an orderly.',
+          'Вампир в медицинской форме покупает у санитара {1d4+1} пакета крови.',
+          'Ein Vampir in OP-Kleidung kauft einem Pfleger {1d4+1} Blutbeutel ab.',
+          'Un vampire en blouse d\'hôpital achète {1d4+1} poches de sang à un aide-soignant.',
+          '一个穿着手术服的吸血鬼正从护工那里买{1d4+1}袋血。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A werewolf pack playing pool in a biker bar, one of them watching you. [[@quirks]]',
+          'Стая оборотней играет в бильярд в байкерском баре; один не сводит с вас глаз. [[@quirks]]',
+          'Ein Werwolfrudel spielt Billard in einer Bikerbar, einer von ihnen beobachtet euch. [[@quirks]]',
+          'Une meute de loups-garous joue au billard dans un bar de bikers ; l\'un d\'eux vous fixe. [[@quirks]]',
+          '一群狼人在机车酒吧里打台球，其中一个盯着你。[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A goblin market sets up in the parking garage, selling [[@curios]]',
+          'На подземной парковке открывается гоблинский рынок. В продаже: [[@curios]]',
+          'Im Parkhaus öffnet ein Koboldmarkt und verkauft: [[@curios]]',
+          'Un marché gobelin s\'installe dans le parking souterrain et vend : [[@curios]]',
+          '停车场里摆起了地精集市，在卖：[[@curios]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A ghost on the late bus who does not know they are dead.',
+          'Призрак в ночном автобусе, не знающий, что умер.',
+          'Ein Geist im Nachtbus, der nicht weiß, dass er tot ist.',
+          'Un fantôme dans le dernier bus, qui ne sait pas qu\'il est mort.',
+          '末班公交上的一个鬼魂，不知道自己已经死了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Things get messy: [[@complications]]',
+          'Всё запутывается: [[@complications]]',
+          'Die Lage wird unübersichtlich: [[@complications]]',
+          'Les choses se compliquent : [[@complications]]',
+          '情况变得一团糟：[[@complications]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A street witch reading tarot on a folding table. She draws {the Tower|Death|the Moon} for you.',
+          'Уличная ведьма гадает на таро за складным столиком. Вам выпадает {Башня|Смерть|Луна}.',
+          'Eine Straßenhexe legt an einem Klapptisch Tarot. Für euch zieht sie {den Turm|den Tod|den Mond}.',
+          'Une sorcière des rues tire le tarot sur une table pliante. Pour vous : {la Maison Dieu|l\'Arcane sans nom|la Lune}.',
+          '一个街头女巫在折叠桌上占塔罗牌，为你抽到了{高塔|死神|月亮}。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A fae noble slumming it in a nightclub, bored and dangerous.',
+          'Знатный фейри развлекается в ночном клубе — скучающий и опасный.',
+          'Ein Feenadliger vergnügt sich gelangweilt und gefährlich in einem Nachtclub.',
+          'Un noble féerique s\'encanaille dans une boîte de nuit, blasé et dangereux.',
+          '一位精灵贵族在夜店里消磨时间，百无聊赖，危险十足。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Hunters in a van with blacked-out windows, checking a list of addresses.',
+          'Охотники в фургоне с тонированными стёклами сверяют список адресов.',
+          'Jäger in einem Van mit getönten Scheiben gehen eine Adressliste durch.',
+          'Des chasseurs dans un van aux vitres teintées vérifient une liste d\'adresses.',
+          '一辆车窗全黑的面包车里，猎人们正核对一份地址清单。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A lost troll under the overpass, asking for directions to the old bridge.',
+          'Заблудившийся тролль под эстакадой спрашивает дорогу к старому мосту.',
+          'Ein verirrter Troll unter der Überführung fragt nach dem Weg zur alten Brücke.',
+          'Un troll égaré sous le pont autoroutier demande le chemin du vieux pont.',
+          '高架桥下一个迷路的巨魔，打听去老桥的路。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A kid who can see through glamours follows you and will not stop asking questions.',
+          'Ребёнок, видящий сквозь морок, идёт за вами и засыпает вопросами.',
+          'Ein Kind, das durch Blendwerk sieht, folgt euch und hört nicht auf zu fragen.',
+          'Un enfant qui voit à travers les illusions vous suit et ne cesse de poser des questions.',
+          '一个能看穿幻术的孩子跟着你，问个不停。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An old god, now a doorman, who remembers when this city was a swamp.',
+          'Древний бог, ныне швейцар, помнящий, как этот город был болотом.',
+          'Ein alter Gott, heute Portier, der sich erinnert, als die Stadt noch ein Sumpf war.',
+          'Un dieu ancien devenu portier, qui se souvient du temps où la ville était un marais.',
+          '一位如今当门卫的古老神祇，还记得这座城市曾是一片沼泽。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'whispers',
+    style: _s,
+    folder: LibraryFolder.rumors,
+    formula: '1d10',
+    name: Tx(
+      'Whispers in the Veil',
+      'Шёпот за завесой',
+      'Geflüster hinter dem Schleier',
+      'Murmures derrière le voile',
+      '帷幕后的低语',
+    ),
+    description: Tx(
+      'Rumors passed between those who know what really walks the streets.',
+      'Слухи, которыми обмениваются те, кто знает, кто на самом деле ходит по улицам.',
+      'Gerüchte unter denen, die wissen, was wirklich durch die Straßen zieht.',
+      'Des rumeurs qui circulent entre ceux qui savent ce qui arpente vraiment les rues.',
+      '知道街头真正游荡着什么的人之间流传的消息。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'The Council is voting on whether to reveal itself. Some members would rather burn the vote.',
+          'Совет голосует, открываться ли людям. Кое-кто предпочёл бы сжечь бюллетени.',
+          'Der Rat stimmt darüber ab, sich zu offenbaren. Manche würden die Abstimmung lieber verbrennen.',
+          'Le Conseil vote pour savoir s\'il doit se révéler. Certains préféreraient brûler le scrutin.',
+          '议会正在投票决定是否公开身份。有些成员宁可把选票烧了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Someone is selling vials of {dragon blood|bottled luck|a saint\'s tears} in the club district.',
+          'Кто-то продаёт в клубном квартале флаконы с {драконьей кровью|удачей в бутылке|слезами святого}.',
+          'Jemand verkauft im Clubviertel Fläschchen mit {Drachenblut|abgefülltem Glück|Heiligentränen}.',
+          'Quelqu\'un vend des fioles {de sang de dragon|de chance en bouteille|de larmes de saint} dans le quartier des clubs.',
+          '有人在夜店区卖一小瓶一小瓶的{龙血|瓶装好运|圣人之泪}。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The river spirit is angry: {1d4} people have fallen in this month.',
+          'Дух реки разгневан: в этом месяце в неё упали {1d4} человека.',
+          'Der Flussgeist ist zornig: Diesen Monat sind {1d4} Menschen hineingefallen.',
+          'L\'esprit du fleuve est en colère : {1d4} personnes y sont tombées ce mois-ci.',
+          '河神发怒了：这个月已经有{1d4}个人落水。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A new coffee shop is a front for a coven. The pastries are excellent.',
+          'Новая кофейня — прикрытие для ковена. Выпечка превосходная.',
+          'Ein neues Café ist die Tarnung eines Hexenzirkels. Das Gebäck ist hervorragend.',
+          'Un nouveau café sert de façade à un cercle de sorcières. Les pâtisseries sont excellentes.',
+          '新开的咖啡馆其实是女巫集会的幌子。糕点倒是一流。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The subway\'s abandoned platform hosts a fight club. Last week\'s bout ended with [[@hidden_encounters]]',
+          'На заброшенной платформе метро проходит бойцовский клуб. Прошлый бой закончился так: [[@hidden_encounters]]',
+          'Auf dem stillgelegten U-Bahnsteig gibt es einen Fightclub. Der letzte Kampf endete mit: [[@hidden_encounters]]',
+          'Le quai abandonné du métro accueille un fight club. Le dernier combat s\'est fini ainsi : [[@hidden_encounters]]',
+          '废弃的地铁站台上有个地下格斗俱乐部。上周的比赛以此收场：[[@hidden_encounters]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A tech company is scanning for magic signatures through phone cameras.',
+          'Техкомпания ищет магические следы через камеры телефонов.',
+          'Eine Techfirma sucht über Handykameras nach magischen Signaturen.',
+          'Une entreprise tech traque les signatures magiques via les caméras des téléphones.',
+          '一家科技公司正在通过手机摄像头扫描魔法痕迹。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The Summer Court and the Winter Court both claim the new park.',
+          'И Летний, и Зимний двор заявляют права на новый парк.',
+          'Sowohl der Sommerhof als auch der Winterhof beanspruchen den neuen Park.',
+          'La Cour d\'été et la Cour d\'hiver revendiquent toutes deux le nouveau parc.',
+          '夏之宫廷和冬之宫廷都宣称新公园归自己所有。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An oracle was found asleep in a laundromat; she will not wake, but she talks.',
+          'Оракула нашли спящей в прачечной; она не просыпается, но говорит.',
+          'Ein Orakel wurde schlafend in einem Waschsalon gefunden; es wacht nicht auf, aber es spricht.',
+          'On a trouvé une oracle endormie dans une laverie ; elle ne se réveille pas, mais elle parle.',
+          '有人在自助洗衣店发现一位沉睡的神谕者。她醒不过来，却在说话。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A demon wants to break its contract and is looking for a lawyer.',
+          'Демон хочет расторгнуть контракт и ищет адвоката.',
+          'Ein Dämon will seinen Vertrag brechen und sucht einen Anwalt.',
+          'Un démon veut rompre son contrat et cherche un avocat.',
+          '一个恶魔想毁约，正在找律师。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Every mirror in the old hotel shows the room as it was in 1920.',
+          'Все зеркала в старом отеле показывают комнату такой, какой она была в 1920-м.',
+          'Jeder Spiegel im alten Hotel zeigt das Zimmer, wie es 1920 aussah.',
+          'Chaque miroir du vieil hôtel montre la pièce telle qu\'elle était en 1920.',
+          '老酒店里每一面镜子映出的都是1920年时的房间。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'curios',
+    style: _s,
+    folder: LibraryFolder.loot,
+    formula: '1d20',
+    name: Tx(
+      'Charms & Curios',
+      'Обереги и диковины',
+      'Talismane & Kuriositäten',
+      'Charmes & curiosités',
+      '护符与奇物',
+    ),
+    description: Tx(
+      'Minor magic found in pawnshops, lost-and-found boxes and dead hunters\' jackets.',
+      'Мелкая магия из ломбардов, бюро находок и курток погибших охотников.',
+      'Kleine Magie aus Pfandhäusern, Fundkisten und Jacken toter Jäger.',
+      'De la petite magie trouvée chez les prêteurs sur gages, aux objets trouvés et dans les vestes de chasseurs morts.',
+      '当铺、失物招领箱和死去猎人夹克里找到的小小魔法。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'A subway token that always gets you on the next train, wherever it goes.',
+          'Жетон метро, который всегда сажает вас на следующий поезд, куда бы тот ни шёл.',
+          'Eine U-Bahn-Münze, die euch immer in den nächsten Zug bringt, egal wohin er fährt.',
+          'Un jeton de métro qui vous fait toujours monter dans la prochaine rame, où qu\'elle aille.',
+          '一枚地铁代币，总能让你搭上下一班车，不管它开往哪里。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          '{2d6*10} dollars in bills that turn to leaves at dawn.',
+          '{2d6*10} долларов купюрами, которые на рассвете превращаются в листья.',
+          '{2d6*10} Dollar in Scheinen, die sich im Morgengrauen in Laub verwandeln.',
+          '{2d6*10} dollars en billets qui se changent en feuilles à l\'aube.',
+          '{2d6*10}美元的钞票，天一亮就会变成树叶。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          'A lighter that only lights in the presence of the undead.',
+          'Зажигалка, загорающаяся только рядом с нежитью.',
+          'Ein Feuerzeug, das nur in der Nähe von Untoten zündet.',
+          'Un briquet qui ne s\'allume qu\'en présence de morts-vivants.',
+          '一只只在亡灵附近才打得着火的打火机。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A {red|silver|iron} thread bracelet that burns when someone lies to you.',
+          'Браслет из {красной|серебряной|железной} нити, жгущий кожу, когда вам лгут.',
+          'Ein Armband aus {rotem|silbernem|eisernem} Faden, das brennt, wenn man euch belügt.',
+          'Un bracelet de fil {rouge|d\'argent|de fer} qui brûle quand on vous ment.',
+          '一条{红|银|铁}线手链，有人对你撒谎时会发烫。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A phone with one contact: "Do not call unless dying".',
+          'Телефон с единственным контактом: «Не звонить, если не умираешь».',
+          'Ein Handy mit einem einzigen Kontakt: „Nur anrufen, wenn du stirbst“.',
+          'Un téléphone avec un seul contact : « N\'appeler qu\'en cas d\'agonie ».',
+          '一部手机，通讯录里只有一个联系人：“除非快死了，否则别打”。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A jar of salt from a church that burned down, {1d4} handfuls left.',
+          'Банка соли из сгоревшей церкви, осталось {1d4} горсти.',
+          'Ein Glas Salz aus einer abgebrannten Kirche, noch {1d4} Handvoll.',
+          'Un bocal de sel d\'une église incendiée, il en reste {1d4} poignées.',
+          '一罐来自烧毁教堂的盐，还剩{1d4}把。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Sunglasses that show auras, and give migraines.',
+          'Солнечные очки, показывающие ауры и вызывающие мигрень.',
+          'Eine Sonnenbrille, die Auren zeigt und Migräne macht.',
+          'Des lunettes de soleil qui révèlent les auras, et donnent la migraine.',
+          '一副能看见灵光的墨镜，戴久了会偏头痛。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A business card for a fixer who deals in favors between courts.',
+          'Визитка посредника, торгующего услугами между дворами.',
+          'Eine Visitenkarte eines Vermittlers, der Gefälligkeiten zwischen den Höfen handelt.',
+          'La carte d\'un intermédiaire qui négocie des faveurs entre les cours.',
+          '一张名片，属于一个在各宫廷之间买卖人情的掮客。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A silver bullet engraved with a name you recognize.',
+          'Серебряная пуля с выгравированным знакомым вам именем.',
+          'Eine Silberkugel mit einem Namen, den ihr kennt.',
+          'Une balle d\'argent gravée d\'un nom que vous reconnaissez.',
+          '一颗刻着你熟悉名字的银子弹。',
+        ),
+        weight: 1,
+      ),
+      LibraryRow(
+        Tx(
+          'A key to a door that only appears in the rain.',
+          'Ключ от двери, появляющейся только под дождём.',
+          'Ein Schlüssel zu einer Tür, die nur bei Regen erscheint.',
+          'La clé d\'une porte qui n\'apparaît que sous la pluie.',
+          '一把钥匙，对应的门只在下雨时出现。',
+        ),
+        weight: 1,
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'complications',
+    style: _s,
+    folder: LibraryFolder.locale,
+    formula: '1d10',
+    name: Tx(
+      'Masquerade Complications',
+      'Угрозы маскараду',
+      'Komplikationen der Maskerade',
+      'Complications de la mascarade',
+      '伪装危机',
+    ),
+    description: Tx(
+      'Ways the secret world risks being exposed, right now.',
+      'Как тайный мир рискует раскрыться — прямо сейчас.',
+      'Wie die geheime Welt gerade jetzt aufzufliegen droht.',
+      'Comment le monde secret risque d\'être exposé, maintenant.',
+      '秘密世界眼下可能暴露的种种方式。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Someone filmed it. The video has {1d100*100} views and climbing.',
+          'Кто-то это снял. У видео {1d100*100} просмотров, и число растёт.',
+          'Jemand hat es gefilmt. Das Video hat {1d100*100} Aufrufe, Tendenz steigend.',
+          'Quelqu\'un a filmé. La vidéo a {1d100*100} vues et ça grimpe.',
+          '有人拍下来了。视频已有{1d100*100}次播放，还在涨。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A police detective starts connecting the dots. [[@quirks]]',
+          'Полицейский детектив начинает связывать факты. [[@quirks]]',
+          'Eine Kriminalbeamtin beginnt, die Punkte zu verbinden. [[@quirks]]',
+          'Une inspectrice commence à relier les points. [[@quirks]]',
+          '一名刑警开始把线索串起来了。[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A glamour fails in broad daylight, on a crowded street.',
+          'Морок рассеивается средь бела дня на людной улице.',
+          'Ein Blendwerk versagt am helllichten Tag auf einer belebten Straße.',
+          'Une illusion se dissipe en plein jour, dans une rue bondée.',
+          '光天化日之下，一个幻术在人来人往的街上失效了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A body with {fang marks|claw marks|no shadow} ends up at the city morgue.',
+          'В городской морг попадает тело {со следами клыков|со следами когтей|без тени}.',
+          'Eine Leiche mit {Bissspuren|Krallenspuren|ohne Schatten} landet im städtischen Leichenschauhaus.',
+          'Un corps {marqué de crocs|lacéré de griffes|sans ombre} arrive à la morgue municipale.',
+          '一具{带着獠牙印|带着爪痕|没有影子}的尸体被送进了市立停尸房。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A journalist has a source inside the hidden world and a deadline on Friday.',
+          'У журналиста есть источник в скрытом мире и дедлайн в пятницу.',
+          'Ein Journalist hat eine Quelle in der verborgenen Welt und Redaktionsschluss am Freitag.',
+          'Un journaliste a une source dans le monde caché et un bouclage vendredi.',
+          '一名记者在隐秘世界里有线人，而且周五就要截稿。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A full moon falls on the night of the big game; the stadium is packed.',
+          'Полнолуние выпадает на вечер большого матча; стадион полон.',
+          'Vollmond fällt auf den Abend des großen Spiels; das Stadion ist voll.',
+          'La pleine lune tombe le soir du grand match ; le stade est plein.',
+          '满月恰逢大赛之夜，体育场座无虚席。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A child\'s drawing shows exactly what you are.',
+          'Детский рисунок в точности показывает, кто вы такие.',
+          'Eine Kinderzeichnung zeigt genau, was ihr seid.',
+          'Un dessin d\'enfant montre exactement ce que vous êtes.',
+          '一幅儿童画准确地画出了你的真面目。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The wards on the safe house fail for {1d6} hours.',
+          'Защитные знаки на убежище перестают работать на {1d6} ч.',
+          'Die Schutzzeichen am Unterschlupf versagen für {1d6} Stunden.',
+          'Les protections de la planque cèdent pendant {1d6} heures.',
+          '安全屋的结界失效了{1d6}小时。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A rival faction leaks your address to the hunters.',
+          'Конкурирующая фракция сливает охотникам ваш адрес.',
+          'Eine rivalisierende Fraktion spielt den Jägern eure Adresse zu.',
+          'Une faction rivale donne votre adresse aux chasseurs.',
+          '敌对派系把你的住址泄露给了猎人。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An ordinary friend walks in at exactly the wrong moment.',
+          'Обычный друг заходит в самый неподходящий момент.',
+          'Ein ganz normaler Freund kommt genau im falschen Moment herein.',
+          'Un ami ordinaire entre pile au mauvais moment.',
+          '一个普通朋友偏偏在最不该出现的时候走了进来。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'quirks',
+    style: _s,
+    folder: LibraryFolder.people,
+    name: Tx(
+      'Supernatural Tells',
+      'Выдающие признаки',
+      'Übernatürliche Merkmale',
+      'Indices surnaturels',
+      '超自然破绽',
+    ),
+    description: Tx(
+      'Small giveaways that someone is not entirely human.',
+      'Мелочи, выдающие, что кто-то не вполне человек.',
+      'Kleine Hinweise darauf, dass jemand nicht ganz menschlich ist.',
+      'De petits signes que quelqu\'un n\'est pas tout à fait humain.',
+      '暴露某人并非完全是人类的小细节。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Never casts a reflection in shop windows.',
+          'Никогда не отражается в витринах.',
+          'Spiegelt sich nie in Schaufenstern.',
+          'Ne se reflète jamais dans les vitrines.',
+          '在橱窗玻璃上从来照不出影子。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Eyes flash {gold|green|silver} in headlights.',
+          'Глаза вспыхивают {золотом|зеленью|серебром} в свете фар.',
+          'Die Augen blitzen im Scheinwerferlicht {golden|grün|silbern} auf.',
+          'Les yeux luisent {d\'or|de vert|d\'argent} dans les phares.',
+          '在车灯照射下眼睛会闪出{金|绿|银}光。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Cannot enter a home without being invited, and makes excuses.',
+          'Не может войти в дом без приглашения и придумывает отговорки.',
+          'Kann ohne Einladung kein Haus betreten und erfindet Ausreden.',
+          'Ne peut entrer chez quelqu\'un sans y être invité, et trouve des excuses.',
+          '没被邀请就进不了别人家门，总找借口推托。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Plants lean toward them.',
+          'Растения тянутся к нему.',
+          'Pflanzen neigen sich ihm zu.',
+          'Les plantes se penchent vers lui.',
+          '植物会朝他倾斜。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Counts spilled rice compulsively.',
+          'Не может удержаться, чтобы не пересчитать рассыпанный рис.',
+          'Muss verschütteten Reis zwanghaft zählen.',
+          'Compte le riz renversé de façon compulsive.',
+          '看到撒落的米粒就忍不住要数。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Smells of wet fur after rain.',
+          'После дождя пахнет мокрой шерстью.',
+          'Riecht nach Regen nach nassem Fell.',
+          'Sent le poil mouillé après la pluie.',
+          '雨后身上有股湿毛皮的味道。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Avoids iron railings, even when it means a long detour.',
+          'Избегает железных перил, даже если приходится идти в обход.',
+          'Meidet Eisengeländer, selbst wenn das einen langen Umweg bedeutet.',
+          'Évite les rambardes en fer, quitte à faire un long détour.',
+          '避开铁栏杆，哪怕要绕很远的路。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Speaks a language no one has used in centuries, in their sleep.',
+          'Во сне говорит на языке, которым никто не пользуется веками.',
+          'Spricht im Schlaf eine Sprache, die seit Jahrhunderten niemand benutzt.',
+          'Parle en dormant une langue que personne n\'utilise depuis des siècles.',
+          '睡梦中说着一种几百年没人用过的语言。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Is always cold to the touch, and always hungry.',
+          'Всегда холоден на ощупь и всегда голоден.',
+          'Fühlt sich immer kalt an und ist immer hungrig.',
+          'Est toujours froid au toucher, et toujours affamé.',
+          '摸起来总是冰凉，而且总是很饿。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Every clock near them runs a little fast.',
+          'Все часы рядом с ним немного спешат.',
+          'Jede Uhr in der Nähe geht ein wenig vor.',
+          'Toutes les horloges près de lui avancent un peu.',
+          '靠近他的钟都会走快一点。',
+        ),
+      ),
+    ],
+  ),
+];

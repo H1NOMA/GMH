@@ -3487,6 +3487,510 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Customize fields'**
   String get kindFieldsAction;
+
+  /// No description provided for @tablesSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tables'**
+  String get tablesSearchHint;
+
+  /// No description provided for @tablesNewTable.
+  ///
+  /// In en, this message translates to:
+  /// **'New table'**
+  String get tablesNewTable;
+
+  /// No description provided for @tablesImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from text'**
+  String get tablesImport;
+
+  /// No description provided for @tablesLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get tablesLibrary;
+
+  /// No description provided for @tablesOpenLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the library'**
+  String get tablesOpenLibrary;
+
+  /// No description provided for @tablesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No random tables yet'**
+  String get tablesEmptyTitle;
+
+  /// No description provided for @tablesEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Start from a ready-made table in the library, write your own, or paste a list from a book.'**
+  String get tablesEmptyHint;
+
+  /// No description provided for @tablesNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No tables match your search.'**
+  String get tablesNoMatches;
+
+  /// No description provided for @tablesNoFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Other tables'**
+  String get tablesNoFolder;
+
+  /// No description provided for @tablesRowCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 row} other{{count} rows}}'**
+  String tablesRowCount(int count);
+
+  /// No description provided for @tablesWeighted.
+  ///
+  /// In en, this message translates to:
+  /// **'By weight'**
+  String get tablesWeighted;
+
+  /// No description provided for @tablesDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Table {number}'**
+  String tablesDefaultName(int number);
+
+  /// No description provided for @tablesDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get tablesDescriptionLabel;
+
+  /// No description provided for @tablesFolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get tablesFolderLabel;
+
+  /// No description provided for @tablesFolderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Encounters'**
+  String get tablesFolderHint;
+
+  /// No description provided for @tablesFormulaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dice formula'**
+  String get tablesFormulaLabel;
+
+  /// No description provided for @tablesFormulaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1d20 — empty rolls by weight'**
+  String get tablesFormulaHint;
+
+  /// No description provided for @tablesFormulaInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a valid dice formula'**
+  String get tablesFormulaInvalid;
+
+  /// No description provided for @tablesEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit table'**
+  String get tablesEditTitle;
+
+  /// No description provided for @tablesEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit details'**
+  String get tablesEdit;
+
+  /// No description provided for @tablesDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get tablesDuplicate;
+
+  /// No description provided for @tablesCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (copy)'**
+  String tablesCopyName(String name);
+
+  /// No description provided for @tablesDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{name}”?'**
+  String tablesDeleteTitle(String name);
+
+  /// No description provided for @tablesDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The table and all its rows will be removed from this world.'**
+  String get tablesDeleteBody;
+
+  /// No description provided for @tablesActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Table actions'**
+  String get tablesActions;
+
+  /// No description provided for @tablesAllTables.
+  ///
+  /// In en, this message translates to:
+  /// **'All tables'**
+  String get tablesAllTables;
+
+  /// No description provided for @tablesMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This table no longer exists.'**
+  String get tablesMissing;
+
+  /// No description provided for @tablesRoll.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll'**
+  String get tablesRoll;
+
+  /// No description provided for @tablesRollAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll again'**
+  String get tablesRollAgain;
+
+  /// No description provided for @tablesCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get tablesCopy;
+
+  /// No description provided for @tablesCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get tablesCopied;
+
+  /// No description provided for @tablesResultEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll to get a result.'**
+  String get tablesResultEmpty;
+
+  /// No description provided for @tablesClamped.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside every range — nearest row used'**
+  String get tablesClamped;
+
+  /// No description provided for @tablesRollLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll log'**
+  String get tablesRollLog;
+
+  /// No description provided for @tablesRollLogEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Rolls made on this page appear here.'**
+  String get tablesRollLogEmpty;
+
+  /// No description provided for @tablesClearLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear log'**
+  String get tablesClearLog;
+
+  /// No description provided for @tablesRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Rows'**
+  String get tablesRows;
+
+  /// No description provided for @tablesAddRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Add row'**
+  String get tablesAddRow;
+
+  /// No description provided for @tablesDeleteRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete row'**
+  String get tablesDeleteRow;
+
+  /// No description provided for @tablesAutoRanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto ranges'**
+  String get tablesAutoRanges;
+
+  /// No description provided for @tablesAutoRangesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Spread the rows over the formula by weight'**
+  String get tablesAutoRangesHint;
+
+  /// No description provided for @tablesBulkEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit as text'**
+  String get tablesBulkEdit;
+
+  /// No description provided for @tablesBulkEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit rows as text'**
+  String get tablesBulkEditTitle;
+
+  /// No description provided for @tablesTextFormatHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'One row per line: “1-3 | text”, “4: text”, “x3 text” for a weight, or plain text. Lines starting with # are ignored.'**
+  String get tablesTextFormatHelp;
+
+  /// No description provided for @tablesImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a table from text'**
+  String get tablesImportTitle;
+
+  /// No description provided for @tablesImportRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Rows'**
+  String get tablesImportRows;
+
+  /// No description provided for @tablesImportFound.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No rows found} =1{1 row found} other{{count} rows found}}'**
+  String tablesImportFound(int count);
+
+  /// No description provided for @tablesImportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get tablesImportAction;
+
+  /// No description provided for @tablesApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get tablesApply;
+
+  /// No description provided for @tablesRowsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No rows yet. Add one, or paste a whole list with “Edit as text”.'**
+  String get tablesRowsEmpty;
+
+  /// No description provided for @tablesRowTextHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Text, {dice} dice, {choice} choices, {table} rolls'**
+  String tablesRowTextHint(String dice, String choice, String table);
+
+  /// No description provided for @tablesFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get tablesFrom;
+
+  /// No description provided for @tablesTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get tablesTo;
+
+  /// No description provided for @tablesWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get tablesWeight;
+
+  /// No description provided for @tablesDragToReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder'**
+  String get tablesDragToReorder;
+
+  /// No description provided for @tablesIssueBadFormula.
+  ///
+  /// In en, this message translates to:
+  /// **'The dice formula cannot be rolled.'**
+  String get tablesIssueBadFormula;
+
+  /// No description provided for @tablesIssueEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The table has no rows with text.'**
+  String get tablesIssueEmpty;
+
+  /// No description provided for @tablesIssueEmptyRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Row {row} has no text.'**
+  String tablesIssueEmptyRow(int row);
+
+  /// No description provided for @tablesIssueMissingRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Row {row} has no range.'**
+  String tablesIssueMissingRange(int row);
+
+  /// No description provided for @tablesIssueInverted.
+  ///
+  /// In en, this message translates to:
+  /// **'Row {row}: the range runs backwards.'**
+  String tablesIssueInverted(int row);
+
+  /// No description provided for @tablesIssueOutOfBounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Row {row} goes beyond what the formula can roll ({range}).'**
+  String tablesIssueOutOfBounds(int row, String range);
+
+  /// No description provided for @tablesIssueGap.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing covers {range}.'**
+  String tablesIssueGap(String range);
+
+  /// No description provided for @tablesIssueOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'Rows {first} and {second} overlap on {range}.'**
+  String tablesIssueOverlap(int first, int second, String range);
+
+  /// No description provided for @tablesFailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No table with this name'**
+  String get tablesFailNotFound;
+
+  /// No description provided for @tablesFailCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Refers back to itself — stopped'**
+  String get tablesFailCycle;
+
+  /// No description provided for @tablesFailDepth.
+  ///
+  /// In en, this message translates to:
+  /// **'Nested too deep — stopped'**
+  String get tablesFailDepth;
+
+  /// No description provided for @tablesFailTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many nested rolls — stopped'**
+  String get tablesFailTooMany;
+
+  /// No description provided for @tablesFailEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The table has no rows'**
+  String get tablesFailEmpty;
+
+  /// No description provided for @tablesFailBadFormula.
+  ///
+  /// In en, this message translates to:
+  /// **'The formula cannot be rolled'**
+  String get tablesFailBadFormula;
+
+  /// No description provided for @tablesChoice.
+  ///
+  /// In en, this message translates to:
+  /// **'one of {count}'**
+  String tablesChoice(int count);
+
+  /// No description provided for @tablesFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'From the library'**
+  String get tablesFromLibrary;
+
+  /// No description provided for @tablesLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Table library'**
+  String get tablesLibraryTitle;
+
+  /// No description provided for @tablesLibraryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready-made tables for every setting. Preview them, then add them to this world to edit.'**
+  String get tablesLibraryHint;
+
+  /// No description provided for @tablesYourSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'This world’s setting'**
+  String get tablesYourSetting;
+
+  /// No description provided for @tablesOtherSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Other settings'**
+  String get tablesOtherSettings;
+
+  /// No description provided for @tablesTableCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 table} other{{count} tables}}'**
+  String tablesTableCount(int count);
+
+  /// No description provided for @tablesPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get tablesPreview;
+
+  /// No description provided for @tablesAddToWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to world'**
+  String get tablesAddToWorld;
+
+  /// No description provided for @tablesInWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'In this world'**
+  String get tablesInWorld;
+
+  /// No description provided for @tablesAddDepsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the referenced tables too?'**
+  String get tablesAddDepsTitle;
+
+  /// No description provided for @tablesAddDepsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” rolls on these tables. Without them its results show a warning mark.'**
+  String tablesAddDepsBody(String name);
+
+  /// No description provided for @tablesAddedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Added 1 table} other{Added {count} tables}}'**
+  String tablesAddedCount(int count);
+
+  /// No description provided for @tablesPreviewRoll.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a roll'**
+  String get tablesPreviewRoll;
+
+  /// No description provided for @tablesWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'How it was rolled'**
+  String get tablesWhy;
 }
 
 class _AppLocalizationsDelegate

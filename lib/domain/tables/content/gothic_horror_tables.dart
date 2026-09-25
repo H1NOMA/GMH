@@ -1,0 +1,581 @@
+import '../../models/world.dart';
+import 'table_library.dart';
+
+const _s = WorldStyle.gothicHorror;
+
+const gothicHorrorTables = <LibraryTable>[
+  LibraryTable(
+    localId: 'night_encounters',
+    style: _s,
+    folder: LibraryFolder.encounters,
+    formula: '2d6',
+    name: Tx(
+      'Night Encounters',
+      'Ночные встречи',
+      'Nächtliche Begegnungen',
+      'Rencontres nocturnes',
+      '夜间遭遇',
+    ),
+    description: Tx(
+      'What waits on the moor road, in the churchyard or behind the manor walls after dark.',
+      'Что ждёт после заката на болотной дороге, на погосте или за стенами поместья.',
+      'Was nach Einbruch der Nacht auf der Moorstraße, am Friedhof oder hinter Herrenhausmauern wartet.',
+      'Ce qui attend la nuit sur la route de la lande, au cimetière ou derrière les murs du manoir.',
+      '入夜后，荒原小路、教堂墓地或庄园高墙后等待着的东西。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'A coach with no driver, its lanterns lit, stops beside you and opens its door.',
+          'Карета без кучера, с зажжёнными фонарями, останавливается рядом и открывает дверцу.',
+          'Eine Kutsche ohne Kutscher, die Laternen brennen, hält neben euch und öffnet die Tür.',
+          'Un carrosse sans cocher, lanternes allumées, s\'arrête près de vous et ouvre sa porte.',
+          '一辆没有车夫、灯火通明的马车停在身旁，车门自己打开了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          '{1d4+1} wolves with human eyes pace the edge of the torchlight.',
+          '{1d4+1} волка с человеческими глазами бродят на краю света факелов.',
+          '{1d4+1} Wölfe mit Menschenaugen streifen am Rand des Fackelscheins umher.',
+          '{1d4+1} loups aux yeux humains rôdent en lisière de la lueur des torches.',
+          '{1d4+1}头长着人眼的狼在火把光圈边缘徘徊。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A gravedigger working by lantern light, who insists the grave is for you. [[@quirks]]',
+          'Могильщик копает при свете фонаря и уверяет, что могила — для вас. [[@quirks]]',
+          'Ein Totengräber arbeitet im Laternenlicht und beharrt darauf, das Grab sei für euch. [[@quirks]]',
+          'Un fossoyeur qui creuse à la lanterne et affirme que la tombe est pour vous. [[@quirks]]',
+          '一个就着灯笼挖坟的掘墓人，坚持说这座坟是给你的。[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A procession of mourners in black, carrying an empty coffin.',
+          'Похоронная процессия в чёрном несёт пустой гроб.',
+          'Ein Trauerzug in Schwarz trägt einen leeren Sarg.',
+          'Un cortège funèbre en noir porte un cercueil vide.',
+          '一队身着黑衣的送葬者，抬着一口空棺材。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The village watch, pitchforks raised, looking for "the stranger". [[@quirks]]',
+          'Деревенский дозор с вилами наперевес ищет «чужака». [[@quirks]]',
+          'Die Dorfwache mit erhobenen Mistgabeln sucht nach „dem Fremden“. [[@quirks]]',
+          'Le guet du village, fourches levées, cherche « l\'étranger ». [[@quirks]]',
+          '举着草叉的村庄守夜人正在搜寻“那个外乡人”。[[@quirks]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'An omen stops you in your tracks: [[@omens]]',
+          'Знамение заставляет вас замереть: [[@omens]]',
+          'Ein Omen lässt euch innehalten: [[@omens]]',
+          'Un présage vous arrête net : [[@omens]]',
+          '一个征兆让你停下了脚步：[[@omens]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A pale child in a nightgown asks if you have seen her mother.',
+          'Бледная девочка в ночной рубашке спрашивает, не видели ли вы её маму.',
+          'Ein blasses Kind im Nachthemd fragt, ob ihr seine Mutter gesehen habt.',
+          'Une enfant pâle en chemise de nuit demande si vous avez vu sa mère.',
+          '一个穿睡衣的苍白女孩问你有没有见过她妈妈。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A robbed tomb, its occupant gone. Left behind: [[@relics]]',
+          'Разграбленная гробница, покойник исчез. Осталось: [[@relics]]',
+          'Ein geplündertes Grabmal, der Tote verschwunden. Zurückgelassen: [[@relics]]',
+          'Un tombeau pillé, son occupant disparu. Reste : [[@relics]]',
+          '一座被盗的墓，墓主不见了。留下的是：[[@relics]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A nobleman in evening dress, alone on the road, who never blinks.',
+          'Дворянин во фраке, один на дороге, ни разу не моргнувший.',
+          'Ein Edelmann im Abendanzug, allein auf der Straße, der nie blinzelt.',
+          'Un noble en habit de soirée, seul sur la route, qui ne cligne jamais des yeux.',
+          '一位身着晚礼服、独自走在路上的贵族，从不眨眼。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Bats, thousands of them, pour from the bell tower for {1d6} minutes.',
+          'Летучие мыши, тысячи, {1d6} минут вылетают из колокольни.',
+          'Tausende Fledermäuse strömen {1d6} Minuten lang aus dem Glockenturm.',
+          'Des chauves-souris, par milliers, jaillissent du clocher pendant {1d6} minutes.',
+          '成千上万只蝙蝠从钟楼里涌出，持续了{1d6}分钟。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The thing in the well has learned your name.',
+          'То, что сидит в колодце, узнало ваше имя.',
+          'Das Ding im Brunnen kennt jetzt euren Namen.',
+          'La chose au fond du puits a appris votre nom.',
+          '井里的那个东西知道了你的名字。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'omens',
+    style: _s,
+    folder: LibraryFolder.locale,
+    formula: '1d10',
+    name: Tx('Omens', 'Знамения', 'Vorzeichen', 'Présages', '凶兆'),
+    description: Tx(
+      'Signs that something wicked stirs. Read them before the night falls.',
+      'Знаки того, что пробуждается зло. Прочтите их до наступления ночи.',
+      'Zeichen, dass sich Böses regt. Deutet sie, bevor die Nacht hereinbricht.',
+      'Des signes que le mal s\'éveille. Lisez-les avant la tombée de la nuit.',
+      '邪恶苏醒的迹象。趁夜幕降临前读懂它们。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Milk curdles in every house on the street overnight.',
+          'За ночь во всех домах на улице скисает молоко.',
+          'Über Nacht wird in jedem Haus der Straße die Milch sauer.',
+          'Le lait tourne en une nuit dans toutes les maisons de la rue.',
+          '一夜之间，整条街每户人家的牛奶都变质了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A portrait in the hall now faces the wall.',
+          'Портрет в зале теперь повёрнут лицом к стене.',
+          'Ein Porträt in der Halle zeigt nun zur Wand.',
+          'Un portrait du hall est désormais tourné vers le mur.',
+          '大厅里的一幅肖像如今面朝墙壁。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The church candles burn {blue|black|backwards, growing taller}.',
+          'Свечи в церкви горят {синим пламенем|чёрным пламенем|наоборот, становясь выше}.',
+          'Die Kirchenkerzen brennen {blau|schwarz|rückwärts und werden länger}.',
+          'Les cierges de l\'église brûlent {bleu|noir|à l\'envers, en grandissant}.',
+          '教堂的蜡烛燃着{蓝色|黑色|倒着烧、越烧越高}的火焰。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A crow lands on the windowsill and taps {1d6+1} times.',
+          'Ворона садится на подоконник и стучит {1d6+1} раз.',
+          'Eine Krähe landet auf dem Fensterbrett und klopft {1d6+1} Mal.',
+          'Un corbeau se pose sur le rebord et frappe {1d6+1} fois.',
+          '一只乌鸦落在窗台上，敲了{1d6+1}下。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Every mirror in the inn fogs over at the same moment.',
+          'Все зеркала в трактире одновременно запотевают.',
+          'Alle Spiegel im Gasthaus beschlagen im selben Augenblick.',
+          'Tous les miroirs de l\'auberge s\'embuent au même instant.',
+          '客栈里所有的镜子在同一刻蒙上了雾气。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Dogs refuse to cross the old bridge and howl until dawn.',
+          'Собаки отказываются переходить старый мост и воют до рассвета.',
+          'Die Hunde weigern sich, die alte Brücke zu überqueren, und heulen bis zum Morgen.',
+          'Les chiens refusent de traverser le vieux pont et hurlent jusqu\'à l\'aube.',
+          '狗不肯过那座老桥，一直嚎到天亮。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A newborn is born with a full set of teeth.',
+          'Младенец рождается с полным набором зубов.',
+          'Ein Neugeborenes kommt mit vollem Gebiss zur Welt.',
+          'Un nouveau-né vient au monde avec toutes ses dents.',
+          '一个新生儿生下来就长满了牙齿。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The church bell tolls once at noon, though the rope has been cut.',
+          'Церковный колокол звонит один раз в полдень, хотя верёвка перерезана.',
+          'Die Kirchenglocke schlägt mittags einmal, obwohl das Seil durchtrennt ist.',
+          'La cloche de l\'église sonne une fois à midi, alors que la corde est coupée.',
+          '教堂的钟在正午敲响一下，而钟绳早已被割断。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Roses in the manor garden bloom overnight, all the color of old blood.',
+          'Розы в саду поместья распускаются за ночь — все цвета запёкшейся крови.',
+          'Die Rosen im Herrenhausgarten blühen über Nacht auf, alle in der Farbe alten Blutes.',
+          'Les roses du jardin du manoir fleurissent en une nuit, toutes couleur de sang séché.',
+          '庄园花园里的玫瑰一夜盛开，全是陈血般的颜色。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Someone has written your name in the frost on the inside of the window.',
+          'Кто-то написал ваше имя на инее с внутренней стороны окна.',
+          'Jemand hat euren Namen von innen in den Frost am Fenster geschrieben.',
+          'Quelqu\'un a écrit votre nom dans le givre, à l\'intérieur de la fenêtre.',
+          '有人在窗户内侧的霜花上写下了你的名字。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'village_rumors',
+    style: _s,
+    folder: LibraryFolder.rumors,
+    formula: '1d10',
+    name: Tx(
+      'Village Whispers',
+      'Деревенские пересуды',
+      'Dorfgeflüster',
+      'Murmures du village',
+      '村中耳语',
+    ),
+    description: Tx(
+      'What the villagers mutter when the priest is not listening.',
+      'О чём шепчутся селяне, когда священник не слышит.',
+      'Was die Dorfleute murmeln, wenn der Pfarrer nicht zuhört.',
+      'Ce que marmonnent les villageois quand le curé n\'écoute pas.',
+      '趁神父不在时，村民们嘀咕的事。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'The old count has returned, though he was buried forty winters ago.',
+          'Старый граф вернулся, хотя его похоронили сорок зим назад.',
+          'Der alte Graf ist zurück, obwohl er vor vierzig Wintern begraben wurde.',
+          'Le vieux comte est revenu, bien qu\'on l\'ait enterré il y a quarante hivers.',
+          '老伯爵回来了，尽管他四十个冬天前就已下葬。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The miller\'s wife walks in her sleep, always toward the forest.',
+          'Жена мельника ходит во сне — всегда в сторону леса.',
+          'Die Müllersfrau schlafwandelt, immer in Richtung Wald.',
+          'La femme du meunier est somnambule et marche toujours vers la forêt.',
+          '磨坊主的妻子梦游，总是朝着森林走去。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          '{1d4+1} sheep found drained of blood, not a mark on them.',
+          'Найдено {1d4+1} обескровленных овцы — ни единой раны.',
+          '{1d4+1} Schafe blutleer aufgefunden, ohne eine einzige Wunde.',
+          '{1d4+1} moutons retrouvés vidés de leur sang, sans une marque.',
+          '发现{1d4+1}只羊被吸干了血，身上却没有一处伤口。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Travelers on the moor road at night meet [[@night_encounters]]',
+          'Путники на болотной дороге по ночам встречают: [[@night_encounters]]',
+          'Wer nachts die Moorstraße nimmt, begegnet: [[@night_encounters]]',
+          'Les voyageurs de la route de la lande, la nuit, croisent : [[@night_encounters]]',
+          '夜里走荒原小路的人会遇到：[[@night_encounters]]',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The new doctor pays well for bodies, and asks no questions about where they came from.',
+          'Новый доктор хорошо платит за тела и не спрашивает, откуда они.',
+          'Der neue Arzt zahlt gut für Leichen und fragt nicht, woher sie kommen.',
+          'Le nouveau médecin paie bien les cadavres et ne demande jamais d\'où ils viennent.',
+          '新来的医生高价收购尸体，从不过问来路。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A {governess|priest|huntsman} left the manor in the night and has not been seen since.',
+          'Ночью из поместья ушёл человек — {гувернантка|священник|егерь}. С тех пор его никто не видел.',
+          '{Die Gouvernante|Der Priester|Der Jäger} verließ nachts das Herrenhaus und wurde nie wieder gesehen.',
+          '{La gouvernante|Le prêtre|Le garde-chasse} a quitté le manoir dans la nuit et n\'a jamais reparu.',
+          '一位{家庭女教师|神父|猎场看守}夜里离开了庄园，从此再没人见过。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The witch in the fen will trade a cure for a memory.',
+          'Ведьма с болот обменяет лекарство на воспоминание.',
+          'Die Hexe im Moor tauscht ein Heilmittel gegen eine Erinnerung.',
+          'La sorcière des marais échange un remède contre un souvenir.',
+          '沼泽里的女巫愿用解药换一段记忆。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Someone dug up the plague pit behind the chapel.',
+          'Кто-то раскопал чумную яму за часовней.',
+          'Jemand hat die Pestgrube hinter der Kapelle aufgegraben.',
+          'Quelqu\'un a creusé la fosse aux pestiférés derrière la chapelle.',
+          '有人挖开了礼拜堂后面的瘟疫坑。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'A peddler sold charms that work. All his customers are dead now.',
+          'Коробейник продавал обереги, которые действовали. Все его покупатели мертвы.',
+          'Ein Hausierer verkaufte Amulette, die wirken. Alle seine Kunden sind jetzt tot.',
+          'Un colporteur vendait des amulettes efficaces. Tous ses clients sont morts.',
+          '一个货郎卖的护身符真的灵验。可买过的人都死了。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'The lake gave back a drowned girl, dry and smiling.',
+          'Озеро вернуло утопленницу — сухую и улыбающуюся.',
+          'Der See hat ein ertrunkenes Mädchen zurückgegeben, trocken und lächelnd.',
+          'Le lac a rendu une noyée, sèche et souriante.',
+          '湖水送回了一个溺死的女孩，浑身干爽，面带微笑。',
+        ),
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'relics',
+    style: _s,
+    folder: LibraryFolder.loot,
+    formula: '1d20',
+    name: Tx(
+      'Curious Relics',
+      'Странные реликвии',
+      'Seltsame Reliquien',
+      'Reliques étranges',
+      '古怪遗物',
+    ),
+    description: Tx(
+      'Objects found in crypts, attics and dead men\'s pockets. Few are only what they seem.',
+      'Вещи из склепов, чердаков и карманов мертвецов. Мало какие из них — лишь то, чем кажутся.',
+      'Gegenstände aus Grüften, Dachböden und Taschen Verstorbener. Wenige sind nur, was sie scheinen.',
+      'Des objets trouvés dans les cryptes, les greniers et les poches des morts. Rares sont ceux qui ne sont que ce qu\'ils paraissent.',
+      '墓穴、阁楼和死者口袋里找到的物件，很少只是表面那样。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'A silver crucifix, blackened, worth {2d6} shillings.',
+          'Почерневшее серебряное распятие стоимостью {2d6} шиллингов.',
+          'Ein geschwärztes Silberkruzifix, {2d6} Schilling wert.',
+          'Un crucifix d\'argent noirci, valant {2d6} shillings.',
+          '一个发黑的银十字架，值{2d6}先令。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          'A locket holding a curl of {red|white|black} hair.',
+          'Медальон с локоном {рыжих|седых|чёрных} волос.',
+          'Ein Medaillon mit einer Locke {roten|weißen|schwarzen} Haars.',
+          'Un médaillon contenant une boucle de cheveux {roux|blancs|noirs}.',
+          '一个装着一缕{红|白|黑}发的挂坠盒。',
+        ),
+        weight: 3,
+      ),
+      LibraryRow(
+        Tx(
+          'A diary whose last entry is dated tomorrow.',
+          'Дневник, последняя запись в котором датирована завтрашним днём.',
+          'Ein Tagebuch, dessen letzter Eintrag auf morgen datiert ist.',
+          'Un journal dont la dernière entrée est datée de demain.',
+          '一本日记，最后一篇的日期是明天。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A vial of holy water that has frozen solid and will not thaw.',
+          'Склянка святой воды, замёрзшая насмерть и не тающая.',
+          'Eine Phiole Weihwasser, fest gefroren, die nicht auftaut.',
+          'Une fiole d\'eau bénite gelée qui refuse de dégeler.',
+          '一小瓶结成冰、怎么也化不开的圣水。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A music box with a tiny dancer who turns to watch you.',
+          'Музыкальная шкатулка с крошечной балериной, поворачивающейся к вам.',
+          'Eine Spieluhr mit einer winzigen Tänzerin, die sich nach euch umdreht.',
+          'Une boîte à musique dont la minuscule danseuse se tourne pour vous regarder.',
+          '一个八音盒，里面的小舞者会转过身来看着你。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A surgeon\'s kit, well used, with one tool no one can name.',
+          'Набор хирурга, изрядно потрёпанный, с одним инструментом, названия которого никто не знает.',
+          'Ein viel benutztes Chirurgenbesteck mit einem Werkzeug, das niemand benennen kann.',
+          'Une trousse de chirurgien bien usée, avec un instrument que personne ne sait nommer.',
+          '一套用旧了的外科器械，其中一件谁也叫不出名字。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A deed to a manor house, signed in something that is not ink.',
+          'Купчая на поместье, подписанная чем-то, что не является чернилами.',
+          'Eine Besitzurkunde für ein Herrenhaus, unterschrieben mit etwas, das keine Tinte ist.',
+          'L\'acte de propriété d\'un manoir, signé avec autre chose que de l\'encre.',
+          '一份庄园地契，签名用的不是墨水。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          '{1d6} gold sovereigns, each bitten by very sharp teeth.',
+          '{1d6} золотых соверена, каждый прокушен очень острыми зубами.',
+          '{1d6} goldene Sovereigns, jeder von sehr spitzen Zähnen angebissen.',
+          '{1d6} souverains d\'or, chacun mordu par des dents très pointues.',
+          '{1d6}枚金镑，每一枚都有尖牙咬过的痕迹。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'A mourning ring that tightens when a lie is told nearby.',
+          'Траурное кольцо сжимается, когда рядом кто-то лжёт.',
+          'Ein Trauerring, der sich zusammenzieht, wenn in der Nähe gelogen wird.',
+          'Une bague de deuil qui se resserre quand on ment à proximité.',
+          '一枚哀悼戒指，附近有人说谎时就会收紧。',
+        ),
+        weight: 1,
+      ),
+      LibraryRow(
+        Tx(
+          'A stake of hawthorn wood, its tip stained dark.',
+          'Боярышниковый кол с потемневшим остриём.',
+          'Ein Pflock aus Weißdornholz mit dunkel verfärbter Spitze.',
+          'Un pieu d\'aubépine à la pointe tachée de sombre.',
+          '一根山楂木木桩，尖端染着深色的污迹。',
+        ),
+        weight: 1,
+      ),
+    ],
+  ),
+  LibraryTable(
+    localId: 'quirks',
+    style: _s,
+    folder: LibraryFolder.people,
+    name: Tx(
+      'Villager Quirks',
+      'Причуды селян',
+      'Marotten der Dorfleute',
+      'Manies villageoises',
+      '村民怪癖',
+    ),
+    description: Tx(
+      'Small, unsettling details for innkeepers, servants and gravediggers.',
+      'Мелкие тревожные детали для трактирщиков, слуг и могильщиков.',
+      'Kleine, beunruhigende Details für Wirte, Diener und Totengräber.',
+      'De petits détails troublants pour aubergistes, domestiques et fossoyeurs.',
+      '给店主、仆人和掘墓人添些令人不安的小细节。',
+    ),
+    rows: [
+      LibraryRow(
+        Tx(
+          'Crosses themselves every time a name is spoken.',
+          'Крестится каждый раз, когда кто-то произносит имя.',
+          'Bekreuzigt sich jedes Mal, wenn ein Name fällt.',
+          'Se signe chaque fois qu\'un nom est prononcé.',
+          '每当有人说出一个名字，就画一次十字。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Wears garlic under their collar and denies it.',
+          'Носит чеснок под воротником и отрицает это.',
+          'Trägt Knoblauch unter dem Kragen und leugnet es.',
+          'Porte de l\'ail sous le col et le nie.',
+          '衣领下藏着大蒜，却矢口否认。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Has a {twitching eye|missing finger|streak of white hair} since "that night".',
+          'С «той самой ночи» у него {дёргается глаз|нет пальца|седая прядь}.',
+          'Hat seit „jener Nacht“ {ein zuckendes Auge|einen fehlenden Finger|eine weiße Haarsträhne}.',
+          'A depuis « cette nuit-là » {un œil qui tressaille|un doigt en moins|une mèche blanche}.',
+          '自从“那一夜”后就{眼皮直跳|少了一根手指|多了一缕白发}。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Laughs nervously at funerals.',
+          'Нервно смеётся на похоронах.',
+          'Lacht bei Beerdigungen nervös.',
+          'Rit nerveusement aux enterrements.',
+          '在葬礼上会紧张地发笑。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Speaks of the local lord with love, and whispers.',
+          'Говорит о местном господине с любовью — и шёпотом.',
+          'Spricht vom Gutsherrn voller Liebe, und flüsternd.',
+          'Parle du seigneur local avec amour, et à voix basse.',
+          '提起当地领主时满怀爱戴，而且压低声音。',
+        ),
+        weight: 2,
+      ),
+      LibraryRow(
+        Tx(
+          'Keeps every clock in the house stopped at the same hour.',
+          'Держит все часы в доме остановленными на одном и том же часе.',
+          'Hält alle Uhren im Haus auf derselben Stunde angehalten.',
+          'Garde toutes les horloges de la maison arrêtées à la même heure.',
+          '家里所有的钟都停在同一个时刻。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Sets an extra place at the table every night.',
+          'Каждый вечер ставит на стол лишний прибор.',
+          'Deckt jeden Abend einen Platz mehr am Tisch.',
+          'Met chaque soir un couvert de trop.',
+          '每晚都在桌上多摆一副餐具。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Refuses to enter any room with a mirror.',
+          'Отказывается входить в комнаты, где есть зеркало.',
+          'Betritt keinen Raum mit einem Spiegel.',
+          'Refuse d\'entrer dans une pièce où se trouve un miroir.',
+          '拒绝进入任何有镜子的房间。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Collects funeral cards and shows them off like a proud grandparent.',
+          'Собирает траурные открытки и хвастается ими, как гордый дедушка внуками.',
+          'Sammelt Trauerkarten und zeigt sie stolz herum wie Enkelfotos.',
+          'Collectionne les faire-part de décès et les montre avec fierté.',
+          '收集讣告卡片，像骄傲的祖父母炫耀孙辈一样四处展示。',
+        ),
+      ),
+      LibraryRow(
+        Tx(
+          'Hums a hymn backwards without noticing.',
+          'Сам того не замечая, напевает гимн задом наперёд.',
+          'Summt unbemerkt ein Kirchenlied rückwärts.',
+          'Fredonne un cantique à l\'envers sans s\'en rendre compte.',
+          '不自觉地倒着哼一首圣歌。',
+        ),
+      ),
+    ],
+  ),
+];

@@ -1968,4 +1968,328 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get kindFieldsAction => 'Настроить поля';
+
+  @override
+  String get tablesSearchHint => 'Поиск таблиц';
+
+  @override
+  String get tablesNewTable => 'Новая таблица';
+
+  @override
+  String get tablesImport => 'Импорт из текста';
+
+  @override
+  String get tablesLibrary => 'Библиотека';
+
+  @override
+  String get tablesOpenLibrary => 'Открыть библиотеку';
+
+  @override
+  String get tablesEmptyTitle => 'Пока нет случайных таблиц';
+
+  @override
+  String get tablesEmptyHint =>
+      'Начните с готовой таблицы из библиотеки, составьте свою или вставьте список из книги.';
+
+  @override
+  String get tablesNoMatches => 'Ничего не найдено.';
+
+  @override
+  String get tablesNoFolder => 'Прочие таблицы';
+
+  @override
+  String tablesRowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count строки',
+      many: '$count строк',
+      few: '$count строки',
+      one: '1 строка',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesWeighted => 'По весу';
+
+  @override
+  String tablesDefaultName(int number) {
+    return 'Таблица $number';
+  }
+
+  @override
+  String get tablesDescriptionLabel => 'Описание';
+
+  @override
+  String get tablesFolderLabel => 'Папка';
+
+  @override
+  String get tablesFolderHint => 'например, Встречи';
+
+  @override
+  String get tablesFormulaLabel => 'Формула броска';
+
+  @override
+  String get tablesFormulaHint => 'например, 1d20; пусто — по весу';
+
+  @override
+  String get tablesFormulaInvalid => 'Некорректная формула';
+
+  @override
+  String get tablesEditTitle => 'Изменить таблицу';
+
+  @override
+  String get tablesEdit => 'Изменить описание';
+
+  @override
+  String get tablesDuplicate => 'Дублировать';
+
+  @override
+  String tablesCopyName(String name) {
+    return '$name (копия)';
+  }
+
+  @override
+  String tablesDeleteTitle(String name) {
+    return 'Удалить «$name»?';
+  }
+
+  @override
+  String get tablesDeleteBody =>
+      'Таблица и все её строки будут удалены из этого мира.';
+
+  @override
+  String get tablesActions => 'Действия с таблицей';
+
+  @override
+  String get tablesAllTables => 'Все таблицы';
+
+  @override
+  String get tablesMissing => 'Этой таблицы больше нет.';
+
+  @override
+  String get tablesRoll => 'Бросить';
+
+  @override
+  String get tablesRollAgain => 'Ещё раз';
+
+  @override
+  String get tablesCopy => 'Копировать';
+
+  @override
+  String get tablesCopied => 'Скопировано';
+
+  @override
+  String get tablesResultEmpty => 'Бросьте, чтобы получить результат.';
+
+  @override
+  String get tablesClamped => 'Вне всех диапазонов — взята ближайшая строка';
+
+  @override
+  String get tablesRollLog => 'Журнал бросков';
+
+  @override
+  String get tablesRollLogEmpty => 'Здесь появятся броски на этой странице.';
+
+  @override
+  String get tablesClearLog => 'Очистить журнал';
+
+  @override
+  String get tablesRows => 'Строки';
+
+  @override
+  String get tablesAddRow => 'Добавить строку';
+
+  @override
+  String get tablesDeleteRow => 'Удалить строку';
+
+  @override
+  String get tablesAutoRanges => 'Авто-диапазоны';
+
+  @override
+  String get tablesAutoRangesHint =>
+      'Распределить строки по формуле согласно весам';
+
+  @override
+  String get tablesBulkEdit => 'Правка текстом';
+
+  @override
+  String get tablesBulkEditTitle => 'Строки в виде текста';
+
+  @override
+  String get tablesTextFormatHelp =>
+      'По одной записи на строку: «1-3 | текст», «4: текст», «x3 текст» для веса или просто текст. Строки с # пропускаются.';
+
+  @override
+  String get tablesImportTitle => 'Импорт таблицы из текста';
+
+  @override
+  String get tablesImportRows => 'Строки';
+
+  @override
+  String tablesImportFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Найдено $count строки',
+      many: 'Найдено $count строк',
+      few: 'Найдено $count строки',
+      one: 'Найдена 1 строка',
+      zero: 'Строк не найдено',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesImportAction => 'Импортировать';
+
+  @override
+  String get tablesApply => 'Применить';
+
+  @override
+  String get tablesRowsEmpty =>
+      'Строк пока нет. Добавьте строку или вставьте целый список через «Правка текстом».';
+
+  @override
+  String tablesRowTextHint(String dice, String choice, String table) {
+    return 'Текст, кубы $dice, выбор $choice, броски $table';
+  }
+
+  @override
+  String get tablesFrom => 'От';
+
+  @override
+  String get tablesTo => 'До';
+
+  @override
+  String get tablesWeight => 'Вес';
+
+  @override
+  String get tablesDragToReorder => 'Перетащите, чтобы изменить порядок';
+
+  @override
+  String get tablesIssueBadFormula => 'Формулу невозможно бросить.';
+
+  @override
+  String get tablesIssueEmpty => 'В таблице нет строк с текстом.';
+
+  @override
+  String tablesIssueEmptyRow(int row) {
+    return 'В строке $row нет текста.';
+  }
+
+  @override
+  String tablesIssueMissingRange(int row) {
+    return 'У строки $row нет диапазона.';
+  }
+
+  @override
+  String tablesIssueInverted(int row) {
+    return 'Строка $row: диапазон задан наоборот.';
+  }
+
+  @override
+  String tablesIssueOutOfBounds(int row, String range) {
+    return 'Строка $row выходит за пределы формулы ($range).';
+  }
+
+  @override
+  String tablesIssueGap(String range) {
+    return 'Значения $range ничем не покрыты.';
+  }
+
+  @override
+  String tablesIssueOverlap(int first, int second, String range) {
+    return 'Строки $first и $second пересекаются на $range.';
+  }
+
+  @override
+  String get tablesFailNotFound => 'Нет таблицы с таким именем';
+
+  @override
+  String get tablesFailCycle => 'Ссылается сама на себя — остановлено';
+
+  @override
+  String get tablesFailDepth => 'Слишком глубокая вложенность — остановлено';
+
+  @override
+  String get tablesFailTooMany =>
+      'Слишком много вложенных бросков — остановлено';
+
+  @override
+  String get tablesFailEmpty => 'В таблице нет строк';
+
+  @override
+  String get tablesFailBadFormula => 'Формулу невозможно бросить';
+
+  @override
+  String tablesChoice(int count) {
+    return 'одно из $count';
+  }
+
+  @override
+  String get tablesFromLibrary => 'Из библиотеки';
+
+  @override
+  String get tablesLibraryTitle => 'Библиотека таблиц';
+
+  @override
+  String get tablesLibraryHint =>
+      'Готовые таблицы для любого сеттинга. Посмотрите их и добавьте в мир, чтобы редактировать.';
+
+  @override
+  String get tablesYourSetting => 'Сеттинг этого мира';
+
+  @override
+  String get tablesOtherSettings => 'Другие сеттинги';
+
+  @override
+  String tablesTableCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count таблицы',
+      many: '$count таблиц',
+      few: '$count таблицы',
+      one: '1 таблица',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreview => 'Просмотр';
+
+  @override
+  String get tablesAddToWorld => 'Добавить в мир';
+
+  @override
+  String get tablesInWorld => 'Уже в мире';
+
+  @override
+  String get tablesAddDepsTitle => 'Добавить и связанные таблицы?';
+
+  @override
+  String tablesAddDepsBody(String name) {
+    return '«$name» бросает по этим таблицам. Без них в результатах появятся предупреждения.';
+  }
+
+  @override
+  String tablesAddedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Добавлено $count таблицы',
+      many: 'Добавлено $count таблиц',
+      few: 'Добавлено $count таблицы',
+      one: 'Добавлена 1 таблица',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreviewRoll => 'Пробный бросок';
+
+  @override
+  String get tablesWhy => 'Как получен результат';
 }
