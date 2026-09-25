@@ -191,4 +191,25 @@ void main() {
   testWidgets('13 map', skip: !_enabled, (tester) async {
     await run(tester, '13_map', (d) => Routes.tool(d.worldId, 'maps', d.mapId));
   });
+
+  testWidgets('14 generators', skip: !_enabled, (tester) async {
+    await run(tester, '14_generators',
+        (d) => Routes.tool(d.worldId, 'generators'),
+        act: (tester, d) async {
+      await tester.tap(find.text('Generate'));
+      for (var i = 0; i < 6; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+    });
+  });
+
+  for (final (n, tool) in [
+    (15, 'tables'),
+    (16, 'dice'),
+    (17, 'combat'),
+  ]) {
+    testWidgets('$n $tool', skip: !_enabled, (tester) async {
+      await run(tester, '${n}_$tool', (d) => Routes.tool(d.worldId, tool));
+    });
+  }
 }
