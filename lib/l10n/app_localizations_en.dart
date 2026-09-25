@@ -1846,4 +1846,319 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get combatEncounterActions => 'Encounter actions';
+
+  @override
+  String get tablesSearchHint => 'Search tables';
+
+  @override
+  String get tablesNewTable => 'New table';
+
+  @override
+  String get tablesImport => 'Import from text';
+
+  @override
+  String get tablesLibrary => 'Library';
+
+  @override
+  String get tablesOpenLibrary => 'Open the library';
+
+  @override
+  String get tablesEmptyTitle => 'No random tables yet';
+
+  @override
+  String get tablesEmptyHint =>
+      'Start from a ready-made table in the library, write your own, or paste a list from a book.';
+
+  @override
+  String get tablesNoMatches => 'No tables match your search.';
+
+  @override
+  String get tablesNoFolder => 'Other tables';
+
+  @override
+  String tablesRowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rows',
+      one: '1 row',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesWeighted => 'By weight';
+
+  @override
+  String tablesDefaultName(int number) {
+    return 'Table $number';
+  }
+
+  @override
+  String get tablesDescriptionLabel => 'Description';
+
+  @override
+  String get tablesFolderLabel => 'Folder';
+
+  @override
+  String get tablesFolderHint => 'e.g. Encounters';
+
+  @override
+  String get tablesFormulaLabel => 'Dice formula';
+
+  @override
+  String get tablesFormulaHint => 'e.g. 1d20 — empty rolls by weight';
+
+  @override
+  String get tablesFormulaInvalid => 'Not a valid dice formula';
+
+  @override
+  String get tablesEditTitle => 'Edit table';
+
+  @override
+  String get tablesEdit => 'Edit details';
+
+  @override
+  String get tablesDuplicate => 'Duplicate';
+
+  @override
+  String tablesCopyName(String name) {
+    return '$name (copy)';
+  }
+
+  @override
+  String tablesDeleteTitle(String name) {
+    return 'Delete “$name”?';
+  }
+
+  @override
+  String get tablesDeleteBody =>
+      'The table and all its rows will be removed from this world.';
+
+  @override
+  String get tablesActions => 'Table actions';
+
+  @override
+  String get tablesAllTables => 'All tables';
+
+  @override
+  String get tablesMissing => 'This table no longer exists.';
+
+  @override
+  String get tablesRoll => 'Roll';
+
+  @override
+  String get tablesRollAgain => 'Roll again';
+
+  @override
+  String get tablesCopy => 'Copy';
+
+  @override
+  String get tablesCopied => 'Copied to clipboard';
+
+  @override
+  String get tablesResultEmpty => 'Roll to get a result.';
+
+  @override
+  String get tablesClamped => 'Outside every range — nearest row used';
+
+  @override
+  String get tablesRollLog => 'Roll log';
+
+  @override
+  String get tablesRollLogEmpty => 'Rolls made on this page appear here.';
+
+  @override
+  String get tablesClearLog => 'Clear log';
+
+  @override
+  String get tablesRows => 'Rows';
+
+  @override
+  String get tablesAddRow => 'Add row';
+
+  @override
+  String get tablesDeleteRow => 'Delete row';
+
+  @override
+  String get tablesAutoRanges => 'Auto ranges';
+
+  @override
+  String get tablesAutoRangesHint =>
+      'Spread the rows over the formula by weight';
+
+  @override
+  String get tablesBulkEdit => 'Edit as text';
+
+  @override
+  String get tablesBulkEditTitle => 'Edit rows as text';
+
+  @override
+  String get tablesTextFormatHelp =>
+      'One row per line: “1-3 | text”, “4: text”, “x3 text” for a weight, or plain text. Lines starting with # are ignored.';
+
+  @override
+  String get tablesImportTitle => 'Import a table from text';
+
+  @override
+  String get tablesImportRows => 'Rows';
+
+  @override
+  String tablesImportFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rows found',
+      one: '1 row found',
+      zero: 'No rows found',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesImportAction => 'Import';
+
+  @override
+  String get tablesApply => 'Apply';
+
+  @override
+  String get tablesRowsEmpty =>
+      'No rows yet. Add one, or paste a whole list with “Edit as text”.';
+
+  @override
+  String tablesRowTextHint(String dice, String choice, String table) {
+    return 'Text, $dice dice, $choice choices, $table rolls';
+  }
+
+  @override
+  String get tablesFrom => 'From';
+
+  @override
+  String get tablesTo => 'To';
+
+  @override
+  String get tablesWeight => 'Weight';
+
+  @override
+  String get tablesDragToReorder => 'Drag to reorder';
+
+  @override
+  String get tablesIssueBadFormula => 'The dice formula cannot be rolled.';
+
+  @override
+  String get tablesIssueEmpty => 'The table has no rows with text.';
+
+  @override
+  String tablesIssueEmptyRow(int row) {
+    return 'Row $row has no text.';
+  }
+
+  @override
+  String tablesIssueMissingRange(int row) {
+    return 'Row $row has no range.';
+  }
+
+  @override
+  String tablesIssueInverted(int row) {
+    return 'Row $row: the range runs backwards.';
+  }
+
+  @override
+  String tablesIssueOutOfBounds(int row, String range) {
+    return 'Row $row goes beyond what the formula can roll ($range).';
+  }
+
+  @override
+  String tablesIssueGap(String range) {
+    return 'Nothing covers $range.';
+  }
+
+  @override
+  String tablesIssueOverlap(int first, int second, String range) {
+    return 'Rows $first and $second overlap on $range.';
+  }
+
+  @override
+  String get tablesFailNotFound => 'No table with this name';
+
+  @override
+  String get tablesFailCycle => 'Refers back to itself — stopped';
+
+  @override
+  String get tablesFailDepth => 'Nested too deep — stopped';
+
+  @override
+  String get tablesFailTooMany => 'Too many nested rolls — stopped';
+
+  @override
+  String get tablesFailEmpty => 'The table has no rows';
+
+  @override
+  String get tablesFailBadFormula => 'The formula cannot be rolled';
+
+  @override
+  String tablesChoice(int count) {
+    return 'one of $count';
+  }
+
+  @override
+  String get tablesFromLibrary => 'From the library';
+
+  @override
+  String get tablesLibraryTitle => 'Table library';
+
+  @override
+  String get tablesLibraryHint =>
+      'Ready-made tables for every setting. Preview them, then add them to this world to edit.';
+
+  @override
+  String get tablesYourSetting => 'This world’s setting';
+
+  @override
+  String get tablesOtherSettings => 'Other settings';
+
+  @override
+  String tablesTableCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tables',
+      one: '1 table',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreview => 'Preview';
+
+  @override
+  String get tablesAddToWorld => 'Add to world';
+
+  @override
+  String get tablesInWorld => 'In this world';
+
+  @override
+  String get tablesAddDepsTitle => 'Add the referenced tables too?';
+
+  @override
+  String tablesAddDepsBody(String name) {
+    return '“$name” rolls on these tables. Without them its results show a warning mark.';
+  }
+
+  @override
+  String tablesAddedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Added $count tables',
+      one: 'Added 1 table',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreviewRoll => 'Try a roll';
+
+  @override
+  String get tablesWhy => 'How it was rolled';
 }

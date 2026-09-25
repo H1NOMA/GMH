@@ -900,5 +900,216 @@
   },
   "combatOpenEntry": "Open entry",
   "combatActions": "Combatant actions",
-  "combatEncounterActions": "Encounter actions"
+  "combatEncounterActions": "Encounter actions",
+  "tablesSearchHint": "Search tables",
+  "tablesNewTable": "New table",
+  "tablesImport": "Import from text",
+  "tablesLibrary": "Library",
+  "tablesOpenLibrary": "Open the library",
+  "tablesEmptyTitle": "No random tables yet",
+  "tablesEmptyHint": "Start from a ready-made table in the library, write your own, or paste a list from a book.",
+  "tablesNoMatches": "No tables match your search.",
+  "tablesNoFolder": "Other tables",
+  "tablesRowCount": "{count, plural, =1{1 row} other{{count} rows}}",
+  "@tablesRowCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesWeighted": "By weight",
+  "tablesDefaultName": "Table {number}",
+  "@tablesDefaultName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesDescriptionLabel": "Description",
+  "tablesFolderLabel": "Folder",
+  "tablesFolderHint": "e.g. Encounters",
+  "tablesFormulaLabel": "Dice formula",
+  "tablesFormulaHint": "e.g. 1d20 — empty rolls by weight",
+  "tablesFormulaInvalid": "Not a valid dice formula",
+  "tablesEditTitle": "Edit table",
+  "tablesEdit": "Edit details",
+  "tablesDuplicate": "Duplicate",
+  "tablesCopyName": "{name} (copy)",
+  "@tablesCopyName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesDeleteTitle": "Delete “{name}”?",
+  "@tablesDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesDeleteBody": "The table and all its rows will be removed from this world.",
+  "tablesActions": "Table actions",
+  "tablesAllTables": "All tables",
+  "tablesMissing": "This table no longer exists.",
+  "tablesRoll": "Roll",
+  "tablesRollAgain": "Roll again",
+  "tablesCopy": "Copy",
+  "tablesCopied": "Copied to clipboard",
+  "tablesResultEmpty": "Roll to get a result.",
+  "tablesClamped": "Outside every range — nearest row used",
+  "tablesRollLog": "Roll log",
+  "tablesRollLogEmpty": "Rolls made on this page appear here.",
+  "tablesClearLog": "Clear log",
+  "tablesRows": "Rows",
+  "tablesAddRow": "Add row",
+  "tablesDeleteRow": "Delete row",
+  "tablesAutoRanges": "Auto ranges",
+  "tablesAutoRangesHint": "Spread the rows over the formula by weight",
+  "tablesBulkEdit": "Edit as text",
+  "tablesBulkEditTitle": "Edit rows as text",
+  "tablesTextFormatHelp": "One row per line: “1-3 | text”, “4: text”, “x3 text” for a weight, or plain text. Lines starting with # are ignored.",
+  "tablesImportTitle": "Import a table from text",
+  "tablesImportRows": "Rows",
+  "tablesImportFound": "{count, plural, =0{No rows found} =1{1 row found} other{{count} rows found}}",
+  "@tablesImportFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesImportAction": "Import",
+  "tablesApply": "Apply",
+  "tablesRowsEmpty": "No rows yet. Add one, or paste a whole list with “Edit as text”.",
+  "tablesRowTextHint": "Text, {dice} dice, {choice} choices, {table} rolls",
+  "@tablesRowTextHint": {
+    "placeholders": {
+      "dice": {
+        "type": "String"
+      },
+      "choice": {
+        "type": "String"
+      },
+      "table": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesFrom": "From",
+  "tablesTo": "To",
+  "tablesWeight": "Weight",
+  "tablesDragToReorder": "Drag to reorder",
+  "tablesIssueBadFormula": "The dice formula cannot be rolled.",
+  "tablesIssueEmpty": "The table has no rows with text.",
+  "tablesIssueEmptyRow": "Row {row} has no text.",
+  "@tablesIssueEmptyRow": {
+    "placeholders": {
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesIssueMissingRange": "Row {row} has no range.",
+  "@tablesIssueMissingRange": {
+    "placeholders": {
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesIssueInverted": "Row {row}: the range runs backwards.",
+  "@tablesIssueInverted": {
+    "placeholders": {
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesIssueOutOfBounds": "Row {row} goes beyond what the formula can roll ({range}).",
+  "@tablesIssueOutOfBounds": {
+    "placeholders": {
+      "row": {
+        "type": "int"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesIssueGap": "Nothing covers {range}.",
+  "@tablesIssueGap": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesIssueOverlap": "Rows {first} and {second} overlap on {range}.",
+  "@tablesIssueOverlap": {
+    "placeholders": {
+      "first": {
+        "type": "int"
+      },
+      "second": {
+        "type": "int"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesFailNotFound": "No table with this name",
+  "tablesFailCycle": "Refers back to itself — stopped",
+  "tablesFailDepth": "Nested too deep — stopped",
+  "tablesFailTooMany": "Too many nested rolls — stopped",
+  "tablesFailEmpty": "The table has no rows",
+  "tablesFailBadFormula": "The formula cannot be rolled",
+  "tablesChoice": "one of {count}",
+  "@tablesChoice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesFromLibrary": "From the library",
+  "tablesLibraryTitle": "Table library",
+  "tablesLibraryHint": "Ready-made tables for every setting. Preview them, then add them to this world to edit.",
+  "tablesYourSetting": "This world’s setting",
+  "tablesOtherSettings": "Other settings",
+  "tablesTableCount": "{count, plural, =1{1 table} other{{count} tables}}",
+  "@tablesTableCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesPreview": "Preview",
+  "tablesAddToWorld": "Add to world",
+  "tablesInWorld": "In this world",
+  "tablesAddDepsTitle": "Add the referenced tables too?",
+  "tablesAddDepsBody": "“{name}” rolls on these tables. Without them its results show a warning mark.",
+  "@tablesAddDepsBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tablesAddedCount": "{count, plural, =1{Added 1 table} other{Added {count} tables}}",
+  "@tablesAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesPreviewRoll": "Try a roll",
+  "tablesWhy": "How it was rolled"
 }

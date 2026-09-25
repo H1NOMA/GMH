@@ -1787,4 +1787,309 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get combatEncounterActions => '遭遇操作';
+
+  @override
+  String get tablesSearchHint => '搜索随机表';
+
+  @override
+  String get tablesNewTable => '新建表';
+
+  @override
+  String get tablesImport => '从文本导入';
+
+  @override
+  String get tablesLibrary => '表库';
+
+  @override
+  String get tablesOpenLibrary => '打开表库';
+
+  @override
+  String get tablesEmptyTitle => '还没有随机表';
+
+  @override
+  String get tablesEmptyHint => '可以从表库里的现成表开始，也可以自己编写，或粘贴书中的列表。';
+
+  @override
+  String get tablesNoMatches => '没有匹配的表。';
+
+  @override
+  String get tablesNoFolder => '其他表';
+
+  @override
+  String tablesRowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 行',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesWeighted => '按权重';
+
+  @override
+  String tablesDefaultName(int number) {
+    return '表 $number';
+  }
+
+  @override
+  String get tablesDescriptionLabel => '描述';
+
+  @override
+  String get tablesFolderLabel => '分组';
+
+  @override
+  String get tablesFolderHint => '例如：遭遇';
+
+  @override
+  String get tablesFormulaLabel => '骰子公式';
+
+  @override
+  String get tablesFormulaHint => '例如 1d20；留空则按权重';
+
+  @override
+  String get tablesFormulaInvalid => '不是有效的骰子公式';
+
+  @override
+  String get tablesEditTitle => '编辑表';
+
+  @override
+  String get tablesEdit => '编辑信息';
+
+  @override
+  String get tablesDuplicate => '复制表';
+
+  @override
+  String tablesCopyName(String name) {
+    return '$name（副本）';
+  }
+
+  @override
+  String tablesDeleteTitle(String name) {
+    return '删除“$name”？';
+  }
+
+  @override
+  String get tablesDeleteBody => '该表及其所有行将从这个世界中移除。';
+
+  @override
+  String get tablesActions => '表操作';
+
+  @override
+  String get tablesAllTables => '全部表';
+
+  @override
+  String get tablesMissing => '这个表已不存在。';
+
+  @override
+  String get tablesRoll => '掷骰';
+
+  @override
+  String get tablesRollAgain => '再掷一次';
+
+  @override
+  String get tablesCopy => '复制';
+
+  @override
+  String get tablesCopied => '已复制到剪贴板';
+
+  @override
+  String get tablesResultEmpty => '掷骰即可得到结果。';
+
+  @override
+  String get tablesClamped => '超出所有区间——已取最近一行';
+
+  @override
+  String get tablesRollLog => '掷骰记录';
+
+  @override
+  String get tablesRollLogEmpty => '本页的掷骰结果会显示在这里。';
+
+  @override
+  String get tablesClearLog => '清空记录';
+
+  @override
+  String get tablesRows => '行';
+
+  @override
+  String get tablesAddRow => '添加行';
+
+  @override
+  String get tablesDeleteRow => '删除行';
+
+  @override
+  String get tablesAutoRanges => '自动区间';
+
+  @override
+  String get tablesAutoRangesHint => '按权重把各行分配到公式的点数上';
+
+  @override
+  String get tablesBulkEdit => '以文本编辑';
+
+  @override
+  String get tablesBulkEditTitle => '以文本编辑各行';
+
+  @override
+  String get tablesTextFormatHelp =>
+      '每行一条：“1-3 | 文本”、“4: 文本”、“x3 文本”（权重）或纯文本。以 # 开头的行会被忽略。';
+
+  @override
+  String get tablesImportTitle => '从文本导入表';
+
+  @override
+  String get tablesImportRows => '行';
+
+  @override
+  String tablesImportFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '找到 $count 行',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesImportAction => '导入';
+
+  @override
+  String get tablesApply => '应用';
+
+  @override
+  String get tablesRowsEmpty => '还没有行。添加一行，或用“以文本编辑”粘贴整份列表。';
+
+  @override
+  String tablesRowTextHint(String dice, String choice, String table) {
+    return '文本、骰子 $dice、选项 $choice、嵌套 $table';
+  }
+
+  @override
+  String get tablesFrom => '起';
+
+  @override
+  String get tablesTo => '止';
+
+  @override
+  String get tablesWeight => '权重';
+
+  @override
+  String get tablesDragToReorder => '拖动以排序';
+
+  @override
+  String get tablesIssueBadFormula => '骰子公式无法掷出。';
+
+  @override
+  String get tablesIssueEmpty => '表中没有带文本的行。';
+
+  @override
+  String tablesIssueEmptyRow(int row) {
+    return '第 $row 行没有文本。';
+  }
+
+  @override
+  String tablesIssueMissingRange(int row) {
+    return '第 $row 行没有区间。';
+  }
+
+  @override
+  String tablesIssueInverted(int row) {
+    return '第 $row 行：区间首尾颠倒。';
+  }
+
+  @override
+  String tablesIssueOutOfBounds(int row, String range) {
+    return '第 $row 行超出了公式能掷出的范围（$range）。';
+  }
+
+  @override
+  String tablesIssueGap(String range) {
+    return '$range 没有对应的行。';
+  }
+
+  @override
+  String tablesIssueOverlap(int first, int second, String range) {
+    return '第 $first 行和第 $second 行在 $range 上重叠。';
+  }
+
+  @override
+  String get tablesFailNotFound => '没有这个名字的表';
+
+  @override
+  String get tablesFailCycle => '循环引用——已停止';
+
+  @override
+  String get tablesFailDepth => '嵌套过深——已停止';
+
+  @override
+  String get tablesFailTooMany => '嵌套掷骰过多——已停止';
+
+  @override
+  String get tablesFailEmpty => '该表没有行';
+
+  @override
+  String get tablesFailBadFormula => '公式无法掷出';
+
+  @override
+  String tablesChoice(int count) {
+    return '$count 选 1';
+  }
+
+  @override
+  String get tablesFromLibrary => '来自表库';
+
+  @override
+  String get tablesLibraryTitle => '随机表库';
+
+  @override
+  String get tablesLibraryHint => '适用于各种设定的现成随机表。先预览，再添加到这个世界中编辑。';
+
+  @override
+  String get tablesYourSetting => '本世界的设定';
+
+  @override
+  String get tablesOtherSettings => '其他设定';
+
+  @override
+  String tablesTableCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个表',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreview => '预览';
+
+  @override
+  String get tablesAddToWorld => '添加到世界';
+
+  @override
+  String get tablesInWorld => '已在世界中';
+
+  @override
+  String get tablesAddDepsTitle => '同时添加被引用的表吗？';
+
+  @override
+  String tablesAddDepsBody(String name) {
+    return '“$name”会在这些表上掷骰。缺少它们时，结果中会出现警告标记。';
+  }
+
+  @override
+  String tablesAddedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已添加 $count 个表',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesPreviewRoll => '试掷一次';
+
+  @override
+  String get tablesWhy => '掷骰过程';
 }
