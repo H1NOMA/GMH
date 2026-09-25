@@ -2316,4 +2316,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get paletteTitle => 'Палитра команд';
+
+  @override
+  String get homeAtTheTable => 'За столом';
+
+  @override
+  String get homeYourSections => 'Ваши разделы';
 }

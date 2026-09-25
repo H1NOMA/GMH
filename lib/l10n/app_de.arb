@@ -654,5 +654,7 @@
   "paletteNoMatches": "Keine Treffer",
   "paletteToggleTheme": "Hell / dunkel umschalten",
   "paletteOpenInTab": "Gehe zu {name}",
-  "paletteTitle": "Befehlspalette"
+  "paletteTitle": "Befehlspalette",
+  "homeAtTheTable": "Am Spieltisch",
+  "homeYourSections": "Eigene Bereiche"
 }

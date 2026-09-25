@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/l10n_ext.dart';
 import '../../app/router.dart';
+import '../../domain/models/world.dart';
+import '../../app/tools.dart';
+import '../../app/packs/setting_packs.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../domain/models/entity_kind.dart';
@@ -68,13 +71,17 @@ class HomeScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 96),
         children: [
-          if (world != null && world.description.isNotEmpty) ...[
-            Text(world.description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: GmhColors.parchmentDim,
-                    fontStyle: FontStyle.italic)),
-            const SizedBox(height: 16),
+          if (world != null) ...[
+            _WorldHeader(
+              world: world,
+              total: counts.values.fold(0, (a, b) => a + b),
+            ),
+            const SizedBox(height: 18),
           ],
+          _SectionTitle(context.l10n.homeAtTheTable),
+          const SizedBox(height: 10),
+          _ToolsRow(worldId: worldId),
+          const SizedBox(height: 22),
           _SectionTitle(context.l10n.homeTheWorld),
           const SizedBox(height: 10),
           _KindGrid(worldId: worldId, kinds: EntityKind.worldKinds, counts: counts),
@@ -89,8 +96,7 @@ class HomeScreen extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                  child:
-                      _SectionTitle(context.l10n.manageCategories)),
+                  child: _SectionTitle(context.l10n.homeYourSections)),
               IconButton(
                 tooltip: context.l10n.manageCategories,
                 icon: const Icon(Icons.tune, size: 18),
@@ -105,21 +111,19 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 22),
             _SectionTitle(context.l10n.homeFavorites),
             const SizedBox(height: 10),
-            for (final entity in favorites.take(8))
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: EntityCard(entity: entity, worldId: worldId),
-              ),
+            _CardColumns(children: [
+              for (final entity in favorites.take(8))
+                EntityCard(entity: entity, worldId: worldId),
+            ]),
           ],
           if (recents != null && recents.isNotEmpty) ...[
             const SizedBox(height: 22),
             _SectionTitle(context.l10n.homeRecentlyOpened),
             const SizedBox(height: 10),
-            for (final entity in recents.take(10))
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: EntityCard(entity: entity, worldId: worldId),
-              ),
+            _CardColumns(children: [
+              for (final entity in recents.take(10))
+                EntityCard(entity: entity, worldId: worldId),
+            ]),
           ],
         ],
       ),
@@ -285,5 +289,123 @@ class _TileGrid extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+/// The world at a glance: its setting pack, size and description.
+class _WorldHeader extends StatelessWidget {
+  final World world;
+  final int total;
+  const _WorldHeader({required this.world, required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    final pack = SettingPacks.of(world.style);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: GmhColors.ember.withValues(alpha: 0.14),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(pack.icon, color: GmhColors.ember, size: 26),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(world.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.headlineSmall),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${world.style.localizedName(context)} · '
+                    '${context.l10n.entriesCount(total)}',
+                    style: TextStyle(
+                        fontSize: 12.5, color: GmhColors.parchmentDim),
+                  ),
+                  if (world.description.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(world.description,
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: GmhColors.parchmentDim,
+                            fontStyle: FontStyle.italic)),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// One-tap access to the GM tools from the dashboard.
+class _ToolsRow extends StatelessWidget {
+  final String worldId;
+  const _ToolsRow({required this.worldId});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final tool in gmhTools)
+          ActionChip(
+            avatar: Icon(tool.icon, size: 16, color: GmhColors.ember),
+            label: Text(tool.label(l)),
+            tooltip: tool.description(l),
+            onPressed: () => context.go(Routes.tool(worldId, tool.id)),
+          ),
+      ],
+    );
+  }
+}
+
+/// Cards in one column, or two side by side when there is room.
+class _CardColumns extends StatelessWidget {
+  final List<Widget> children;
+  const _CardColumns({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < 860) {
+        return Column(children: [
+          for (final child in children)
+            Padding(padding: const EdgeInsets.only(bottom: 8), child: child),
+        ]);
+      }
+      final rows = <Widget>[];
+      for (var i = 0; i < children.length; i += 2) {
+        rows.add(Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: children[i]),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: i + 1 < children.length
+                      ? children[i + 1]
+                      : const SizedBox.shrink()),
+            ],
+          ),
+        ));
+      }
+      return Column(children: rows);
+    });
   }
 }

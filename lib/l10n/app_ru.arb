@@ -654,5 +654,7 @@
   "paletteNoMatches": "Ничего не найдено",
   "paletteToggleTheme": "Переключить светлую / тёмную тему",
   "paletteOpenInTab": "Перейти: {name}",
-  "paletteTitle": "Палитра команд"
+  "paletteTitle": "Палитра команд",
+  "homeAtTheTable": "За столом",
+  "homeYourSections": "Ваши разделы"
 }

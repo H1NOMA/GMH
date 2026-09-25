@@ -1199,5 +1199,7 @@
       }
     }
   },
-  "paletteTitle": "Command palette"
+  "paletteTitle": "Command palette",
+  "homeAtTheTable": "At the table",
+  "homeYourSections": "Your sections"
 }

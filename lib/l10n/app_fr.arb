@@ -654,5 +654,7 @@
   "paletteNoMatches": "Aucun résultat",
   "paletteToggleTheme": "Basculer thème clair / sombre",
   "paletteOpenInTab": "Aller à {name}",
-  "paletteTitle": "Palette de commandes"
+  "paletteTitle": "Palette de commandes",
+  "homeAtTheTable": "À la table",
+  "homeYourSections": "Vos sections"
 }

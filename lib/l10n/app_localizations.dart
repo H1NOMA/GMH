@@ -4033,6 +4033,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Command palette'**
   String get paletteTitle;
+
+  /// No description provided for @homeAtTheTable.
+  ///
+  /// In en, this message translates to:
+  /// **'At the table'**
+  String get homeAtTheTable;
+
+  /// No description provided for @homeYourSections.
+  ///
+  /// In en, this message translates to:
+  /// **'Your sections'**
+  String get homeYourSections;
 }
 
 class _AppLocalizationsDelegate

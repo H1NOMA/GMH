@@ -48,6 +48,9 @@ class AppShell extends ConsumerWidget {
     final content = PageStorage(bucket: appPageBucket, child: child);
     // Wide layouts get browser-style workspace tabs above the page.
     final tabbedContent = Column(
+      // Stretch: the strip's scroll view sizes to its tabs, and a
+      // centering column would float them in the middle.
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         WorkspaceTabStrip(worldId: worldId),
         Expanded(child: content),

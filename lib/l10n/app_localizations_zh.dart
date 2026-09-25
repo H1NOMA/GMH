@@ -2215,4 +2215,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get paletteTitle => '命令面板';
+
+  @override
+  String get homeAtTheTable => '游戏桌边';
+
+  @override
+  String get homeYourSections => '自定义分区';
 }

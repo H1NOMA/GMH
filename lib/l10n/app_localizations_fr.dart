@@ -2303,4 +2303,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get paletteTitle => 'Palette de commandes';
+
+  @override
+  String get homeAtTheTable => 'À la table';
+
+  @override
+  String get homeYourSections => 'Vos sections';
 }

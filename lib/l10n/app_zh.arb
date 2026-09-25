@@ -654,5 +654,7 @@
   "paletteNoMatches": "无匹配结果",
   "paletteToggleTheme": "切换浅色 / 深色主题",
   "paletteOpenInTab": "前往 {name}",
-  "paletteTitle": "命令面板"
+  "paletteTitle": "命令面板",
+  "homeAtTheTable": "游戏桌边",
+  "homeYourSections": "自定义分区"
 }

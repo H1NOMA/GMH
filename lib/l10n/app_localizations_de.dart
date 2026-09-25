@@ -2302,4 +2302,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get paletteTitle => 'Befehlspalette';
+
+  @override
+  String get homeAtTheTable => 'Am Spieltisch';
+
+  @override
+  String get homeYourSections => 'Eigene Bereiche';
 }
