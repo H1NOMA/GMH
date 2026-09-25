@@ -132,6 +132,27 @@ class _EntityScaffold extends ConsumerWidget {
     }
   }
 
+  Future<void> _duplicate(BuildContext context, WidgetRef ref) async {
+    final service = ref.read(entityServiceProvider);
+    final media = ref.read(mediaRepositoryProvider);
+    final l10n = context.l10n;
+    final result = await service.duplicate(entity.id,
+        copyName: l10n.entryCopyName(entity.name));
+    if (result.isErr) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(localizedError(context, result.error))));
+      }
+      return;
+    }
+    final copy = result.value;
+    // Each entry owns its gallery rows; the files themselves are shared.
+    for (final item in await media.watchGallery(entity.id).first) {
+      await media.addToGallery(copy.id, item.media.id, caption: item.caption);
+    }
+    if (context.mounted) context.go(Routes.entity(worldId, copy.id));
+  }
+
   Future<void> _delete(BuildContext context, WidgetRef ref) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -261,6 +282,8 @@ class _EntityScaffold extends ConsumerWidget {
                 _rename(context, ref);
               case 'graph':
                 context.go(Routes.graph(worldId, focusEntityId: entity.id));
+              case 'duplicate':
+                _duplicate(context, ref);
               case 'delete':
                 _delete(context, ref);
             }
@@ -273,6 +296,10 @@ class _EntityScaffold extends ConsumerWidget {
             PopupMenuItem(
               value: 'graph',
               child: Text(context.l10n.menuShowInGraph),
+            ),
+            PopupMenuItem(
+              value: 'duplicate',
+              child: Text(context.l10n.menuDuplicateEntry),
             ),
             PopupMenuItem(
               value: 'delete',

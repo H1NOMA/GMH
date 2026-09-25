@@ -2297,4 +2297,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeYourSections => 'Your sections';
+
+  @override
+  String get menuDuplicateEntry => 'Duplicate';
+
+  @override
+  String entryCopyName(String name) {
+    return '$name (copy)';
+  }
 }

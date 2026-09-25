@@ -2221,4 +2221,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeYourSections => '自定义分区';
+
+  @override
+  String get menuDuplicateEntry => '复制';
+
+  @override
+  String entryCopyName(String name) {
+    return '$name（副本）';
+  }
 }

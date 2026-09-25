@@ -656,5 +656,7 @@
   "paletteOpenInTab": "Перейти: {name}",
   "paletteTitle": "Палитра команд",
   "homeAtTheTable": "За столом",
-  "homeYourSections": "Ваши разделы"
+  "homeYourSections": "Ваши разделы",
+  "menuDuplicateEntry": "Дублировать",
+  "entryCopyName": "{name} (копия)"
 }

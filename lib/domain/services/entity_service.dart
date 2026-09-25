@@ -127,6 +127,38 @@ class EntityService {
     });
   }
 
+  /// Copies an entry: fields, tags, cover and lore (reference fields
+  /// re-mirror their links; manual relations and backlinks stay with the
+  /// original). [copyName] is the new name, e.g. "Mira (copy)". Gallery
+  /// images are the caller's to copy (see MediaRepository).
+  Future<Result<Entity>> duplicate(String id, {required String copyName}) {
+    return guard(() async {
+      final source = await _entities.getEntity(id);
+      if (source == null) {
+        throw const ValidationException('Entry no longer exists.');
+      }
+      final copy = await _entities.createEntity(
+        worldId: source.worldId,
+        kind: source.kind,
+        customCategoryId: source.customCategoryId,
+        name: copyName.trim().isEmpty ? source.name : copyName.trim(),
+        summary: source.summary,
+        attributes: source.attributes,
+      );
+      if (source.coverMediaId != null) {
+        await _entities
+            .updateEntity(copy.copyWith(coverMediaId: () => source.coverMediaId));
+      }
+      for (final tag in await _tags.watchEntityTags(id).first) {
+        await _tags.tagEntity(copy.id, tag.id);
+      }
+      await _documents?.copyContent(fromEntityId: id, toEntityId: copy.id);
+      await _linkSync.syncAttributeRefs(copy);
+      await _search.reindexEntity(copy.id);
+      return (await _entities.getEntity(copy.id))!;
+    });
+  }
+
   /// Sets (or clears) the cover image against the freshest row. With
   /// [onlyIfEmpty], an existing cover is kept — used when the first image
   /// added to an entry becomes its cover.

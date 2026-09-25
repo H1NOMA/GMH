@@ -1201,5 +1201,14 @@
   },
   "paletteTitle": "Command palette",
   "homeAtTheTable": "At the table",
-  "homeYourSections": "Your sections"
+  "homeYourSections": "Your sections",
+  "menuDuplicateEntry": "Duplicate",
+  "entryCopyName": "{name} (copy)",
+  "@entryCopyName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

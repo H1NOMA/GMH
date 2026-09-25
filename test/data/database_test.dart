@@ -306,4 +306,40 @@ void main() {
     expect(names, ['B', 'C']);
     expect(c.sortOrder, greaterThan(1));
   });
+
+  test('duplicating an entry copies fields, tags, cover and lore', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final city = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.location, name: 'Ravenport');
+    final mira = (await h.entityService.create(
+      worldId: world.id,
+      kind: EntityKind.character,
+      name: 'Mira',
+      summary: 'Harbor master',
+      attributes: {'occupation': 'Pilot', 'homeLocation': 'entity:${city.id}'},
+    ))
+        .value;
+    await h.entityService.addTag(mira.id, world.id, 'harbor');
+    final cover = await h.media
+        .import(worldId: world.id, fileName: 'c.png', bytes: utf8.encode('c'));
+    await h.entityService.setCover(mira.id, cover.id);
+    await h.documentService.save(
+        entityId: mira.id, contentJson: '[{"insert":"Knows every reef.\\n"}]');
+
+    final copy = (await h.entityService
+            .duplicate(mira.id, copyName: 'Mira (copy)'))
+        .value;
+    expect(copy.id, isNot(mira.id));
+    expect(copy.name, 'Mira (copy)');
+    expect(copy.summary, 'Harbor master');
+    expect(copy.attributes['occupation'], 'Pilot');
+    expect(copy.coverMediaId, cover.id);
+    expect((await h.tags.watchEntityTags(copy.id).first).map((t) => t.name),
+        ['harbor']);
+    expect((await h.documents.getByEntity(copy.id))!.plainText,
+        contains('Knows every reef'));
+    final links = await h.links.allForWorld(world.id);
+    expect(links.where((l) => l.sourceId == copy.id).map((l) => l.targetId),
+        [city.id]);
+  });
 }

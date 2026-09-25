@@ -656,5 +656,7 @@
   "paletteOpenInTab": "前往 {name}",
   "paletteTitle": "命令面板",
   "homeAtTheTable": "游戏桌边",
-  "homeYourSections": "自定义分区"
+  "homeYourSections": "自定义分区",
+  "menuDuplicateEntry": "复制",
+  "entryCopyName": "{name}（副本）"
 }

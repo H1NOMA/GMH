@@ -656,5 +656,7 @@
   "paletteOpenInTab": "Aller à {name}",
   "paletteTitle": "Palette de commandes",
   "homeAtTheTable": "À la table",
-  "homeYourSections": "Vos sections"
+  "homeYourSections": "Vos sections",
+  "menuDuplicateEntry": "Dupliquer",
+  "entryCopyName": "{name} (copie)"
 }

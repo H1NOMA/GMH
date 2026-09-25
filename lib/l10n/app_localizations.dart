@@ -4045,6 +4045,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your sections'**
   String get homeYourSections;
+
+  /// No description provided for @menuDuplicateEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get menuDuplicateEntry;
+
+  /// No description provided for @entryCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (copy)'**
+  String entryCopyName(String name);
 }
 
 class _AppLocalizationsDelegate

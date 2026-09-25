@@ -2322,4 +2322,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeYourSections => 'Ваши разделы';
+
+  @override
+  String get menuDuplicateEntry => 'Дублировать';
+
+  @override
+  String entryCopyName(String name) {
+    return '$name (копия)';
+  }
 }

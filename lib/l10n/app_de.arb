@@ -656,5 +656,7 @@
   "paletteOpenInTab": "Gehe zu {name}",
   "paletteTitle": "Befehlspalette",
   "homeAtTheTable": "Am Spieltisch",
-  "homeYourSections": "Eigene Bereiche"
+  "homeYourSections": "Eigene Bereiche",
+  "menuDuplicateEntry": "Duplizieren",
+  "entryCopyName": "{name} (Kopie)"
 }

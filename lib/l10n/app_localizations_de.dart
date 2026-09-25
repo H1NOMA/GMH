@@ -2308,4 +2308,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get homeYourSections => 'Eigene Bereiche';
+
+  @override
+  String get menuDuplicateEntry => 'Duplizieren';
+
+  @override
+  String entryCopyName(String name) {
+    return '$name (Kopie)';
+  }
 }

@@ -55,6 +55,14 @@ class DocumentService {
     }
   }
 
+  /// Copies [fromEntityId]'s lore to [toEntityId] (mentions included).
+  Future<void> copyContent(
+      {required String fromEntityId, required String toEntityId}) async {
+    final doc = await _documents.getByEntity(fromEntityId);
+    if (doc == null || doc.plainText.trim().isEmpty) return;
+    await save(entityId: toEntityId, contentJson: doc.contentJson);
+  }
+
   /// Manual or automatic version checkpoint.
   Future<Result<void>> checkpoint(String entityId, {String note = ''}) {
     return guard(() async {
