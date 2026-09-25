@@ -2292,4 +2292,344 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tablesWhy => 'Как получен результат';
+
+  @override
+  String get mapsEmptyTitle => 'Карт пока нет';
+
+  @override
+  String get mapsEmptyHint =>
+      'Загрузите изображение карты или начните с чистого листа, затем расставьте метки, связанные с записями.';
+
+  @override
+  String get mapsNewFromImage => 'Карта из изображения';
+
+  @override
+  String get mapsNewBlank => 'Пустая карта';
+
+  @override
+  String mapsDefaultName(int number) {
+    return 'Карта $number';
+  }
+
+  @override
+  String mapsPinCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count метки',
+      many: '$count меток',
+      few: '$count метки',
+      one: '$count метка',
+      zero: 'Нет меток',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mapsRenameTitle => 'Переименовать карту';
+
+  @override
+  String get mapsDuplicate => 'Дублировать';
+
+  @override
+  String mapsCopyName(String name) {
+    return '$name (копия)';
+  }
+
+  @override
+  String mapsDeleteTitle(String name) {
+    return 'Удалить «$name»?';
+  }
+
+  @override
+  String get mapsDeleteBody =>
+      'Карта и все её метки будут удалены. Связанные записи не пострадают.';
+
+  @override
+  String get mapsActions => 'Действия с картой';
+
+  @override
+  String get mapsAllMaps => 'Все карты';
+
+  @override
+  String get mapsMissing => 'Этой карты больше нет.';
+
+  @override
+  String get mapsImportFailed => 'Не удалось открыть файл как изображение.';
+
+  @override
+  String get mapsChangeImage => 'Сменить изображение';
+
+  @override
+  String get mapsImageMissing => 'Изображение карты пропало';
+
+  @override
+  String get mapsImageMissingHint =>
+      'Метки по-прежнему работают. Выберите новое изображение, чтобы вернуть фон.';
+
+  @override
+  String get mapsModeSelect => 'Выбор';
+
+  @override
+  String get mapsModeAdd => 'Добавить метку';
+
+  @override
+  String get mapsModeMeasure => 'Измерить';
+
+  @override
+  String get mapsAddHint => 'Нажмите на карту, чтобы поставить метку.';
+
+  @override
+  String get mapsMeasureHint => 'Нажмите на две точки, чтобы измерить.';
+
+  @override
+  String get mapsMeasureNoScale => 'Масштаб не задан: расстояние в пикселях.';
+
+  @override
+  String mapsDistance(String distance) {
+    return 'Расстояние: $distance';
+  }
+
+  @override
+  String mapsPixels(String value) {
+    return '$value пкс';
+  }
+
+  @override
+  String get mapsMeasureRule => 'Правило диагоналей';
+
+  @override
+  String get mapsRuleStraight => 'По прямой';
+
+  @override
+  String get mapsRuleGrid => 'Сетка: диагональ = 1 клетка';
+
+  @override
+  String get mapsRuleAlternating => 'Сетка: диагонали 1-2-1';
+
+  @override
+  String get mapsFit => 'Вписать в экран';
+
+  @override
+  String get mapsZoomIn => 'Приблизить';
+
+  @override
+  String get mapsZoomOut => 'Отдалить';
+
+  @override
+  String get mapsPlayerView => 'Вид для игроков';
+
+  @override
+  String get mapsExitPlayerView => 'Выйти из вида для игроков';
+
+  @override
+  String get mapsPanel => 'Метки и сведения';
+
+  @override
+  String get mapsPinsTab => 'Метки';
+
+  @override
+  String get mapsDetailsTab => 'Сведения';
+
+  @override
+  String get mapsSearchPins => 'Поиск меток';
+
+  @override
+  String get mapsNoPins =>
+      'Меток пока нет. Выберите «Добавить метку» и нажмите на карту.';
+
+  @override
+  String get mapsNoPinMatches => 'Метки не найдены.';
+
+  @override
+  String get mapsNewPin => 'Новая метка';
+
+  @override
+  String get mapsEditPin => 'Изменить метку';
+
+  @override
+  String get mapsPinLabel => 'Подпись';
+
+  @override
+  String get mapsPinIcon => 'Значок';
+
+  @override
+  String get mapsPinColor => 'Цвет';
+
+  @override
+  String get mapsPinNotes => 'Заметки';
+
+  @override
+  String get mapsPinGmOnly => 'Только для мастера';
+
+  @override
+  String get mapsPinGmOnlyHint => 'Скрыта в виде для игроков';
+
+  @override
+  String get mapsLinkedEntry => 'Связанная запись';
+
+  @override
+  String get mapsLinkEntry => 'Связать с записью';
+
+  @override
+  String get mapsChangeEntry => 'Сменить';
+
+  @override
+  String get mapsUnlink => 'Отвязать';
+
+  @override
+  String get mapsOpenEntry => 'Открыть запись';
+
+  @override
+  String get mapsEntryMissing => 'Связанная запись удалена';
+
+  @override
+  String get mapsDeletePin => 'Удалить метку';
+
+  @override
+  String get mapsPinDeleted => 'Метка удалена';
+
+  @override
+  String get mapsUntitledPin => 'Метка без названия';
+
+  @override
+  String get mapsDescription => 'Описание';
+
+  @override
+  String get mapsNoDescription => 'Описания нет.';
+
+  @override
+  String get mapsScale => 'Масштаб';
+
+  @override
+  String get mapsNoScale => 'Масштаб не задан';
+
+  @override
+  String mapsScaleValue(String units, String unit, String px) {
+    return '1 клетка = $units $unit ($px пкс)';
+  }
+
+  @override
+  String get mapsScaleHelp =>
+      'Одна клетка сетки на изображении соответствует этому расстоянию. Оставьте поля пустыми, если масштаб не нужен.';
+
+  @override
+  String get mapsScaleInvalid =>
+      'Укажите положительные числа для расстояния и размера клетки.';
+
+  @override
+  String get mapsUnitsPerCell => 'Расстояние на клетку';
+
+  @override
+  String get mapsUnitName => 'Единица';
+
+  @override
+  String get mapsUnitHint => 'мили, км, фт…';
+
+  @override
+  String get mapsCellPx => 'Клетка (пкс)';
+
+  @override
+  String get mapsShowGrid => 'Показывать сетку';
+
+  @override
+  String get mapsGridNeedsScale => 'Задайте масштаб, чтобы показать сетку.';
+
+  @override
+  String get mapsPinsVisibleDefault => 'Новые метки видны игрокам';
+
+  @override
+  String get mapsEditDetails => 'Изменить сведения';
+
+  @override
+  String get mapsDetailsTitle => 'Сведения о карте';
+
+  @override
+  String mapsImageSize(int width, int height) {
+    return '$width × $height пкс';
+  }
+
+  @override
+  String get mapsBlankCanvas => 'Чистый лист';
+
+  @override
+  String get mapsOnMaps => 'На картах';
+
+  @override
+  String get mapsIconPin => 'Метка';
+
+  @override
+  String get mapsIconCastle => 'Замок';
+
+  @override
+  String get mapsIconTown => 'Город';
+
+  @override
+  String get mapsIconDungeon => 'Подземелье';
+
+  @override
+  String get mapsIconCave => 'Пещера';
+
+  @override
+  String get mapsIconForest => 'Лес';
+
+  @override
+  String get mapsIconMountain => 'Гора';
+
+  @override
+  String get mapsIconPort => 'Порт';
+
+  @override
+  String get mapsIconDanger => 'Опасность';
+
+  @override
+  String get mapsIconTreasure => 'Сокровище';
+
+  @override
+  String get mapsIconQuest => 'Задание';
+
+  @override
+  String get mapsIconCamp => 'Лагерь';
+
+  @override
+  String get mapsIconNpc => 'Персонаж';
+
+  @override
+  String get mapsIconPortal => 'Портал';
+
+  @override
+  String get mapsIconNote => 'Заметка';
+
+  @override
+  String get mapsColorAuto => 'Автоматически (цвет записи)';
+
+  @override
+  String get mapsColorAccent => 'Акцент';
+
+  @override
+  String get mapsColorRed => 'Красный';
+
+  @override
+  String get mapsColorOrange => 'Оранжевый';
+
+  @override
+  String get mapsColorYellow => 'Жёлтый';
+
+  @override
+  String get mapsColorGreen => 'Зелёный';
+
+  @override
+  String get mapsColorTeal => 'Бирюзовый';
+
+  @override
+  String get mapsColorBlue => 'Синий';
+
+  @override
+  String get mapsColorPurple => 'Фиолетовый';
+
+  @override
+  String get mapsColorPink => 'Розовый';
+
+  @override
+  String get mapsColorGray => 'Серый';
 }

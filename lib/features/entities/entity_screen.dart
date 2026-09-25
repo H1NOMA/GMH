@@ -15,6 +15,7 @@ import '../shell/history_buttons.dart';
 import '../shell/workspace_tabs.dart';
 import '../shell/ui_providers.dart';
 import '../attachments/attachments_panel.dart';
+import '../tools/maps/map_entity_pins.dart';
 import '../../domain/models/entity_kind.dart';
 import 'character_profile.dart';
 import 'widgets/attribute_form.dart';
@@ -525,6 +526,7 @@ class _SidePanel extends StatelessWidget {
           const SizedBox(height: 16),
           RelationsPanel(entity: entity),
         ],
+        EntityMapPins(entity: entity),
         if (showMedia) ...[
           const SizedBox(height: 16),
           AttachmentsPanel(

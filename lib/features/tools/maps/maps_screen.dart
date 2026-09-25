@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../app/l10n_ext.dart';
-import '../../../app/tools.dart';
-import '../tool_scaffold.dart';
+import 'map_page.dart';
+import 'maps_actions.dart';
+import 'maps_list.dart';
 
-// Placeholder page; the full tool replaces this file.
+/// Maps: the world's map list or — with a [mapId] — one map's page.
 class MapsScreen extends StatelessWidget {
   final String worldId;
   final String? mapId;
 
   const MapsScreen({super.key, required this.worldId, this.mapId});
 
+  /// The `?pin=` of the current location (the router hands tools only the
+  /// object id).
+  static String? _pinQuery(BuildContext context) {
+    try {
+      return GoRouterState.of(context).uri.queryParameters[mapPinQuery];
+    } on GoError {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tool = toolById('maps')!;
-    return ToolScaffold(
-      toolId: 'maps',
-      body: ToolEmptyState(
-        icon: tool.icon,
-        title: tool.label(context.l10n),
-        hint: tool.description(context.l10n),
-      ),
+    final id = mapId;
+    if (id == null) return MapList(worldId: worldId);
+    return MapPage(
+      key: ValueKey(id),
+      worldId: worldId,
+      mapId: id,
+      focusPinId: _pinQuery(context),
     );
   }
 }

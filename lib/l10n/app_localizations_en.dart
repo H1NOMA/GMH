@@ -2267,4 +2267,341 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tablesWhy => 'How it was rolled';
+
+  @override
+  String get mapsEmptyTitle => 'No maps yet';
+
+  @override
+  String get mapsEmptyHint =>
+      'Import a map image or start from a blank sheet, then place pins linked to your entries.';
+
+  @override
+  String get mapsNewFromImage => 'Map from image';
+
+  @override
+  String get mapsNewBlank => 'Blank map';
+
+  @override
+  String mapsDefaultName(int number) {
+    return 'Map $number';
+  }
+
+  @override
+  String mapsPinCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pins',
+      one: '1 pin',
+      zero: 'No pins',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mapsRenameTitle => 'Rename map';
+
+  @override
+  String get mapsDuplicate => 'Duplicate';
+
+  @override
+  String mapsCopyName(String name) {
+    return '$name (copy)';
+  }
+
+  @override
+  String mapsDeleteTitle(String name) {
+    return 'Delete “$name”?';
+  }
+
+  @override
+  String get mapsDeleteBody =>
+      'The map and all of its pins will be deleted. Linked entries stay untouched.';
+
+  @override
+  String get mapsActions => 'Map actions';
+
+  @override
+  String get mapsAllMaps => 'All maps';
+
+  @override
+  String get mapsMissing => 'This map no longer exists.';
+
+  @override
+  String get mapsImportFailed => 'This file could not be opened as an image.';
+
+  @override
+  String get mapsChangeImage => 'Change image';
+
+  @override
+  String get mapsImageMissing => 'The map image is missing';
+
+  @override
+  String get mapsImageMissingHint =>
+      'Pins still work. Choose a new image to restore the background.';
+
+  @override
+  String get mapsModeSelect => 'Select';
+
+  @override
+  String get mapsModeAdd => 'Add pin';
+
+  @override
+  String get mapsModeMeasure => 'Measure';
+
+  @override
+  String get mapsAddHint => 'Tap the map to place a pin.';
+
+  @override
+  String get mapsMeasureHint => 'Tap two points to measure.';
+
+  @override
+  String get mapsMeasureNoScale => 'No scale set: distance in pixels.';
+
+  @override
+  String mapsDistance(String distance) {
+    return 'Distance: $distance';
+  }
+
+  @override
+  String mapsPixels(String value) {
+    return '$value px';
+  }
+
+  @override
+  String get mapsMeasureRule => 'Diagonal rule';
+
+  @override
+  String get mapsRuleStraight => 'Straight line';
+
+  @override
+  String get mapsRuleGrid => 'Grid: diagonal = 1 cell';
+
+  @override
+  String get mapsRuleAlternating => 'Grid: diagonals 1-2-1';
+
+  @override
+  String get mapsFit => 'Fit to screen';
+
+  @override
+  String get mapsZoomIn => 'Zoom in';
+
+  @override
+  String get mapsZoomOut => 'Zoom out';
+
+  @override
+  String get mapsPlayerView => 'Player view';
+
+  @override
+  String get mapsExitPlayerView => 'Exit player view';
+
+  @override
+  String get mapsPanel => 'Pins and details';
+
+  @override
+  String get mapsPinsTab => 'Pins';
+
+  @override
+  String get mapsDetailsTab => 'Details';
+
+  @override
+  String get mapsSearchPins => 'Search pins';
+
+  @override
+  String get mapsNoPins => 'No pins yet. Choose “Add pin” and tap the map.';
+
+  @override
+  String get mapsNoPinMatches => 'No pins match your search.';
+
+  @override
+  String get mapsNewPin => 'New pin';
+
+  @override
+  String get mapsEditPin => 'Edit pin';
+
+  @override
+  String get mapsPinLabel => 'Label';
+
+  @override
+  String get mapsPinIcon => 'Symbol';
+
+  @override
+  String get mapsPinColor => 'Color';
+
+  @override
+  String get mapsPinNotes => 'Notes';
+
+  @override
+  String get mapsPinGmOnly => 'GM only';
+
+  @override
+  String get mapsPinGmOnlyHint => 'Hidden in player view';
+
+  @override
+  String get mapsLinkedEntry => 'Linked entry';
+
+  @override
+  String get mapsLinkEntry => 'Link an entry';
+
+  @override
+  String get mapsChangeEntry => 'Change';
+
+  @override
+  String get mapsUnlink => 'Unlink';
+
+  @override
+  String get mapsOpenEntry => 'Open entry';
+
+  @override
+  String get mapsEntryMissing => 'The linked entry was deleted';
+
+  @override
+  String get mapsDeletePin => 'Delete pin';
+
+  @override
+  String get mapsPinDeleted => 'Pin deleted';
+
+  @override
+  String get mapsUntitledPin => 'Unnamed pin';
+
+  @override
+  String get mapsDescription => 'Description';
+
+  @override
+  String get mapsNoDescription => 'No description.';
+
+  @override
+  String get mapsScale => 'Scale';
+
+  @override
+  String get mapsNoScale => 'No scale set';
+
+  @override
+  String mapsScaleValue(String units, String unit, String px) {
+    return '1 cell = $units $unit ($px px)';
+  }
+
+  @override
+  String get mapsScaleHelp =>
+      'One grid cell of the image covers this distance. Leave the numbers empty for a map without a scale.';
+
+  @override
+  String get mapsScaleInvalid =>
+      'Enter positive numbers for both the distance and the cell size.';
+
+  @override
+  String get mapsUnitsPerCell => 'Distance per cell';
+
+  @override
+  String get mapsUnitName => 'Unit';
+
+  @override
+  String get mapsUnitHint => 'miles, km, ft…';
+
+  @override
+  String get mapsCellPx => 'Cell size (px)';
+
+  @override
+  String get mapsShowGrid => 'Show grid';
+
+  @override
+  String get mapsGridNeedsScale => 'Set a scale to draw a grid.';
+
+  @override
+  String get mapsPinsVisibleDefault => 'New pins visible to players';
+
+  @override
+  String get mapsEditDetails => 'Edit details';
+
+  @override
+  String get mapsDetailsTitle => 'Map details';
+
+  @override
+  String mapsImageSize(int width, int height) {
+    return '$width × $height px';
+  }
+
+  @override
+  String get mapsBlankCanvas => 'Blank sheet';
+
+  @override
+  String get mapsOnMaps => 'On maps';
+
+  @override
+  String get mapsIconPin => 'Pin';
+
+  @override
+  String get mapsIconCastle => 'Castle';
+
+  @override
+  String get mapsIconTown => 'Town';
+
+  @override
+  String get mapsIconDungeon => 'Dungeon';
+
+  @override
+  String get mapsIconCave => 'Cave';
+
+  @override
+  String get mapsIconForest => 'Forest';
+
+  @override
+  String get mapsIconMountain => 'Mountain';
+
+  @override
+  String get mapsIconPort => 'Port';
+
+  @override
+  String get mapsIconDanger => 'Danger';
+
+  @override
+  String get mapsIconTreasure => 'Treasure';
+
+  @override
+  String get mapsIconQuest => 'Quest';
+
+  @override
+  String get mapsIconCamp => 'Camp';
+
+  @override
+  String get mapsIconNpc => 'Character';
+
+  @override
+  String get mapsIconPortal => 'Portal';
+
+  @override
+  String get mapsIconNote => 'Note';
+
+  @override
+  String get mapsColorAuto => 'Automatic (entry color)';
+
+  @override
+  String get mapsColorAccent => 'Accent';
+
+  @override
+  String get mapsColorRed => 'Red';
+
+  @override
+  String get mapsColorOrange => 'Orange';
+
+  @override
+  String get mapsColorYellow => 'Yellow';
+
+  @override
+  String get mapsColorGreen => 'Green';
+
+  @override
+  String get mapsColorTeal => 'Teal';
+
+  @override
+  String get mapsColorBlue => 'Blue';
+
+  @override
+  String get mapsColorPurple => 'Purple';
+
+  @override
+  String get mapsColorPink => 'Pink';
+
+  @override
+  String get mapsColorGray => 'Gray';
 }
