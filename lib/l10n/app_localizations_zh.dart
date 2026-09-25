@@ -1191,4 +1191,279 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toolReferenceHint => '状态与速查规则一目了然（SRD 5.2.1）。';
+
+  @override
+  String get combatNewEncounter => '新遭遇';
+
+  @override
+  String combatEncounterDefaultName(int number) {
+    return '遭遇 $number';
+  }
+
+  @override
+  String get combatEncounterNameLabel => '遭遇名称';
+
+  @override
+  String get combatEmptyTitle => '还没有遭遇';
+
+  @override
+  String get combatEmptyHint => '规划一场战斗：加入怪物和英雄，检查难度，然后逐轮进行。';
+
+  @override
+  String get combatRenameTitle => '重命名遭遇';
+
+  @override
+  String get combatDuplicate => '复制';
+
+  @override
+  String combatCopyName(String name) {
+    return '$name（副本）';
+  }
+
+  @override
+  String combatDeleteTitle(String name) {
+    return '删除“$name”？';
+  }
+
+  @override
+  String get combatDeleteBody => '该遭遇及其所有参战者将被永久删除。';
+
+  @override
+  String get combatStatusPlanning => '筹备中';
+
+  @override
+  String get combatStatusActive => '战斗中';
+
+  @override
+  String get combatStatusFinished => '已结束';
+
+  @override
+  String combatRound(int round) {
+    return '第 $round 轮';
+  }
+
+  @override
+  String combatCombatantCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 名参战者',
+      zero: '没有参战者',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get combatNotFound => '该遭遇已不存在。';
+
+  @override
+  String get combatAllEncounters => '全部遭遇';
+
+  @override
+  String get combatStart => '开始战斗';
+
+  @override
+  String get combatEnd => '结束战斗';
+
+  @override
+  String get combatNextTurn => '下一回合';
+
+  @override
+  String get combatPreviousTurn => '上一回合';
+
+  @override
+  String get combatRollInitiative => '投先攻';
+
+  @override
+  String get combatRollInitiativeHint => '为每个怪物投 d20 + 加值；玩家保留自己的数值。';
+
+  @override
+  String combatTurnOf(String name) {
+    return '当前：$name';
+  }
+
+  @override
+  String get combatNotStarted => '战斗尚未开始';
+
+  @override
+  String get combatAddFromWorld => '从世界添加';
+
+  @override
+  String get combatAddManually => '手动添加';
+
+  @override
+  String get combatPickTitle => '添加生物或角色';
+
+  @override
+  String combatQuantityTitle(String name) {
+    return '添加多少个“$name”？';
+  }
+
+  @override
+  String get combatNoCombatants => '还没有参战者';
+
+  @override
+  String get combatNoCombatantsHint => '从你的世界添加生物和角色，或手动输入。';
+
+  @override
+  String get combatInitiative => '先攻';
+
+  @override
+  String get combatInitiativeBonus => '先攻加值';
+
+  @override
+  String get combatArmorClass => '护甲等级';
+
+  @override
+  String get combatAcShort => 'AC';
+
+  @override
+  String get combatHpMax => '最大生命';
+
+  @override
+  String get combatHpCurrent => '当前生命';
+
+  @override
+  String get combatHpTemp => '临时生命';
+
+  @override
+  String get combatAmountHint => '生命';
+
+  @override
+  String get combatDamage => '伤害';
+
+  @override
+  String get combatHeal => '治疗';
+
+  @override
+  String get combatTemp => '临时';
+
+  @override
+  String get combatAddCondition => '状态';
+
+  @override
+  String combatConditionDurationTitle(String condition) {
+    return '持续时间：$condition';
+  }
+
+  @override
+  String get combatConditionRounds => '轮数（留空 = 直到移除）';
+
+  @override
+  String get combatRemoveCondition => '移除状态';
+
+  @override
+  String get combatConcentration => '专注';
+
+  @override
+  String get combatDefeated => '已击败';
+
+  @override
+  String get combatPlayer => '玩家角色';
+
+  @override
+  String get combatEdit => '编辑';
+
+  @override
+  String get combatRemove => '移除';
+
+  @override
+  String get combatEditCombatant => '编辑参战者';
+
+  @override
+  String get combatAddCombatant => '添加参战者';
+
+  @override
+  String get combatChallenge => '挑战等级';
+
+  @override
+  String get combatXp => '经验值';
+
+  @override
+  String get combatQuantity => '数量';
+
+  @override
+  String get combatNotes => '笔记';
+
+  @override
+  String get combatNotesHint => '战术、地形、战利品……';
+
+  @override
+  String get combatDifficulty => '难度';
+
+  @override
+  String get combatRules => '规则';
+
+  @override
+  String get combatPartyLevels => '队伍等级';
+
+  @override
+  String get combatAddLevel => '等级';
+
+  @override
+  String combatLevelChip(int level) {
+    return '$level 级';
+  }
+
+  @override
+  String get combatLevelLabel => '角色等级（1–20）';
+
+  @override
+  String combatMonsterXp(String xp) {
+    return '怪物经验值：$xp';
+  }
+
+  @override
+  String combatAdjustedXp(String xp, String multiplier) {
+    return '调整后经验值：$xp（×$multiplier）';
+  }
+
+  @override
+  String get combatNoParty => '添加队伍等级以评估此遭遇。';
+
+  @override
+  String get combatRatingTrivial => '微不足道';
+
+  @override
+  String get combatRatingLow => '低';
+
+  @override
+  String get combatRatingModerate => '中等';
+
+  @override
+  String get combatRatingHigh => '高';
+
+  @override
+  String get combatRatingBeyondHigh => '超高';
+
+  @override
+  String get combatRatingEasy => '简单';
+
+  @override
+  String get combatRatingMedium => '中等';
+
+  @override
+  String get combatRatingHard => '困难';
+
+  @override
+  String get combatRatingDeadly => '致命';
+
+  @override
+  String combatConcentrationCheck(String name, int dc) {
+    return '$name：专注豁免 DC $dc';
+  }
+
+  @override
+  String combatDefeatedNotice(String name) {
+    return '$name 已被击败';
+  }
+
+  @override
+  String get combatOpenEntry => '打开条目';
+
+  @override
+  String get combatActions => '参战者操作';
+
+  @override
+  String get combatEncounterActions => '遭遇操作';
 }

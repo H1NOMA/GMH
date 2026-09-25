@@ -2245,6 +2245,492 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Conditions and quick rules at a glance (SRD 5.2.1).'**
   String get toolReferenceHint;
+
+  /// No description provided for @combatNewEncounter.
+  ///
+  /// In en, this message translates to:
+  /// **'New encounter'**
+  String get combatNewEncounter;
+
+  /// No description provided for @combatEncounterDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Encounter {number}'**
+  String combatEncounterDefaultName(int number);
+
+  /// No description provided for @combatEncounterNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Encounter name'**
+  String get combatEncounterNameLabel;
+
+  /// No description provided for @combatEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No encounters yet'**
+  String get combatEmptyTitle;
+
+  /// No description provided for @combatEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan a fight: add monsters and heroes, check the difficulty, then run it round by round.'**
+  String get combatEmptyHint;
+
+  /// No description provided for @combatRenameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename encounter'**
+  String get combatRenameTitle;
+
+  /// No description provided for @combatDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get combatDuplicate;
+
+  /// No description provided for @combatCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (copy)'**
+  String combatCopyName(String name);
+
+  /// No description provided for @combatDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{name}”?'**
+  String combatDeleteTitle(String name);
+
+  /// No description provided for @combatDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The encounter and all its combatants are deleted permanently.'**
+  String get combatDeleteBody;
+
+  /// No description provided for @combatStatusPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning'**
+  String get combatStatusPlanning;
+
+  /// No description provided for @combatStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'In combat'**
+  String get combatStatusActive;
+
+  /// No description provided for @combatStatusFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get combatStatusFinished;
+
+  /// No description provided for @combatRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round}'**
+  String combatRound(int round);
+
+  /// No description provided for @combatCombatantCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No combatants} =1{1 combatant} other{{count} combatants}}'**
+  String combatCombatantCount(int count);
+
+  /// No description provided for @combatNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This encounter no longer exists.'**
+  String get combatNotFound;
+
+  /// No description provided for @combatAllEncounters.
+  ///
+  /// In en, this message translates to:
+  /// **'All encounters'**
+  String get combatAllEncounters;
+
+  /// No description provided for @combatStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start combat'**
+  String get combatStart;
+
+  /// No description provided for @combatEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End combat'**
+  String get combatEnd;
+
+  /// No description provided for @combatNextTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Next turn'**
+  String get combatNextTurn;
+
+  /// No description provided for @combatPreviousTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous turn'**
+  String get combatPreviousTurn;
+
+  /// No description provided for @combatRollInitiative.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll initiative'**
+  String get combatRollInitiative;
+
+  /// No description provided for @combatRollInitiativeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rolls d20 + bonus for every monster; players keep their own values.'**
+  String get combatRollInitiativeHint;
+
+  /// No description provided for @combatTurnOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn: {name}'**
+  String combatTurnOf(String name);
+
+  /// No description provided for @combatNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Combat has not started'**
+  String get combatNotStarted;
+
+  /// No description provided for @combatAddFromWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'Add from world'**
+  String get combatAddFromWorld;
+
+  /// No description provided for @combatAddManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Add manually'**
+  String get combatAddManually;
+
+  /// No description provided for @combatPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a creature or character'**
+  String get combatPickTitle;
+
+  /// No description provided for @combatQuantityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How many “{name}”?'**
+  String combatQuantityTitle(String name);
+
+  /// No description provided for @combatNoCombatants.
+  ///
+  /// In en, this message translates to:
+  /// **'No combatants yet'**
+  String get combatNoCombatants;
+
+  /// No description provided for @combatNoCombatantsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add creatures and characters from your world or enter them by hand.'**
+  String get combatNoCombatantsHint;
+
+  /// No description provided for @combatInitiative.
+  ///
+  /// In en, this message translates to:
+  /// **'Initiative'**
+  String get combatInitiative;
+
+  /// No description provided for @combatInitiativeBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Initiative bonus'**
+  String get combatInitiativeBonus;
+
+  /// No description provided for @combatArmorClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Armor class'**
+  String get combatArmorClass;
+
+  /// No description provided for @combatAcShort.
+  ///
+  /// In en, this message translates to:
+  /// **'AC'**
+  String get combatAcShort;
+
+  /// No description provided for @combatHpMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Max HP'**
+  String get combatHpMax;
+
+  /// No description provided for @combatHpCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current HP'**
+  String get combatHpCurrent;
+
+  /// No description provided for @combatHpTemp.
+  ///
+  /// In en, this message translates to:
+  /// **'Temp HP'**
+  String get combatHpTemp;
+
+  /// No description provided for @combatAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'HP'**
+  String get combatAmountHint;
+
+  /// No description provided for @combatDamage.
+  ///
+  /// In en, this message translates to:
+  /// **'Damage'**
+  String get combatDamage;
+
+  /// No description provided for @combatHeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Heal'**
+  String get combatHeal;
+
+  /// No description provided for @combatTemp.
+  ///
+  /// In en, this message translates to:
+  /// **'Temp'**
+  String get combatTemp;
+
+  /// No description provided for @combatAddCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition'**
+  String get combatAddCondition;
+
+  /// No description provided for @combatConditionDurationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {condition}'**
+  String combatConditionDurationTitle(String condition);
+
+  /// No description provided for @combatConditionRounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds (empty = until removed)'**
+  String get combatConditionRounds;
+
+  /// No description provided for @combatRemoveCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove condition'**
+  String get combatRemoveCondition;
+
+  /// No description provided for @combatConcentration.
+  ///
+  /// In en, this message translates to:
+  /// **'Concentration'**
+  String get combatConcentration;
+
+  /// No description provided for @combatDefeated.
+  ///
+  /// In en, this message translates to:
+  /// **'Defeated'**
+  String get combatDefeated;
+
+  /// No description provided for @combatPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Player character'**
+  String get combatPlayer;
+
+  /// No description provided for @combatEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get combatEdit;
+
+  /// No description provided for @combatRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get combatRemove;
+
+  /// No description provided for @combatEditCombatant.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit combatant'**
+  String get combatEditCombatant;
+
+  /// No description provided for @combatAddCombatant.
+  ///
+  /// In en, this message translates to:
+  /// **'Add combatant'**
+  String get combatAddCombatant;
+
+  /// No description provided for @combatChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge rating'**
+  String get combatChallenge;
+
+  /// No description provided for @combatXp.
+  ///
+  /// In en, this message translates to:
+  /// **'XP'**
+  String get combatXp;
+
+  /// No description provided for @combatQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get combatQuantity;
+
+  /// No description provided for @combatNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get combatNotes;
+
+  /// No description provided for @combatNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tactics, terrain, loot…'**
+  String get combatNotesHint;
+
+  /// No description provided for @combatDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get combatDifficulty;
+
+  /// No description provided for @combatRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules'**
+  String get combatRules;
+
+  /// No description provided for @combatPartyLevels.
+  ///
+  /// In en, this message translates to:
+  /// **'Party levels'**
+  String get combatPartyLevels;
+
+  /// No description provided for @combatAddLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get combatAddLevel;
+
+  /// No description provided for @combatLevelChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Lv {level}'**
+  String combatLevelChip(int level);
+
+  /// No description provided for @combatLevelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Character level (1–20)'**
+  String get combatLevelLabel;
+
+  /// No description provided for @combatMonsterXp.
+  ///
+  /// In en, this message translates to:
+  /// **'Monster XP: {xp}'**
+  String combatMonsterXp(String xp);
+
+  /// No description provided for @combatAdjustedXp.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjusted XP: {xp} (×{multiplier})'**
+  String combatAdjustedXp(String xp, String multiplier);
+
+  /// No description provided for @combatNoParty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the party’s levels to rate this encounter.'**
+  String get combatNoParty;
+
+  /// No description provided for @combatRatingTrivial.
+  ///
+  /// In en, this message translates to:
+  /// **'Trivial'**
+  String get combatRatingTrivial;
+
+  /// No description provided for @combatRatingLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get combatRatingLow;
+
+  /// No description provided for @combatRatingModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get combatRatingModerate;
+
+  /// No description provided for @combatRatingHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get combatRatingHigh;
+
+  /// No description provided for @combatRatingBeyondHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Beyond high'**
+  String get combatRatingBeyondHigh;
+
+  /// No description provided for @combatRatingEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get combatRatingEasy;
+
+  /// No description provided for @combatRatingMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get combatRatingMedium;
+
+  /// No description provided for @combatRatingHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get combatRatingHard;
+
+  /// No description provided for @combatRatingDeadly.
+  ///
+  /// In en, this message translates to:
+  /// **'Deadly'**
+  String get combatRatingDeadly;
+
+  /// No description provided for @combatConcentrationCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: concentration save DC {dc}'**
+  String combatConcentrationCheck(String name, int dc);
+
+  /// No description provided for @combatDefeatedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is defeated'**
+  String combatDefeatedNotice(String name);
+
+  /// No description provided for @combatOpenEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Open entry'**
+  String get combatOpenEntry;
+
+  /// No description provided for @combatActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Combatant actions'**
+  String get combatActions;
+
+  /// No description provided for @combatEncounterActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Encounter actions'**
+  String get combatEncounterActions;
 }
 
 class _AppLocalizationsDelegate

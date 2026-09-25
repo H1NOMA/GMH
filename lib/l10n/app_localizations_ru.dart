@@ -1239,4 +1239,286 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'Состояния и быстрые правила под рукой (SRD 5.2.1).';
+
+  @override
+  String get combatNewEncounter => 'Новая стычка';
+
+  @override
+  String combatEncounterDefaultName(int number) {
+    return 'Стычка $number';
+  }
+
+  @override
+  String get combatEncounterNameLabel => 'Название стычки';
+
+  @override
+  String get combatEmptyTitle => 'Стычек пока нет';
+
+  @override
+  String get combatEmptyHint =>
+      'Спланируйте бой: добавьте чудовищ и героев, оцените сложность и ведите бой по раундам.';
+
+  @override
+  String get combatRenameTitle => 'Переименовать стычку';
+
+  @override
+  String get combatDuplicate => 'Дублировать';
+
+  @override
+  String combatCopyName(String name) {
+    return '$name (копия)';
+  }
+
+  @override
+  String combatDeleteTitle(String name) {
+    return 'Удалить «$name»?';
+  }
+
+  @override
+  String get combatDeleteBody =>
+      'Стычка и все её участники будут удалены безвозвратно.';
+
+  @override
+  String get combatStatusPlanning => 'Подготовка';
+
+  @override
+  String get combatStatusActive => 'Идёт бой';
+
+  @override
+  String get combatStatusFinished => 'Завершён';
+
+  @override
+  String combatRound(int round) {
+    return 'Раунд $round';
+  }
+
+  @override
+  String combatCombatantCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count участника',
+      many: '$count участников',
+      few: '$count участника',
+      one: '$count участник',
+      zero: 'Нет участников',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get combatNotFound => 'Этой стычки больше нет.';
+
+  @override
+  String get combatAllEncounters => 'Все стычки';
+
+  @override
+  String get combatStart => 'Начать бой';
+
+  @override
+  String get combatEnd => 'Завершить бой';
+
+  @override
+  String get combatNextTurn => 'Следующий ход';
+
+  @override
+  String get combatPreviousTurn => 'Предыдущий ход';
+
+  @override
+  String get combatRollInitiative => 'Бросить инициативу';
+
+  @override
+  String get combatRollInitiativeHint =>
+      'Бросает d20 + бонус за каждое чудовище; игроки сохраняют свои значения.';
+
+  @override
+  String combatTurnOf(String name) {
+    return 'Ход: $name';
+  }
+
+  @override
+  String get combatNotStarted => 'Бой ещё не начался';
+
+  @override
+  String get combatAddFromWorld => 'Добавить из мира';
+
+  @override
+  String get combatAddManually => 'Добавить вручную';
+
+  @override
+  String get combatPickTitle => 'Добавить существо или персонажа';
+
+  @override
+  String combatQuantityTitle(String name) {
+    return 'Сколько «$name»?';
+  }
+
+  @override
+  String get combatNoCombatants => 'Участников пока нет';
+
+  @override
+  String get combatNoCombatantsHint =>
+      'Добавьте существ и персонажей из своего мира или введите их вручную.';
+
+  @override
+  String get combatInitiative => 'Инициатива';
+
+  @override
+  String get combatInitiativeBonus => 'Бонус инициативы';
+
+  @override
+  String get combatArmorClass => 'Класс доспеха';
+
+  @override
+  String get combatAcShort => 'КД';
+
+  @override
+  String get combatHpMax => 'Макс. хиты';
+
+  @override
+  String get combatHpCurrent => 'Текущие хиты';
+
+  @override
+  String get combatHpTemp => 'Врем. хиты';
+
+  @override
+  String get combatAmountHint => 'Хиты';
+
+  @override
+  String get combatDamage => 'Урон';
+
+  @override
+  String get combatHeal => 'Лечение';
+
+  @override
+  String get combatTemp => 'Врем.';
+
+  @override
+  String get combatAddCondition => 'Состояние';
+
+  @override
+  String combatConditionDurationTitle(String condition) {
+    return 'Длительность: $condition';
+  }
+
+  @override
+  String get combatConditionRounds => 'Раунды (пусто = до снятия)';
+
+  @override
+  String get combatRemoveCondition => 'Снять состояние';
+
+  @override
+  String get combatConcentration => 'Концентрация';
+
+  @override
+  String get combatDefeated => 'Повержен';
+
+  @override
+  String get combatPlayer => 'Персонаж игрока';
+
+  @override
+  String get combatEdit => 'Изменить';
+
+  @override
+  String get combatRemove => 'Убрать';
+
+  @override
+  String get combatEditCombatant => 'Изменить участника';
+
+  @override
+  String get combatAddCombatant => 'Добавить участника';
+
+  @override
+  String get combatChallenge => 'Уровень опасности';
+
+  @override
+  String get combatXp => 'Опыт';
+
+  @override
+  String get combatQuantity => 'Количество';
+
+  @override
+  String get combatNotes => 'Заметки';
+
+  @override
+  String get combatNotesHint => 'Тактика, местность, добыча…';
+
+  @override
+  String get combatDifficulty => 'Сложность';
+
+  @override
+  String get combatRules => 'Правила';
+
+  @override
+  String get combatPartyLevels => 'Уровни отряда';
+
+  @override
+  String get combatAddLevel => 'Уровень';
+
+  @override
+  String combatLevelChip(int level) {
+    return 'Ур. $level';
+  }
+
+  @override
+  String get combatLevelLabel => 'Уровень персонажа (1–20)';
+
+  @override
+  String combatMonsterXp(String xp) {
+    return 'Опыт чудовищ: $xp';
+  }
+
+  @override
+  String combatAdjustedXp(String xp, String multiplier) {
+    return 'С поправкой: $xp (×$multiplier)';
+  }
+
+  @override
+  String get combatNoParty => 'Добавьте уровни отряда, чтобы оценить стычку.';
+
+  @override
+  String get combatRatingTrivial => 'Пустяк';
+
+  @override
+  String get combatRatingLow => 'Низкая';
+
+  @override
+  String get combatRatingModerate => 'Средняя';
+
+  @override
+  String get combatRatingHigh => 'Высокая';
+
+  @override
+  String get combatRatingBeyondHigh => 'Запредельная';
+
+  @override
+  String get combatRatingEasy => 'Лёгкая';
+
+  @override
+  String get combatRatingMedium => 'Средняя';
+
+  @override
+  String get combatRatingHard => 'Трудная';
+
+  @override
+  String get combatRatingDeadly => 'Смертельная';
+
+  @override
+  String combatConcentrationCheck(String name, int dc) {
+    return '$name: спасбросок концентрации, СЛ $dc';
+  }
+
+  @override
+  String combatDefeatedNotice(String name) {
+    return '$name повержен';
+  }
+
+  @override
+  String get combatOpenEntry => 'Открыть запись';
+
+  @override
+  String get combatActions => 'Действия участника';
+
+  @override
+  String get combatEncounterActions => 'Действия со стычкой';
 }

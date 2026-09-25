@@ -1241,4 +1241,285 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'États et règles rapides en un coup d\'œil (SRD 5.2.1).';
+
+  @override
+  String get combatNewEncounter => 'Nouvelle rencontre';
+
+  @override
+  String combatEncounterDefaultName(int number) {
+    return 'Rencontre $number';
+  }
+
+  @override
+  String get combatEncounterNameLabel => 'Nom de la rencontre';
+
+  @override
+  String get combatEmptyTitle => 'Aucune rencontre';
+
+  @override
+  String get combatEmptyHint =>
+      'Préparez un combat : ajoutez monstres et héros, vérifiez la difficulté, puis jouez-le round par round.';
+
+  @override
+  String get combatRenameTitle => 'Renommer la rencontre';
+
+  @override
+  String get combatDuplicate => 'Dupliquer';
+
+  @override
+  String combatCopyName(String name) {
+    return '$name (copie)';
+  }
+
+  @override
+  String combatDeleteTitle(String name) {
+    return 'Supprimer « $name » ?';
+  }
+
+  @override
+  String get combatDeleteBody =>
+      'La rencontre et tous ses combattants seront définitivement supprimés.';
+
+  @override
+  String get combatStatusPlanning => 'Préparation';
+
+  @override
+  String get combatStatusActive => 'En combat';
+
+  @override
+  String get combatStatusFinished => 'Terminé';
+
+  @override
+  String combatRound(int round) {
+    return 'Round $round';
+  }
+
+  @override
+  String combatCombatantCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count combattants',
+      one: '1 combattant',
+      zero: 'Aucun combattant',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get combatNotFound => 'Cette rencontre n’existe plus.';
+
+  @override
+  String get combatAllEncounters => 'Toutes les rencontres';
+
+  @override
+  String get combatStart => 'Lancer le combat';
+
+  @override
+  String get combatEnd => 'Finir le combat';
+
+  @override
+  String get combatNextTurn => 'Tour suivant';
+
+  @override
+  String get combatPreviousTurn => 'Tour précédent';
+
+  @override
+  String get combatRollInitiative => 'Jet d’initiative';
+
+  @override
+  String get combatRollInitiativeHint =>
+      'Lance d20 + bonus pour chaque monstre ; les joueurs gardent leurs valeurs.';
+
+  @override
+  String combatTurnOf(String name) {
+    return 'Tour : $name';
+  }
+
+  @override
+  String get combatNotStarted => 'Le combat n’a pas commencé';
+
+  @override
+  String get combatAddFromWorld => 'Depuis le monde';
+
+  @override
+  String get combatAddManually => 'Manuellement';
+
+  @override
+  String get combatPickTitle => 'Ajouter une créature ou un personnage';
+
+  @override
+  String combatQuantityTitle(String name) {
+    return 'Combien de « $name » ?';
+  }
+
+  @override
+  String get combatNoCombatants => 'Aucun combattant';
+
+  @override
+  String get combatNoCombatantsHint =>
+      'Ajoutez des créatures et personnages de votre monde ou saisissez-les à la main.';
+
+  @override
+  String get combatInitiative => 'Initiative';
+
+  @override
+  String get combatInitiativeBonus => 'Bonus d’initiative';
+
+  @override
+  String get combatArmorClass => 'Classe d’armure';
+
+  @override
+  String get combatAcShort => 'CA';
+
+  @override
+  String get combatHpMax => 'PV max';
+
+  @override
+  String get combatHpCurrent => 'PV actuels';
+
+  @override
+  String get combatHpTemp => 'PV temp.';
+
+  @override
+  String get combatAmountHint => 'PV';
+
+  @override
+  String get combatDamage => 'Dégâts';
+
+  @override
+  String get combatHeal => 'Soin';
+
+  @override
+  String get combatTemp => 'Temp.';
+
+  @override
+  String get combatAddCondition => 'État';
+
+  @override
+  String combatConditionDurationTitle(String condition) {
+    return 'Durée : $condition';
+  }
+
+  @override
+  String get combatConditionRounds => 'Rounds (vide = jusqu’au retrait)';
+
+  @override
+  String get combatRemoveCondition => 'Retirer l’état';
+
+  @override
+  String get combatConcentration => 'Concentration';
+
+  @override
+  String get combatDefeated => 'Vaincu';
+
+  @override
+  String get combatPlayer => 'Personnage joueur';
+
+  @override
+  String get combatEdit => 'Modifier';
+
+  @override
+  String get combatRemove => 'Retirer';
+
+  @override
+  String get combatEditCombatant => 'Modifier le combattant';
+
+  @override
+  String get combatAddCombatant => 'Ajouter un combattant';
+
+  @override
+  String get combatChallenge => 'Facteur de puissance';
+
+  @override
+  String get combatXp => 'PX';
+
+  @override
+  String get combatQuantity => 'Quantité';
+
+  @override
+  String get combatNotes => 'Notes';
+
+  @override
+  String get combatNotesHint => 'Tactique, terrain, butin…';
+
+  @override
+  String get combatDifficulty => 'Difficulté';
+
+  @override
+  String get combatRules => 'Règles';
+
+  @override
+  String get combatPartyLevels => 'Niveaux du groupe';
+
+  @override
+  String get combatAddLevel => 'Niveau';
+
+  @override
+  String combatLevelChip(int level) {
+    return 'Niv. $level';
+  }
+
+  @override
+  String get combatLevelLabel => 'Niveau du personnage (1–20)';
+
+  @override
+  String combatMonsterXp(String xp) {
+    return 'PX des monstres : $xp';
+  }
+
+  @override
+  String combatAdjustedXp(String xp, String multiplier) {
+    return 'PX ajustés : $xp (×$multiplier)';
+  }
+
+  @override
+  String get combatNoParty =>
+      'Ajoutez les niveaux du groupe pour évaluer la rencontre.';
+
+  @override
+  String get combatRatingTrivial => 'Triviale';
+
+  @override
+  String get combatRatingLow => 'Faible';
+
+  @override
+  String get combatRatingModerate => 'Modérée';
+
+  @override
+  String get combatRatingHigh => 'Élevée';
+
+  @override
+  String get combatRatingBeyondHigh => 'Au-delà';
+
+  @override
+  String get combatRatingEasy => 'Facile';
+
+  @override
+  String get combatRatingMedium => 'Moyenne';
+
+  @override
+  String get combatRatingHard => 'Difficile';
+
+  @override
+  String get combatRatingDeadly => 'Mortelle';
+
+  @override
+  String combatConcentrationCheck(String name, int dc) {
+    return '$name : sauvegarde de concentration DD $dc';
+  }
+
+  @override
+  String combatDefeatedNotice(String name) {
+    return '$name est vaincu';
+  }
+
+  @override
+  String get combatOpenEntry => 'Ouvrir la fiche';
+
+  @override
+  String get combatActions => 'Actions du combattant';
+
+  @override
+  String get combatEncounterActions => 'Actions de la rencontre';
 }
