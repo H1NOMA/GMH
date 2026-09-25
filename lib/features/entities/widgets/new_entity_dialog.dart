@@ -62,7 +62,11 @@ Future<String?> showNewEntityDialog(
   _TypeChoice choice = initialCategoryId != null &&
           categories.any((c) => c.id == initialCategoryId)
       ? _CategoryChoice(initialCategoryId)
-      : _KindChoice(initialKind ?? EntityKind.character);
+      // "custom" is only valid with a live category: on a deleted
+      // category's page it would create an orphan entry in no section.
+      : _KindChoice(initialKind == null || initialKind == EntityKind.custom
+          ? EntityKind.character
+          : initialKind);
 
   ModalRoute<Object?>? dialogRoute;
   final confirmed = await showDialog<bool>(

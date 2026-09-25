@@ -17,8 +17,10 @@ import '../shell/ui_providers.dart';
 const fileAttachmentEmbedKey = 'fileAttachment';
 
 void insertFileAttachment(QuillController controller, MediaItem item) {
-  final index = controller.selection.baseOffset;
-  final length = controller.selection.extentOffset - index;
+  // start/end, not base/extent: a right-to-left selection has its base
+  // after its extent, which made the length negative.
+  final index = controller.selection.start;
+  final length = controller.selection.end - index;
   controller.replaceText(
     index,
     length,

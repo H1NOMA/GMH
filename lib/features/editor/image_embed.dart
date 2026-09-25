@@ -12,8 +12,10 @@ import '../shell/ui_providers.dart';
 const mediaImagePrefix = 'media:';
 
 void insertVaultImage(QuillController controller, String mediaId) {
-  final index = controller.selection.baseOffset;
-  final length = controller.selection.extentOffset - index;
+  // start/end, not base/extent: a right-to-left selection has its base
+  // after its extent, which made the length negative.
+  final index = controller.selection.start;
+  final length = controller.selection.end - index;
   controller.replaceText(
     index,
     length,
@@ -71,6 +73,13 @@ class _VaultImage extends ConsumerWidget {
                     color: GmhColors.parchmentFaint),
           );
         }
+        // Decode at display size, not the file's: a few 8K battle maps
+        // in one lore page otherwise cost hundreds of MB. The embed can't
+        // use a LayoutBuilder (Quill asks embeds for intrinsic sizes), so
+        // the window width bounds it.
+        final decodeWidth = (MediaQuery.sizeOf(context).width.clamp(320, 1600) *
+                MediaQuery.devicePixelRatioOf(context))
+            .round();
         return ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: ConstrainedBox(
@@ -78,6 +87,7 @@ class _VaultImage extends ConsumerWidget {
             child: Image.file(
               File(path),
               fit: BoxFit.contain,
+              cacheWidth: decodeWidth,
               errorBuilder: (_, _, _) => Icon(
                   Icons.broken_image_outlined,
                   color: GmhColors.parchmentFaint),

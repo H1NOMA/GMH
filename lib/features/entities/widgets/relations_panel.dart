@@ -9,6 +9,7 @@ import '../../../app/router.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/models/entity.dart';
 import '../../../domain/models/link.dart';
+import '../../categories/category_ui.dart';
 import '../../shell/ui_providers.dart';
 import 'entity_picker_dialog.dart';
 
@@ -21,59 +22,89 @@ class RelationsPanel extends ConsumerWidget {
   const RelationsPanel({super.key, required this.entity});
 
   Future<void> _addManualLink(BuildContext context, WidgetRef ref) async {
+    // Captured up front: this panel can be gone by the time the dialogs
+    // close (the page navigated), and a dead WidgetRef throws.
+    final links = ref.read(linkRepositoryProvider);
     final target = await showEntityPickerDialog(context,
-        worldId: entity.worldId, title: context.l10n.addRelation);
+        worldId: entity.worldId,
+        // An entry relating to itself is never meant.
+        excludeIds: {entity.id},
+        title: context.l10n.addRelation);
     if (target == null || !context.mounted) return;
 
-    final roleController = TextEditingController(text: LinkRoles.related);
+    // Suggestions are stored as stable keys and shown translated; the
+    // text field is only for a custom role, so the user never sees (or
+    // saves) a raw key like "related" in their language's UI.
+    var selected = LinkRoles.related;
+    final customController = TextEditingController();
     ModalRoute<Object?>? dialogRoute;
     final role = await showDialog<String>(
       context: context,
       builder: (context) {
         dialogRoute ??= ModalRoute.of(context);
-        return AlertDialog(
-        title: Text(context.l10n.relationToTitle(target.name)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: roleController,
-              decoration: InputDecoration(
-                  labelText: context.l10n.roleLabel,
-                  hintText: context.l10n.roleHint),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 6,
-              children: [
-                for (final suggestion in LinkRoles.suggestions)
-                  ActionChip(
-                    label: Text(localizedRoleLabel(context, suggestion),
-                        style: const TextStyle(fontSize: 11.5)),
-                    onPressed: () => roleController.text = suggestion,
-                  ),
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            String chosen() {
+              final custom = customController.text.trim();
+              return custom.isNotEmpty ? custom : selected;
+            }
+
+            return AlertDialog(
+              title: Text(context.l10n.relationToTitle(target.name)),
+              content: SizedBox(
+                width: 420,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [
+                        for (final suggestion in LinkRoles.suggestions)
+                          ChoiceChip(
+                            label: Text(
+                                localizedRoleLabel(context, suggestion),
+                                style: const TextStyle(fontSize: 11.5)),
+                            selected: customController.text.trim().isEmpty &&
+                                selected == suggestion,
+                            onSelected: (_) => setDialogState(() {
+                              selected = suggestion;
+                              customController.clear();
+                            }),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: customController,
+                      onChanged: (_) => setDialogState(() {}),
+                      onSubmitted: (_) => Navigator.pop(context, chosen()),
+                      decoration: InputDecoration(
+                          labelText: context.l10n.roleCustomLabel,
+                          hintText: context.l10n.roleHint),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(context.l10n.cancel)),
+                FilledButton(
+                    onPressed: () => Navigator.pop(context, chosen()),
+                    child: Text(context.l10n.add)),
               ],
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(context.l10n.cancel)),
-          FilledButton(
-              onPressed: () =>
-                  Navigator.pop(context, roleController.text.trim()),
-              child: Text(context.l10n.add)),
-        ],
-      );
+            );
+          },
+        );
       },
     );
     // Release the controller only once the dialog route is fully gone.
-    dialogRoute?.completed.whenComplete(roleController.dispose);
+    dialogRoute?.completed.whenComplete(customController.dispose);
     if (role == null || role.isEmpty) return;
 
-    await ref.read(linkRepositoryProvider).create(
+    await links.create(
           worldId: entity.worldId,
           sourceId: entity.id,
           targetId: target.id,
@@ -215,6 +246,7 @@ class _LinkRow extends ConsumerWidget {
         direction == _Direction.outgoing ? link.targetId : link.sourceId;
     final other = ref.watch(entityProvider(otherId)).valueOrNull;
     if (other == null || other.isDeleted) return const SizedBox.shrink();
+    final categories = ref.watch(categoryMapProvider(worldId));
 
     return InkWell(
       borderRadius: BorderRadius.circular(6),
@@ -226,7 +258,8 @@ class _LinkRow extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: Row(
           children: [
-            Icon(other.kind.icon, size: 15, color: other.kind.color),
+            Icon(entityIcon(other, categories),
+                size: 15, color: entityColor(other, categories)),
             const SizedBox(width: 7),
             Expanded(
               child: Text(other.name,

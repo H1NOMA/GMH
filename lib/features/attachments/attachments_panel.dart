@@ -42,16 +42,21 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
 
   Future<void> _attach(List<XFile> files) async {
     if (files.isEmpty) return;
-    final imported = await importXFiles(ref,
-        worldId: entity.worldId, files: files);
+    // Captured before the awaits: the panel can be gone by the time a big
+    // import finishes, and a dead ref throws.
     final media = ref.read(mediaRepositoryProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    final (:imported, :failed) =
+        await importXFiles(media, worldId: entity.worldId, files: files);
     for (final item in imported) {
       await media.addToGallery(entity.id, item.id);
     }
-    if (mounted && imported.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(context.l10n.attachmentsAdded(imported.length))));
-    }
+    messenger.showSnackBar(SnackBar(
+        content: Text([
+      if (imported.isNotEmpty) l10n.attachmentsAdded(imported.length),
+      if (failed > 0) l10n.importFilesFailed(failed),
+    ].join(' · '))));
   }
 
   Future<void> _pickFiles() async =>

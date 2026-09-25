@@ -48,10 +48,21 @@ void main() {
     });
 
     expect(refs, {
-      'owner-1': LinkRoles.owner,
-      'forge-2': LinkRoles.createdAt,
-      'war-3': LinkRoles.participatedIn,
-      'war-4': LinkRoles.participatedIn,
+      'owner-1': {LinkRoles.owner},
+      'forge-2': {LinkRoles.createdAt},
+      'war-3': {LinkRoles.participatedIn},
+      'war-4': {LinkRoles.participatedIn},
+    });
+  });
+
+  test('one target referenced from two fields keeps both roles', () {
+    final template = EntityTemplates.of(EntityKind.item);
+    final refs = template.extractEntityRefs({
+      'currentOwner': entityRefValue('smith'),
+      'forgedAt': entityRefValue('smith'),
+    });
+    expect(refs, {
+      'smith': {LinkRoles.owner, LinkRoles.createdAt},
     });
   });
 

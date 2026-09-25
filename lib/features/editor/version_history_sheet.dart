@@ -7,6 +7,11 @@ import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/document_model.dart';
 import '../../domain/services/linking/mention_parser.dart';
 
+/// Stored as the note of the snapshot taken right before a restore;
+/// shown in the UI language of whoever reads the history later (old
+/// snapshots carry a note in the language they were saved in).
+const versionNoteBeforeRestore = '@beforeRestore';
+
 /// Bottom sheet listing document version snapshots; restoring replaces the
 /// editor content (non-destructively — the current state is checkpointed
 /// first).
@@ -19,10 +24,6 @@ Future<void> showVersionHistorySheet(
   final documents = ref.read(documentRepositoryProvider);
   final service = ref.read(documentServiceProvider);
 
-  // Checkpoint current state so restoring can always be undone.
-  if (!context.mounted) return;
-  await service.checkpoint(entityId,
-      note: context.l10n.versionBeforeRestore);
   final doc = await documents.getOrCreate(entityId);
   final versions = await documents.versions(doc.id);
 
@@ -56,12 +57,15 @@ Future<void> showVersionHistorySheet(
                     final preview = extractPlainText(version.contentJson)
                         .replaceAll('\n', ' ')
                         .trim();
+                    final note = version.note == versionNoteBeforeRestore
+                        ? context.l10n.versionBeforeRestore
+                        : version.note;
                     return ListTile(
                       leading: const Icon(Icons.history, size: 20),
                       title: Text(
-                        version.note.isEmpty
+                        note.isEmpty
                             ? localizedDateTime(context, version.createdAt)
-                            : '${version.note} — ${localizedDateTime(context, version.createdAt)}',
+                            : '$note — ${localizedDateTime(context, version.createdAt)}',
                         style: const TextStyle(fontSize: 13.5),
                       ),
                       subtitle: Text(
@@ -76,8 +80,13 @@ Future<void> showVersionHistorySheet(
                       ),
                       trailing: TextButton(
                         child: Text(context.l10n.restore),
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pop(context);
+                          // Snapshot the current text only when a restore
+                          // actually happens, so merely browsing the
+                          // history never pushes older versions out.
+                          await service.checkpoint(entityId,
+                              note: versionNoteBeforeRestore);
                           onRestore(version.contentJson);
                         },
                       ),

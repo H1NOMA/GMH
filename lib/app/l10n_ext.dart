@@ -157,3 +157,10 @@ String localizedError(BuildContext context, GmhException error) {
     UnexpectedException() => l.errorUnexpected,
   };
 }
+
+/// A kind name as it reads mid-sentence ("Filter locations…"): German
+/// keeps noun capitals, the other UI languages lowercase.
+String midSentence(BuildContext context, String word) =>
+    Localizations.localeOf(context).languageCode == 'de'
+        ? word
+        : word.toLowerCase();

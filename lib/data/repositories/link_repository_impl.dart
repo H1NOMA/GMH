@@ -21,23 +21,28 @@ class LinkRepositoryImpl implements LinkRepository {
         createdAt: row.createdAt,
       );
 
-  @override
-  Stream<List<domain.Link>> watchOutgoing(String entityId) {
-    return (_db.select(_db.links)
-          ..where((l) => l.sourceId.equals(entityId))
-          ..orderBy([(l) => OrderingTerm.asc(l.role)]))
+  // Links whose other end is in the trash are hidden (and the stream
+  // re-emits when an entry is trashed or restored), so panels never show
+  // role headings over nothing.
+  Stream<List<domain.Link>> _watchLive(
+      String entityId, GeneratedColumn<String> own, GeneratedColumn<String> other) {
+    final query = _db.select(_db.links).join([
+      innerJoin(_db.entities, _db.entities.id.equalsExp(other)),
+    ])
+      ..where(own.equals(entityId) & _db.entities.deletedAt.isNull())
+      ..orderBy([OrderingTerm.asc(_db.links.role)]);
+    return query
         .watch()
-        .map((rows) => rows.map(_map).toList());
+        .map((rows) => [for (final r in rows) _map(r.readTable(_db.links))]);
   }
 
   @override
-  Stream<List<domain.Link>> watchIncoming(String entityId) {
-    return (_db.select(_db.links)
-          ..where((l) => l.targetId.equals(entityId))
-          ..orderBy([(l) => OrderingTerm.asc(l.role)]))
-        .watch()
-        .map((rows) => rows.map(_map).toList());
-  }
+  Stream<List<domain.Link>> watchOutgoing(String entityId) =>
+      _watchLive(entityId, _db.links.sourceId, _db.links.targetId);
+
+  @override
+  Stream<List<domain.Link>> watchIncoming(String entityId) =>
+      _watchLive(entityId, _db.links.targetId, _db.links.sourceId);
 
   @override
   Future<List<domain.Link>> outgoing(String entityId) async {
@@ -97,8 +102,10 @@ class LinkRepositoryImpl implements LinkRepository {
     required String worldId,
     required String sourceId,
     required domain.LinkOrigin origin,
-    required Map<String, String> targets,
+    required Map<String, Set<String>> targets,
   }) async {
+    bool wanted(String targetId, String role) =>
+        targets[targetId]?.contains(role) ?? false;
     await _db.transaction(() async {
       final existing = await (_db.select(_db.links)
             ..where((l) =>
@@ -107,35 +114,40 @@ class LinkRepositoryImpl implements LinkRepository {
 
       // Remove links whose (target, role) pair is no longer wanted.
       for (final row in existing) {
-        if (targets[row.targetId] != row.role) {
+        if (!wanted(row.targetId, row.role)) {
           await (_db.delete(_db.links)..where((l) => l.id.equals(row.id)))
               .go();
         }
       }
 
-      // Add missing links; skip targets that no longer exist.
+      // Add missing pairs; skip targets that no longer exist.
       final kept = {
         for (final row in existing)
-          if (targets[row.targetId] == row.role) row.targetId
+          if (wanted(row.targetId, row.role)) (row.targetId, row.role)
       };
-      for (final entry in targets.entries) {
-        if (kept.contains(entry.key)) continue;
+      for (final MapEntry(key: targetId, value: roles) in targets.entries) {
+        final missing = roles.where((r) => !kept.contains((targetId, r)));
+        if (missing.isEmpty) continue;
+        // Same-world targets only: a chip pasted from another world's lore
+        // must not wire that world's entry into this graph.
         final targetExists = await (_db.select(_db.entities)
-              ..where((e) => e.id.equals(entry.key)))
+              ..where((e) => e.id.equals(targetId) & e.worldId.equals(worldId)))
             .getSingleOrNull();
         if (targetExists == null) continue;
-        await _db.into(_db.links).insert(
-              LinksCompanion.insert(
-                id: newId(),
-                worldId: worldId,
-                sourceId: sourceId,
-                targetId: entry.key,
-                role: Value(entry.value),
-                origin: origin.name,
-                createdAt: nowMs(),
-              ),
-              mode: InsertMode.insertOrIgnore,
-            );
+        for (final role in missing) {
+          await _db.into(_db.links).insert(
+                LinksCompanion.insert(
+                  id: newId(),
+                  worldId: worldId,
+                  sourceId: sourceId,
+                  targetId: targetId,
+                  role: Value(role),
+                  origin: origin.name,
+                  createdAt: nowMs(),
+                ),
+                mode: InsertMode.insertOrIgnore,
+              );
+        }
       }
     });
   }

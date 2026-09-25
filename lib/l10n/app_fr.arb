@@ -538,5 +538,7 @@
   "combatDefeatedNotice": "{name} est vaincu",
   "combatOpenEntry": "Ouvrir la fiche",
   "combatActions": "Actions du combattant",
-  "combatEncounterActions": "Actions de la rencontre"
+  "combatEncounterActions": "Actions de la rencontre",
+  "roleCustomLabel": "Ou saisissez votre rôle",
+  "importFilesFailed": "{count, plural, one{1 fichier n’a pas pu être importé} other{{count} fichiers n’ont pas pu être importés}}"
 }

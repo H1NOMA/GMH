@@ -86,6 +86,20 @@ class DocumentRepositoryImpl implements DocumentRepository {
       wordCount: Value(words),
       updatedAt: Value(nowMs()),
     ));
+    // Lore edits count as editing the entry ("Recently edited", sort by
+    // update). Throttled to a minute so autosave doesn't re-emit every
+    // entity stream on each keystroke burst.
+    final now = nowMs();
+    await _db.customUpdate(
+      'UPDATE entities SET updated_at = ? WHERE id = ? AND updated_at < ?',
+      variables: [
+        Variable.withInt(now),
+        Variable.withString(entityId),
+        Variable.withInt(now - 60000),
+      ],
+      updates: {_db.entities},
+      updateKind: UpdateKind.update,
+    );
     return DocumentModel(
       id: doc.id,
       entityId: entityId,

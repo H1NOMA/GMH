@@ -3337,6 +3337,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Encounter actions'**
   String get combatEncounterActions;
+
+  /// No description provided for @roleCustomLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type your own role'**
+  String get roleCustomLabel;
+
+  /// No description provided for @importFilesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 file couldn’t be imported} other{{count} files couldn’t be imported}}'**
+  String importFilesFailed(int count);
 }
 
 class _AppLocalizationsDelegate

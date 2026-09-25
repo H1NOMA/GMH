@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Variable;
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -192,5 +193,61 @@ void main() {
     expect(links.single.targetId, owner.id);
     expect(links.single.role, LinkRoles.owner);
     expect(links.single.origin, LinkOrigin.attribute);
+  });
+
+  test('saving lore marks the entry as recently edited', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final e = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.location, name: 'Keep');
+    await h.db.customStatement(
+        'UPDATE entities SET updated_at = 1000 WHERE id = ?', [e.id]);
+    await h.documentService.save(
+        entityId: e.id, contentJson: '[{"insert":"New lore\\n"}]');
+    final after = await h.entities.getEntity(e.id);
+    expect(after!.updatedAt, greaterThan(1000));
+  });
+
+  test('an unknown kind from a newer version lands in the Concept Archive',
+      () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final e = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.character, name: 'Visitor');
+    await h.db.customStatement(
+        "UPDATE entities SET kind = 'hologram' WHERE id = ?", [e.id]);
+    final list = await h.entities.watchEntities(world.id).first;
+    expect(list.single.kind, EntityKind.concept);
+    // Editing it keeps the stored kind for a later upgrade.
+    await h.entities.updateEntity(list.single.copyWith(name: 'Visitor 2'));
+    final raw = await h.db
+        .customSelect('SELECT kind FROM entities WHERE id = ?',
+            variables: [Variable.withString(e.id)])
+        .getSingle();
+    expect(raw.read<String>('kind'), 'hologram');
+  });
+
+  test('name sort ignores case in every script', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    for (final name in ['zeta', 'Zulu', 'арка', 'Башня', 'alpha']) {
+      await h.entities.createEntity(
+          worldId: world.id, kind: EntityKind.location, name: name);
+    }
+    final list = await h.entities
+        .watchEntities(world.id, sort: EntitySort.nameAsc)
+        .first;
+    expect(list.map((e) => e.name),
+        ['alpha', 'zeta', 'Zulu', 'арка', 'Башня']);
+  });
+
+  test('a new category goes last even after deletions', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final a = await h.categories.create(worldId: world.id, name: 'A');
+    await h.categories.create(worldId: world.id, name: 'B');
+    await h.categories.delete(a.id);
+    final c = await h.categories.create(worldId: world.id, name: 'C');
+    final names = [
+      for (final cat in await h.categories.categories(world.id)) cat.name
+    ];
+    expect(names, ['B', 'C']);
+    expect(c.sortOrder, greaterThan(1));
   });
 }

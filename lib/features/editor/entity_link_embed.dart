@@ -11,14 +11,17 @@ import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/entity.dart' as domain;
 import '../../domain/services/linking/mention_parser.dart';
+import '../categories/category_ui.dart';
 import '../shell/ui_providers.dart';
 
 /// Inserts an inline entity-link embed at the current cursor position.
 /// Serialized as `{"insert": {"entityLink": "{\"id\":…,\"label\":…}"}}` —
 /// exactly what the mention parser and link sync service consume.
 void insertEntityLink(QuillController controller, domain.Entity target) {
-  final index = controller.selection.baseOffset;
-  final length = controller.selection.extentOffset - index;
+  // start/end, not base/extent: a right-to-left selection has its base
+  // after its extent, which made the length negative.
+  final index = controller.selection.start;
+  final length = controller.selection.end - index;
   controller.replaceText(
     index,
     length,
@@ -90,8 +93,16 @@ class _EntityLinkChip extends ConsumerWidget {
         : ref.watch(entityProvider(entityId!)).valueOrNull;
     final label = entity?.name ??
         (fallback.isEmpty ? context.l10n.missingLink : fallback);
-    final color = entity?.kind.color ?? GmhColors.parchmentDim;
-    final broken = entityId == null || (entity?.isDeleted ?? false);
+    final categories = ref.watch(categoryMapProvider(worldId));
+    // A chip pasted from another world's lore points at an entry this
+    // world doesn't have: show it as a dead link instead of opening
+    // foreign data under this world's routes.
+    final foreign = entity != null && entity.worldId != worldId;
+    final broken =
+        entityId == null || (entity?.isDeleted ?? false) || foreign;
+    final color = entity == null || foreign
+        ? GmhColors.parchmentDim
+        : entityColor(entity, categories);
 
     return GestureDetector(
       onTap: broken
@@ -101,6 +112,7 @@ class _EntityLinkChip extends ConsumerWidget {
               context.go(Routes.entity(worldId, entityId!));
             },
       child: Container(
+        constraints: const BoxConstraints(maxWidth: 320),
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
         decoration: BoxDecoration(
           color: color.withValues(alpha: broken ? 0.06 : 0.14),
@@ -110,17 +122,21 @@ class _EntityLinkChip extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (entity != null) ...[
-              Icon(entity.kind.icon, size: 12, color: color),
+            if (entity != null && !foreign) ...[
+              Icon(entityIcon(entity, categories), size: 12, color: color),
               const SizedBox(width: 3),
             ],
-            Text(
+            Flexible(
+              child: Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 13,
                 color: broken ? GmhColors.parchmentFaint : color,
                 decoration: broken ? TextDecoration.lineThrough : null,
               ),
+            ),
             ),
           ],
         ),

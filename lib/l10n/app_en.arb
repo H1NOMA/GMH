@@ -900,5 +900,14 @@
   },
   "combatOpenEntry": "Open entry",
   "combatActions": "Combatant actions",
-  "combatEncounterActions": "Encounter actions"
+  "combatEncounterActions": "Encounter actions",
+  "roleCustomLabel": "Or type your own role",
+  "importFilesFailed": "{count, plural, one{1 file couldn’t be imported} other{{count} files couldn’t be imported}}",
+  "@importFilesFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

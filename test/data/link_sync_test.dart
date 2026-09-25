@@ -133,4 +133,28 @@ void main() {
     );
     expect(await h.links.outgoing(doc.id), isEmpty);
   });
+
+  test('two fields pointing at one entry keep a link per role', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final smith = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.character, name: 'Smith');
+    final blade = (await h.entityService.create(
+      worldId: world.id,
+      kind: EntityKind.item,
+      name: 'Blade',
+      attributes: {
+        'currentOwner': entityRefValue(smith.id),
+        'forgedAt': entityRefValue(smith.id),
+      },
+    ))
+        .value;
+    Future<Set<String>> roles() async => {
+          for (final l in await h.links.allForWorld(world.id))
+            if (l.sourceId == blade.id) l.role
+        };
+    expect(await roles(), {LinkRoles.owner, LinkRoles.createdAt});
+
+    await h.entityService.setAttribute(blade.id, 'forgedAt', null);
+    expect(await roles(), {LinkRoles.owner});
+  });
 }

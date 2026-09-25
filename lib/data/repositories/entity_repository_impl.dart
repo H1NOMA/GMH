@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 
-import '../../core/exceptions.dart';
 import '../../core/utils/dates.dart';
 import '../../core/utils/ids.dart';
 import '../../domain/models/entity.dart';
@@ -14,10 +13,11 @@ class EntityRepositoryImpl implements EntityRepository {
   EntityRepositoryImpl(this._db);
 
   Entity _map(EntityRow row) {
-    final kind = EntityKind.tryParse(row.kind);
-    if (kind == null) {
-      throw DatabaseException('Unknown entity kind "${row.kind}"');
-    }
+    // A kind this build doesn't know (an archive from a newer version)
+    // shows up in the Concept Archive instead of breaking every list that
+    // contains it. updateEntity never writes the kind, so the original
+    // value survives edits and a later upgrade.
+    final kind = EntityKind.tryParse(row.kind) ?? EntityKind.concept;
     return Entity(
       id: row.id,
       worldId: row.worldId,
@@ -69,10 +69,8 @@ class EntityRepositoryImpl implements EntityRepository {
       if (favoritesOnly) {
         join.where(_db.entities.isFavorite.equals(true));
       }
-      return join
-          .watch()
-          .map((rows) =>
-              rows.map((r) => _map(r.readTable(_db.entities))).toList());
+      return join.watch().map((rows) => _sorted(
+          [for (final r in rows) _map(r.readTable(_db.entities))], sort));
     }
 
     final query = _db.select(_db.entities)
@@ -90,7 +88,19 @@ class EntityRepositoryImpl implements EntityRepository {
     if (favoritesOnly) {
       query.where((e) => e.isFavorite.equals(true));
     }
-    return query.watch().map((rows) => rows.map(_map).toList());
+    return query.watch().map((rows) => _sorted(rows.map(_map).toList(), sort));
+  }
+
+  /// SQLite's default collation is binary: "zeta" after "Zulu", and
+  /// lowercase Cyrillic after every capital. Name order is settled here.
+  List<Entity> _sorted(List<Entity> list, EntitySort sort) {
+    if (sort == EntitySort.nameAsc) {
+      list.sort((a, b) {
+        final byFolded = a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        return byFolded != 0 ? byFolded : a.name.compareTo(b.name);
+      });
+    }
+    return list;
   }
 
   @override

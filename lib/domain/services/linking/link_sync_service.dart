@@ -29,7 +29,7 @@ class LinkSyncService {
       worldId: worldId,
       sourceId: entityId,
       origin: LinkOrigin.document,
-      targets: {for (final id in mentionIds) id: LinkRoles.mention},
+      targets: {for (final id in mentionIds) id: {LinkRoles.mention}},
     );
   }
 

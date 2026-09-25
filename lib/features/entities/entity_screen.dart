@@ -100,9 +100,16 @@ class _EntityScaffold extends ConsumerWidget {
               onPressed: () => Navigator.pop(context, false),
               child: Text(context.l10n.cancel),
             ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(context.l10n.save),
+            // An entry needs a name: Save waits for one instead of
+            // silently dropping the edit (summary included).
+            ListenableBuilder(
+              listenable: nameController,
+              builder: (context, _) => FilledButton(
+                onPressed: nameController.text.trim().isEmpty
+                    ? null
+                    : () => Navigator.pop(context, true),
+                child: Text(context.l10n.save),
+              ),
             ),
           ],
         );
@@ -164,7 +171,16 @@ class _EntityScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isWide = MediaQuery.sizeOf(context).width >= 980;
+    // The split depends on the width this page actually gets, not the
+    // window's: just past the shell's sidebar breakpoint the sidebar eats
+    // ~260px, and a window-based rule left the editor a narrow sliver.
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          _build(context, ref, isWide: constraints.maxWidth >= 800),
+    );
+  }
+
+  Widget _build(BuildContext context, WidgetRef ref, {required bool isWide}) {
 
     final appBar = AppBar(
       leading: historyLeading(),
@@ -277,7 +293,13 @@ class _EntityScaffold extends ConsumerWidget {
         : CategoryBlueprint.standard;
 
     final document = _DocumentPane(worldId: worldId, entity: entity);
-    final sidePanel = _SidePanel(entity: entity, blueprint: blueprint);
+    final sidePanel = _SidePanel(
+      entity: entity,
+      blueprint: blueprint,
+      // Wide location pages show their images in the full-width strip
+      // below; repeating them in the side panel doubled every picture.
+      imagesInStrip: isWide && entity.kind == EntityKind.location,
+    );
 
     if (!blueprint.has(CategoryModule.document)) {
       // No document module: the side panel becomes the whole page.
@@ -429,17 +451,20 @@ class _DocumentPaneState extends ConsumerState<_DocumentPane> {
 class _SidePanel extends StatelessWidget {
   final Entity entity;
   final CategoryBlueprint blueprint;
+  final bool imagesInStrip;
 
   const _SidePanel({
     required this.entity,
     this.blueprint = CategoryBlueprint.standard,
+    this.imagesInStrip = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final showMedia =
-        blueprint.has(CategoryModule.gallery) ||
-        blueprint.has(CategoryModule.attachments);
+    final showImages =
+        blueprint.has(CategoryModule.gallery) && !imagesInStrip;
+    final showFiles = blueprint.has(CategoryModule.attachments);
+    final showMedia = showImages || showFiles;
     return ListView(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 40),
       children: [
@@ -485,8 +510,8 @@ class _SidePanel extends StatelessWidget {
           const SizedBox(height: 16),
           AttachmentsPanel(
             entity: entity,
-            showImages: blueprint.has(CategoryModule.gallery),
-            showFiles: blueprint.has(CategoryModule.attachments),
+            showImages: showImages,
+            showFiles: showFiles,
           ),
         ],
       ],

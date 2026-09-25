@@ -13,22 +13,10 @@ class StatBlock extends StatelessWidget {
   final Entity entity;
   const StatBlock({super.key, required this.entity});
 
-  bool get _hasContent {
-    const keys = {
-      'level', 'school', 'castingTime', 'range', 'components', 'duration',
-      'ac', 'hp', 'speed', 'strength', 'dexterity', 'constitution',
-      'intelligence', 'wisdom', 'charisma', 'challenge',
-      'itemType', 'rarity', 'weight', 'value', 'charges',
-    };
-    return entity.attributes.entries.any((e) =>
-        keys.contains(e.key) &&
-        e.value != null &&
-        e.value.toString().trim().isNotEmpty);
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (!_hasContent) return const SizedBox.shrink();
+    // Each builder returns nothing when its fields are empty, so any
+    // filled field (senses, damage, languages…) is enough to show it.
     final rows = switch (entity.kind) {
       EntityKind.magicSystem => _spell(context),
       EntityKind.creature => _creature(context),
@@ -176,9 +164,15 @@ class StatBlock extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             color: GmhColors.parchmentDim)),
                     const SizedBox(height: 2),
-                    Text(_abilityText(key),
-                        style: TextStyle(
-                            fontSize: 12.5, color: GmhColors.parchment)),
+                    // "18 (+4)" in a sixth of a side panel at large
+                    // text scales: shrink rather than overflow.
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(_abilityText(key),
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12.5, color: GmhColors.parchment)),
+                    ),
                   ],
                 ),
               ),

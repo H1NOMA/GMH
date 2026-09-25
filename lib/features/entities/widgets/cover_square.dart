@@ -37,10 +37,16 @@ class _EditableCoverSquareState extends ConsumerState<EditableCoverSquare> {
     if (!mounted) return;
     final media = ref.read(mediaRepositoryProvider);
     final entities = ref.read(entityServiceProvider);
-    final bytes = await file.readAsBytes();
-    if (bytes.isEmpty) return;
-    final item = await media.import(
-        worldId: entity.worldId, fileName: file.name, bytes: bytes);
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    final (:imported, :failed) =
+        await importXFiles(media, worldId: entity.worldId, files: [file]);
+    if (failed > 0) {
+      messenger.showSnackBar(
+          SnackBar(content: Text(l10n.importFilesFailed(failed))));
+    }
+    final item = imported.firstOrNull;
+    if (item == null) return;
     await media.addToGallery(entity.id, item.id);
     await entities.setCover(entity.id, item.id);
   }

@@ -1787,4 +1787,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get combatEncounterActions => '遭遇操作';
+
+  @override
+  String get roleCustomLabel => '或输入自定义关系';
+
+  @override
+  String importFilesFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个文件无法导入',
+    );
+    return '$_temp0';
+  }
 }

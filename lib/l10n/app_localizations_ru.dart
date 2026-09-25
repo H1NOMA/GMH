@@ -1858,4 +1858,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get combatEncounterActions => 'Действия со стычкой';
+
+  @override
+  String get roleCustomLabel => 'Или введите свою роль';
+
+  @override
+  String importFilesFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Не удалось импортировать $count файлов',
+      few: 'Не удалось импортировать $count файла',
+      one: 'Не удалось импортировать $count файл',
+    );
+    return '$_temp0';
+  }
 }

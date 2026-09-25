@@ -1855,4 +1855,18 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get combatEncounterActions => 'Begegnungsaktionen';
+
+  @override
+  String get roleCustomLabel => 'Oder eigene Rolle eingeben';
+
+  @override
+  String importFilesFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Dateien konnten nicht importiert werden',
+      one: '1 Datei konnte nicht importiert werden',
+    );
+    return '$_temp0';
+  }
 }

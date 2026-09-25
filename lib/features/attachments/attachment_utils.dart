@@ -8,8 +8,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/providers.dart';
 import '../../domain/models/media_item.dart';
+import '../../domain/repositories/repositories.dart';
 
-bool isImageMime(String mime) => mime.startsWith('image/');
+/// Raster images Flutter can decode. SVG is excluded: Image.file can't
+/// render it, so vector maps travel as file attachments instead.
+bool isImageMime(String mime) =>
+    mime.startsWith('image/') && mime != 'image/svg+xml';
 
 bool isTextLikeMime(String mime, String fileName) {
   if (mime.startsWith('text/')) return true;
@@ -61,22 +65,30 @@ String fileTypeTag(MediaItem item) {
   return item.mimeType.split('/').last.toUpperCase();
 }
 
-/// Imports picked/dropped files into the vault. Large files are streamed
-/// from their path instead of loaded through memory when possible.
-Future<List<MediaItem>> importXFiles(
-  WidgetRef ref, {
+/// Result of importing several files: what made it into the vault, and
+/// how many could not be read or stored (a locked file, a full disk).
+typedef ImportOutcome = ({List<MediaItem> imported, int failed});
+
+/// Imports picked/dropped files into the vault. One unreadable file does
+/// not abort the batch; failures are counted for the caller to report.
+Future<ImportOutcome> importXFiles(
+  MediaRepository media, {
   required String worldId,
   required List<XFile> files,
 }) async {
-  final media = ref.read(mediaRepositoryProvider);
   final imported = <MediaItem>[];
+  var failed = 0;
   for (final file in files) {
-    final bytes = await file.readAsBytes();
-    if (bytes.isEmpty) continue;
-    imported.add(await media.import(
-        worldId: worldId, fileName: file.name, bytes: bytes));
+    try {
+      final bytes = await file.readAsBytes();
+      if (bytes.isEmpty) continue;
+      imported.add(await media.import(
+          worldId: worldId, fileName: file.name, bytes: bytes));
+    } catch (_) {
+      failed++;
+    }
   }
-  return imported;
+  return (imported: imported, failed: failed);
 }
 
 /// Opens the platform file picker (all file types, multiple).

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart' show driftRuntimeOptions;
 import 'package:drift/native.dart';
 import 'package:gmh/data/db/app_database.dart';
+import 'package:gmh/data/repositories/category_repository_impl.dart';
 import 'package:gmh/data/repositories/document_repository_impl.dart';
 import 'package:gmh/data/repositories/entity_repository_impl.dart';
 import 'package:gmh/data/repositories/link_repository_impl.dart';
@@ -33,6 +34,7 @@ class TestHarness {
   late final search = SearchRepositoryImpl(db, entities);
   late final settings = SettingsRepositoryImpl(db);
   late final objects = WorldObjectRepositoryImpl(db);
+  late final categories = CategoryRepositoryImpl(db);
 
   late final linkSync = LinkSyncService(links);
   late final entityService = EntityService(entities, tags, search, linkSync);

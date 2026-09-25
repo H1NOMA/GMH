@@ -66,16 +66,26 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
     // restarts.
     final prefs = ref.watch(listPrefsProvider(_prefsKey));
     final prefsController = ref.read(listPrefsProvider(_prefsKey).notifier);
+    final tagsAsync = ref.watch(worldTagsProvider(widget.worldId));
+    final tags = tagsAsync.valueOrNull ?? [];
+    // A filter on a tag that was since deleted or merged would show an
+    // empty list with no chip left to clear it: drop it.
+    final staleTag = prefs.tagId != null &&
+        tagsAsync.hasValue &&
+        !tags.any((t) => t.id == prefs.tagId);
+    if (staleTag) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) prefsController.setTag(null);
+      });
+    }
     final entities = ref.watch(entityListProvider((
       worldId: widget.worldId,
       kind: widget.kind,
       customCategoryId: widget.customCategoryId,
-      tagId: prefs.tagId,
+      tagId: staleTag ? null : prefs.tagId,
       favoritesOnly: prefs.favoritesOnly,
       sort: prefs.sort,
     )));
-    final tags =
-        ref.watch(worldTagsProvider(widget.worldId)).valueOrNull ?? [];
     final category = widget.customCategoryId == null
         ? null
         : ref.watch(categoryMapProvider(widget.worldId))[
@@ -154,7 +164,10 @@ class _EntityListScreenState extends ConsumerState<EntityListScreen> {
             child: TextField(
               controller: _filterController,
               decoration: InputDecoration(
-                hintText: context.l10n.filterHint(title.toLowerCase()),
+                // A user's category name is shown as typed; built-in
+                // kind names follow the language's mid-sentence case.
+                hintText: context.l10n.filterHint(
+                    category?.name ?? midSentence(context, title)),
                 prefixIcon: const Icon(Icons.filter_alt_outlined, size: 18),
               ),
               onChanged: prefsController.setFilterText,

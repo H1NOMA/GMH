@@ -18,6 +18,7 @@ Future<Entity?> showEntityPickerDialog(
   BuildContext context, {
   required String worldId,
   List<EntityKind> kinds = const [],
+  Set<String> excludeIds = const {},
   String? title,
 }) {
   return showDialog<Entity>(
@@ -25,6 +26,7 @@ Future<Entity?> showEntityPickerDialog(
     builder: (context) => _EntityPickerDialog(
         worldId: worldId,
         kinds: kinds,
+        excludeIds: excludeIds,
         title: title ?? context.l10n.pickerTitleDefault),
   );
 }
@@ -32,11 +34,13 @@ Future<Entity?> showEntityPickerDialog(
 class _EntityPickerDialog extends ConsumerStatefulWidget {
   final String worldId;
   final List<EntityKind> kinds;
+  final Set<String> excludeIds;
   final String title;
 
   const _EntityPickerDialog({
     required this.worldId,
     required this.kinds,
+    required this.excludeIds,
     required this.title,
   });
 
@@ -70,10 +74,14 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
     // same-named locations/items consumed the whole limit.
     final all = await ref
         .read(entityRepositoryProvider)
-        .lookupByName(widget.worldId, text, limit: 30, kinds: widget.kinds);
+        .lookupByName(widget.worldId, text,
+            limit: 30 + widget.excludeIds.length, kinds: widget.kinds);
     if (!mounted) return;
     setState(() {
-      _results = all;
+      _results = [
+        for (final e in all)
+          if (!widget.excludeIds.contains(e.id)) e
+      ].take(30).toList();
       _loading = false;
     });
   }
@@ -94,7 +102,7 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
                 hintText: widget.kinds.isEmpty
                     ? context.l10n.pickerSearchAll
                     : context.l10n.pickerSearchKinds(widget.kinds
-                        .map((k) => _midSentence(
+                        .map((k) => midSentence(
                             context, k.localizedPlural(context)))
                         .join(', ')),
                 prefixIcon: const Icon(Icons.search, size: 18),
@@ -150,8 +158,3 @@ class _EntityPickerDialogState extends ConsumerState<_EntityPickerDialog> {
   }
 }
 
-/// A kind name as it reads mid-sentence: German keeps noun capitals.
-String _midSentence(BuildContext context, String word) =>
-    Localizations.localeOf(context).languageCode == 'de'
-        ? word
-        : word.toLowerCase();

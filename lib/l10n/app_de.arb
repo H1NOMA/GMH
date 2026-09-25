@@ -538,5 +538,7 @@
   "combatDefeatedNotice": "{name} ist besiegt",
   "combatOpenEntry": "Eintrag öffnen",
   "combatActions": "Teilnehmeraktionen",
-  "combatEncounterActions": "Begegnungsaktionen"
+  "combatEncounterActions": "Begegnungsaktionen",
+  "roleCustomLabel": "Oder eigene Rolle eingeben",
+  "importFilesFailed": "{count, plural, one{1 Datei konnte nicht importiert werden} other{{count} Dateien konnten nicht importiert werden}}"
 }

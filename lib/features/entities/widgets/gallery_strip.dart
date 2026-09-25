@@ -26,14 +26,15 @@ class EntityGalleryStrip extends ConsumerWidget {
     // picker and the import return, and a dead WidgetRef throws.
     final media = ref.read(mediaRepositoryProvider);
     final entities = ref.read(entityServiceProvider);
+    final messenger = ScaffoldMessenger.of(context);
     final files = await pickImageFiles(dialogTitle: l10n.addImage);
     if (files.isEmpty) return;
-    final imported = [
-      for (final file in files)
-        if ((await file.readAsBytes()) case final bytes when bytes.isNotEmpty)
-          await media.import(
-              worldId: entity.worldId, fileName: file.name, bytes: bytes),
-    ];
+    final (:imported, :failed) =
+        await importXFiles(media, worldId: entity.worldId, files: files);
+    if (failed > 0) {
+      messenger.showSnackBar(
+          SnackBar(content: Text(l10n.importFilesFailed(failed))));
+    }
     for (final item in imported) {
       await media.addToGallery(entity.id, item.id);
     }

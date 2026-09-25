@@ -538,5 +538,7 @@
   "combatDefeatedNotice": "{name} 已被击败",
   "combatOpenEntry": "打开条目",
   "combatActions": "参战者操作",
-  "combatEncounterActions": "遭遇操作"
+  "combatEncounterActions": "遭遇操作",
+  "roleCustomLabel": "或输入自定义关系",
+  "importFilesFailed": "{count, plural, other{{count} 个文件无法导入}}"
 }

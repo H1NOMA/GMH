@@ -124,8 +124,11 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
     _changes?.cancel();
     _retry?.cancel();
     _autosave.flush(_saveAndCheckpointSync);
-    // Checkpoint the version history when leaving the editor.
-    unawaited(_documents.checkpoint(widget.entityId));
+    // Checkpoint the version history when leaving the editor — after the
+    // flush-save above has landed, or the snapshot misses the last edits.
+    final documents = _documents;
+    final entityId = widget.entityId;
+    unawaited(_saveChain.then((_) => documents.checkpoint(entityId)));
     _controller.dispose();
     _focusNode.dispose();
     _scrollController.dispose();
@@ -138,12 +141,14 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   }
 
   Future<void> _save() {
-    _saveChain = _saveChain.then((_) => _doSave());
+    // Serialized now, not when the chain gets to it: the dispose-time
+    // flush queues a save right before the controller is disposed.
+    final json = jsonEncode(_controller.document.toDelta().toJson());
+    _saveChain = _saveChain.then((_) => _doSave(json));
     return _saveChain;
   }
 
-  Future<void> _doSave() async {
-    final json = jsonEncode(_controller.document.toDelta().toJson());
+  Future<void> _doSave(String json) async {
     if (json == _lastSavedJson) return;
     final result = await _documents.save(
       entityId: widget.entityId,
@@ -218,14 +223,18 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
   /// images inline, everything else as attachment chips.
   Future<void> _embedFiles(List<XFile> files, {bool imagesOnly = false}) async {
     if (files.isEmpty) return;
-    final imported = await importXFiles(
-      ref,
+    final (:imported, :failed) = await importXFiles(
+      ref.read(mediaRepositoryProvider),
       worldId: widget.worldId,
       files: files,
     );
     // A slow import can outlive this editor (user navigated away): the
     // controller is disposed then, and inserting would throw.
     if (!mounted) return;
+    if (failed > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.importFilesFailed(failed))));
+    }
     for (final item in imported) {
       if (isImageMime(item.mimeType)) {
         insertVaultImage(_controller, item.id);
@@ -300,6 +309,7 @@ class _LoreEditorState extends ConsumerState<LoreEditor> {
                       ref,
                       entityId: widget.entityId,
                       onRestore: (contentJson) {
+                        if (!mounted) return;
                         try {
                           final restored = Document.fromJson(
                             jsonDecode(contentJson) as List,

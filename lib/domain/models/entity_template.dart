@@ -99,19 +99,25 @@ class EntityTemplate {
   /// Extracts every entity reference held in [attributes] together with the
   /// link role of its field — used to mirror structured refs into the
   /// links table.
-  Map<String, String> extractEntityRefs(Map<String, Object?> attributes) {
-    final refs = <String, String>{}; // entityId -> role
+  /// entityId -> roles: one entry can be referenced from several fields
+  /// (a character's home and current location may be the same city), and
+  /// each field's role is its own link.
+  Map<String, Set<String>> extractEntityRefs(Map<String, Object?> attributes) {
+    final refs = <String, Set<String>>{};
+    void add(Object? value, String role) {
+      final id = parseEntityRef(value);
+      if (id != null) (refs[id] ??= {}).add(role);
+    }
+
     for (final field in allFields) {
       final value = attributes[field.key];
       switch (field.type) {
         case FieldType.entityRef:
-          final id = parseEntityRef(value);
-          if (id != null) refs[id] = field.linkRole;
+          add(value, field.linkRole);
         case FieldType.entityRefList:
           if (value is List) {
             for (final item in value) {
-              final id = parseEntityRef(item);
-              if (id != null) refs[id] = field.linkRole;
+              add(item, field.linkRole);
             }
           }
         default:

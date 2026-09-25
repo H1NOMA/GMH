@@ -137,12 +137,12 @@ abstract interface class LinkRepository {
   Future<void> delete(String linkId);
 
   /// Replaces all links of [origin] from [sourceId] with [targets]
-  /// (targetId -> role). Used by mention sync and attribute mirroring.
+  /// (targetId -> roles). Used by mention sync and attribute mirroring.
   Future<void> replaceForOrigin({
     required String worldId,
     required String sourceId,
     required LinkOrigin origin,
-    required Map<String, String> targets,
+    required Map<String, Set<String>> targets,
   });
 }
 
