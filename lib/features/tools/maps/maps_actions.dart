@@ -200,7 +200,7 @@ class MapsActions {
     final outcome = await importXFiles(
       _media,
       worldId: worldId,
-      files: [XFile.fromData(bytes, name: file.name)],
+      files: [file],
     );
     if (outcome.imported.isEmpty) return null;
     final item = outcome.imported.first;

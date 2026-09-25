@@ -230,6 +230,8 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   void _setMode(MapMode mode) => setState(() {
     _mode = mode;
+    // The pin card would cover the map the new mode needs.
+    if (mode != MapMode.select) _selectedPinId = null;
     if (mode != MapMode.measure) {
       _measureA = null;
       _measureB = null;

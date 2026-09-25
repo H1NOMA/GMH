@@ -290,9 +290,11 @@ void main() {
     expect(find.byKey(const ValueKey('maps-measure-hint')), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('maps-mode-select')));
 
-    // Make the pin GM-only (still selected since the drag): player view
-    // hides it.
-    expect(find.byKey(const ValueKey('maps-pin-card')), findsOneWidget);
+    // Make the pin GM-only: player view hides it. Measuring cleared the
+    // selection.
+    expect(find.byKey(const ValueKey('maps-pin-card')), findsNothing);
+    await tester.tap(find.byKey(pinKey));
+    await _settle(tester);
     await _tap(tester, find.byKey(const ValueKey('maps-pin-card-edit')));
     await _tap(tester, find.byKey(const ValueKey('maps-pin-gm-only')));
     await _tap(tester, find.byKey(const ValueKey('maps-pin-save')));
@@ -377,6 +379,18 @@ void main() {
       },
     );
 
+    // The row sits below the fields and relations in the side panel.
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('entity-on-maps')),
+      200,
+      scrollable: find
+          .ancestor(
+            of: find.text('OVERVIEW'),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await _settle(tester);
     expect(find.byKey(const ValueKey('entity-on-maps')), findsOneWidget);
     final chip = find.byKey(ValueKey('entity-map-pin-$pinId'));
     expect(chip, findsOneWidget);
@@ -400,7 +414,9 @@ void main() {
 
     // "Open entry" from the pin card goes back to the entry.
     await _tap(tester, find.byKey(const ValueKey('maps-pin-card-open')));
-    expect(find.byKey(ValueKey('entity-map-pin-$pinId')), findsOneWidget);
+    expect(find.byKey(const ValueKey('maps-viewer')), findsNothing);
+    expect(find.text('OVERVIEW'), findsOneWidget);
+    expect(find.text('Ravenport'), findsWidgets);
     expect(mapId, isNotEmpty);
     expect(tester.takeException(), isNull);
   });
@@ -416,7 +432,8 @@ void main() {
       pickImages: () => [
         XFile.fromData(
           Uint8List.fromList(png),
-          name: 'Frostmarch.png',
+          // On desktop the name comes from the path.
+          path: 'Frostmarch.png',
           mimeType: 'image/png',
         ),
       ],
@@ -634,20 +651,33 @@ void main() {
       expect(find.byKey(const ValueKey('maps-measure-result')), findsOneWidget);
       await _tap(tester, find.byKey(const ValueKey('maps-mode-select')));
 
+      await tester.tap(find.byKey(pinKey));
+      await _settle(tester);
       await _tap(tester, find.byKey(const ValueKey('maps-pin-card-edit')));
       expect(find.byKey(const ValueKey('maps-pin-label')), findsOneWidget);
       await tester.drag(find.byType(Scrollable).last, const Offset(0, -2000));
       await _settle(tester);
       await _tap(tester, find.widgetWithText(TextButton, _cancel(locale)));
 
-      await _tap(tester, find.byKey(const ValueKey('maps-panel-toggle')));
+      // Wide windows show the panel already; narrow ones open a sheet.
+      final sheet = find
+          .byKey(const ValueKey('maps-tab-details'))
+          .evaluate()
+          .isEmpty;
+      if (sheet) {
+        await _tap(tester, find.byKey(const ValueKey('maps-panel-toggle')));
+      }
       await _tap(tester, find.byKey(const ValueKey('maps-tab-details')));
       await _tap(tester, find.byKey(const ValueKey('maps-edit-details')));
       expect(find.byKey(const ValueKey('maps-scale-units')), findsOneWidget);
       await _tap(tester, find.widgetWithText(TextButton, _cancel(locale)));
-      if (size.width < 960) {
+      if (sheet) {
         await tester.tapAt(const Offset(10, 10));
         await _settle(tester);
+      } else {
+        // Collapsing the panel gives the map the whole width.
+        await _tap(tester, find.byKey(const ValueKey('maps-panel-toggle')));
+        expect(find.byKey(const ValueKey('maps-tab-details')), findsNothing);
       }
 
       await _tap(tester, find.byKey(const ValueKey('maps-player-view')));
