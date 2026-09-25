@@ -71,9 +71,20 @@ Future<void> main() async {
           lastLocation.startsWith('/w/${world.id}/')) {
         initialLocation = lastLocation;
       }
-      // Fire-and-forget; must never block startup.
-      unawaited(
-          container.read(backupServiceProvider).autoBackupIfDue(world.id));
+      // Fire-and-forget; must never block startup. Unused media is swept
+      // only right after a fresh backup, so anything removed stays
+      // restorable.
+      final backups = container.read(backupServiceProvider);
+      final media = container.read(mediaRepositoryProvider);
+      unawaited(() async {
+        try {
+          if (await backups.autoBackupIfDue(world.id)) {
+            await media.collectGarbage(world.id);
+          }
+        } catch (_) {
+          // Housekeeping only; the next start tries again.
+        }
+      }());
     }
   }
 

@@ -43,15 +43,12 @@ class MediaRepositoryImpl implements MediaRepository {
     required String fileName,
     required List<int> bytes,
   }) async {
+    // Identical content shares one stored file, but every import gets its
+    // own row: rows carry the name and are what entries point at, so
+    // renaming or replacing a file in one entry must never change the
+    // same picture in another.
     final relativePath =
         await _vault.store(worldId: worldId, fileName: fileName, bytes: bytes);
-
-    // Deduplicate: same content already registered in this world?
-    final existing = await (_db.select(_db.mediaFiles)
-          ..where((m) =>
-              m.worldId.equals(worldId) & m.relativePath.equals(relativePath)))
-        .getSingleOrNull();
-    if (existing != null) return _map(existing);
 
     final item = MediaItem(
       id: newId(),
@@ -190,6 +187,37 @@ class MediaRepositoryImpl implements MediaRepository {
     return objects.isNotEmpty;
   }
 
+  @override
+  Future<int> collectGarbage(String worldId,
+      {Duration grace = const Duration(minutes: 10)}) async {
+    // Anything younger than the grace period may belong to an import that
+    // is still being attached; it is left for the next pass.
+    final cutoff = nowMs() - grace.inMilliseconds;
+    // Cheap SQL pre-filter (galleries, covers); the text probes in
+    // _isReferenced then run for the few remaining candidates only.
+    final candidates = await _db.customSelect(
+      'SELECT id FROM media_files m WHERE m.world_id = ? AND m.created_at < ? '
+      'AND NOT EXISTS (SELECT 1 FROM entity_media em WHERE em.media_id = m.id) '
+      'AND NOT EXISTS (SELECT 1 FROM entities e WHERE e.cover_media_id = m.id) '
+      'AND NOT EXISTS (SELECT 1 FROM worlds w WHERE w.cover_media_id = m.id)',
+      variables: [Variable.withString(worldId), Variable.withInt(cutoff)],
+    ).map((r) => r.read<String>('id')).get();
+    var removed = 0;
+    for (final id in candidates) {
+      if (await _isReferenced(id)) continue;
+      await (_db.delete(_db.mediaFiles)..where((m) => m.id.equals(id))).go();
+      removed++;
+    }
+    final livePaths = await (_db.selectOnly(_db.mediaFiles)
+          ..addColumns([_db.mediaFiles.relativePath])
+          ..where(_db.mediaFiles.worldId.equals(worldId)))
+        .map((r) => r.read(_db.mediaFiles.relativePath)!)
+        .get();
+    removed += await _vault.collectGarbage(worldId, livePaths.toSet(),
+        olderThan: DateTime.fromMillisecondsSinceEpoch(cutoff));
+    return removed;
+  }
+
   Future<void> _deleteVaultFileIfOrphan(
       String worldId, String relativePath) async {
     final sharing = await (_db.select(_db.mediaFiles)
@@ -223,6 +251,15 @@ class MediaRepositoryImpl implements MediaRepository {
   @override
   Future<void> addToGallery(String entityId, String mediaId,
       {String caption = ''}) async {
+    // The same picture attached twice to one entry shows once.
+    final duplicate = await _db.customSelect(
+      'SELECT 1 FROM entity_media em '
+      'JOIN media_files a ON a.id = em.media_id '
+      'JOIN media_files b ON b.id = ? '
+      'WHERE em.entity_id = ? AND a.relative_path = b.relative_path LIMIT 1',
+      variables: [Variable.withString(mediaId), Variable.withString(entityId)],
+    ).get();
+    if (duplicate.isNotEmpty) return;
     final maxOrder = await (_db.selectOnly(_db.entityMedia)
           ..addColumns([_db.entityMedia.sortOrder.max()])
           ..where(_db.entityMedia.entityId.equals(entityId)))

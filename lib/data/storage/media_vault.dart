@@ -79,17 +79,28 @@ class MediaVault {
     if (await dir.exists()) await dir.delete(recursive: true);
   }
 
-  /// Removes vault files that are not referenced by [referencedPaths]
-  /// (called during backup, when the DB list is authoritative).
-  Future<int> collectGarbage(
-      String worldId, Set<String> referencedPaths) async {
+  /// Removes vault files that no media row points at. Files modified
+  /// after [olderThan] are kept: an import may have stored the file and
+  /// not yet written its row.
+  Future<int> collectGarbage(String worldId, Set<String> referencedPaths,
+      {DateTime? olderThan}) async {
     final dir = Directory(mediaDirectory(worldId));
     if (!await dir.exists()) return 0;
+    final referenced = {for (final path in referencedPaths) p.basename(path)};
     var removed = 0;
     await for (final item in dir.list()) {
-      if (item is File && !referencedPaths.contains(p.basename(item.path))) {
+      if (item is! File || referenced.contains(p.basename(item.path))) {
+        continue;
+      }
+      if (olderThan != null &&
+          (await item.lastModified()).isAfter(olderThan)) {
+        continue;
+      }
+      try {
         await item.delete();
         removed++;
+      } on FileSystemException {
+        // Locked by another process: next pass.
       }
     }
     return removed;

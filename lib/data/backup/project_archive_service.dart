@@ -227,11 +227,18 @@ class ProjectArchiveService {
       archive.addFile(_jsonFile('manifest.json', manifest));
       archive.addFile(_jsonFile('data.json', data));
 
+      // Several rows can share one stored file (same picture in two
+      // entries): each file goes in once. Images and PDFs are already
+      // compressed, so deflating them again only costs time.
+      final packed = <String>{};
       for (final m in (data['media'] as List).cast<Map<String, Object?>>()) {
         final relativePath = m['relativePath'] as String;
+        if (!packed.add(relativePath)) continue;
         if (await _vault.exists(worldId, relativePath)) {
           final bytes = await _vault.read(worldId, relativePath);
-          archive.addFile(ArchiveFile('media/$relativePath', bytes.length, bytes));
+          archive.addFile(
+              ArchiveFile('media/$relativePath', bytes.length, bytes)
+                ..compression = CompressionType.none);
         }
       }
 

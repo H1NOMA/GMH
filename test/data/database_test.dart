@@ -122,15 +122,71 @@ void main() {
     expect(recents.map((e) => e.name).toList(), ['B', 'A']);
   });
 
-  test('media vault dedupes identical content', () async {
+  test('identical content shares a file but each import owns its row',
+      () async {
     final world = await h.worlds.createWorld(name: 'W');
     final bytes = utf8.encode('fake image bytes');
     final first = await h.media
         .import(worldId: world.id, fileName: 'a.png', bytes: bytes);
     final second = await h.media
         .import(worldId: world.id, fileName: 'b.png', bytes: bytes);
-    expect(second.id, first.id, reason: 'same content → same media row');
+    expect(second.relativePath, first.relativePath);
+    expect(second.id, isNot(first.id));
+
+    // Renaming or replacing one leaves the other alone.
+    await h.media.rename(second.id, 'renamed.png');
+    expect((await h.media.get(first.id))!.fileName, 'a.png');
+    final replaced = await h.media.replaceBytes(
+        mediaId: second.id, fileName: 'new.png', bytes: utf8.encode('other'));
+    expect((await h.media.get(first.id))!.relativePath, first.relativePath);
     expect(await h.vault.exists(world.id, first.relativePath), isTrue);
+    expect(replaced.relativePath, isNot(first.relativePath));
+  });
+
+  test('the same picture attached twice to one entry shows once', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final e = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.location, name: 'Keep');
+    final bytes = utf8.encode('pic');
+    for (final name in ['a.png', 'b.png']) {
+      final m = await h.media
+          .import(worldId: world.id, fileName: name, bytes: bytes);
+      await h.media.addToGallery(e.id, m.id);
+    }
+    expect(await h.media.watchGallery(e.id).first, hasLength(1));
+  });
+
+  test('garbage collection keeps everything referenced', () async {
+    final world = await h.worlds.createWorld(name: 'W');
+    final e = await h.entities.createEntity(
+        worldId: world.id, kind: EntityKind.location, name: 'Keep');
+    Future<String> importText(String text) async => (await h.media.import(
+            worldId: world.id, fileName: '$text.png', bytes: utf8.encode(text)))
+        .id;
+    final inGallery = await importText('gallery');
+    await h.media.addToGallery(e.id, inGallery);
+    final inLore = await importText('lore');
+    await h.documentService.save(
+        entityId: e.id,
+        contentJson: jsonEncode([
+          {
+            'insert': {'image': 'media:$inLore'}
+          },
+          {'insert': '\n'},
+        ]));
+    final orphan = await importText('orphan');
+    final orphanPath = (await h.media.get(orphan))!.relativePath;
+
+    // Fresh imports are protected by the grace period.
+    expect(await h.media.collectGarbage(world.id), 0);
+
+    final removed =
+        await h.media.collectGarbage(world.id, grace: Duration.zero);
+    expect(removed, greaterThanOrEqualTo(1));
+    expect(await h.media.get(orphan), isNull);
+    expect(await h.vault.exists(world.id, orphanPath), isFalse);
+    expect(await h.media.get(inGallery), isNotNull);
+    expect(await h.media.get(inLore), isNotNull);
   });
 
   test('cascading delete: removing a world clears its data', () async {

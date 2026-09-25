@@ -180,7 +180,7 @@ abstract interface class TagRepository {
 
 abstract interface class MediaRepository {
   /// Imports bytes into the world's content-addressed vault and records
-  /// metadata. Identical content is deduplicated.
+  /// metadata. Identical content shares one stored file.
   Future<MediaItem> import({
     required String worldId,
     required String fileName,
@@ -216,6 +216,12 @@ abstract interface class MediaRepository {
   Future<void> setCaption(String entityId, String mediaId, String caption);
 
   Future<List<MediaItem>> allForWorld(String worldId);
+
+  /// Deletes media rows nothing refers to any more (galleries, covers,
+  /// lore and its versions, tool objects) and vault files no row points
+  /// at, skipping anything younger than [grace]. Returns how many rows
+  /// and files were removed.
+  Future<int> collectGarbage(String worldId, {Duration grace});
 }
 
 abstract interface class SearchRepository {

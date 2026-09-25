@@ -84,16 +84,18 @@ class BackupService {
 
   /// Automatic backup on app start, throttled to one per
   /// [GmhConstants.autoBackupInterval].
-  Future<void> autoBackupIfDue(String worldId) async {
+  /// Returns whether a backup was taken.
+  Future<bool> autoBackupIfDue(String worldId) async {
     final key = '${SettingsKeys.lastAutoBackup}.$worldId';
     final last = int.tryParse(await _settings.get(key) ?? '') ?? 0;
     final elapsed = Duration(milliseconds: nowMs() - last);
-    if (elapsed < GmhConstants.autoBackupInterval) return;
+    if (elapsed < GmhConstants.autoBackupInterval) return false;
 
     final result = await backupNow(worldId, kind: BackupKind.auto);
     if (result.isOk) {
       await _settings.set(key, nowMs().toString());
     }
+    return result.isOk;
   }
 
   Future<List<BackupInfo>> listBackups({String? worldId}) async {
