@@ -2373,4 +2373,243 @@ class AppLocalizationsRu extends AppLocalizations {
   String sessionNumberName(int number) {
     return 'Сессия $number';
   }
+
+  @override
+  String get generatorsKindNames => 'Имена';
+
+  @override
+  String get generatorsKindNpc => 'НПС';
+
+  @override
+  String get generatorsKindSettlement => 'Поселение';
+
+  @override
+  String get generatorsKindEstablishment => 'Таверна и лавка';
+
+  @override
+  String get generatorsKindHook => 'Завязка приключения';
+
+  @override
+  String get generatorsKindLoot => 'Добыча';
+
+  @override
+  String get generatorsKindFaction => 'Фракция';
+
+  @override
+  String get generatorsKindWeather => 'Погода';
+
+  @override
+  String get generatorsKindRumor => 'Слух';
+
+  @override
+  String get generatorsPicker => 'Генератор';
+
+  @override
+  String get generatorsPack => 'Жанровый набор';
+
+  @override
+  String generatorsPackWorld(String pack) {
+    return '$pack (этот мир)';
+  }
+
+  @override
+  String get generatorsGender => 'Пол';
+
+  @override
+  String get generatorsGenderAny => 'Любой';
+
+  @override
+  String get generatorsGenderFeminine => 'Женские';
+
+  @override
+  String get generatorsGenderMasculine => 'Мужские';
+
+  @override
+  String get generatorsCulture => 'Традиция имён';
+
+  @override
+  String get generatorsCultureAny => 'Вперемешку';
+
+  @override
+  String get generatorsCount => 'Сколько';
+
+  @override
+  String get generatorsEpithets => 'С прозвищами';
+
+  @override
+  String get generatorsGenerate => 'Создать';
+
+  @override
+  String get generatorsRerollAll => 'Перебросить всё';
+
+  @override
+  String generatorsRerollField(String field) {
+    return 'Перебросить: $field';
+  }
+
+  @override
+  String get generatorsCopy => 'Копировать текстом';
+
+  @override
+  String get generatorsCopyAll => 'Копировать все';
+
+  @override
+  String get generatorsCopyName => 'Копировать имя';
+
+  @override
+  String get generatorsCopied => 'Скопировано в буфер обмена';
+
+  @override
+  String get generatorsKeep => 'Оставить';
+
+  @override
+  String get generatorsUnkeep => 'Не оставлять';
+
+  @override
+  String get generatorsDismiss => 'Убрать';
+
+  @override
+  String get generatorsSave => 'Сохранить в мир';
+
+  @override
+  String get generatorsSaveAsCharacter => 'Сохранить как персонажа';
+
+  @override
+  String generatorsSaved(String name) {
+    return '«$name» сохранено в мир';
+  }
+
+  @override
+  String get generatorsSavedBadge => 'Сохранено';
+
+  @override
+  String get generatorsKept => 'Оставленные';
+
+  @override
+  String get generatorsHistory => 'Недавние, без сохранения';
+
+  @override
+  String get generatorsHistoryEmpty =>
+      'Сюда попадают результаты, заменённые без сохранения, — до конца сеанса.';
+
+  @override
+  String get generatorsRestore => 'Вернуть';
+
+  @override
+  String get generatorsEmptyTitle => 'Пока ничего не создано';
+
+  @override
+  String get generatorsEmptyHint =>
+      'Выберите генератор и нажмите «Создать». Перебрасывайте любую строку, оставляйте удачное и сохраняйте в мир.';
+
+  @override
+  String get generatorsFieldName => 'Имя';
+
+  @override
+  String get generatorsFieldPlaceName => 'Название';
+
+  @override
+  String get generatorsFieldEpithet => 'Прозвище';
+
+  @override
+  String get generatorsFieldAncestry => 'Происхождение';
+
+  @override
+  String get generatorsFieldRole => 'Роль';
+
+  @override
+  String get generatorsFieldAge => 'Возраст';
+
+  @override
+  String get generatorsFieldAppearance => 'Внешность';
+
+  @override
+  String get generatorsFieldTrait => 'Черта';
+
+  @override
+  String get generatorsFieldMotivation => 'Мотивация';
+
+  @override
+  String get generatorsFieldSecret => 'Тайна';
+
+  @override
+  String get generatorsFieldVoice => 'Голос и манеры';
+
+  @override
+  String get generatorsFieldAttributes => 'Характеристики';
+
+  @override
+  String get generatorsFieldSize => 'Размер';
+
+  @override
+  String get generatorsFieldFeature => 'Особенность';
+
+  @override
+  String get generatorsFieldTrouble => 'Беда';
+
+  @override
+  String get generatorsFieldAuthority => 'Власть';
+
+  @override
+  String get generatorsFieldType => 'Тип';
+
+  @override
+  String get generatorsFieldOwner => 'Хозяин';
+
+  @override
+  String get generatorsFieldSpecialty => 'Фирменное';
+
+  @override
+  String get generatorsFieldPatron => 'Завсегдатай';
+
+  @override
+  String get generatorsFieldTitle => 'Название';
+
+  @override
+  String get generatorsFieldWho => 'Кто';
+
+  @override
+  String get generatorsFieldWants => 'Чего хочет';
+
+  @override
+  String get generatorsFieldObstacle => 'Препятствие';
+
+  @override
+  String get generatorsFieldTwist => 'Поворот';
+
+  @override
+  String get generatorsFieldContainer => 'Где найдено';
+
+  @override
+  String get generatorsFieldCoins => 'Монеты';
+
+  @override
+  String get generatorsFieldItem => 'Предмет';
+
+  @override
+  String get generatorsFieldCurio => 'Диковина';
+
+  @override
+  String get generatorsFieldGoal => 'Цель';
+
+  @override
+  String get generatorsFieldMethod => 'Методы';
+
+  @override
+  String get generatorsFieldSymbol => 'Символ';
+
+  @override
+  String get generatorsFieldSky => 'Небо';
+
+  @override
+  String get generatorsFieldAir => 'Воздух';
+
+  @override
+  String get generatorsFieldOmen => 'Знамение';
+
+  @override
+  String get generatorsFieldSource => 'Источник';
+
+  @override
+  String get generatorsFieldTruth => 'Правда ли';
 }

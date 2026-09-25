@@ -1229,5 +1229,103 @@
         "type": "int"
       }
     }
-  }
+  },
+  "generatorsKindNames": "Names",
+  "generatorsKindNpc": "NPC",
+  "generatorsKindSettlement": "Settlement",
+  "generatorsKindEstablishment": "Tavern & shop",
+  "generatorsKindHook": "Adventure hook",
+  "generatorsKindLoot": "Loot",
+  "generatorsKindFaction": "Faction",
+  "generatorsKindWeather": "Weather",
+  "generatorsKindRumor": "Rumor",
+  "generatorsPicker": "Generator",
+  "generatorsPack": "Genre pack",
+  "generatorsPackWorld": "{pack} (this world)",
+  "@generatorsPackWorld": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      }
+    }
+  },
+  "generatorsGender": "Gender",
+  "generatorsGenderAny": "Any",
+  "generatorsGenderFeminine": "Feminine",
+  "generatorsGenderMasculine": "Masculine",
+  "generatorsCulture": "Naming style",
+  "generatorsCultureAny": "Mixed",
+  "generatorsCount": "How many",
+  "generatorsEpithets": "Add epithets",
+  "generatorsGenerate": "Generate",
+  "generatorsRerollAll": "Reroll all",
+  "generatorsRerollField": "Reroll {field}",
+  "@generatorsRerollField": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "generatorsCopy": "Copy as text",
+  "generatorsCopyAll": "Copy all",
+  "generatorsCopyName": "Copy name",
+  "generatorsCopied": "Copied to clipboard",
+  "generatorsKeep": "Keep",
+  "generatorsUnkeep": "Stop keeping",
+  "generatorsDismiss": "Dismiss",
+  "generatorsSave": "Save to world",
+  "generatorsSaveAsCharacter": "Save as character",
+  "generatorsSaved": "Saved “{name}” to the world",
+  "@generatorsSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "generatorsSavedBadge": "Saved",
+  "generatorsKept": "Kept",
+  "generatorsHistory": "Recent, unsaved",
+  "generatorsHistoryEmpty": "Results you replace without saving land here for this session.",
+  "generatorsRestore": "Bring back",
+  "generatorsEmptyTitle": "Nothing generated yet",
+  "generatorsEmptyHint": "Pick a generator and press Generate. Reroll any line, keep the good results and save them into the world.",
+  "generatorsFieldName": "Name",
+  "generatorsFieldPlaceName": "Name",
+  "generatorsFieldEpithet": "Epithet",
+  "generatorsFieldAncestry": "Ancestry",
+  "generatorsFieldRole": "Role",
+  "generatorsFieldAge": "Age",
+  "generatorsFieldAppearance": "Appearance",
+  "generatorsFieldTrait": "Trait",
+  "generatorsFieldMotivation": "Motivation",
+  "generatorsFieldSecret": "Secret",
+  "generatorsFieldVoice": "Voice",
+  "generatorsFieldAttributes": "Attributes",
+  "generatorsFieldSize": "Size",
+  "generatorsFieldFeature": "Feature",
+  "generatorsFieldTrouble": "Trouble",
+  "generatorsFieldAuthority": "In charge",
+  "generatorsFieldType": "Type",
+  "generatorsFieldOwner": "Owner",
+  "generatorsFieldSpecialty": "Specialty",
+  "generatorsFieldPatron": "Regular",
+  "generatorsFieldTitle": "Title",
+  "generatorsFieldWho": "Who",
+  "generatorsFieldWants": "Wants",
+  "generatorsFieldObstacle": "Obstacle",
+  "generatorsFieldTwist": "Twist",
+  "generatorsFieldContainer": "Found in",
+  "generatorsFieldCoins": "Coins",
+  "generatorsFieldItem": "Item",
+  "generatorsFieldCurio": "Curio",
+  "generatorsFieldGoal": "Goal",
+  "generatorsFieldMethod": "Methods",
+  "generatorsFieldSymbol": "Symbol",
+  "generatorsFieldSky": "Sky",
+  "generatorsFieldAir": "Air",
+  "generatorsFieldOmen": "Omen",
+  "generatorsFieldSource": "Heard from",
+  "generatorsFieldTruth": "Truth"
 }

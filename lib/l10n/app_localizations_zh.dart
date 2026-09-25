@@ -2272,4 +2272,241 @@ class AppLocalizationsZh extends AppLocalizations {
   String sessionNumberName(int number) {
     return '第 $number 场';
   }
+
+  @override
+  String get generatorsKindNames => '名字';
+
+  @override
+  String get generatorsKindNpc => 'NPC';
+
+  @override
+  String get generatorsKindSettlement => '聚落';
+
+  @override
+  String get generatorsKindEstablishment => '店铺';
+
+  @override
+  String get generatorsKindHook => '冒险引子';
+
+  @override
+  String get generatorsKindLoot => '战利品';
+
+  @override
+  String get generatorsKindFaction => '势力';
+
+  @override
+  String get generatorsKindWeather => '天气';
+
+  @override
+  String get generatorsKindRumor => '传闻';
+
+  @override
+  String get generatorsPicker => '生成器';
+
+  @override
+  String get generatorsPack => '题材包';
+
+  @override
+  String generatorsPackWorld(String pack) {
+    return '$pack（本世界）';
+  }
+
+  @override
+  String get generatorsGender => '性别';
+
+  @override
+  String get generatorsGenderAny => '不限';
+
+  @override
+  String get generatorsGenderFeminine => '女性';
+
+  @override
+  String get generatorsGenderMasculine => '男性';
+
+  @override
+  String get generatorsCulture => '命名风格';
+
+  @override
+  String get generatorsCultureAny => '混合';
+
+  @override
+  String get generatorsCount => '数量';
+
+  @override
+  String get generatorsEpithets => '附带绰号';
+
+  @override
+  String get generatorsGenerate => '生成';
+
+  @override
+  String get generatorsRerollAll => '全部重掷';
+
+  @override
+  String generatorsRerollField(String field) {
+    return '重掷$field';
+  }
+
+  @override
+  String get generatorsCopy => '复制为文本';
+
+  @override
+  String get generatorsCopyAll => '全部复制';
+
+  @override
+  String get generatorsCopyName => '复制名字';
+
+  @override
+  String get generatorsCopied => '已复制到剪贴板';
+
+  @override
+  String get generatorsKeep => '保留';
+
+  @override
+  String get generatorsUnkeep => '取消保留';
+
+  @override
+  String get generatorsDismiss => '移除';
+
+  @override
+  String get generatorsSave => '保存到世界';
+
+  @override
+  String get generatorsSaveAsCharacter => '保存为角色';
+
+  @override
+  String generatorsSaved(String name) {
+    return '已将“$name”保存到世界';
+  }
+
+  @override
+  String get generatorsSavedBadge => '已保存';
+
+  @override
+  String get generatorsKept => '已保留';
+
+  @override
+  String get generatorsHistory => '最近未保存';
+
+  @override
+  String get generatorsHistoryEmpty => '本次会话中未保存就被替换的结果会出现在这里。';
+
+  @override
+  String get generatorsRestore => '恢复';
+
+  @override
+  String get generatorsEmptyTitle => '尚未生成内容';
+
+  @override
+  String get generatorsEmptyHint => '选择一个生成器并点击“生成”。任意一行都可以重掷，留下满意的结果并保存到世界中。';
+
+  @override
+  String get generatorsFieldName => '名字';
+
+  @override
+  String get generatorsFieldPlaceName => '名称';
+
+  @override
+  String get generatorsFieldEpithet => '绰号';
+
+  @override
+  String get generatorsFieldAncestry => '出身';
+
+  @override
+  String get generatorsFieldRole => '身份';
+
+  @override
+  String get generatorsFieldAge => '年龄';
+
+  @override
+  String get generatorsFieldAppearance => '外貌';
+
+  @override
+  String get generatorsFieldTrait => '性格';
+
+  @override
+  String get generatorsFieldMotivation => '动机';
+
+  @override
+  String get generatorsFieldSecret => '秘密';
+
+  @override
+  String get generatorsFieldVoice => '言谈';
+
+  @override
+  String get generatorsFieldAttributes => '属性';
+
+  @override
+  String get generatorsFieldSize => '规模';
+
+  @override
+  String get generatorsFieldFeature => '特色';
+
+  @override
+  String get generatorsFieldTrouble => '麻烦';
+
+  @override
+  String get generatorsFieldAuthority => '掌权者';
+
+  @override
+  String get generatorsFieldType => '类型';
+
+  @override
+  String get generatorsFieldOwner => '店主';
+
+  @override
+  String get generatorsFieldSpecialty => '招牌';
+
+  @override
+  String get generatorsFieldPatron => '常客';
+
+  @override
+  String get generatorsFieldTitle => '标题';
+
+  @override
+  String get generatorsFieldWho => '委托人';
+
+  @override
+  String get generatorsFieldWants => '诉求';
+
+  @override
+  String get generatorsFieldObstacle => '阻碍';
+
+  @override
+  String get generatorsFieldTwist => '转折';
+
+  @override
+  String get generatorsFieldContainer => '出处';
+
+  @override
+  String get generatorsFieldCoins => '钱财';
+
+  @override
+  String get generatorsFieldItem => '物品';
+
+  @override
+  String get generatorsFieldCurio => '奇物';
+
+  @override
+  String get generatorsFieldGoal => '目标';
+
+  @override
+  String get generatorsFieldMethod => '手段';
+
+  @override
+  String get generatorsFieldSymbol => '标志';
+
+  @override
+  String get generatorsFieldSky => '天色';
+
+  @override
+  String get generatorsFieldAir => '空气';
+
+  @override
+  String get generatorsFieldOmen => '征兆';
+
+  @override
+  String get generatorsFieldSource => '消息来源';
+
+  @override
+  String get generatorsFieldTruth => '真相';
 }

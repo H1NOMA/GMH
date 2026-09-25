@@ -2359,4 +2359,243 @@ class AppLocalizationsDe extends AppLocalizations {
   String sessionNumberName(int number) {
     return 'Sitzung $number';
   }
+
+  @override
+  String get generatorsKindNames => 'Namen';
+
+  @override
+  String get generatorsKindNpc => 'NSC';
+
+  @override
+  String get generatorsKindSettlement => 'Siedlung';
+
+  @override
+  String get generatorsKindEstablishment => 'Taverne & Laden';
+
+  @override
+  String get generatorsKindHook => 'Abenteueraufhänger';
+
+  @override
+  String get generatorsKindLoot => 'Beute';
+
+  @override
+  String get generatorsKindFaction => 'Fraktion';
+
+  @override
+  String get generatorsKindWeather => 'Wetter';
+
+  @override
+  String get generatorsKindRumor => 'Gerücht';
+
+  @override
+  String get generatorsPicker => 'Generator';
+
+  @override
+  String get generatorsPack => 'Genre-Paket';
+
+  @override
+  String generatorsPackWorld(String pack) {
+    return '$pack (diese Welt)';
+  }
+
+  @override
+  String get generatorsGender => 'Geschlecht';
+
+  @override
+  String get generatorsGenderAny => 'Beliebig';
+
+  @override
+  String get generatorsGenderFeminine => 'Weiblich';
+
+  @override
+  String get generatorsGenderMasculine => 'Männlich';
+
+  @override
+  String get generatorsCulture => 'Namensstil';
+
+  @override
+  String get generatorsCultureAny => 'Gemischt';
+
+  @override
+  String get generatorsCount => 'Anzahl';
+
+  @override
+  String get generatorsEpithets => 'Mit Beinamen';
+
+  @override
+  String get generatorsGenerate => 'Erzeugen';
+
+  @override
+  String get generatorsRerollAll => 'Alles neu würfeln';
+
+  @override
+  String generatorsRerollField(String field) {
+    return '$field neu würfeln';
+  }
+
+  @override
+  String get generatorsCopy => 'Als Text kopieren';
+
+  @override
+  String get generatorsCopyAll => 'Alle kopieren';
+
+  @override
+  String get generatorsCopyName => 'Namen kopieren';
+
+  @override
+  String get generatorsCopied => 'In die Zwischenablage kopiert';
+
+  @override
+  String get generatorsKeep => 'Behalten';
+
+  @override
+  String get generatorsUnkeep => 'Nicht mehr behalten';
+
+  @override
+  String get generatorsDismiss => 'Verwerfen';
+
+  @override
+  String get generatorsSave => 'In die Welt speichern';
+
+  @override
+  String get generatorsSaveAsCharacter => 'Als Figur speichern';
+
+  @override
+  String generatorsSaved(String name) {
+    return '„$name“ in der Welt gespeichert';
+  }
+
+  @override
+  String get generatorsSavedBadge => 'Gespeichert';
+
+  @override
+  String get generatorsKept => 'Behalten';
+
+  @override
+  String get generatorsHistory => 'Zuletzt, ungespeichert';
+
+  @override
+  String get generatorsHistoryEmpty =>
+      'Ersetzte, nicht gespeicherte Ergebnisse landen für diese Sitzung hier.';
+
+  @override
+  String get generatorsRestore => 'Zurückholen';
+
+  @override
+  String get generatorsEmptyTitle => 'Noch nichts erzeugt';
+
+  @override
+  String get generatorsEmptyHint =>
+      'Wähle einen Generator und tippe auf „Erzeugen“. Würfle jede Zeile neu, behalte das Gute und speichere es in die Welt.';
+
+  @override
+  String get generatorsFieldName => 'Name';
+
+  @override
+  String get generatorsFieldPlaceName => 'Name';
+
+  @override
+  String get generatorsFieldEpithet => 'Beiname';
+
+  @override
+  String get generatorsFieldAncestry => 'Herkunft';
+
+  @override
+  String get generatorsFieldRole => 'Rolle';
+
+  @override
+  String get generatorsFieldAge => 'Alter';
+
+  @override
+  String get generatorsFieldAppearance => 'Aussehen';
+
+  @override
+  String get generatorsFieldTrait => 'Wesenszug';
+
+  @override
+  String get generatorsFieldMotivation => 'Antrieb';
+
+  @override
+  String get generatorsFieldSecret => 'Geheimnis';
+
+  @override
+  String get generatorsFieldVoice => 'Stimme';
+
+  @override
+  String get generatorsFieldAttributes => 'Attribute';
+
+  @override
+  String get generatorsFieldSize => 'Größe';
+
+  @override
+  String get generatorsFieldFeature => 'Besonderheit';
+
+  @override
+  String get generatorsFieldTrouble => 'Ärger';
+
+  @override
+  String get generatorsFieldAuthority => 'Obrigkeit';
+
+  @override
+  String get generatorsFieldType => 'Art';
+
+  @override
+  String get generatorsFieldOwner => 'Besitzer';
+
+  @override
+  String get generatorsFieldSpecialty => 'Spezialität';
+
+  @override
+  String get generatorsFieldPatron => 'Stammgast';
+
+  @override
+  String get generatorsFieldTitle => 'Titel';
+
+  @override
+  String get generatorsFieldWho => 'Wer';
+
+  @override
+  String get generatorsFieldWants => 'Will';
+
+  @override
+  String get generatorsFieldObstacle => 'Hindernis';
+
+  @override
+  String get generatorsFieldTwist => 'Wendung';
+
+  @override
+  String get generatorsFieldContainer => 'Fundort';
+
+  @override
+  String get generatorsFieldCoins => 'Münzen';
+
+  @override
+  String get generatorsFieldItem => 'Gegenstand';
+
+  @override
+  String get generatorsFieldCurio => 'Kuriosität';
+
+  @override
+  String get generatorsFieldGoal => 'Ziel';
+
+  @override
+  String get generatorsFieldMethod => 'Methoden';
+
+  @override
+  String get generatorsFieldSymbol => 'Symbol';
+
+  @override
+  String get generatorsFieldSky => 'Himmel';
+
+  @override
+  String get generatorsFieldAir => 'Luft';
+
+  @override
+  String get generatorsFieldOmen => 'Omen';
+
+  @override
+  String get generatorsFieldSource => 'Quelle';
+
+  @override
+  String get generatorsFieldTruth => 'Wahrheit';
 }
