@@ -1143,4 +1143,52 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get worldSection => '世界';
+
+  @override
+  String get navTools => '工具';
+
+  @override
+  String get sectionTools => '跑团工具';
+
+  @override
+  String get toolDice => '掷骰';
+
+  @override
+  String get toolDiceHint => '支持任意记法——4d6kh3、2d20kl1、3d6!、dF——含预设与掷骰记录。';
+
+  @override
+  String get toolCombat => '战斗追踪';
+
+  @override
+  String get toolCombatHint => '先攻顺序、生命值、状态与回合；遭遇难度计算。';
+
+  @override
+  String get toolTables => '随机表';
+
+  @override
+  String get toolTablesHint => '自定义掷骰表，支持权重、骰值区间与嵌套掷骰。';
+
+  @override
+  String get toolGenerators => '生成器';
+
+  @override
+  String get toolGeneratorsHint => '姓名、NPC、酒馆、战利品、天气、传闻——贴合你的设定。';
+
+  @override
+  String get toolMaps => '地图';
+
+  @override
+  String get toolMapsHint => '带有条目标记的交互式地图，支持嵌套地图。';
+
+  @override
+  String get toolTimeline => '时间线';
+
+  @override
+  String get toolTimelineHint => '按时间顺序排列的世界事件与纪元。';
+
+  @override
+  String get toolReference => '主持人屏风';
+
+  @override
+  String get toolReferenceHint => '状态与速查规则一目了然（SRD 5.2.1）。';
 }

@@ -1186,4 +1186,59 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get worldSection => 'Monde';
+
+  @override
+  String get navTools => 'Outils';
+
+  @override
+  String get sectionTools => 'À LA TABLE';
+
+  @override
+  String get toolDice => 'Dés';
+
+  @override
+  String get toolDiceHint =>
+      'Toute notation — 4d6kh3, 2d20kl1, 3d6!, dF — avec préréglages et historique.';
+
+  @override
+  String get toolCombat => 'Suivi de combat';
+
+  @override
+  String get toolCombatHint =>
+      'Initiative, points de vie, états et rounds ; difficulté de la rencontre.';
+
+  @override
+  String get toolTables => 'Tables aléatoires';
+
+  @override
+  String get toolTablesHint =>
+      'Vos propres tables avec poids, plages de dés et jets imbriqués.';
+
+  @override
+  String get toolGenerators => 'Générateurs';
+
+  @override
+  String get toolGeneratorsHint =>
+      'Noms, PNJ, tavernes, butin, météo, rumeurs — adaptés à votre univers.';
+
+  @override
+  String get toolMaps => 'Cartes';
+
+  @override
+  String get toolMapsHint =>
+      'Cartes interactives avec repères liés à vos entrées ; cartes imbriquées.';
+
+  @override
+  String get toolTimeline => 'Chronologie';
+
+  @override
+  String get toolTimelineHint =>
+      'Événements et ères de votre monde dans l\'ordre chronologique.';
+
+  @override
+  String get toolReference => 'Écran du MJ';
+
+  @override
+  String get toolReferenceHint =>
+      'États et règles rapides en un coup d\'œil (SRD 5.2.1).';
 }

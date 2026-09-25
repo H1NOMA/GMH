@@ -340,5 +340,21 @@
   "worldActions": "Weltaktionen",
   "deleteWorldTitle": "„{name}“ löschen?",
   "deleteWorldBody": "Alle Einträge, Dokumente, Bilder und Kampagnen dieser Welt werden endgültig gelöscht. Vorhandene Sicherungsdateien bleiben erhalten.",
-  "worldSection": "Welt"
+  "worldSection": "Welt",
+  "navTools": "Werkzeuge",
+  "sectionTools": "AM SPIELTISCH",
+  "toolDice": "Würfel",
+  "toolDiceHint": "Jede Notation — 4d6kh3, 2d20kl1, 3d6!, dF — mit Vorlagen und Wurfprotokoll.",
+  "toolCombat": "Kampfverwaltung",
+  "toolCombatHint": "Initiative, Trefferpunkte, Zustände und Runden; Begegnungsschwierigkeit.",
+  "toolTables": "Zufallstabellen",
+  "toolTablesHint": "Eigene Würfeltabellen mit Gewichtung, Bereichen und verschachtelten Würfen.",
+  "toolGenerators": "Generatoren",
+  "toolGeneratorsHint": "Namen, NSCs, Tavernen, Beute, Wetter, Gerüchte — passend zum Setting.",
+  "toolMaps": "Karten",
+  "toolMapsHint": "Interaktive Karten mit Markierungen zu deinen Einträgen; verschachtelte Karten.",
+  "toolTimeline": "Zeitleiste",
+  "toolTimelineHint": "Ereignisse und Zeitalter deiner Welt in zeitlicher Reihenfolge.",
+  "toolReference": "Meisterschirm",
+  "toolReferenceHint": "Zustände und Schnellregeln auf einen Blick (SRD 5.2.1)."
 }

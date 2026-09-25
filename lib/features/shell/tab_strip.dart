@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/l10n_ext.dart';
 import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
+import '../../app/tools.dart';
 import '../../domain/models/entity_kind.dart';
 import '../categories/category_ui.dart';
 import 'ui_providers.dart';
@@ -143,6 +144,21 @@ class _WorkspaceTab extends ConsumerWidget {
         return (categoryIconFor(category.icon), category.name);
       }
       return (Icons.folder_outlined, '…');
+    }
+    final toolMatch = RegExp(r'^/w/[^/]+/tools(?:/([^/]+))?(?:/([^/]+))?$')
+        .firstMatch(location);
+    if (toolMatch != null) {
+      final tool = toolById(toolMatch.group(1) ?? '');
+      if (tool == null) return (Icons.handyman_outlined, l.navTools);
+      final objectId = toolMatch.group(2);
+      if (objectId != null) {
+        // A specific map / encounter / table: show its own name.
+        final object = ref.watch(worldObjectProvider(objectId)).valueOrNull;
+        if (object != null && object.name.isNotEmpty) {
+          return (tool.icon, object.name);
+        }
+      }
+      return (tool.icon, tool.label(l));
     }
     if (location.endsWith('/home')) {
       return (Icons.dashboard_outlined, l.navHome);

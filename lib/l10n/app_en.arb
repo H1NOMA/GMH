@@ -557,5 +557,21 @@
     }
   },
   "deleteWorldBody": "Every entry, document, image and campaign in this world is deleted permanently. Existing backup files are kept.",
-  "worldSection": "World"
+  "worldSection": "World",
+  "navTools": "Tools",
+  "sectionTools": "AT THE TABLE",
+  "toolDice": "Dice Roller",
+  "toolDiceHint": "Any notation — 4d6kh3, 2d20kl1, 3d6!, dF — with presets and a roll log.",
+  "toolCombat": "Combat Tracker",
+  "toolCombatHint": "Initiative order, hit points, conditions and rounds; encounter difficulty.",
+  "toolTables": "Random Tables",
+  "toolTablesHint": "Your own roll tables with weights, dice ranges and nested rolls.",
+  "toolGenerators": "Generators",
+  "toolGeneratorsHint": "Names, NPCs, taverns, loot, weather, rumors — tuned to your setting.",
+  "toolMaps": "Maps",
+  "toolMapsHint": "Interactive maps with pins linked to your entries; nested maps.",
+  "toolTimeline": "Timeline",
+  "toolTimelineHint": "Events and eras of your world in chronological order.",
+  "toolReference": "GM Screen",
+  "toolReferenceHint": "Conditions and quick rules at a glance (SRD 5.2.1)."
 }

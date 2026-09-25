@@ -1184,4 +1184,59 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get worldSection => 'Мир';
+
+  @override
+  String get navTools => 'Инструменты';
+
+  @override
+  String get sectionTools => 'ЗА СТОЛОМ';
+
+  @override
+  String get toolDice => 'Кубы';
+
+  @override
+  String get toolDiceHint =>
+      'Любая нотация — 4d6kh3, 2d20kl1, 3d6!, dF — с пресетами и журналом бросков.';
+
+  @override
+  String get toolCombat => 'Трекер боя';
+
+  @override
+  String get toolCombatHint =>
+      'Инициатива, хиты, состояния и раунды; сложность столкновения.';
+
+  @override
+  String get toolTables => 'Таблицы случайностей';
+
+  @override
+  String get toolTablesHint =>
+      'Свои таблицы бросков с весами, диапазонами и вложенными бросками.';
+
+  @override
+  String get toolGenerators => 'Генераторы';
+
+  @override
+  String get toolGeneratorsHint =>
+      'Имена, NPC, таверны, добыча, погода, слухи — под ваш сеттинг.';
+
+  @override
+  String get toolMaps => 'Карты';
+
+  @override
+  String get toolMapsHint =>
+      'Интерактивные карты с метками, связанными с записями; вложенные карты.';
+
+  @override
+  String get toolTimeline => 'Хронология';
+
+  @override
+  String get toolTimelineHint =>
+      'События и эпохи вашего мира в хронологическом порядке.';
+
+  @override
+  String get toolReference => 'Ширма мастера';
+
+  @override
+  String get toolReferenceHint =>
+      'Состояния и быстрые правила под рукой (SRD 5.2.1).';
 }

@@ -340,5 +340,21 @@
   "worldActions": "Actions du monde",
   "deleteWorldTitle": "Supprimer « {name} » ?",
   "deleteWorldBody": "Toutes les entrées, documents, images et campagnes de ce monde seront supprimés définitivement. Les fichiers de sauvegarde existants sont conservés.",
-  "worldSection": "Monde"
+  "worldSection": "Monde",
+  "navTools": "Outils",
+  "sectionTools": "À LA TABLE",
+  "toolDice": "Dés",
+  "toolDiceHint": "Toute notation — 4d6kh3, 2d20kl1, 3d6!, dF — avec préréglages et historique.",
+  "toolCombat": "Suivi de combat",
+  "toolCombatHint": "Initiative, points de vie, états et rounds ; difficulté de la rencontre.",
+  "toolTables": "Tables aléatoires",
+  "toolTablesHint": "Vos propres tables avec poids, plages de dés et jets imbriqués.",
+  "toolGenerators": "Générateurs",
+  "toolGeneratorsHint": "Noms, PNJ, tavernes, butin, météo, rumeurs — adaptés à votre univers.",
+  "toolMaps": "Cartes",
+  "toolMapsHint": "Cartes interactives avec repères liés à vos entrées ; cartes imbriquées.",
+  "toolTimeline": "Chronologie",
+  "toolTimelineHint": "Événements et ères de votre monde dans l'ordre chronologique.",
+  "toolReference": "Écran du MJ",
+  "toolReferenceHint": "États et règles rapides en un coup d'œil (SRD 5.2.1)."
 }

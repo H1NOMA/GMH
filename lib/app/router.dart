@@ -1,6 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../domain/models/entity_kind.dart';
+import 'tools.dart';
 import '../features/campaigns/campaigns_screen.dart';
 import '../features/entities/entity_list_screen.dart';
 import '../features/entities/entity_screen.dart';
@@ -10,6 +12,7 @@ import '../features/home/home_screen.dart';
 import '../features/search/search_screen.dart';
 import '../features/settings/settings_screen.dart';
 import '../features/shell/app_shell.dart';
+import '../features/tools/tools_hub_screen.dart';
 import '../features/worlds/world_picker_screen.dart';
 
 /// Route helpers so navigation call-sites never build path strings by hand.
@@ -28,11 +31,32 @@ abstract final class Routes {
   static String campaigns(String worldId) => '/w/$worldId/campaigns';
   static String settings(String worldId) => '/w/$worldId/settings';
   static String help(String worldId) => '/w/$worldId/help';
+  static String tools(String worldId) => '/w/$worldId/tools';
+  static String tool(String worldId, String toolId, [String? objectId]) =>
+      '/w/$worldId/tools/$toolId${objectId == null ? '' : '/$objectId'}';
+}
+
+/// One page builder for every tool; an unknown tool id (a stale restored
+/// location from another app version) falls back to the Tools hub.
+Page<void> _toolPage(GoRouterState state, {required String? objectId}) {
+  final worldId = state.pathParameters['worldId']!;
+  final tool = toolById(state.pathParameters['toolId'] ?? '');
+  return NoTransitionPage(
+    // Keyed by object: switching encounters/maps inside one tab must not
+    // reuse the previous object's page state.
+    key: ValueKey(state.uri.path),
+    child: tool == null
+        ? ToolsHubScreen(worldId: worldId)
+        : tool.builder(worldId, objectId),
+  );
 }
 
 GoRouter createRouter({required String initialLocation}) {
   return GoRouter(
     initialLocation: initialLocation,
+    // A location that matches no route (e.g. restored from an older app
+    // version) lands on the world picker instead of an error page.
+    onException: (context, state, router) => router.go(Routes.worlds()),
     routes: [
       GoRoute(
         path: '/',
@@ -115,6 +139,22 @@ GoRouter createRouter({required String initialLocation}) {
               child:
                   SettingsScreen(worldId: state.pathParameters['worldId']!),
             ),
+          ),
+          GoRoute(
+            path: '/w/:worldId/tools',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: ToolsHubScreen(worldId: state.pathParameters['worldId']!),
+            ),
+          ),
+          GoRoute(
+            path: '/w/:worldId/tools/:toolId',
+            pageBuilder: (context, state) =>
+                _toolPage(state, objectId: null),
+          ),
+          GoRoute(
+            path: '/w/:worldId/tools/:toolId/:objectId',
+            pageBuilder: (context, state) => _toolPage(state,
+                objectId: state.pathParameters['objectId']),
           ),
           GoRoute(
             path: '/w/:worldId/help',

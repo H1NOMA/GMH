@@ -26,6 +26,7 @@ import 'package:gmh/app/locale_provider.dart';
 import 'package:gmh/app/providers.dart';
 import 'package:gmh/app/router.dart';
 import 'package:gmh/app/theme_provider.dart';
+import 'package:gmh/app/tools.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/domain/models/world.dart';
 
@@ -75,6 +76,10 @@ final _routes = <_Route>[
   _Route('campaigns', (d) => Routes.campaigns(d.worldId)),
   _Route('settings', (d) => Routes.settings(d.worldId)),
   _Route('help', (d) => Routes.help(d.worldId)),
+  _Route('tools', (d) => Routes.tools(d.worldId)),
+  for (final tool in gmhTools)
+    _Route('tool:${tool.id}', (d) => Routes.tool(d.worldId, tool.id)),
+  _Route('unknown-route', (d) => '/w/${d.worldId}/no-such-page'),
   // Cyberpunk world: same screens, different palette + vocabulary.
   _Route('cyber:home', (d) => Routes.home(d.cyberWorldId), cyber: true),
   _Route('cyber:browse:character',

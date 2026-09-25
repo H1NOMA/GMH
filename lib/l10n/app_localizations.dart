@@ -2149,6 +2149,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'World'**
   String get worldSection;
+
+  /// No description provided for @navTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get navTools;
+
+  /// No description provided for @sectionTools.
+  ///
+  /// In en, this message translates to:
+  /// **'AT THE TABLE'**
+  String get sectionTools;
+
+  /// No description provided for @toolDice.
+  ///
+  /// In en, this message translates to:
+  /// **'Dice Roller'**
+  String get toolDice;
+
+  /// No description provided for @toolDiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Any notation — 4d6kh3, 2d20kl1, 3d6!, dF — with presets and a roll log.'**
+  String get toolDiceHint;
+
+  /// No description provided for @toolCombat.
+  ///
+  /// In en, this message translates to:
+  /// **'Combat Tracker'**
+  String get toolCombat;
+
+  /// No description provided for @toolCombatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Initiative order, hit points, conditions and rounds; encounter difficulty.'**
+  String get toolCombatHint;
+
+  /// No description provided for @toolTables.
+  ///
+  /// In en, this message translates to:
+  /// **'Random Tables'**
+  String get toolTables;
+
+  /// No description provided for @toolTablesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own roll tables with weights, dice ranges and nested rolls.'**
+  String get toolTablesHint;
+
+  /// No description provided for @toolGenerators.
+  ///
+  /// In en, this message translates to:
+  /// **'Generators'**
+  String get toolGenerators;
+
+  /// No description provided for @toolGeneratorsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Names, NPCs, taverns, loot, weather, rumors — tuned to your setting.'**
+  String get toolGeneratorsHint;
+
+  /// No description provided for @toolMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Maps'**
+  String get toolMaps;
+
+  /// No description provided for @toolMapsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive maps with pins linked to your entries; nested maps.'**
+  String get toolMapsHint;
+
+  /// No description provided for @toolTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get toolTimeline;
+
+  /// No description provided for @toolTimelineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Events and eras of your world in chronological order.'**
+  String get toolTimelineHint;
+
+  /// No description provided for @toolReference.
+  ///
+  /// In en, this message translates to:
+  /// **'GM Screen'**
+  String get toolReference;
+
+  /// No description provided for @toolReferenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions and quick rules at a glance (SRD 5.2.1).'**
+  String get toolReferenceHint;
 }
 
 class _AppLocalizationsDelegate

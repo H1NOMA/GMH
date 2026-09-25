@@ -13,6 +13,7 @@ import '../../app/nav_state.dart';
 import '../categories/category_ui.dart';
 import '../tags/tag_manager_sheet.dart';
 import '../categories/manage_categories_sheet.dart';
+import '../../app/tools.dart';
 import 'history_buttons.dart';
 import 'tab_strip.dart';
 import 'ui_providers.dart';
@@ -86,18 +87,30 @@ class AppShell extends ConsumerWidget {
   }
 }
 
-enum _Section { home, search, graph, campaigns, settings }
+enum _Section { home, search, graph, campaigns, tools, settings }
 
 /// Null when no top-level section matches (browsing a kind, a category or
-/// an entry) — the rail/bottom nav must not highlight "Home" then.
+/// an entry) — the rail/bottom nav must not highlight "Home" then. Matches
+/// on the path segment after the world id, never on substrings: a world or
+/// entry id containing "graph" must not light up the Graph tab.
 _Section? _currentSection(BuildContext context) {
-  final location = GoRouterState.of(context).uri.path;
-  if (location.contains('/search')) return _Section.search;
-  if (location.contains('/graph')) return _Section.graph;
-  if (location.contains('/campaigns')) return _Section.campaigns;
-  if (location.contains('/settings')) return _Section.settings;
-  if (location.endsWith('/home')) return _Section.home;
-  return null;
+  final segments = GoRouterState.of(context).uri.pathSegments;
+  if (segments.length < 3) return null;
+  return switch (segments[2]) {
+    'home' => _Section.home,
+    'search' => _Section.search,
+    'graph' => _Section.graph,
+    'campaigns' => _Section.campaigns,
+    'tools' => _Section.tools,
+    'settings' => _Section.settings,
+    _ => null,
+  };
+}
+
+/// The active tool id when a tool page is open.
+String? _currentToolId(BuildContext context) {
+  final segments = GoRouterState.of(context).uri.pathSegments;
+  return segments.length >= 4 && segments[2] == 'tools' ? segments[3] : null;
 }
 
 String _sectionRoute(String worldId, _Section section) => switch (section) {
@@ -105,23 +118,12 @@ String _sectionRoute(String worldId, _Section section) => switch (section) {
       _Section.search => Routes.search(worldId),
       _Section.graph => Routes.graph(worldId),
       _Section.campaigns => Routes.campaigns(worldId),
+      _Section.tools => Routes.tools(worldId),
       _Section.settings => Routes.settings(worldId),
     };
 
-void _goToSection(BuildContext context, String worldId, _Section section) {
-  switch (section) {
-    case _Section.home:
-      context.go(Routes.home(worldId));
-    case _Section.search:
-      context.go(Routes.search(worldId));
-    case _Section.graph:
-      context.go(Routes.graph(worldId));
-    case _Section.campaigns:
-      context.go(Routes.campaigns(worldId));
-    case _Section.settings:
-      context.go(Routes.settings(worldId));
-  }
-}
+void _goToSection(BuildContext context, String worldId, _Section section) =>
+    context.go(_sectionRoute(worldId, section));
 
 // ---------------------------------------------------------------- sidebar
 
@@ -183,11 +185,26 @@ class _Sidebar extends ConsumerWidget {
                       .read(sidebarOrderProvider('$worldId|nav').notifier)
                       .setOrder(order),
                 ),
-                _SectionHeader(context.l10n.sectionWorld),
-                _kindGroup(ref, 'worldKinds', EntityKind.worldKinds, counts),
-                _SectionHeader(context.l10n.sectionLibrary),
-                _kindGroup(
-                    ref, 'libraryKinds', EntityKind.libraryKinds, counts),
+                _CollapsibleSection(
+                  worldId: worldId,
+                  group: 'worldKinds',
+                  label: context.l10n.sectionWorld,
+                  child: _kindGroup(
+                      ref, 'worldKinds', EntityKind.worldKinds, counts),
+                ),
+                _CollapsibleSection(
+                  worldId: worldId,
+                  group: 'tools',
+                  label: context.l10n.sectionTools,
+                  child: _toolGroup(context, ref),
+                ),
+                _CollapsibleSection(
+                  worldId: worldId,
+                  group: 'libraryKinds',
+                  label: context.l10n.sectionLibrary,
+                  child: _kindGroup(
+                      ref, 'libraryKinds', EntityKind.libraryKinds, counts),
+                ),
                 _CategoriesSection(worldId: worldId),
               ],
             ),
@@ -261,6 +278,30 @@ extension on _Sidebar {
     }
   }
 
+  Widget _toolGroup(BuildContext context, WidgetRef ref) {
+    final activeTool = _currentToolId(context);
+    return _DraggableGroup(
+      ids: applySidebarOrder(
+        [for (final t in gmhTools) t.id],
+        ref.watch(sidebarOrderProvider('$worldId|tools')),
+      ),
+      itemBuilder: (id) {
+        final tool = toolById(id)!;
+        return _NavTile(
+          icon: tool.icon,
+          label: tool.label(context.l10n),
+          selected: activeTool == id,
+          onTap: () => ref
+              .read(workspaceTabsProvider.notifier)
+              .openInNewTab(Routes.tool(worldId, id)),
+        );
+      },
+      onReorder: (order) => ref
+          .read(sidebarOrderProvider('$worldId|tools').notifier)
+          .setOrder(order),
+    );
+  }
+
   Widget _kindGroup(WidgetRef ref, String group, List<EntityKind> kinds,
       Map<EntityKind, int> counts) {
     final byName = {for (final k in kinds) k.name: k};
@@ -326,21 +367,89 @@ class _DraggableGroup extends StatelessWidget {
   }
 }
 
+/// A sidebar section whose header toggles it open/closed (persisted per
+/// world and group).
+class _CollapsibleSection extends ConsumerWidget {
+  final String worldId;
+  final String group;
+  final String label;
+  final Widget child;
+
+  const _CollapsibleSection({
+    required this.worldId,
+    required this.group,
+    required this.label,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final key = '$worldId|$group';
+    final collapsed = ref.watch(sidebarCollapsedProvider(key));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _SectionHeader(
+          label,
+          collapsed: collapsed,
+          onTap: () =>
+              ref.read(sidebarCollapsedProvider(key).notifier).toggle(),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 160),
+          alignment: Alignment.topCenter,
+          child: collapsed ? const SizedBox(width: double.infinity) : child,
+        ),
+      ],
+    );
+  }
+}
+
 class _SectionHeader extends StatelessWidget {
   final String label;
-  const _SectionHeader(this.label);
+
+  /// When set, the header is a toggle showing a chevron.
+  final bool? collapsed;
+  final VoidCallback? onTap;
+  const _SectionHeader(this.label, {this.collapsed, this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final text = Text(
+      label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: 10.5,
+        letterSpacing: 1.6,
+        fontWeight: FontWeight.w700,
+        color: GmhColors.parchmentFaint,
+      ),
+    );
+    if (onTap == null) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
+        child: text,
+      );
+    }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 10.5,
-          letterSpacing: 1.6,
-          fontWeight: FontWeight.w700,
-          color: GmhColors.parchmentFaint,
+      padding: const EdgeInsets.fromLTRB(8, 12, 8, 2),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(6),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 6, 4, 6),
+          child: Row(
+            children: [
+              Expanded(child: text),
+              AnimatedRotation(
+                turns: collapsed == true ? -0.25 : 0,
+                duration: const Duration(milliseconds: 160),
+                child: Icon(Icons.expand_more,
+                    size: 16, color: GmhColors.parchmentFaint),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -552,6 +661,9 @@ class _Rail extends ConsumerWidget {
             icon: const Icon(Icons.map_outlined),
             label: Text(context.l10n.navCampaigns)),
         NavigationRailDestination(
+            icon: const Icon(Icons.handyman_outlined),
+            label: Text(context.l10n.navTools)),
+        NavigationRailDestination(
             icon: const Icon(Icons.settings_outlined),
             label: Text(context.l10n.navSettingsShort)),
       ],
@@ -582,12 +694,15 @@ class _BottomNav extends StatelessWidget {
               child: NavigationBar(
                 // NavigationBar can't render "nothing selected"; hide the
                 // indicator instead when no top-level section is active.
-                selectedIndex: section?.index ?? 0,
-                indicatorColor:
-                    section == null ? Colors.transparent : null,
+                selectedIndex: _phoneSections.contains(section)
+                    ? _phoneSections.indexOf(section!)
+                    : 0,
+                indicatorColor: _phoneSections.contains(section)
+                    ? null
+                    : Colors.transparent,
                 height: 64,
                 onDestinationSelected: (index) =>
-                    _goToSection(context, worldId, _Section.values[index]),
+                    _goToSection(context, worldId, _phoneSections[index]),
                 destinations: _destinations(context),
               ),
             ),
@@ -597,6 +712,15 @@ class _BottomNav extends StatelessWidget {
     );
   }
 
+  /// Five slots fit a phone: the graph stays reachable from the dashboard.
+  static const _phoneSections = [
+    _Section.home,
+    _Section.search,
+    _Section.campaigns,
+    _Section.tools,
+    _Section.settings,
+  ];
+
   List<NavigationDestination> _destinations(BuildContext context) => [
         NavigationDestination(
             icon: const Icon(Icons.dashboard_outlined),
@@ -604,11 +728,11 @@ class _BottomNav extends StatelessWidget {
         NavigationDestination(
             icon: const Icon(Icons.search), label: context.l10n.navSearch),
         NavigationDestination(
-            icon: const Icon(Icons.hub_outlined),
-            label: context.l10n.navGraphShort),
-        NavigationDestination(
             icon: const Icon(Icons.map_outlined),
             label: context.l10n.navCampaigns),
+        NavigationDestination(
+            icon: const Icon(Icons.handyman_outlined),
+            label: context.l10n.navTools),
         NavigationDestination(
             icon: const Icon(Icons.settings_outlined),
             label: context.l10n.navSettingsShort),

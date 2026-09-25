@@ -1178,4 +1178,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get worldSection => 'World';
+
+  @override
+  String get navTools => 'Tools';
+
+  @override
+  String get sectionTools => 'AT THE TABLE';
+
+  @override
+  String get toolDice => 'Dice Roller';
+
+  @override
+  String get toolDiceHint =>
+      'Any notation — 4d6kh3, 2d20kl1, 3d6!, dF — with presets and a roll log.';
+
+  @override
+  String get toolCombat => 'Combat Tracker';
+
+  @override
+  String get toolCombatHint =>
+      'Initiative order, hit points, conditions and rounds; encounter difficulty.';
+
+  @override
+  String get toolTables => 'Random Tables';
+
+  @override
+  String get toolTablesHint =>
+      'Your own roll tables with weights, dice ranges and nested rolls.';
+
+  @override
+  String get toolGenerators => 'Generators';
+
+  @override
+  String get toolGeneratorsHint =>
+      'Names, NPCs, taverns, loot, weather, rumors — tuned to your setting.';
+
+  @override
+  String get toolMaps => 'Maps';
+
+  @override
+  String get toolMapsHint =>
+      'Interactive maps with pins linked to your entries; nested maps.';
+
+  @override
+  String get toolTimeline => 'Timeline';
+
+  @override
+  String get toolTimelineHint =>
+      'Events and eras of your world in chronological order.';
+
+  @override
+  String get toolReference => 'GM Screen';
+
+  @override
+  String get toolReferenceHint =>
+      'Conditions and quick rules at a glance (SRD 5.2.1).';
 }

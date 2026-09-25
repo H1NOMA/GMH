@@ -228,6 +228,34 @@ final sidebarOrderProvider =
     NotifierProvider.family<SidebarOrderController, List<String>, String>(
         SidebarOrderController.new);
 
+/// Collapsed state of a sidebar section (`'<worldId>|<group>'`), toggled by
+/// clicking its header; persisted like the order.
+class SidebarCollapsedController extends FamilyNotifier<bool, String> {
+  String get _key =>
+      '${SettingsKeys.sidebarCollapsed}.${arg.replaceAll('|', '.')}';
+  bool _touched = false;
+
+  @override
+  bool build(String key) {
+    _touched = false;
+    Future.microtask(() async {
+      final saved = await ref.read(settingsRepositoryProvider).get(_key);
+      if (saved == 'true' && !_touched) state = true;
+    });
+    return false;
+  }
+
+  void toggle() {
+    _touched = true;
+    state = !state;
+    ref.read(settingsRepositoryProvider).set(_key, '$state');
+  }
+}
+
+final sidebarCollapsedProvider =
+    NotifierProvider.family<SidebarCollapsedController, bool, String>(
+        SidebarCollapsedController.new);
+
 /// Applies a saved order to the canonical id list: unknown saved ids are
 /// dropped, new canonical ids are appended — so app updates that add tabs
 /// keep working with an old saved order.

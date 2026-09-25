@@ -340,5 +340,21 @@
   "worldActions": "世界操作",
   "deleteWorldTitle": "删除“{name}”？",
   "deleteWorldBody": "此世界中的所有条目、文档、图片和战役都将被永久删除。已有的备份文件会保留。",
-  "worldSection": "世界"
+  "worldSection": "世界",
+  "navTools": "工具",
+  "sectionTools": "跑团工具",
+  "toolDice": "掷骰",
+  "toolDiceHint": "支持任意记法——4d6kh3、2d20kl1、3d6!、dF——含预设与掷骰记录。",
+  "toolCombat": "战斗追踪",
+  "toolCombatHint": "先攻顺序、生命值、状态与回合；遭遇难度计算。",
+  "toolTables": "随机表",
+  "toolTablesHint": "自定义掷骰表，支持权重、骰值区间与嵌套掷骰。",
+  "toolGenerators": "生成器",
+  "toolGeneratorsHint": "姓名、NPC、酒馆、战利品、天气、传闻——贴合你的设定。",
+  "toolMaps": "地图",
+  "toolMapsHint": "带有条目标记的交互式地图，支持嵌套地图。",
+  "toolTimeline": "时间线",
+  "toolTimelineHint": "按时间顺序排列的世界事件与纪元。",
+  "toolReference": "主持人屏风",
+  "toolReferenceHint": "状态与速查规则一目了然（SRD 5.2.1）。"
 }

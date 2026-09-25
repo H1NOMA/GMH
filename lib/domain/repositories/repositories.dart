@@ -293,6 +293,7 @@ abstract final class SettingsKeys {
 
   /// User-defined sidebar tab order (`sidebarOrder.<worldId>.<group>`).
   static const sidebarOrder = 'sidebarOrder';
+  static const sidebarCollapsed = 'ui.sidebarCollapsed';
 
   /// Grid/list view per entity list (`listViewMode.<worldId>|<scope>`).
   static const listViewMode = 'listViewMode';

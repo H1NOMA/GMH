@@ -1184,4 +1184,59 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get worldSection => 'Welt';
+
+  @override
+  String get navTools => 'Werkzeuge';
+
+  @override
+  String get sectionTools => 'AM SPIELTISCH';
+
+  @override
+  String get toolDice => 'Würfel';
+
+  @override
+  String get toolDiceHint =>
+      'Jede Notation — 4d6kh3, 2d20kl1, 3d6!, dF — mit Vorlagen und Wurfprotokoll.';
+
+  @override
+  String get toolCombat => 'Kampfverwaltung';
+
+  @override
+  String get toolCombatHint =>
+      'Initiative, Trefferpunkte, Zustände und Runden; Begegnungsschwierigkeit.';
+
+  @override
+  String get toolTables => 'Zufallstabellen';
+
+  @override
+  String get toolTablesHint =>
+      'Eigene Würfeltabellen mit Gewichtung, Bereichen und verschachtelten Würfen.';
+
+  @override
+  String get toolGenerators => 'Generatoren';
+
+  @override
+  String get toolGeneratorsHint =>
+      'Namen, NSCs, Tavernen, Beute, Wetter, Gerüchte — passend zum Setting.';
+
+  @override
+  String get toolMaps => 'Karten';
+
+  @override
+  String get toolMapsHint =>
+      'Interaktive Karten mit Markierungen zu deinen Einträgen; verschachtelte Karten.';
+
+  @override
+  String get toolTimeline => 'Zeitleiste';
+
+  @override
+  String get toolTimelineHint =>
+      'Ereignisse und Zeitalter deiner Welt in zeitlicher Reihenfolge.';
+
+  @override
+  String get toolReference => 'Meisterschirm';
+
+  @override
+  String get toolReferenceHint =>
+      'Zustände und Schnellregeln auf einen Blick (SRD 5.2.1).';
 }
