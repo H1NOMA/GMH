@@ -2264,4 +2264,12 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get helpTrashBody =>
       '删除的条目会移入回收站（侧边栏或“设置 → 世界”）——删除后也可以立即点击“撤销”。之后可以恢复，或永久删除。条目菜单中的“复制”会连同字段、标签、图片和正文一起复制。“设置 → 导出”可生成完整归档（.gmhw，用于备份和跨设备迁移）、JSON、可打印的 PDF 世界书，或可作为 Obsidian 库打开且 [[链接]] 可用的 Markdown 笔记；仅主持人可见的字段默认不导出，除非你选择包含。';
+
+  @override
+  String get newSessionAction => '新场次';
+
+  @override
+  String sessionNumberName(int number) {
+    return '第 $number 场';
+  }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gmh/domain/models/entity.dart';
+import 'package:gmh/features/campaigns/campaigns_screen.dart';
 import 'package:gmh/app/template_l10n.dart';
 import 'package:gmh/core/utils/ids.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
@@ -134,5 +136,23 @@ void main() {
       expect([for (final t in terms) if (trTemplateFor(lang, t) == t) t],
           isEmpty, reason: lang);
     }
+  });
+
+  test('next session number follows the highest one in use', () {
+    Entity session(String name) => Entity(
+        id: name,
+        worldId: 'w',
+        kind: EntityKind.session,
+        name: name,
+        createdAt: 0,
+        updatedAt: 0);
+    expect(nextSessionNumber(const []), 1);
+    expect(
+        nextSessionNumber([
+          session('Session 12 — The Storm'),
+          session('Session 10 — The Broken Oath'),
+        ]),
+        13);
+    expect(nextSessionNumber([session('Prologue')]), 2);
   });
 }

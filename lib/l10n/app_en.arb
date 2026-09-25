@@ -1220,5 +1220,14 @@
   "helpFieldsTitle": "Your own fields",
   "helpFieldsBody": "Built-in sections can carry extra fields for your game: open a section (Characters, Locations…) and click Customize fields in its toolbar. Add text, numbers, dates, lists, checklists or choices; they appear on every entry of that section in this world, after the built-in fields, and are included in search, the PDF book and the Markdown export. Custom sections define all of their fields in the section constructor.",
   "helpTrashTitle": "Trash, copies and exports",
-  "helpTrashBody": "Deleting an entry moves it to the Trash (sidebar, or Settings → World) — right after deleting you can also press Undo. Restore it later or delete it for good. The entry menu can Duplicate an entry with its fields, tags, pictures and lore. Settings → Export writes a full archive (.gmhw, for backups and moving between devices), JSON, a printable PDF world book, or Markdown notes that open as an Obsidian vault with working [[links]]; GM-only fields are left out unless you include them."
+  "helpTrashBody": "Deleting an entry moves it to the Trash (sidebar, or Settings → World) — right after deleting you can also press Undo. Restore it later or delete it for good. The entry menu can Duplicate an entry with its fields, tags, pictures and lore. Settings → Export writes a full archive (.gmhw, for backups and moving between devices), JSON, a printable PDF world book, or Markdown notes that open as an Obsidian vault with working [[links]]; GM-only fields are left out unless you include them.",
+  "newSessionAction": "New session",
+  "sessionNumberName": "Session {number}",
+  "@sessionNumberName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -2352,4 +2352,12 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get helpTrashBody =>
       'Une entrée supprimée va dans la corbeille (barre latérale ou Paramètres → Monde) — juste après, vous pouvez aussi toucher « Annuler ». Restaurez-la plus tard ou supprimez-la définitivement. Le menu d’une entrée permet de la dupliquer avec ses champs, tags, images et texte. Paramètres → Export produit une archive complète (.gmhw, pour les sauvegardes et le changement d’appareil), du JSON, un livre PDF imprimable ou des notes Markdown qui s’ouvrent comme un coffre Obsidian avec des [[liens]] fonctionnels ; les champs réservés au MJ sont exclus sauf si vous les incluez.';
+
+  @override
+  String get newSessionAction => 'Nouvelle séance';
+
+  @override
+  String sessionNumberName(int number) {
+    return 'Séance $number';
+  }
 }

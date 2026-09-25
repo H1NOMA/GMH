@@ -4117,6 +4117,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deleting an entry moves it to the Trash (sidebar, or Settings → World) — right after deleting you can also press Undo. Restore it later or delete it for good. The entry menu can Duplicate an entry with its fields, tags, pictures and lore. Settings → Export writes a full archive (.gmhw, for backups and moving between devices), JSON, a printable PDF world book, or Markdown notes that open as an Obsidian vault with working [[links]]; GM-only fields are left out unless you include them.'**
   String get helpTrashBody;
+
+  /// No description provided for @newSessionAction.
+  ///
+  /// In en, this message translates to:
+  /// **'New session'**
+  String get newSessionAction;
+
+  /// No description provided for @sessionNumberName.
+  ///
+  /// In en, this message translates to:
+  /// **'Session {number}'**
+  String sessionNumberName(int number);
 }
 
 class _AppLocalizationsDelegate

@@ -2340,4 +2340,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get helpTrashBody =>
       'Deleting an entry moves it to the Trash (sidebar, or Settings → World) — right after deleting you can also press Undo. Restore it later or delete it for good. The entry menu can Duplicate an entry with its fields, tags, pictures and lore. Settings → Export writes a full archive (.gmhw, for backups and moving between devices), JSON, a printable PDF world book, or Markdown notes that open as an Obsidian vault with working [[links]]; GM-only fields are left out unless you include them.';
+
+  @override
+  String get newSessionAction => 'New session';
+
+  @override
+  String sessionNumberName(int number) {
+    return 'Session $number';
+  }
 }

@@ -2351,4 +2351,12 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get helpTrashBody =>
       'Ein gelöschter Eintrag landet im Papierkorb (Seitenleiste oder Einstellungen → Welt) – direkt nach dem Löschen kannst du auch „Rückgängig“ drücken. Später lässt er sich wiederherstellen oder endgültig löschen. Im Eintragsmenü kannst du einen Eintrag samt Feldern, Tags, Bildern und Text duplizieren. Einstellungen → Export erstellt ein vollständiges Archiv (.gmhw, für Backups und Gerätewechsel), JSON, ein druckbares PDF-Weltbuch oder Markdown-Notizen, die sich als Obsidian-Vault mit funktionierenden [[Links]] öffnen; SL-Felder bleiben draußen, außer du nimmst sie mit.';
+
+  @override
+  String get newSessionAction => 'Neue Sitzung';
+
+  @override
+  String sessionNumberName(int number) {
+    return 'Sitzung $number';
+  }
 }

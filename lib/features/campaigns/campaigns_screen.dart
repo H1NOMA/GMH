@@ -335,8 +335,41 @@ class _CampaignDashboard extends ConsumerWidget {
         else
           _QuestBoard(worldId: worldId, quests: quests),
         const SizedBox(height: 24),
-        Text(context.l10n.sessionLog,
-            style: Theme.of(context).textTheme.titleLarge),
+        Row(
+          children: [
+            Expanded(
+              child: Text(context.l10n.sessionLog,
+                  style: Theme.of(context).textTheme.titleLarge),
+            ),
+            // The next session in one click: numbered, dated today,
+            // already part of this campaign.
+            TextButton.icon(
+              icon: const Icon(Icons.add, size: 18),
+              label: Text(context.l10n.newSessionAction),
+              onPressed: () async {
+                final service = ref.read(entityServiceProvider);
+                final router = GoRouter.of(context);
+                final now = DateTime.now();
+                final date = '${now.year}-'
+                    '${now.month.toString().padLeft(2, '0')}-'
+                    '${now.day.toString().padLeft(2, '0')}';
+                final result = await service.create(
+                  worldId: worldId,
+                  kind: EntityKind.session,
+                  name: context.l10n
+                      .sessionNumberName(nextSessionNumber(sessions)),
+                  attributes: {
+                    'campaign': '$entityRefPrefix${campaign.id}',
+                    'date': date,
+                  },
+                );
+                if (result.isOk) {
+                  router.go(Routes.entity(worldId, result.value.id));
+                }
+              },
+            ),
+          ],
+        ),
         const SizedBox(height: 10),
         if (sessions.isEmpty)
           Text(context.l10n.noSessions,
@@ -551,4 +584,16 @@ class _SessionCard extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// The number for the next session: one past the highest number found in
+/// existing session names ("Session 12 — The Storm" → 13), else count + 1.
+int nextSessionNumber(List<Entity> sessions) {
+  var highest = 0;
+  for (final session in sessions) {
+    final match = RegExp(r'(\d+)').firstMatch(session.name);
+    final n = int.tryParse(match?.group(1) ?? '');
+    if (n != null && n > highest && n < 100000) highest = n;
+  }
+  return (highest > 0 ? highest : sessions.length) + 1;
 }
