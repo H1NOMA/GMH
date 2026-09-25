@@ -2498,4 +2498,343 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get gmScreenAttribution =>
       'Résumés de règles d’après le SRD 5.2.1 (CC BY 4.0)';
+
+  @override
+  String get mapsEmptyTitle => 'Aucune carte';
+
+  @override
+  String get mapsEmptyHint =>
+      'Importez une image de carte ou partez d’une feuille vierge, puis placez des repères liés à vos fiches.';
+
+  @override
+  String get mapsNewFromImage => 'Carte depuis une image';
+
+  @override
+  String get mapsNewBlank => 'Carte vierge';
+
+  @override
+  String mapsDefaultName(int number) {
+    return 'Carte $number';
+  }
+
+  @override
+  String mapsPinCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count repères',
+      one: '1 repère',
+      zero: 'Aucun repère',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mapsRenameTitle => 'Renommer la carte';
+
+  @override
+  String get mapsDuplicate => 'Dupliquer';
+
+  @override
+  String mapsCopyName(String name) {
+    return '$name (copie)';
+  }
+
+  @override
+  String mapsDeleteTitle(String name) {
+    return 'Supprimer « $name » ?';
+  }
+
+  @override
+  String get mapsDeleteBody =>
+      'La carte et tous ses repères seront supprimés. Les fiches liées sont conservées.';
+
+  @override
+  String get mapsActions => 'Actions de la carte';
+
+  @override
+  String get mapsAllMaps => 'Toutes les cartes';
+
+  @override
+  String get mapsMissing => 'Cette carte n’existe plus.';
+
+  @override
+  String get mapsImportFailed => 'Impossible d’ouvrir ce fichier comme image.';
+
+  @override
+  String get mapsChangeImage => 'Changer l’image';
+
+  @override
+  String get mapsImageMissing => 'L’image de la carte est introuvable';
+
+  @override
+  String get mapsImageMissingHint =>
+      'Les repères fonctionnent toujours. Choisissez une nouvelle image pour le fond.';
+
+  @override
+  String get mapsModeSelect => 'Sélection';
+
+  @override
+  String get mapsModeAdd => 'Ajouter un repère';
+
+  @override
+  String get mapsModeMeasure => 'Mesurer';
+
+  @override
+  String get mapsAddHint => 'Touchez la carte pour placer un repère.';
+
+  @override
+  String get mapsMeasureHint => 'Touchez deux points pour mesurer.';
+
+  @override
+  String get mapsMeasureNoScale => 'Pas d’échelle : distance en pixels.';
+
+  @override
+  String mapsDistance(String distance) {
+    return 'Distance : $distance';
+  }
+
+  @override
+  String mapsPixels(String value) {
+    return '$value px';
+  }
+
+  @override
+  String get mapsMeasureRule => 'Règle des diagonales';
+
+  @override
+  String get mapsRuleStraight => 'Ligne droite';
+
+  @override
+  String get mapsRuleGrid => 'Grille : diagonale = 1 case';
+
+  @override
+  String get mapsRuleAlternating => 'Grille : diagonales 1-2-1';
+
+  @override
+  String get mapsFit => 'Ajuster à l’écran';
+
+  @override
+  String get mapsZoomIn => 'Zoom avant';
+
+  @override
+  String get mapsZoomOut => 'Zoom arrière';
+
+  @override
+  String get mapsPlayerView => 'Vue joueurs';
+
+  @override
+  String get mapsExitPlayerView => 'Quitter la vue joueurs';
+
+  @override
+  String get mapsPanel => 'Repères et détails';
+
+  @override
+  String get mapsPinsTab => 'Repères';
+
+  @override
+  String get mapsDetailsTab => 'Détails';
+
+  @override
+  String get mapsSearchPins => 'Chercher un repère';
+
+  @override
+  String get mapsNoPins =>
+      'Aucun repère. Choisissez « Ajouter un repère » et touchez la carte.';
+
+  @override
+  String get mapsNoPinMatches => 'Aucun repère ne correspond.';
+
+  @override
+  String get mapsNewPin => 'Nouveau repère';
+
+  @override
+  String get mapsEditPin => 'Modifier le repère';
+
+  @override
+  String get mapsPinLabel => 'Libellé';
+
+  @override
+  String get mapsPinIcon => 'Symbole';
+
+  @override
+  String get mapsPinColor => 'Couleur';
+
+  @override
+  String get mapsPinNotes => 'Notes';
+
+  @override
+  String get mapsPinGmOnly => 'MJ seulement';
+
+  @override
+  String get mapsPinGmOnlyHint => 'Masqué dans la vue joueurs';
+
+  @override
+  String get mapsLinkedEntry => 'Fiche liée';
+
+  @override
+  String get mapsLinkEntry => 'Lier une fiche';
+
+  @override
+  String get mapsChangeEntry => 'Changer';
+
+  @override
+  String get mapsUnlink => 'Délier';
+
+  @override
+  String get mapsOpenEntry => 'Ouvrir la fiche';
+
+  @override
+  String get mapsEntryMissing => 'La fiche liée a été supprimée';
+
+  @override
+  String get mapsDeletePin => 'Supprimer';
+
+  @override
+  String get mapsPinDeleted => 'Repère supprimé';
+
+  @override
+  String get mapsUntitledPin => 'Repère sans nom';
+
+  @override
+  String get mapsDescription => 'Description';
+
+  @override
+  String get mapsNoDescription => 'Aucune description.';
+
+  @override
+  String get mapsScale => 'Échelle';
+
+  @override
+  String get mapsNoScale => 'Aucune échelle';
+
+  @override
+  String mapsScaleValue(String units, String unit, String px) {
+    return '1 case = $units $unit ($px px)';
+  }
+
+  @override
+  String get mapsScaleHelp =>
+      'Une case de la grille couvre cette distance. Laissez les nombres vides pour une carte sans échelle.';
+
+  @override
+  String get mapsScaleInvalid =>
+      'Saisissez des nombres positifs pour la distance et la taille de case.';
+
+  @override
+  String get mapsUnitsPerCell => 'Distance par case';
+
+  @override
+  String get mapsUnitName => 'Unité';
+
+  @override
+  String get mapsUnitHint => 'lieues, km, pieds…';
+
+  @override
+  String get mapsCellPx => 'Case (px)';
+
+  @override
+  String get mapsShowGrid => 'Afficher la grille';
+
+  @override
+  String get mapsGridNeedsScale =>
+      'Définissez une échelle pour afficher la grille.';
+
+  @override
+  String get mapsPinsVisibleDefault => 'Nouveaux repères visibles des joueurs';
+
+  @override
+  String get mapsEditDetails => 'Modifier les détails';
+
+  @override
+  String get mapsDetailsTitle => 'Détails de la carte';
+
+  @override
+  String mapsImageSize(int width, int height) {
+    return '$width × $height px';
+  }
+
+  @override
+  String get mapsBlankCanvas => 'Feuille vierge';
+
+  @override
+  String get mapsOnMaps => 'Sur les cartes';
+
+  @override
+  String get mapsIconPin => 'Repère';
+
+  @override
+  String get mapsIconCastle => 'Château';
+
+  @override
+  String get mapsIconTown => 'Ville';
+
+  @override
+  String get mapsIconDungeon => 'Donjon';
+
+  @override
+  String get mapsIconCave => 'Grotte';
+
+  @override
+  String get mapsIconForest => 'Forêt';
+
+  @override
+  String get mapsIconMountain => 'Montagne';
+
+  @override
+  String get mapsIconPort => 'Port';
+
+  @override
+  String get mapsIconDanger => 'Danger';
+
+  @override
+  String get mapsIconTreasure => 'Trésor';
+
+  @override
+  String get mapsIconQuest => 'Quête';
+
+  @override
+  String get mapsIconCamp => 'Camp';
+
+  @override
+  String get mapsIconNpc => 'Personnage';
+
+  @override
+  String get mapsIconPortal => 'Portail';
+
+  @override
+  String get mapsIconNote => 'Note';
+
+  @override
+  String get mapsColorAuto => 'Automatique (couleur de la fiche)';
+
+  @override
+  String get mapsColorAccent => 'Accent';
+
+  @override
+  String get mapsColorRed => 'Rouge';
+
+  @override
+  String get mapsColorOrange => 'Orange';
+
+  @override
+  String get mapsColorYellow => 'Jaune';
+
+  @override
+  String get mapsColorGreen => 'Vert';
+
+  @override
+  String get mapsColorTeal => 'Sarcelle';
+
+  @override
+  String get mapsColorBlue => 'Bleu';
+
+  @override
+  String get mapsColorPurple => 'Violet';
+
+  @override
+  String get mapsColorPink => 'Rose';
+
+  @override
+  String get mapsColorGray => 'Gris';
 }

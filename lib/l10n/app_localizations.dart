@@ -4363,6 +4363,624 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rules summaries based on the SRD 5.2.1 (CC BY 4.0)'**
   String get gmScreenAttribution;
+
+  /// No description provided for @mapsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No maps yet'**
+  String get mapsEmptyTitle;
+
+  /// No description provided for @mapsEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a map image or start from a blank sheet, then place pins linked to your entries.'**
+  String get mapsEmptyHint;
+
+  /// No description provided for @mapsNewFromImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Map from image'**
+  String get mapsNewFromImage;
+
+  /// No description provided for @mapsNewBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank map'**
+  String get mapsNewBlank;
+
+  /// No description provided for @mapsDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Map {number}'**
+  String mapsDefaultName(int number);
+
+  /// No description provided for @mapsPinCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No pins} =1{1 pin} other{{count} pins}}'**
+  String mapsPinCount(int count);
+
+  /// No description provided for @mapsRenameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename map'**
+  String get mapsRenameTitle;
+
+  /// No description provided for @mapsDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get mapsDuplicate;
+
+  /// No description provided for @mapsCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (copy)'**
+  String mapsCopyName(String name);
+
+  /// No description provided for @mapsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{name}”?'**
+  String mapsDeleteTitle(String name);
+
+  /// No description provided for @mapsDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The map and all of its pins will be deleted. Linked entries stay untouched.'**
+  String get mapsDeleteBody;
+
+  /// No description provided for @mapsActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Map actions'**
+  String get mapsActions;
+
+  /// No description provided for @mapsAllMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'All maps'**
+  String get mapsAllMaps;
+
+  /// No description provided for @mapsMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This map no longer exists.'**
+  String get mapsMissing;
+
+  /// No description provided for @mapsImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This file could not be opened as an image.'**
+  String get mapsImportFailed;
+
+  /// No description provided for @mapsChangeImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change image'**
+  String get mapsChangeImage;
+
+  /// No description provided for @mapsImageMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The map image is missing'**
+  String get mapsImageMissing;
+
+  /// No description provided for @mapsImageMissingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pins still work. Choose a new image to restore the background.'**
+  String get mapsImageMissingHint;
+
+  /// No description provided for @mapsModeSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get mapsModeSelect;
+
+  /// No description provided for @mapsModeAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add pin'**
+  String get mapsModeAdd;
+
+  /// No description provided for @mapsModeMeasure.
+  ///
+  /// In en, this message translates to:
+  /// **'Measure'**
+  String get mapsModeMeasure;
+
+  /// No description provided for @mapsAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the map to place a pin.'**
+  String get mapsAddHint;
+
+  /// No description provided for @mapsMeasureHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap two points to measure.'**
+  String get mapsMeasureHint;
+
+  /// No description provided for @mapsMeasureNoScale.
+  ///
+  /// In en, this message translates to:
+  /// **'No scale set: distance in pixels.'**
+  String get mapsMeasureNoScale;
+
+  /// No description provided for @mapsDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance: {distance}'**
+  String mapsDistance(String distance);
+
+  /// No description provided for @mapsPixels.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} px'**
+  String mapsPixels(String value);
+
+  /// No description provided for @mapsMeasureRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagonal rule'**
+  String get mapsMeasureRule;
+
+  /// No description provided for @mapsRuleStraight.
+  ///
+  /// In en, this message translates to:
+  /// **'Straight line'**
+  String get mapsRuleStraight;
+
+  /// No description provided for @mapsRuleGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid: diagonal = 1 cell'**
+  String get mapsRuleGrid;
+
+  /// No description provided for @mapsRuleAlternating.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid: diagonals 1-2-1'**
+  String get mapsRuleAlternating;
+
+  /// No description provided for @mapsFit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit to screen'**
+  String get mapsFit;
+
+  /// No description provided for @mapsZoomIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom in'**
+  String get mapsZoomIn;
+
+  /// No description provided for @mapsZoomOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom out'**
+  String get mapsZoomOut;
+
+  /// No description provided for @mapsPlayerView.
+  ///
+  /// In en, this message translates to:
+  /// **'Player view'**
+  String get mapsPlayerView;
+
+  /// No description provided for @mapsExitPlayerView.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit player view'**
+  String get mapsExitPlayerView;
+
+  /// No description provided for @mapsPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pins and details'**
+  String get mapsPanel;
+
+  /// No description provided for @mapsPinsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Pins'**
+  String get mapsPinsTab;
+
+  /// No description provided for @mapsDetailsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get mapsDetailsTab;
+
+  /// No description provided for @mapsSearchPins.
+  ///
+  /// In en, this message translates to:
+  /// **'Search pins'**
+  String get mapsSearchPins;
+
+  /// No description provided for @mapsNoPins.
+  ///
+  /// In en, this message translates to:
+  /// **'No pins yet. Choose “Add pin” and tap the map.'**
+  String get mapsNoPins;
+
+  /// No description provided for @mapsNoPinMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No pins match your search.'**
+  String get mapsNoPinMatches;
+
+  /// No description provided for @mapsNewPin.
+  ///
+  /// In en, this message translates to:
+  /// **'New pin'**
+  String get mapsNewPin;
+
+  /// No description provided for @mapsEditPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit pin'**
+  String get mapsEditPin;
+
+  /// No description provided for @mapsPinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get mapsPinLabel;
+
+  /// No description provided for @mapsPinIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbol'**
+  String get mapsPinIcon;
+
+  /// No description provided for @mapsPinColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get mapsPinColor;
+
+  /// No description provided for @mapsPinNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get mapsPinNotes;
+
+  /// No description provided for @mapsPinGmOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'GM only'**
+  String get mapsPinGmOnly;
+
+  /// No description provided for @mapsPinGmOnlyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden in player view'**
+  String get mapsPinGmOnlyHint;
+
+  /// No description provided for @mapsLinkedEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked entry'**
+  String get mapsLinkedEntry;
+
+  /// No description provided for @mapsLinkEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Link an entry'**
+  String get mapsLinkEntry;
+
+  /// No description provided for @mapsChangeEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get mapsChangeEntry;
+
+  /// No description provided for @mapsUnlink.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink'**
+  String get mapsUnlink;
+
+  /// No description provided for @mapsOpenEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Open entry'**
+  String get mapsOpenEntry;
+
+  /// No description provided for @mapsEntryMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The linked entry was deleted'**
+  String get mapsEntryMissing;
+
+  /// No description provided for @mapsDeletePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete pin'**
+  String get mapsDeletePin;
+
+  /// No description provided for @mapsPinDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin deleted'**
+  String get mapsPinDeleted;
+
+  /// No description provided for @mapsUntitledPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Unnamed pin'**
+  String get mapsUntitledPin;
+
+  /// No description provided for @mapsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get mapsDescription;
+
+  /// No description provided for @mapsNoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description.'**
+  String get mapsNoDescription;
+
+  /// No description provided for @mapsScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get mapsScale;
+
+  /// No description provided for @mapsNoScale.
+  ///
+  /// In en, this message translates to:
+  /// **'No scale set'**
+  String get mapsNoScale;
+
+  /// No description provided for @mapsScaleValue.
+  ///
+  /// In en, this message translates to:
+  /// **'1 cell = {units} {unit} ({px} px)'**
+  String mapsScaleValue(String units, String unit, String px);
+
+  /// No description provided for @mapsScaleHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'One grid cell of the image covers this distance. Leave the numbers empty for a map without a scale.'**
+  String get mapsScaleHelp;
+
+  /// No description provided for @mapsScaleInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter positive numbers for both the distance and the cell size.'**
+  String get mapsScaleInvalid;
+
+  /// No description provided for @mapsUnitsPerCell.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance per cell'**
+  String get mapsUnitsPerCell;
+
+  /// No description provided for @mapsUnitName.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get mapsUnitName;
+
+  /// No description provided for @mapsUnitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'miles, km, ft…'**
+  String get mapsUnitHint;
+
+  /// No description provided for @mapsCellPx.
+  ///
+  /// In en, this message translates to:
+  /// **'Cell size (px)'**
+  String get mapsCellPx;
+
+  /// No description provided for @mapsShowGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Show grid'**
+  String get mapsShowGrid;
+
+  /// No description provided for @mapsGridNeedsScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a scale to draw a grid.'**
+  String get mapsGridNeedsScale;
+
+  /// No description provided for @mapsPinsVisibleDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'New pins visible to players'**
+  String get mapsPinsVisibleDefault;
+
+  /// No description provided for @mapsEditDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit details'**
+  String get mapsEditDetails;
+
+  /// No description provided for @mapsDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Map details'**
+  String get mapsDetailsTitle;
+
+  /// No description provided for @mapsImageSize.
+  ///
+  /// In en, this message translates to:
+  /// **'{width} × {height} px'**
+  String mapsImageSize(int width, int height);
+
+  /// No description provided for @mapsBlankCanvas.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank sheet'**
+  String get mapsBlankCanvas;
+
+  /// No description provided for @mapsOnMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'On maps'**
+  String get mapsOnMaps;
+
+  /// No description provided for @mapsIconPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin'**
+  String get mapsIconPin;
+
+  /// No description provided for @mapsIconCastle.
+  ///
+  /// In en, this message translates to:
+  /// **'Castle'**
+  String get mapsIconCastle;
+
+  /// No description provided for @mapsIconTown.
+  ///
+  /// In en, this message translates to:
+  /// **'Town'**
+  String get mapsIconTown;
+
+  /// No description provided for @mapsIconDungeon.
+  ///
+  /// In en, this message translates to:
+  /// **'Dungeon'**
+  String get mapsIconDungeon;
+
+  /// No description provided for @mapsIconCave.
+  ///
+  /// In en, this message translates to:
+  /// **'Cave'**
+  String get mapsIconCave;
+
+  /// No description provided for @mapsIconForest.
+  ///
+  /// In en, this message translates to:
+  /// **'Forest'**
+  String get mapsIconForest;
+
+  /// No description provided for @mapsIconMountain.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain'**
+  String get mapsIconMountain;
+
+  /// No description provided for @mapsIconPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Port'**
+  String get mapsIconPort;
+
+  /// No description provided for @mapsIconDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger'**
+  String get mapsIconDanger;
+
+  /// No description provided for @mapsIconTreasure.
+  ///
+  /// In en, this message translates to:
+  /// **'Treasure'**
+  String get mapsIconTreasure;
+
+  /// No description provided for @mapsIconQuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Quest'**
+  String get mapsIconQuest;
+
+  /// No description provided for @mapsIconCamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Camp'**
+  String get mapsIconCamp;
+
+  /// No description provided for @mapsIconNpc.
+  ///
+  /// In en, this message translates to:
+  /// **'Character'**
+  String get mapsIconNpc;
+
+  /// No description provided for @mapsIconPortal.
+  ///
+  /// In en, this message translates to:
+  /// **'Portal'**
+  String get mapsIconPortal;
+
+  /// No description provided for @mapsIconNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get mapsIconNote;
+
+  /// No description provided for @mapsColorAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic (entry color)'**
+  String get mapsColorAuto;
+
+  /// No description provided for @mapsColorAccent.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent'**
+  String get mapsColorAccent;
+
+  /// No description provided for @mapsColorRed.
+  ///
+  /// In en, this message translates to:
+  /// **'Red'**
+  String get mapsColorRed;
+
+  /// No description provided for @mapsColorOrange.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange'**
+  String get mapsColorOrange;
+
+  /// No description provided for @mapsColorYellow.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get mapsColorYellow;
+
+  /// No description provided for @mapsColorGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get mapsColorGreen;
+
+  /// No description provided for @mapsColorTeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Teal'**
+  String get mapsColorTeal;
+
+  /// No description provided for @mapsColorBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get mapsColorBlue;
+
+  /// No description provided for @mapsColorPurple.
+  ///
+  /// In en, this message translates to:
+  /// **'Purple'**
+  String get mapsColorPurple;
+
+  /// No description provided for @mapsColorPink.
+  ///
+  /// In en, this message translates to:
+  /// **'Pink'**
+  String get mapsColorPink;
+
+  /// No description provided for @mapsColorGray.
+  ///
+  /// In en, this message translates to:
+  /// **'Gray'**
+  String get mapsColorGray;
 }
 
 class _AppLocalizationsDelegate

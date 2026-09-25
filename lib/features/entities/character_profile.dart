@@ -10,6 +10,7 @@ import '../../domain/models/document_model.dart';
 import '../../domain/models/entity.dart';
 import '../attachments/attachments_panel.dart';
 import '../editor/lore_editor.dart';
+import '../tools/maps/map_entity_pins.dart';
 import '../../domain/models/kind_extension.dart';
 import 'widgets/attribute_form.dart';
 import 'widgets/cover_square.dart';
@@ -114,6 +115,7 @@ class _CharacterProfileState extends ConsumerState<CharacterProfile>
             ),
             const SizedBox(height: 14),
             RelationsPanel(entity: entity),
+            EntityMapPins(entity: entity),
           ],
         ),
       ),

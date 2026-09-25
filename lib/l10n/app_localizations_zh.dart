@@ -2400,4 +2400,335 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get gmScreenAttribution => '规则摘要基于 SRD 5.2.1（CC BY 4.0）';
+
+  @override
+  String get mapsEmptyTitle => '还没有地图';
+
+  @override
+  String get mapsEmptyHint => '导入地图图片或从空白画布开始，然后放置与条目关联的标记。';
+
+  @override
+  String get mapsNewFromImage => '从图片创建地图';
+
+  @override
+  String get mapsNewBlank => '空白地图';
+
+  @override
+  String mapsDefaultName(int number) {
+    return '地图 $number';
+  }
+
+  @override
+  String mapsPinCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个标记',
+      zero: '没有标记',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mapsRenameTitle => '重命名地图';
+
+  @override
+  String get mapsDuplicate => '复制';
+
+  @override
+  String mapsCopyName(String name) {
+    return '$name（副本）';
+  }
+
+  @override
+  String mapsDeleteTitle(String name) {
+    return '删除“$name”？';
+  }
+
+  @override
+  String get mapsDeleteBody => '地图及其所有标记将被删除。关联的条目不受影响。';
+
+  @override
+  String get mapsActions => '地图操作';
+
+  @override
+  String get mapsAllMaps => '全部地图';
+
+  @override
+  String get mapsMissing => '此地图已不存在。';
+
+  @override
+  String get mapsImportFailed => '无法将此文件作为图片打开。';
+
+  @override
+  String get mapsChangeImage => '更换图片';
+
+  @override
+  String get mapsImageMissing => '地图图片缺失';
+
+  @override
+  String get mapsImageMissingHint => '标记仍可使用。选择新图片以恢复背景。';
+
+  @override
+  String get mapsModeSelect => '选择';
+
+  @override
+  String get mapsModeAdd => '添加标记';
+
+  @override
+  String get mapsModeMeasure => '测量';
+
+  @override
+  String get mapsAddHint => '点击地图放置标记。';
+
+  @override
+  String get mapsMeasureHint => '点击两个点进行测量。';
+
+  @override
+  String get mapsMeasureNoScale => '未设置比例尺：以像素计。';
+
+  @override
+  String mapsDistance(String distance) {
+    return '距离：$distance';
+  }
+
+  @override
+  String mapsPixels(String value) {
+    return '$value 像素';
+  }
+
+  @override
+  String get mapsMeasureRule => '对角线规则';
+
+  @override
+  String get mapsRuleStraight => '直线';
+
+  @override
+  String get mapsRuleGrid => '网格：对角 = 1 格';
+
+  @override
+  String get mapsRuleAlternating => '网格：对角 1-2-1';
+
+  @override
+  String get mapsFit => '适应屏幕';
+
+  @override
+  String get mapsZoomIn => '放大';
+
+  @override
+  String get mapsZoomOut => '缩小';
+
+  @override
+  String get mapsPlayerView => '玩家视图';
+
+  @override
+  String get mapsExitPlayerView => '退出玩家视图';
+
+  @override
+  String get mapsPanel => '标记与详情';
+
+  @override
+  String get mapsPinsTab => '标记';
+
+  @override
+  String get mapsDetailsTab => '详情';
+
+  @override
+  String get mapsSearchPins => '搜索标记';
+
+  @override
+  String get mapsNoPins => '还没有标记。选择“添加标记”并点击地图。';
+
+  @override
+  String get mapsNoPinMatches => '没有匹配的标记。';
+
+  @override
+  String get mapsNewPin => '新标记';
+
+  @override
+  String get mapsEditPin => '编辑标记';
+
+  @override
+  String get mapsPinLabel => '名称';
+
+  @override
+  String get mapsPinIcon => '图标';
+
+  @override
+  String get mapsPinColor => '颜色';
+
+  @override
+  String get mapsPinNotes => '备注';
+
+  @override
+  String get mapsPinGmOnly => '仅主持人';
+
+  @override
+  String get mapsPinGmOnlyHint => '在玩家视图中隐藏';
+
+  @override
+  String get mapsLinkedEntry => '关联条目';
+
+  @override
+  String get mapsLinkEntry => '关联条目';
+
+  @override
+  String get mapsChangeEntry => '更换';
+
+  @override
+  String get mapsUnlink => '取消关联';
+
+  @override
+  String get mapsOpenEntry => '打开条目';
+
+  @override
+  String get mapsEntryMissing => '关联的条目已被删除';
+
+  @override
+  String get mapsDeletePin => '删除标记';
+
+  @override
+  String get mapsPinDeleted => '标记已删除';
+
+  @override
+  String get mapsUntitledPin => '未命名标记';
+
+  @override
+  String get mapsDescription => '描述';
+
+  @override
+  String get mapsNoDescription => '暂无描述。';
+
+  @override
+  String get mapsScale => '比例尺';
+
+  @override
+  String get mapsNoScale => '未设置比例尺';
+
+  @override
+  String mapsScaleValue(String units, String unit, String px) {
+    return '1 格 = $units $unit（$px 像素）';
+  }
+
+  @override
+  String get mapsScaleHelp => '图片中的一个网格对应此距离。不需要比例尺时请留空数字。';
+
+  @override
+  String get mapsScaleInvalid => '请为距离和格子大小输入正数。';
+
+  @override
+  String get mapsUnitsPerCell => '每格距离';
+
+  @override
+  String get mapsUnitName => '单位';
+
+  @override
+  String get mapsUnitHint => '英里、公里、尺…';
+
+  @override
+  String get mapsCellPx => '格子大小（像素）';
+
+  @override
+  String get mapsShowGrid => '显示网格';
+
+  @override
+  String get mapsGridNeedsScale => '设置比例尺后才能显示网格。';
+
+  @override
+  String get mapsPinsVisibleDefault => '新标记对玩家可见';
+
+  @override
+  String get mapsEditDetails => '编辑详情';
+
+  @override
+  String get mapsDetailsTitle => '地图详情';
+
+  @override
+  String mapsImageSize(int width, int height) {
+    return '$width × $height 像素';
+  }
+
+  @override
+  String get mapsBlankCanvas => '空白画布';
+
+  @override
+  String get mapsOnMaps => '在地图上';
+
+  @override
+  String get mapsIconPin => '标记';
+
+  @override
+  String get mapsIconCastle => '城堡';
+
+  @override
+  String get mapsIconTown => '城镇';
+
+  @override
+  String get mapsIconDungeon => '地下城';
+
+  @override
+  String get mapsIconCave => '洞穴';
+
+  @override
+  String get mapsIconForest => '森林';
+
+  @override
+  String get mapsIconMountain => '山脉';
+
+  @override
+  String get mapsIconPort => '港口';
+
+  @override
+  String get mapsIconDanger => '危险';
+
+  @override
+  String get mapsIconTreasure => '宝藏';
+
+  @override
+  String get mapsIconQuest => '任务';
+
+  @override
+  String get mapsIconCamp => '营地';
+
+  @override
+  String get mapsIconNpc => '人物';
+
+  @override
+  String get mapsIconPortal => '传送门';
+
+  @override
+  String get mapsIconNote => '笔记';
+
+  @override
+  String get mapsColorAuto => '自动（条目颜色）';
+
+  @override
+  String get mapsColorAccent => '强调色';
+
+  @override
+  String get mapsColorRed => '红';
+
+  @override
+  String get mapsColorOrange => '橙';
+
+  @override
+  String get mapsColorYellow => '黄';
+
+  @override
+  String get mapsColorGreen => '绿';
+
+  @override
+  String get mapsColorTeal => '青';
+
+  @override
+  String get mapsColorBlue => '蓝';
+
+  @override
+  String get mapsColorPurple => '紫';
+
+  @override
+  String get mapsColorPink => '粉';
+
+  @override
+  String get mapsColorGray => '灰';
 }

@@ -1292,5 +1292,173 @@
   "gmScreenDifficulty": "Difficulty class",
   "gmScreenCover": "Cover",
   "gmScreenPanels": "Panels",
-  "gmScreenAttribution": "Rules summaries based on the SRD 5.2.1 (CC BY 4.0)"
+  "gmScreenAttribution": "Rules summaries based on the SRD 5.2.1 (CC BY 4.0)",
+  "mapsEmptyTitle": "No maps yet",
+  "mapsEmptyHint": "Import a map image or start from a blank sheet, then place pins linked to your entries.",
+  "mapsNewFromImage": "Map from image",
+  "mapsNewBlank": "Blank map",
+  "mapsDefaultName": "Map {number}",
+  "@mapsDefaultName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mapsPinCount": "{count, plural, =0{No pins} =1{1 pin} other{{count} pins}}",
+  "@mapsPinCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapsRenameTitle": "Rename map",
+  "mapsDuplicate": "Duplicate",
+  "mapsCopyName": "{name} (copy)",
+  "@mapsCopyName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mapsDeleteTitle": "Delete “{name}”?",
+  "@mapsDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mapsDeleteBody": "The map and all of its pins will be deleted. Linked entries stay untouched.",
+  "mapsActions": "Map actions",
+  "mapsAllMaps": "All maps",
+  "mapsMissing": "This map no longer exists.",
+  "mapsImportFailed": "This file could not be opened as an image.",
+  "mapsChangeImage": "Change image",
+  "mapsImageMissing": "The map image is missing",
+  "mapsImageMissingHint": "Pins still work. Choose a new image to restore the background.",
+  "mapsModeSelect": "Select",
+  "mapsModeAdd": "Add pin",
+  "mapsModeMeasure": "Measure",
+  "mapsAddHint": "Tap the map to place a pin.",
+  "mapsMeasureHint": "Tap two points to measure.",
+  "mapsMeasureNoScale": "No scale set: distance in pixels.",
+  "mapsDistance": "Distance: {distance}",
+  "@mapsDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "mapsPixels": "{value} px",
+  "@mapsPixels": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "mapsMeasureRule": "Diagonal rule",
+  "mapsRuleStraight": "Straight line",
+  "mapsRuleGrid": "Grid: diagonal = 1 cell",
+  "mapsRuleAlternating": "Grid: diagonals 1-2-1",
+  "mapsFit": "Fit to screen",
+  "mapsZoomIn": "Zoom in",
+  "mapsZoomOut": "Zoom out",
+  "mapsPlayerView": "Player view",
+  "mapsExitPlayerView": "Exit player view",
+  "mapsPanel": "Pins and details",
+  "mapsPinsTab": "Pins",
+  "mapsDetailsTab": "Details",
+  "mapsSearchPins": "Search pins",
+  "mapsNoPins": "No pins yet. Choose “Add pin” and tap the map.",
+  "mapsNoPinMatches": "No pins match your search.",
+  "mapsNewPin": "New pin",
+  "mapsEditPin": "Edit pin",
+  "mapsPinLabel": "Label",
+  "mapsPinIcon": "Symbol",
+  "mapsPinColor": "Color",
+  "mapsPinNotes": "Notes",
+  "mapsPinGmOnly": "GM only",
+  "mapsPinGmOnlyHint": "Hidden in player view",
+  "mapsLinkedEntry": "Linked entry",
+  "mapsLinkEntry": "Link an entry",
+  "mapsChangeEntry": "Change",
+  "mapsUnlink": "Unlink",
+  "mapsOpenEntry": "Open entry",
+  "mapsEntryMissing": "The linked entry was deleted",
+  "mapsDeletePin": "Delete pin",
+  "mapsPinDeleted": "Pin deleted",
+  "mapsUntitledPin": "Unnamed pin",
+  "mapsDescription": "Description",
+  "mapsNoDescription": "No description.",
+  "mapsScale": "Scale",
+  "mapsNoScale": "No scale set",
+  "mapsScaleValue": "1 cell = {units} {unit} ({px} px)",
+  "@mapsScaleValue": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "px": {
+        "type": "String"
+      }
+    }
+  },
+  "mapsScaleHelp": "One grid cell of the image covers this distance. Leave the numbers empty for a map without a scale.",
+  "mapsScaleInvalid": "Enter positive numbers for both the distance and the cell size.",
+  "mapsUnitsPerCell": "Distance per cell",
+  "mapsUnitName": "Unit",
+  "mapsUnitHint": "miles, km, ft…",
+  "mapsCellPx": "Cell size (px)",
+  "mapsShowGrid": "Show grid",
+  "mapsGridNeedsScale": "Set a scale to draw a grid.",
+  "mapsPinsVisibleDefault": "New pins visible to players",
+  "mapsEditDetails": "Edit details",
+  "mapsDetailsTitle": "Map details",
+  "mapsImageSize": "{width} × {height} px",
+  "@mapsImageSize": {
+    "placeholders": {
+      "width": {
+        "type": "int"
+      },
+      "height": {
+        "type": "int"
+      }
+    }
+  },
+  "mapsBlankCanvas": "Blank sheet",
+  "mapsOnMaps": "On maps",
+  "mapsIconPin": "Pin",
+  "mapsIconCastle": "Castle",
+  "mapsIconTown": "Town",
+  "mapsIconDungeon": "Dungeon",
+  "mapsIconCave": "Cave",
+  "mapsIconForest": "Forest",
+  "mapsIconMountain": "Mountain",
+  "mapsIconPort": "Port",
+  "mapsIconDanger": "Danger",
+  "mapsIconTreasure": "Treasure",
+  "mapsIconQuest": "Quest",
+  "mapsIconCamp": "Camp",
+  "mapsIconNpc": "Character",
+  "mapsIconPortal": "Portal",
+  "mapsIconNote": "Note",
+  "mapsColorAuto": "Automatic (entry color)",
+  "mapsColorAccent": "Accent",
+  "mapsColorRed": "Red",
+  "mapsColorOrange": "Orange",
+  "mapsColorYellow": "Yellow",
+  "mapsColorGreen": "Green",
+  "mapsColorTeal": "Teal",
+  "mapsColorBlue": "Blue",
+  "mapsColorPurple": "Purple",
+  "mapsColorPink": "Pink",
+  "mapsColorGray": "Gray"
 }
