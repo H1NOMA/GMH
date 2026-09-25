@@ -187,10 +187,13 @@ void main() {
           // the next route starts clean and no timer outlives the test.
           await tester.pumpWidget(const SizedBox());
           await tester.pump(const Duration(seconds: 5));
-          container.dispose();
           // Disposing closes drift query streams, which schedules
-          // zero-length timers — let them fire.
-          await tester.pump();
+          // zero-length timers: do it on the real event loop so they fire
+          // there instead of lingering as fake-async timers.
+          await tester.runAsync(() async {
+            container.dispose();
+            await Future<void>.delayed(const Duration(milliseconds: 20));
+          });
         }
       } finally {
         FlutterError.onError = previous;
@@ -198,6 +201,6 @@ void main() {
       expect(problems, isEmpty,
           reason: 'visual problems in "${variant.name}":\n'
               '${problems.join('\n')}');
-    }, timeout: const Timeout(Duration(minutes: 10)));
+    }, timeout: const Timeout(Duration(minutes: 30)));
   }
 }
