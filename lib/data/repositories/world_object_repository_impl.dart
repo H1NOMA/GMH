@@ -187,11 +187,20 @@ class WorldObjectRepositoryImpl implements WorldObjectRepository {
 
   @override
   Future<void> trim(String worldId, String type, {required int keep}) async {
-    await _db.customStatement(
+    // customUpdate (not customStatement) so live watchers see the removal.
+    await _db.customUpdate(
       'DELETE FROM world_objects WHERE world_id = ? AND type = ? AND id NOT IN '
       '(SELECT id FROM world_objects WHERE world_id = ? AND type = ? '
       'ORDER BY created_at DESC LIMIT ?)',
-      [worldId, type, worldId, type, keep],
+      variables: [
+        Variable.withString(worldId),
+        Variable.withString(type),
+        Variable.withString(worldId),
+        Variable.withString(type),
+        Variable.withInt(keep),
+      ],
+      updates: {_db.worldObjects},
+      updateKind: UpdateKind.delete,
     );
   }
 }

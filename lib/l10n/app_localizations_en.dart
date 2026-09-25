@@ -1298,4 +1298,272 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorAiNotConfigured => 'No AI provider is configured.';
+
+  @override
+  String get diceExpressionLabel => 'Dice expression';
+
+  @override
+  String get diceExpressionHint => 'e.g. 2d6+3, 4d6kh3, 1d20!';
+
+  @override
+  String get diceRollAction => 'Roll';
+
+  @override
+  String get diceLabelHint => 'Label (optional)';
+
+  @override
+  String get diceAdvantage => 'Advantage';
+
+  @override
+  String get diceDisadvantage => 'Disadvantage';
+
+  @override
+  String get diceModifier => 'Modifier';
+
+  @override
+  String get diceDecrease => 'Decrease';
+
+  @override
+  String get diceIncrease => 'Increase';
+
+  @override
+  String get diceQuickHint =>
+      'Tap a die to roll it, long-press to add it to the expression.';
+
+  @override
+  String get dicePresets => 'System presets';
+
+  @override
+  String get diceHistory => 'Roll history';
+
+  @override
+  String get diceHistoryEmpty => 'No rolls yet. Every roll is logged here.';
+
+  @override
+  String get diceClearHistory => 'Clear history';
+
+  @override
+  String get diceClearHistoryTitle => 'Clear roll history?';
+
+  @override
+  String get diceClearHistoryBody =>
+      'Every logged roll in this world is deleted.';
+
+  @override
+  String get diceReroll => 'Roll again';
+
+  @override
+  String get diceCopy => 'Copy';
+
+  @override
+  String get diceCopied => 'Copied to clipboard';
+
+  @override
+  String get diceResultEmpty => 'Pick a die or type an expression';
+
+  @override
+  String get diceDropped => 'Dropped';
+
+  @override
+  String get diceExploded => 'Exploded';
+
+  @override
+  String get diceRerolled => 'Rerolled';
+
+  @override
+  String diceMoreDice(int count) {
+    return '+$count more';
+  }
+
+  @override
+  String get diceErrorEmpty => 'Type a dice expression';
+
+  @override
+  String get diceErrorTooLong => 'The expression is too long';
+
+  @override
+  String get diceErrorUnexpectedChar => 'Unexpected character';
+
+  @override
+  String get diceErrorUnexpectedEnd => 'The expression ends too early';
+
+  @override
+  String get diceErrorExpectedNumber => 'A number is expected here';
+
+  @override
+  String get diceErrorParen => 'Unbalanced parentheses';
+
+  @override
+  String get diceErrorTooManyDice => 'At most 1000 dice per term';
+
+  @override
+  String get diceErrorBadSides => 'Dice need 1 to 10000 sides';
+
+  @override
+  String get diceErrorTooLarge => 'The number is too large';
+
+  @override
+  String get diceErrorDivisionByZero => 'Division by zero';
+
+  @override
+  String get diceErrorDuplicate => 'This modifier is repeated';
+
+  @override
+  String get diceErrorImpossibleReroll => 'That reroll would never stop';
+
+  @override
+  String get diceErrorLabel => 'Close the label with ]';
+
+  @override
+  String diceErrorAt(String message, int position) {
+    return '$message (position $position)';
+  }
+
+  @override
+  String get dicePresetD20 => 'd20 check';
+
+  @override
+  String get dicePresetAbility => 'Ability score';
+
+  @override
+  String get dicePresetCoc => 'Call of Cthulhu';
+
+  @override
+  String get dicePresetPbta => 'PbtA move';
+
+  @override
+  String get dicePresetBlades => 'Blades in the Dark';
+
+  @override
+  String get dicePresetFate => 'Fate';
+
+  @override
+  String get dicePresetYearZero => 'Year Zero';
+
+  @override
+  String get dicePresetSavage => 'Savage Worlds';
+
+  @override
+  String get dicePresetCyberpunk => 'Cyberpunk RED';
+
+  @override
+  String get diceModeNormal => 'Normal';
+
+  @override
+  String get diceDc => 'DC (optional)';
+
+  @override
+  String get diceSkill => 'Skill';
+
+  @override
+  String get diceBonusDice => 'Bonus (+) / penalty (−) dice';
+
+  @override
+  String get diceStat => 'Stat';
+
+  @override
+  String get diceDicePool => 'Dice pool';
+
+  @override
+  String get diceTraitDie => 'Trait die';
+
+  @override
+  String get diceWildDie => 'Wild die';
+
+  @override
+  String get diceStatSkill => 'Stat + skill';
+
+  @override
+  String get diceOutcomeCriticalSuccess => 'Critical success';
+
+  @override
+  String get diceOutcomeCriticalFailure => 'Critical failure';
+
+  @override
+  String get diceOutcomeSuccess => 'Success';
+
+  @override
+  String get diceOutcomeFailure => 'Failure';
+
+  @override
+  String get diceOutcomeRaise => 'Success with a raise';
+
+  @override
+  String get diceOutcomeExtreme => 'Extreme success';
+
+  @override
+  String get diceOutcomeHard => 'Hard success';
+
+  @override
+  String get diceOutcomeRegular => 'Regular success';
+
+  @override
+  String get diceOutcomeFumble => 'Fumble';
+
+  @override
+  String get diceOutcomeMiss => 'Miss';
+
+  @override
+  String get diceOutcomePartial => 'Partial success';
+
+  @override
+  String get diceOutcomeFull => 'Full success';
+
+  @override
+  String get diceFateTerrible => 'Terrible';
+
+  @override
+  String get diceFatePoor => 'Poor';
+
+  @override
+  String get diceFateMediocre => 'Mediocre';
+
+  @override
+  String get diceFateAverage => 'Average';
+
+  @override
+  String get diceFateFair => 'Fair';
+
+  @override
+  String get diceFateGood => 'Good';
+
+  @override
+  String get diceFateGreat => 'Great';
+
+  @override
+  String get diceFateSuperb => 'Superb';
+
+  @override
+  String get diceFateFantastic => 'Fantastic';
+
+  @override
+  String get diceFateEpic => 'Epic';
+
+  @override
+  String get diceFateLegendary => 'Legendary';
+
+  @override
+  String diceSuccesses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count successes',
+      one: '1 success',
+      zero: 'No successes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String diceRollTooltip(String expression) {
+    return 'Roll $expression';
+  }
+
+  @override
+  String diceRolledSnack(String expression, int total) {
+    return '$expression: $total';
+  }
+
+  @override
+  String get diceQuickRollTitle => 'Quick roll';
 }

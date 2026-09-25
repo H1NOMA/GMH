@@ -2353,6 +2353,504 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No AI provider is configured.'**
   String get errorAiNotConfigured;
+
+  /// No description provided for @diceExpressionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dice expression'**
+  String get diceExpressionLabel;
+
+  /// No description provided for @diceExpressionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 2d6+3, 4d6kh3, 1d20!'**
+  String get diceExpressionHint;
+
+  /// No description provided for @diceRollAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll'**
+  String get diceRollAction;
+
+  /// No description provided for @diceLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Label (optional)'**
+  String get diceLabelHint;
+
+  /// No description provided for @diceAdvantage.
+  ///
+  /// In en, this message translates to:
+  /// **'Advantage'**
+  String get diceAdvantage;
+
+  /// No description provided for @diceDisadvantage.
+  ///
+  /// In en, this message translates to:
+  /// **'Disadvantage'**
+  String get diceDisadvantage;
+
+  /// No description provided for @diceModifier.
+  ///
+  /// In en, this message translates to:
+  /// **'Modifier'**
+  String get diceModifier;
+
+  /// No description provided for @diceDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease'**
+  String get diceDecrease;
+
+  /// No description provided for @diceIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase'**
+  String get diceIncrease;
+
+  /// No description provided for @diceQuickHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a die to roll it, long-press to add it to the expression.'**
+  String get diceQuickHint;
+
+  /// No description provided for @dicePresets.
+  ///
+  /// In en, this message translates to:
+  /// **'System presets'**
+  String get dicePresets;
+
+  /// No description provided for @diceHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll history'**
+  String get diceHistory;
+
+  /// No description provided for @diceHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No rolls yet. Every roll is logged here.'**
+  String get diceHistoryEmpty;
+
+  /// No description provided for @diceClearHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear history'**
+  String get diceClearHistory;
+
+  /// No description provided for @diceClearHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear roll history?'**
+  String get diceClearHistoryTitle;
+
+  /// No description provided for @diceClearHistoryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every logged roll in this world is deleted.'**
+  String get diceClearHistoryBody;
+
+  /// No description provided for @diceReroll.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll again'**
+  String get diceReroll;
+
+  /// No description provided for @diceCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get diceCopy;
+
+  /// No description provided for @diceCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get diceCopied;
+
+  /// No description provided for @diceResultEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a die or type an expression'**
+  String get diceResultEmpty;
+
+  /// No description provided for @diceDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'Dropped'**
+  String get diceDropped;
+
+  /// No description provided for @diceExploded.
+  ///
+  /// In en, this message translates to:
+  /// **'Exploded'**
+  String get diceExploded;
+
+  /// No description provided for @diceRerolled.
+  ///
+  /// In en, this message translates to:
+  /// **'Rerolled'**
+  String get diceRerolled;
+
+  /// No description provided for @diceMoreDice.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String diceMoreDice(int count);
+
+  /// No description provided for @diceErrorEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a dice expression'**
+  String get diceErrorEmpty;
+
+  /// No description provided for @diceErrorTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'The expression is too long'**
+  String get diceErrorTooLong;
+
+  /// No description provided for @diceErrorUnexpectedChar.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexpected character'**
+  String get diceErrorUnexpectedChar;
+
+  /// No description provided for @diceErrorUnexpectedEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'The expression ends too early'**
+  String get diceErrorUnexpectedEnd;
+
+  /// No description provided for @diceErrorExpectedNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'A number is expected here'**
+  String get diceErrorExpectedNumber;
+
+  /// No description provided for @diceErrorParen.
+  ///
+  /// In en, this message translates to:
+  /// **'Unbalanced parentheses'**
+  String get diceErrorParen;
+
+  /// No description provided for @diceErrorTooManyDice.
+  ///
+  /// In en, this message translates to:
+  /// **'At most 1000 dice per term'**
+  String get diceErrorTooManyDice;
+
+  /// No description provided for @diceErrorBadSides.
+  ///
+  /// In en, this message translates to:
+  /// **'Dice need 1 to 10000 sides'**
+  String get diceErrorBadSides;
+
+  /// No description provided for @diceErrorTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'The number is too large'**
+  String get diceErrorTooLarge;
+
+  /// No description provided for @diceErrorDivisionByZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Division by zero'**
+  String get diceErrorDivisionByZero;
+
+  /// No description provided for @diceErrorDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'This modifier is repeated'**
+  String get diceErrorDuplicate;
+
+  /// No description provided for @diceErrorImpossibleReroll.
+  ///
+  /// In en, this message translates to:
+  /// **'That reroll would never stop'**
+  String get diceErrorImpossibleReroll;
+
+  /// No description provided for @diceErrorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the label with ]'**
+  String get diceErrorLabel;
+
+  /// No description provided for @diceErrorAt.
+  ///
+  /// In en, this message translates to:
+  /// **'{message} (position {position})'**
+  String diceErrorAt(String message, int position);
+
+  /// No description provided for @dicePresetD20.
+  ///
+  /// In en, this message translates to:
+  /// **'d20 check'**
+  String get dicePresetD20;
+
+  /// No description provided for @dicePresetAbility.
+  ///
+  /// In en, this message translates to:
+  /// **'Ability score'**
+  String get dicePresetAbility;
+
+  /// No description provided for @dicePresetCoc.
+  ///
+  /// In en, this message translates to:
+  /// **'Call of Cthulhu'**
+  String get dicePresetCoc;
+
+  /// No description provided for @dicePresetPbta.
+  ///
+  /// In en, this message translates to:
+  /// **'PbtA move'**
+  String get dicePresetPbta;
+
+  /// No description provided for @dicePresetBlades.
+  ///
+  /// In en, this message translates to:
+  /// **'Blades in the Dark'**
+  String get dicePresetBlades;
+
+  /// No description provided for @dicePresetFate.
+  ///
+  /// In en, this message translates to:
+  /// **'Fate'**
+  String get dicePresetFate;
+
+  /// No description provided for @dicePresetYearZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Year Zero'**
+  String get dicePresetYearZero;
+
+  /// No description provided for @dicePresetSavage.
+  ///
+  /// In en, this message translates to:
+  /// **'Savage Worlds'**
+  String get dicePresetSavage;
+
+  /// No description provided for @dicePresetCyberpunk.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyberpunk RED'**
+  String get dicePresetCyberpunk;
+
+  /// No description provided for @diceModeNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get diceModeNormal;
+
+  /// No description provided for @diceDc.
+  ///
+  /// In en, this message translates to:
+  /// **'DC (optional)'**
+  String get diceDc;
+
+  /// No description provided for @diceSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill'**
+  String get diceSkill;
+
+  /// No description provided for @diceBonusDice.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus (+) / penalty (−) dice'**
+  String get diceBonusDice;
+
+  /// No description provided for @diceStat.
+  ///
+  /// In en, this message translates to:
+  /// **'Stat'**
+  String get diceStat;
+
+  /// No description provided for @diceDicePool.
+  ///
+  /// In en, this message translates to:
+  /// **'Dice pool'**
+  String get diceDicePool;
+
+  /// No description provided for @diceTraitDie.
+  ///
+  /// In en, this message translates to:
+  /// **'Trait die'**
+  String get diceTraitDie;
+
+  /// No description provided for @diceWildDie.
+  ///
+  /// In en, this message translates to:
+  /// **'Wild die'**
+  String get diceWildDie;
+
+  /// No description provided for @diceStatSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'Stat + skill'**
+  String get diceStatSkill;
+
+  /// No description provided for @diceOutcomeCriticalSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical success'**
+  String get diceOutcomeCriticalSuccess;
+
+  /// No description provided for @diceOutcomeCriticalFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical failure'**
+  String get diceOutcomeCriticalFailure;
+
+  /// No description provided for @diceOutcomeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get diceOutcomeSuccess;
+
+  /// No description provided for @diceOutcomeFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failure'**
+  String get diceOutcomeFailure;
+
+  /// No description provided for @diceOutcomeRaise.
+  ///
+  /// In en, this message translates to:
+  /// **'Success with a raise'**
+  String get diceOutcomeRaise;
+
+  /// No description provided for @diceOutcomeExtreme.
+  ///
+  /// In en, this message translates to:
+  /// **'Extreme success'**
+  String get diceOutcomeExtreme;
+
+  /// No description provided for @diceOutcomeHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard success'**
+  String get diceOutcomeHard;
+
+  /// No description provided for @diceOutcomeRegular.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular success'**
+  String get diceOutcomeRegular;
+
+  /// No description provided for @diceOutcomeFumble.
+  ///
+  /// In en, this message translates to:
+  /// **'Fumble'**
+  String get diceOutcomeFumble;
+
+  /// No description provided for @diceOutcomeMiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Miss'**
+  String get diceOutcomeMiss;
+
+  /// No description provided for @diceOutcomePartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial success'**
+  String get diceOutcomePartial;
+
+  /// No description provided for @diceOutcomeFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full success'**
+  String get diceOutcomeFull;
+
+  /// No description provided for @diceFateTerrible.
+  ///
+  /// In en, this message translates to:
+  /// **'Terrible'**
+  String get diceFateTerrible;
+
+  /// No description provided for @diceFatePoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get diceFatePoor;
+
+  /// No description provided for @diceFateMediocre.
+  ///
+  /// In en, this message translates to:
+  /// **'Mediocre'**
+  String get diceFateMediocre;
+
+  /// No description provided for @diceFateAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get diceFateAverage;
+
+  /// No description provided for @diceFateFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get diceFateFair;
+
+  /// No description provided for @diceFateGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get diceFateGood;
+
+  /// No description provided for @diceFateGreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Great'**
+  String get diceFateGreat;
+
+  /// No description provided for @diceFateSuperb.
+  ///
+  /// In en, this message translates to:
+  /// **'Superb'**
+  String get diceFateSuperb;
+
+  /// No description provided for @diceFateFantastic.
+  ///
+  /// In en, this message translates to:
+  /// **'Fantastic'**
+  String get diceFateFantastic;
+
+  /// No description provided for @diceFateEpic.
+  ///
+  /// In en, this message translates to:
+  /// **'Epic'**
+  String get diceFateEpic;
+
+  /// No description provided for @diceFateLegendary.
+  ///
+  /// In en, this message translates to:
+  /// **'Legendary'**
+  String get diceFateLegendary;
+
+  /// No description provided for @diceSuccesses.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No successes} one{1 success} other{{count} successes}}'**
+  String diceSuccesses(int count);
+
+  /// No description provided for @diceRollTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll {expression}'**
+  String diceRollTooltip(String expression);
+
+  /// No description provided for @diceRolledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'{expression}: {total}'**
+  String diceRolledSnack(String expression, int total);
+
+  /// No description provided for @diceQuickRollTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick roll'**
+  String get diceQuickRollTitle;
 }
 
 class _AppLocalizationsDelegate
