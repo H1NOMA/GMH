@@ -147,6 +147,19 @@ class SearchRepositoryImpl implements SearchRepository {
   }
 
   @override
+  Stream<List<Entity>> watchRecentlyOpened(String worldId, {int limit = 15}) {
+    // Re-emits whenever an entry is opened (recent_items) or an entry
+    // changes (entities), so "Recently opened" is always current.
+    return _db
+        .customSelect(
+          'SELECT 1',
+          readsFrom: {_db.recentItems, _db.entities},
+        )
+        .watch()
+        .asyncMap((_) => recentlyOpened(worldId, limit: limit));
+  }
+
+  @override
   Future<List<Entity>> recentlyOpened(String worldId, {int limit = 15}) async {
     final rows = await _db.customSelect(
       '''

@@ -22,6 +22,7 @@ import '../domain/services/ai/lore_context.dart';
 import '../domain/services/document_service.dart';
 import '../domain/services/entity_service.dart';
 import '../domain/services/linking/link_sync_service.dart';
+import '../domain/services/tag_service.dart';
 
 /// Composition root. `main()` overrides [appRootDirProvider] with the real
 /// documents directory; everything else derives from it.
@@ -141,4 +142,9 @@ final loreContextBuilderProvider = Provider<LoreContextBuilder>(
     ref.watch(linkRepositoryProvider),
     ref.watch(documentRepositoryProvider),
   ),
+);
+
+final tagServiceProvider = Provider<TagService>(
+  (ref) => TagService(
+      ref.watch(tagRepositoryProvider), ref.watch(searchRepositoryProvider)),
 );

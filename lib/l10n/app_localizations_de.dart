@@ -1271,4 +1271,8 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exportAction => 'Exportieren';
+
+  @override
+  String get tagNameTaken =>
+      'Ein Tag mit diesem Namen existiert bereits — nutze stattdessen Zusammenführen.';
 }

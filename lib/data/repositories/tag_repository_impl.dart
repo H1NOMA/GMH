@@ -38,9 +38,14 @@ class TagRepositoryImpl implements TagRepository {
   Future<domain.Tag> getOrCreate(String worldId, String name,
       {int? color}) async {
     final normalized = name.trim();
-    final existing = await (_db.select(_db.tags)
-          ..where((t) => t.worldId.equals(worldId) & t.name.equals(normalized)))
-        .getSingleOrNull();
+    // Case-insensitive in Dart (SQLite's lower() is ASCII-only): 'Villain'
+    // and 'villain' — or 'Злодей' and 'злодей' — are one tag.
+    final key = normalized.toLowerCase();
+    final existing = (await (_db.select(_db.tags)
+              ..where((t) => t.worldId.equals(worldId)))
+            .get())
+        .where((t) => t.name.toLowerCase() == key)
+        .firstOrNull;
     if (existing != null) return _map(existing);
 
     final count = await (_db.selectOnly(_db.tags)
@@ -83,6 +88,28 @@ class TagRepositoryImpl implements TagRepository {
     // entity_tags rows cascade away with the tag; entries are untouched.
     await (_db.delete(_db.tags)..where((t) => t.id.equals(tagId))).go();
   }
+
+  @override
+  Future<List<domain.Tag>> tags(String worldId) async =>
+      (await (_db.select(_db.tags)..where((t) => t.worldId.equals(worldId)))
+              .get())
+          .map(_map)
+          .toList();
+
+  @override
+  Future<List<String>> entityIdsWithTag(String tagId) async =>
+      (await (_db.select(_db.entityTags)
+                ..where((et) => et.tagId.equals(tagId)))
+              .get())
+          .map((row) => row.entityId)
+          .toList();
+
+  @override
+  Stream<Map<String, int>> watchUsageCounts(String worldId) => _db
+      .customSelect('SELECT 1',
+          readsFrom: {_db.entityTags, _db.tags, _db.entities})
+      .watch()
+      .asyncMap((_) => usageCounts(worldId));
 
   @override
   Future<Map<String, int>> usageCounts(String worldId) async {

@@ -365,5 +365,6 @@
   "pdfBookSubtitle": "Ein Weltenbuch",
   "pdfIncludeGmOnly": "Meistergeheimnisse einbeziehen",
   "pdfIncludeGmOnlyHint": "Aus: ein spielersicheres Buch ohne Felder, die nur für die Spielleitung sind.",
-  "exportAction": "Exportieren"
+  "exportAction": "Exportieren",
+  "tagNameTaken": "Ein Tag mit diesem Namen existiert bereits — nutze stattdessen Zusammenführen."
 }

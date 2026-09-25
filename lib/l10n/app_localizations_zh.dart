@@ -1220,4 +1220,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exportAction => '导出';
+
+  @override
+  String get tagNameTaken => '已存在同名标签——请改用合并。';
 }

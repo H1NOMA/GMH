@@ -365,5 +365,6 @@
   "pdfBookSubtitle": "Un livre du monde",
   "pdfIncludeGmOnly": "Inclure les secrets du MJ",
   "pdfIncludeGmOnlyHint": "Désactivé : un livre pour les joueurs, sans les champs réservés au MJ.",
-  "exportAction": "Exporter"
+  "exportAction": "Exporter",
+  "tagNameTaken": "Un tag porte déjà ce nom — utilisez plutôt Fusionner."
 }

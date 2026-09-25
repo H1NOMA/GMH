@@ -159,6 +159,14 @@ abstract interface class TagRepository {
   /// How many entries use each tag (tagId -> count).
   Future<Map<String, int>> usageCounts(String worldId);
 
+  /// Live [usageCounts]: re-emits when tags are assigned or removed.
+  Stream<Map<String, int>> watchUsageCounts(String worldId);
+
+  /// Entries carrying the tag (for search reindexing after tag edits).
+  Future<List<String>> entityIdsWithTag(String tagId);
+
+  Future<List<Tag>> tags(String worldId);
+
   /// Moves every assignment of [fromTagId] onto [intoTagId] (duplicates
   /// collapse) and deletes [fromTagId] — the merge tool for duplicate tags.
   Future<void> merge({required String fromTagId, required String intoTagId});
@@ -225,6 +233,7 @@ abstract interface class SearchRepository {
   Future<void> rebuildIndex(String worldId);
 
   Future<void> recordOpened(String entityId);
+  Stream<List<Entity>> watchRecentlyOpened(String worldId, {int limit = 15});
   Future<List<Entity>> recentlyOpened(String worldId, {int limit = 15});
 }
 

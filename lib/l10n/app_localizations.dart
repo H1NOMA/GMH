@@ -2299,6 +2299,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Export'**
   String get exportAction;
+
+  /// No description provided for @tagNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'A tag with this name already exists — use Merge instead.'**
+  String get tagNameTaken;
 }
 
 class _AppLocalizationsDelegate

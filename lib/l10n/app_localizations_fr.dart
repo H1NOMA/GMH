@@ -1273,4 +1273,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get exportAction => 'Exporter';
+
+  @override
+  String get tagNameTaken =>
+      'Un tag porte déjà ce nom — utilisez plutôt Fusionner.';
 }

@@ -17,11 +17,13 @@ const tagColorChoices = [
 enum _TagSort { name, created, usage }
 
 /// Usage counts per tag, recomputed when tags change.
+/// Live usage counts: assigning or removing a tag anywhere updates them
+/// (the delete confirmation must never claim a used tag is unused).
 final tagUsageProvider =
-    FutureProvider.family<Map<String, int>, String>((ref, worldId) {
-  ref.watch(worldTagsProvider(worldId));
-  return ref.watch(tagRepositoryProvider).usageCounts(worldId);
-});
+    StreamProvider.autoDispose.family<Map<String, int>, String>(
+  (ref, worldId) =>
+      ref.watch(tagRepositoryProvider).watchUsageCounts(worldId),
+);
 
 /// Dedicated Tag Manager: searchable list of every tag with usage counts;
 /// create, rename, recolor, merge and delete (with confirmation).
@@ -216,7 +218,14 @@ class _TagManagerState extends ConsumerState<_TagManager> {
   Future<void> _rename(Tag tag) async {
     final name = await _promptName(initial: tag.name);
     if (name != null && name != tag.name) {
-      await ref.read(tagRepositoryProvider).rename(tag.id, name);
+      final result =
+          await ref.read(tagServiceProvider).rename(tag.worldId, tag.id, name);
+      if (result.isErr && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(result.error.message == 'Tag name already exists.'
+                ? context.l10n.tagNameTaken
+                : localizedError(context, result.error))));
+      }
     }
   }
 
@@ -308,7 +317,7 @@ class _TagManagerState extends ConsumerState<_TagManager> {
     );
     if (target != null) {
       await ref
-          .read(tagRepositoryProvider)
+          .read(tagServiceProvider)
           .merge(fromTagId: tag.id, intoTagId: target.id);
     }
   }
@@ -332,7 +341,7 @@ class _TagManagerState extends ConsumerState<_TagManager> {
       ),
     );
     if (confirmed == true) {
-      await ref.read(tagRepositoryProvider).delete(tag.id);
+      await ref.read(tagServiceProvider).delete(tag.id);
     }
   }
 }

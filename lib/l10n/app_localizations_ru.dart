@@ -1271,4 +1271,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get exportAction => 'Экспортировать';
+
+  @override
+  String get tagNameTaken =>
+      'Тег с таким именем уже есть — воспользуйтесь слиянием.';
 }

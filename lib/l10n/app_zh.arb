@@ -365,5 +365,6 @@
   "pdfBookSubtitle": "世界之书",
   "pdfIncludeGmOnly": "包含主持人机密",
   "pdfIncludeGmOnlyHint": "关闭：不含仅限主持人字段的玩家安全版本。",
-  "exportAction": "导出"
+  "exportAction": "导出",
+  "tagNameTaken": "已存在同名标签——请改用合并。"
 }

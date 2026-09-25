@@ -1265,4 +1265,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportAction => 'Export';
+
+  @override
+  String get tagNameTaken =>
+      'A tag with this name already exists — use Merge instead.';
 }

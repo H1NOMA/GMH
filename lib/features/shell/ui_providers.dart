@@ -38,7 +38,7 @@ typedef EntityListArgs = ({
 });
 
 final entityListProvider =
-    StreamProvider.family<List<Entity>, EntityListArgs>((ref, args) {
+    StreamProvider.autoDispose.family<List<Entity>, EntityListArgs>((ref, args) {
   return ref.watch(entityRepositoryProvider).watchEntities(
         args.worldId,
         kind: args.kind,
@@ -49,24 +49,24 @@ final entityListProvider =
       );
 });
 
-final entityProvider = StreamProvider.family<Entity?, String>(
+final entityProvider = StreamProvider.autoDispose.family<Entity?, String>(
   (ref, entityId) => ref.watch(entityRepositoryProvider).watchEntity(entityId),
 );
 
-final entityDocumentProvider = StreamProvider.family<DocumentModel?, String>(
+final entityDocumentProvider = StreamProvider.autoDispose.family<DocumentModel?, String>(
   (ref, entityId) =>
       ref.watch(documentRepositoryProvider).watchByEntity(entityId),
 );
 
-final outgoingLinksProvider = StreamProvider.family<List<Link>, String>(
+final outgoingLinksProvider = StreamProvider.autoDispose.family<List<Link>, String>(
   (ref, entityId) => ref.watch(linkRepositoryProvider).watchOutgoing(entityId),
 );
 
-final incomingLinksProvider = StreamProvider.family<List<Link>, String>(
+final incomingLinksProvider = StreamProvider.autoDispose.family<List<Link>, String>(
   (ref, entityId) => ref.watch(linkRepositoryProvider).watchIncoming(entityId),
 );
 
-final entityTagsProvider = StreamProvider.family<List<Tag>, String>(
+final entityTagsProvider = StreamProvider.autoDispose.family<List<Tag>, String>(
   (ref, entityId) => ref.watch(tagRepositoryProvider).watchEntityTags(entityId),
 );
 
@@ -74,7 +74,7 @@ final worldTagsProvider = StreamProvider.family<List<Tag>, String>(
   (ref, worldId) => ref.watch(tagRepositoryProvider).watchTags(worldId),
 );
 
-final galleryProvider = StreamProvider.family<List<GalleryEntry>, String>(
+final galleryProvider = StreamProvider.autoDispose.family<List<GalleryEntry>, String>(
   (ref, entityId) => ref.watch(mediaRepositoryProvider).watchGallery(entityId),
 );
 
@@ -82,7 +82,7 @@ final galleryProvider = StreamProvider.family<List<GalleryEntry>, String>(
 /// embeds resolve through this instead of ad-hoc FutureBuilders, so a
 /// rebuilt card or a keystroke near an inline image no longer re-queries
 /// SQLite for a path that cannot change (the vault is content-addressed).
-final mediaPathProvider = FutureProvider.family<String?, String>(
+final mediaPathProvider = FutureProvider.autoDispose.family<String?, String>(
   (ref, mediaId) async {
     final repository = ref.watch(mediaRepositoryProvider);
     final item = await repository.get(mediaId);
@@ -92,7 +92,8 @@ final mediaPathProvider = FutureProvider.family<String?, String>(
 );
 
 final entityCountsProvider =
-    FutureProvider.family<Map<EntityKind, int>, String>((ref, worldId) {
+    FutureProvider.autoDispose.family<Map<EntityKind, int>, String>(
+        (ref, worldId) {
   // Recompute whenever the entity list of the world changes.
   ref.watch(entityListProvider((
     worldId: worldId,
@@ -105,18 +106,13 @@ final entityCountsProvider =
   return ref.watch(entityRepositoryProvider).countsByKind(worldId);
 });
 
+/// Recently opened entries; live, so opening an entry updates the
+/// dashboard and search lists immediately.
 final recentEntitiesProvider =
-    FutureProvider.family<List<Entity>, String>((ref, worldId) {
-  ref.watch(entityListProvider((
-    worldId: worldId,
-    kind: null,
-    customCategoryId: null,
-    tagId: null,
-    favoritesOnly: false,
-    sort: EntitySort.updatedDesc,
-  )));
-  return ref.watch(searchRepositoryProvider).recentlyOpened(worldId);
-});
+    StreamProvider.autoDispose.family<List<Entity>, String>(
+  (ref, worldId) =>
+      ref.watch(searchRepositoryProvider).watchRecentlyOpened(worldId),
+);
 
 // ------------------------------------------------------------ GM tools
 
