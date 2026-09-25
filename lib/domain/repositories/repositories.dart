@@ -4,6 +4,7 @@ library;
 
 import '../models/category_blueprint.dart';
 import '../models/custom_category.dart';
+import '../models/world_object.dart';
 import '../models/document_model.dart';
 import '../models/entity.dart';
 import '../models/entity_kind.dart';
@@ -234,6 +235,42 @@ abstract interface class SettingsRepository {
 }
 
 /// Well-known settings keys.
+/// Generic store for GM-tool objects (see [WorldObject]).
+abstract interface class WorldObjectRepository {
+  /// Live list of one world's objects of [type], optionally only the
+  /// children of [parentId]; ordered by sortOrder, then creation time.
+  Stream<List<WorldObject>> watch(String worldId, String type,
+      {String? parentId});
+
+  Future<List<WorldObject>> list(String worldId, String type,
+      {String? parentId});
+
+  Stream<WorldObject?> watchOne(String id);
+  Future<WorldObject?> get(String id);
+
+  Future<WorldObject> create({
+    required String worldId,
+    required String type,
+    String? parentId,
+    String name = '',
+    Map<String, Object?> data = const {},
+    int? sortOrder,
+  });
+
+  /// Persists name, data, sortOrder and parentId of [object].
+  Future<WorldObject> update(WorldObject object);
+
+  /// Deletes the object and, recursively, every child object.
+  Future<void> delete(String id);
+
+  /// Rewrites sortOrder to match [orderedIds].
+  Future<void> reorder(List<String> orderedIds);
+
+  /// Keeps only the newest [keep] objects of [type] in the world (used to
+  /// cap append-only logs such as dice history).
+  Future<void> trim(String worldId, String type, {required int keep});
+}
+
 abstract final class SettingsKeys {
   static const lastOpenedWorld = 'lastOpenedWorld';
   static const lastAutoBackup = 'lastAutoBackup';

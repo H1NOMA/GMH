@@ -199,3 +199,26 @@ class Settings extends Table {
   @override
   Set<Column> get primaryKey => {key};
 }
+
+/// Generic world-scoped object store for GM tools (maps and their pins,
+/// random tables, encounters and combatants, dice history, per-kind field
+/// extensions…). One row per object, discriminated by [type]; the payload
+/// is JSON so new tools need no schema migration. Children reference their
+/// parent through [parentId] (e.g. a pin's map, a combatant's encounter)
+/// and are deleted with it by the repository.
+@DataClassName('WorldObjectRow')
+class WorldObjects extends Table {
+  TextColumn get id => text()();
+  TextColumn get worldId =>
+      text().references(Worlds, #id, onDelete: KeyAction.cascade)();
+  TextColumn get type => text()();
+  TextColumn get parentId => text().nullable()();
+  TextColumn get name => text().withDefault(const Constant(''))();
+  TextColumn get dataJson => text().withDefault(const Constant('{}'))();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+  IntColumn get createdAt => integer()();
+  IntColumn get updatedAt => integer()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}

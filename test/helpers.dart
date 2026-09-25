@@ -10,6 +10,7 @@ import 'package:gmh/data/repositories/media_repository_impl.dart';
 import 'package:gmh/data/repositories/search_repository_impl.dart';
 import 'package:gmh/data/repositories/settings_repository_impl.dart';
 import 'package:gmh/data/repositories/tag_repository_impl.dart';
+import 'package:gmh/data/repositories/world_object_repository_impl.dart';
 import 'package:gmh/data/repositories/world_repository_impl.dart';
 import 'package:gmh/data/storage/media_vault.dart';
 import 'package:gmh/domain/services/document_service.dart';
@@ -31,6 +32,7 @@ class TestHarness {
   late final media = MediaRepositoryImpl(db, vault);
   late final search = SearchRepositoryImpl(db, entities);
   late final settings = SettingsRepositoryImpl(db);
+  late final objects = WorldObjectRepositoryImpl(db);
 
   late final linkSync = LinkSyncService(links);
   late final entityService = EntityService(entities, tags, search, linkSync);

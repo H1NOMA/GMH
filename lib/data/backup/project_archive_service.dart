@@ -33,7 +33,14 @@ class ProjectArchiveService {
 
   /// Serializes one world (including soft-deleted entities, versions and
   /// media metadata) into a JSON-encodable map.
-  Future<Map<String, Object?>> exportWorldData(String worldId) async {
+  Future<Map<String, Object?>> exportWorldData(String worldId) =>
+      // One read transaction = one consistent snapshot: an autosave landing
+      // mid-export can no longer produce an archive whose documents point
+      // at entities from a different moment (which failed to import with a
+      // foreign-key abort).
+      _db.transaction(() => _exportWorldData(worldId));
+
+  Future<Map<String, Object?>> _exportWorldData(String worldId) async {
     final world = await (_db.select(_db.worlds)
           ..where((w) => w.id.equals(worldId)))
         .getSingleOrNull();
@@ -77,6 +84,10 @@ class ProjectArchiveService {
 
     final entityMedia = await (_db.select(_db.entityMedia)
           ..where((em) => em.entityId.isIn(entityIds)))
+        .get();
+
+    final worldObjects = await (_db.select(_db.worldObjects)
+          ..where((o) => o.worldId.equals(worldId)))
         .get();
 
     return {
@@ -180,6 +191,19 @@ class ProjectArchiveService {
             'mediaId': em.mediaId,
             'sortOrder': em.sortOrder,
             'caption': em.caption,
+          }
+      ],
+      'worldObjects': [
+        for (final o in worldObjects)
+          {
+            'id': o.id,
+            'type': o.type,
+            'parentId': o.parentId,
+            'name': o.name,
+            'data': jsonDecode(o.dataJson),
+            'sortOrder': o.sortOrder,
+            'createdAt': o.createdAt,
+            'updatedAt': o.updatedAt,
           }
       ],
     };
@@ -428,6 +452,24 @@ class ProjectArchiveService {
                 role: Value(l['role'] as String? ?? 'related'),
                 origin: l['origin'] as String? ?? 'manual',
                 createdAt: (l['createdAt'] as num?)?.toInt() ?? nowMs(),
+              ),
+              mode: InsertMode.insertOrIgnore,
+            );
+      }
+
+      // Archives from before GMH 2.0 simply have no world objects.
+      for (final o in rows('worldObjects')) {
+        await _db.into(_db.worldObjects).insert(
+              WorldObjectsCompanion.insert(
+                id: o['id'] as String,
+                worldId: worldId,
+                type: o['type'] as String,
+                parentId: Value(o['parentId'] as String?),
+                name: Value(o['name'] as String? ?? ''),
+                dataJson: Value(jsonEncode(o['data'] ?? {})),
+                sortOrder: Value((o['sortOrder'] as num?)?.toInt() ?? 0),
+                createdAt: (o['createdAt'] as num?)?.toInt() ?? nowMs(),
+                updatedAt: (o['updatedAt'] as num?)?.toInt() ?? nowMs(),
               ),
               mode: InsertMode.insertOrIgnore,
             );

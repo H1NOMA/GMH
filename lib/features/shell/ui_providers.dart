@@ -8,6 +8,7 @@ import '../../domain/models/link.dart';
 import '../../domain/models/media_item.dart';
 import '../../domain/models/tag.dart';
 import '../../domain/models/world.dart';
+import '../../domain/models/world_object.dart';
 import '../../domain/repositories/repositories.dart';
 
 /// Reactive read-model providers shared by all features. Each wraps a
@@ -116,3 +117,21 @@ final recentEntitiesProvider =
   )));
   return ref.watch(searchRepositoryProvider).recentlyOpened(worldId);
 });
+
+// ------------------------------------------------------------ GM tools
+
+typedef WorldObjectQuery = ({String worldId, String type, String? parentId});
+
+/// Live objects of one type in a world (optionally one parent's children).
+/// autoDispose: tools come and go; their streams must not outlive them.
+final worldObjectsProvider = StreamProvider.autoDispose
+    .family<List<WorldObject>, WorldObjectQuery>(
+  (ref, q) => ref
+      .watch(worldObjectRepositoryProvider)
+      .watch(q.worldId, q.type, parentId: q.parentId),
+);
+
+final worldObjectProvider =
+    StreamProvider.autoDispose.family<WorldObject?, String>(
+  (ref, id) => ref.watch(worldObjectRepositoryProvider).watchOne(id),
+);

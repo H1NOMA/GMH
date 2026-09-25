@@ -13,6 +13,7 @@ import '../data/repositories/media_repository_impl.dart';
 import '../data/repositories/search_repository_impl.dart';
 import '../data/repositories/settings_repository_impl.dart';
 import '../data/repositories/tag_repository_impl.dart';
+import '../data/repositories/world_object_repository_impl.dart';
 import '../data/repositories/world_repository_impl.dart';
 import '../data/storage/media_vault.dart';
 import '../domain/repositories/repositories.dart';
@@ -47,6 +48,10 @@ final worldRepositoryProvider = Provider<WorldRepository>(
 
 final entityRepositoryProvider = Provider<EntityRepository>(
   (ref) => EntityRepositoryImpl(ref.watch(databaseProvider)),
+);
+
+final worldObjectRepositoryProvider = Provider<WorldObjectRepository>(
+  (ref) => WorldObjectRepositoryImpl(ref.watch(databaseProvider)),
 );
 
 final categoryRepositoryProvider = Provider<CategoryRepository>(

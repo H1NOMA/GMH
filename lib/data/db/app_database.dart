@@ -6,7 +6,7 @@ part 'app_database.g.dart';
 
 /// The GMH SQLite database.
 ///
-/// Schema documentation lives in `docs/DATABASE_SCHEMA.md`. The FTS5 search
+/// Tables are declared in `tables.dart`. The FTS5 search
 /// index (`entity_search`) is a virtual table created in the migration
 /// callbacks below because drift table classes cannot express FTS5 options
 /// like prefix indexes.
@@ -23,12 +23,13 @@ part 'app_database.g.dart';
   EntityMedia,
   RecentItems,
   Settings,
+  WorldObjects,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -57,6 +58,14 @@ class AppDatabase extends _$AppDatabase {
             // categories get '{}' = the standard layout, nothing changes.
             await m.addColumn(customCategories, customCategories.blueprintJson);
           }
+          if (from < 6) {
+            // v6: generic world-object store for the GM tools (maps,
+            // random tables, encounters, dice history, field extensions).
+            await m.createTable(worldObjects);
+          }
+          // Indexes are idempotent (IF NOT EXISTS); re-running them after
+          // every upgrade creates the ones that ship with new tables.
+          await _createIndexes();
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');
@@ -86,5 +95,9 @@ class AppDatabase extends _$AppDatabase {
         'ON links (world_id)');
     await customStatement('CREATE INDEX IF NOT EXISTS idx_versions_document '
         'ON document_versions (document_id, created_at DESC)');
+    await customStatement('CREATE INDEX IF NOT EXISTS idx_world_objects_type '
+        'ON world_objects (world_id, type, sort_order)');
+    await customStatement('CREATE INDEX IF NOT EXISTS idx_world_objects_parent '
+        'ON world_objects (parent_id)');
   }
 }

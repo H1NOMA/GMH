@@ -171,7 +171,23 @@ class MediaRepositoryImpl implements MediaRepository {
       'SELECT 1 FROM documents WHERE content_json LIKE ? LIMIT 1',
       variables: [Variable.withString('%$mediaId%')],
     ).get();
-    return docs.isNotEmpty;
+    if (docs.isNotEmpty) return true;
+
+    // Version history can still restore an embed that the live document
+    // dropped — deleting the file would leave that version broken.
+    final versions = await _db.customSelect(
+      'SELECT 1 FROM document_versions WHERE content_json LIKE ? LIMIT 1',
+      variables: [Variable.withString('%$mediaId%')],
+    ).get();
+    if (versions.isNotEmpty) return true;
+
+    // GM-tool objects (map backgrounds, handouts…) keep media ids in their
+    // JSON payload.
+    final objects = await _db.customSelect(
+      'SELECT 1 FROM world_objects WHERE data_json LIKE ? LIMIT 1',
+      variables: [Variable.withString('%$mediaId%')],
+    ).get();
+    return objects.isNotEmpty;
   }
 
   Future<void> _deleteVaultFileIfOrphan(

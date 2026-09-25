@@ -4755,6 +4755,560 @@ class SettingsCompanion extends UpdateCompanion<SettingRow> {
   }
 }
 
+class $WorldObjectsTable extends WorldObjects
+    with TableInfo<$WorldObjectsTable, WorldObjectRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WorldObjectsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _worldIdMeta = const VerificationMeta(
+    'worldId',
+  );
+  @override
+  late final GeneratedColumn<String> worldId = GeneratedColumn<String>(
+    'world_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES worlds (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _parentIdMeta = const VerificationMeta(
+    'parentId',
+  );
+  @override
+  late final GeneratedColumn<String> parentId = GeneratedColumn<String>(
+    'parent_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _dataJsonMeta = const VerificationMeta(
+    'dataJson',
+  );
+  @override
+  late final GeneratedColumn<String> dataJson = GeneratedColumn<String>(
+    'data_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('{}'),
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    worldId,
+    type,
+    parentId,
+    name,
+    dataJson,
+    sortOrder,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'world_objects';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WorldObjectRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('world_id')) {
+      context.handle(
+        _worldIdMeta,
+        worldId.isAcceptableOrUnknown(data['world_id']!, _worldIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_worldIdMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('parent_id')) {
+      context.handle(
+        _parentIdMeta,
+        parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta),
+      );
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    }
+    if (data.containsKey('data_json')) {
+      context.handle(
+        _dataJsonMeta,
+        dataJson.isAcceptableOrUnknown(data['data_json']!, _dataJsonMeta),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WorldObjectRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WorldObjectRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      worldId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}world_id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      parentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}parent_id'],
+      ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      dataJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}data_json'],
+      )!,
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $WorldObjectsTable createAlias(String alias) {
+    return $WorldObjectsTable(attachedDatabase, alias);
+  }
+}
+
+class WorldObjectRow extends DataClass implements Insertable<WorldObjectRow> {
+  final String id;
+  final String worldId;
+  final String type;
+  final String? parentId;
+  final String name;
+  final String dataJson;
+  final int sortOrder;
+  final int createdAt;
+  final int updatedAt;
+  const WorldObjectRow({
+    required this.id,
+    required this.worldId,
+    required this.type,
+    this.parentId,
+    required this.name,
+    required this.dataJson,
+    required this.sortOrder,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['world_id'] = Variable<String>(worldId);
+    map['type'] = Variable<String>(type);
+    if (!nullToAbsent || parentId != null) {
+      map['parent_id'] = Variable<String>(parentId);
+    }
+    map['name'] = Variable<String>(name);
+    map['data_json'] = Variable<String>(dataJson);
+    map['sort_order'] = Variable<int>(sortOrder);
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    return map;
+  }
+
+  WorldObjectsCompanion toCompanion(bool nullToAbsent) {
+    return WorldObjectsCompanion(
+      id: Value(id),
+      worldId: Value(worldId),
+      type: Value(type),
+      parentId: parentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentId),
+      name: Value(name),
+      dataJson: Value(dataJson),
+      sortOrder: Value(sortOrder),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory WorldObjectRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WorldObjectRow(
+      id: serializer.fromJson<String>(json['id']),
+      worldId: serializer.fromJson<String>(json['worldId']),
+      type: serializer.fromJson<String>(json['type']),
+      parentId: serializer.fromJson<String?>(json['parentId']),
+      name: serializer.fromJson<String>(json['name']),
+      dataJson: serializer.fromJson<String>(json['dataJson']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'worldId': serializer.toJson<String>(worldId),
+      'type': serializer.toJson<String>(type),
+      'parentId': serializer.toJson<String?>(parentId),
+      'name': serializer.toJson<String>(name),
+      'dataJson': serializer.toJson<String>(dataJson),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+    };
+  }
+
+  WorldObjectRow copyWith({
+    String? id,
+    String? worldId,
+    String? type,
+    Value<String?> parentId = const Value.absent(),
+    String? name,
+    String? dataJson,
+    int? sortOrder,
+    int? createdAt,
+    int? updatedAt,
+  }) => WorldObjectRow(
+    id: id ?? this.id,
+    worldId: worldId ?? this.worldId,
+    type: type ?? this.type,
+    parentId: parentId.present ? parentId.value : this.parentId,
+    name: name ?? this.name,
+    dataJson: dataJson ?? this.dataJson,
+    sortOrder: sortOrder ?? this.sortOrder,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  WorldObjectRow copyWithCompanion(WorldObjectsCompanion data) {
+    return WorldObjectRow(
+      id: data.id.present ? data.id.value : this.id,
+      worldId: data.worldId.present ? data.worldId.value : this.worldId,
+      type: data.type.present ? data.type.value : this.type,
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+      name: data.name.present ? data.name.value : this.name,
+      dataJson: data.dataJson.present ? data.dataJson.value : this.dataJson,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WorldObjectRow(')
+          ..write('id: $id, ')
+          ..write('worldId: $worldId, ')
+          ..write('type: $type, ')
+          ..write('parentId: $parentId, ')
+          ..write('name: $name, ')
+          ..write('dataJson: $dataJson, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    worldId,
+    type,
+    parentId,
+    name,
+    dataJson,
+    sortOrder,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WorldObjectRow &&
+          other.id == this.id &&
+          other.worldId == this.worldId &&
+          other.type == this.type &&
+          other.parentId == this.parentId &&
+          other.name == this.name &&
+          other.dataJson == this.dataJson &&
+          other.sortOrder == this.sortOrder &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class WorldObjectsCompanion extends UpdateCompanion<WorldObjectRow> {
+  final Value<String> id;
+  final Value<String> worldId;
+  final Value<String> type;
+  final Value<String?> parentId;
+  final Value<String> name;
+  final Value<String> dataJson;
+  final Value<int> sortOrder;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int> rowid;
+  const WorldObjectsCompanion({
+    this.id = const Value.absent(),
+    this.worldId = const Value.absent(),
+    this.type = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.dataJson = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WorldObjectsCompanion.insert({
+    required String id,
+    required String worldId,
+    required String type,
+    this.parentId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.dataJson = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       worldId = Value(worldId),
+       type = Value(type),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<WorldObjectRow> custom({
+    Expression<String>? id,
+    Expression<String>? worldId,
+    Expression<String>? type,
+    Expression<String>? parentId,
+    Expression<String>? name,
+    Expression<String>? dataJson,
+    Expression<int>? sortOrder,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (worldId != null) 'world_id': worldId,
+      if (type != null) 'type': type,
+      if (parentId != null) 'parent_id': parentId,
+      if (name != null) 'name': name,
+      if (dataJson != null) 'data_json': dataJson,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WorldObjectsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? worldId,
+    Value<String>? type,
+    Value<String?>? parentId,
+    Value<String>? name,
+    Value<String>? dataJson,
+    Value<int>? sortOrder,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return WorldObjectsCompanion(
+      id: id ?? this.id,
+      worldId: worldId ?? this.worldId,
+      type: type ?? this.type,
+      parentId: parentId ?? this.parentId,
+      name: name ?? this.name,
+      dataJson: dataJson ?? this.dataJson,
+      sortOrder: sortOrder ?? this.sortOrder,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (worldId.present) {
+      map['world_id'] = Variable<String>(worldId.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (parentId.present) {
+      map['parent_id'] = Variable<String>(parentId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (dataJson.present) {
+      map['data_json'] = Variable<String>(dataJson.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WorldObjectsCompanion(')
+          ..write('id: $id, ')
+          ..write('worldId: $worldId, ')
+          ..write('type: $type, ')
+          ..write('parentId: $parentId, ')
+          ..write('name: $name, ')
+          ..write('dataJson: $dataJson, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4774,6 +5328,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $EntityMediaTable entityMedia = $EntityMediaTable(this);
   late final $RecentItemsTable recentItems = $RecentItemsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
+  late final $WorldObjectsTable worldObjects = $WorldObjectsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4791,6 +5346,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     entityMedia,
     recentItems,
     settings,
+    worldObjects,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -4891,6 +5447,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('recent_items', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'worlds',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('world_objects', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -5011,6 +5574,24 @@ final class $$WorldsTableReferences
     ).filter((f) => f.worldId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_mediaFilesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$WorldObjectsTable, List<WorldObjectRow>>
+  _worldObjectsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.worldObjects,
+    aliasName: $_aliasNameGenerator(db.worlds.id, db.worldObjects.worldId),
+  );
+
+  $$WorldObjectsTableProcessedTableManager get worldObjectsRefs {
+    final manager = $$WorldObjectsTableTableManager(
+      $_db,
+      $_db.worldObjects,
+    ).filter((f) => f.worldId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_worldObjectsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -5177,6 +5758,31 @@ class $$WorldsTableFilterComposer
           }) => $$MediaFilesTableFilterComposer(
             $db: $db,
             $table: $db.mediaFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> worldObjectsRefs(
+    Expression<bool> Function($$WorldObjectsTableFilterComposer f) f,
+  ) {
+    final $$WorldObjectsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.worldObjects,
+      getReferencedColumn: (t) => t.worldId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldObjectsTableFilterComposer(
+            $db: $db,
+            $table: $db.worldObjects,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5390,6 +5996,31 @@ class $$WorldsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> worldObjectsRefs<T extends Object>(
+    Expression<T> Function($$WorldObjectsTableAnnotationComposer a) f,
+  ) {
+    final $$WorldObjectsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.worldObjects,
+      getReferencedColumn: (t) => t.worldId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldObjectsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.worldObjects,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$WorldsTableTableManager
@@ -5411,6 +6042,7 @@ class $$WorldsTableTableManager
             bool linksRefs,
             bool tagsRefs,
             bool mediaFilesRefs,
+            bool worldObjectsRefs,
           })
         > {
   $$WorldsTableTableManager(_$AppDatabase db, $WorldsTable table)
@@ -5477,6 +6109,7 @@ class $$WorldsTableTableManager
                 linksRefs = false,
                 tagsRefs = false,
                 mediaFilesRefs = false,
+                worldObjectsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -5486,6 +6119,7 @@ class $$WorldsTableTableManager
                     if (linksRefs) db.links,
                     if (tagsRefs) db.tags,
                     if (mediaFilesRefs) db.mediaFiles,
+                    if (worldObjectsRefs) db.worldObjects,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -5587,6 +6221,27 @@ class $$WorldsTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (worldObjectsRefs)
+                        await $_getPrefetchedData<
+                          WorldRow,
+                          $WorldsTable,
+                          WorldObjectRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$WorldsTableReferences
+                              ._worldObjectsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$WorldsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).worldObjectsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.worldId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5613,6 +6268,7 @@ typedef $$WorldsTableProcessedTableManager =
         bool linksRefs,
         bool tagsRefs,
         bool mediaFilesRefs,
+        bool worldObjectsRefs,
       })
     >;
 typedef $$CustomCategoriesTableCreateCompanionBuilder =
@@ -10116,6 +10772,400 @@ typedef $$SettingsTableProcessedTableManager =
       SettingRow,
       PrefetchHooks Function()
     >;
+typedef $$WorldObjectsTableCreateCompanionBuilder =
+    WorldObjectsCompanion Function({
+      required String id,
+      required String worldId,
+      required String type,
+      Value<String?> parentId,
+      Value<String> name,
+      Value<String> dataJson,
+      Value<int> sortOrder,
+      required int createdAt,
+      required int updatedAt,
+      Value<int> rowid,
+    });
+typedef $$WorldObjectsTableUpdateCompanionBuilder =
+    WorldObjectsCompanion Function({
+      Value<String> id,
+      Value<String> worldId,
+      Value<String> type,
+      Value<String?> parentId,
+      Value<String> name,
+      Value<String> dataJson,
+      Value<int> sortOrder,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$WorldObjectsTableReferences
+    extends BaseReferences<_$AppDatabase, $WorldObjectsTable, WorldObjectRow> {
+  $$WorldObjectsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $WorldsTable _worldIdTable(_$AppDatabase db) => db.worlds.createAlias(
+    $_aliasNameGenerator(db.worldObjects.worldId, db.worlds.id),
+  );
+
+  $$WorldsTableProcessedTableManager get worldId {
+    final $_column = $_itemColumn<String>('world_id')!;
+
+    final manager = $$WorldsTableTableManager(
+      $_db,
+      $_db.worlds,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_worldIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$WorldObjectsTableFilterComposer
+    extends Composer<_$AppDatabase, $WorldObjectsTable> {
+  $$WorldObjectsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get parentId => $composableBuilder(
+    column: $table.parentId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$WorldsTableFilterComposer get worldId {
+    final $$WorldsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableFilterComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WorldObjectsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WorldObjectsTable> {
+  $$WorldObjectsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get parentId => $composableBuilder(
+    column: $table.parentId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WorldsTableOrderingComposer get worldId {
+    final $$WorldsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableOrderingComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WorldObjectsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WorldObjectsTable> {
+  $$WorldObjectsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get parentId =>
+      $composableBuilder(column: $table.parentId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get dataJson =>
+      $composableBuilder(column: $table.dataJson, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$WorldsTableAnnotationComposer get worldId {
+    final $$WorldsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WorldObjectsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WorldObjectsTable,
+          WorldObjectRow,
+          $$WorldObjectsTableFilterComposer,
+          $$WorldObjectsTableOrderingComposer,
+          $$WorldObjectsTableAnnotationComposer,
+          $$WorldObjectsTableCreateCompanionBuilder,
+          $$WorldObjectsTableUpdateCompanionBuilder,
+          (WorldObjectRow, $$WorldObjectsTableReferences),
+          WorldObjectRow,
+          PrefetchHooks Function({bool worldId})
+        > {
+  $$WorldObjectsTableTableManager(_$AppDatabase db, $WorldObjectsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WorldObjectsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WorldObjectsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WorldObjectsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> worldId = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String?> parentId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> dataJson = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WorldObjectsCompanion(
+                id: id,
+                worldId: worldId,
+                type: type,
+                parentId: parentId,
+                name: name,
+                dataJson: dataJson,
+                sortOrder: sortOrder,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String worldId,
+                required String type,
+                Value<String?> parentId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> dataJson = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => WorldObjectsCompanion.insert(
+                id: id,
+                worldId: worldId,
+                type: type,
+                parentId: parentId,
+                name: name,
+                dataJson: dataJson,
+                sortOrder: sortOrder,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$WorldObjectsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({worldId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (worldId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.worldId,
+                                referencedTable: $$WorldObjectsTableReferences
+                                    ._worldIdTable(db),
+                                referencedColumn: $$WorldObjectsTableReferences
+                                    ._worldIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$WorldObjectsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WorldObjectsTable,
+      WorldObjectRow,
+      $$WorldObjectsTableFilterComposer,
+      $$WorldObjectsTableOrderingComposer,
+      $$WorldObjectsTableAnnotationComposer,
+      $$WorldObjectsTableCreateCompanionBuilder,
+      $$WorldObjectsTableUpdateCompanionBuilder,
+      (WorldObjectRow, $$WorldObjectsTableReferences),
+      WorldObjectRow,
+      PrefetchHooks Function({bool worldId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -10143,4 +11193,6 @@ class $AppDatabaseManager {
       $$RecentItemsTableTableManager(_db, _db.recentItems);
   $$SettingsTableTableManager get settings =>
       $$SettingsTableTableManager(_db, _db.settings);
+  $$WorldObjectsTableTableManager get worldObjects =>
+      $$WorldObjectsTableTableManager(_db, _db.worldObjects);
 }
