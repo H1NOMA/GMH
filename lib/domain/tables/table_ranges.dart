@@ -84,25 +84,32 @@ List<RandomTableRow> autoRanges(
       sizes[i] = 1;
     }
   } else {
-    // One value each, then share the rest by weight.
-    final rest = span - rows.length;
+    // Proportional shares (at least one value each), then hand out the
+    // difference by largest remainder / take it back from the largest.
     final totalWeight =
         rows.fold<int>(0, (sum, r) => sum + max(1, r.weight));
     final remainders = <(double, int)>[];
     var given = 0;
     for (var i = 0; i < rows.length; i++) {
-      final exact = rest * max(1, rows[i].weight) / totalWeight;
-      final whole = exact.floor();
-      sizes[i] = 1 + whole;
-      given += whole;
-      remainders.add((exact - whole, i));
+      final exact = span * max(1, rows[i].weight) / totalWeight;
+      sizes[i] = max(1, exact.floor());
+      given += sizes[i];
+      remainders.add((exact - exact.floor(), i));
     }
     remainders.sort((x, y) {
       final c = y.$1.compareTo(x.$1);
       return c != 0 ? c : x.$2.compareTo(y.$2);
     });
-    for (var k = 0; k < rest - given; k++) {
+    for (var k = 0; given < span; k++, given++) {
       sizes[remainders[k % remainders.length].$2]++;
+    }
+    while (given > span) {
+      var largest = 0;
+      for (var i = 1; i < sizes.length; i++) {
+        if (sizes[i] > sizes[largest]) largest = i;
+      }
+      sizes[largest]--;
+      given--;
     }
   }
   final out = <RandomTableRow>[];
