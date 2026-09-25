@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,10 +26,10 @@ import '../../app/theme/gmh_theme.dart';
 import '../../core/constants.dart';
 import '../../core/utils/save_flush.dart';
 import '../../data/backup/backup_service.dart';
-import '../../domain/repositories/repositories.dart';
 import '../shell/history_buttons.dart';
 import '../shell/ui_providers.dart';
 import '../shell/workspace_tabs.dart';
+import '../worlds/import_world.dart';
 
 /// Settings: language, manual/automatic backups, full-project export
 /// (.gmhw ZIP), JSON export, PDF world book, and restore/import.
@@ -281,52 +280,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return id.length >= 6 ? '$base-${id.substring(0, 6)}' : base;
   }
 
-  Future<void> _importArchive() => _run(() async {
-        final picked = await FilePicker.platform.pickFiles(
-          dialogTitle: context.l10n.importPickArchive,
-          type: FileType.any,
-        );
-        final path = picked?.files.firstOrNull?.path;
-        if (path == null || !mounted) return;
-
-        final archives = ref.read(projectArchiveServiceProvider);
-        final manifest = await archives.inspectArchive(path);
-        if (!mounted) return;
-        if (manifest.isErr) {
-          _notify(localizedError(context, manifest.error));
-          return;
-        }
-        // Importing a world that already exists replaces it: say so.
-        final existing = (ref.read(worldsProvider).valueOrNull ?? const [])
-            .where((w) => w.id == manifest.value.worldId)
-            .firstOrNull;
-        if (existing != null) {
-          final replace = await _confirm(
-            title: context.l10n.importReplaceTitle(existing.name),
-            body: context.l10n.importReplaceBody,
-            action: context.l10n.importReplaceAction,
-          );
-          if (!replace || !mounted) return;
-        }
-
-        final result = await archives.importArchive(path);
-        if (!mounted) return;
-        if (result.isErr) {
-          _notify(localizedError(context, result.error));
-          return;
-        }
-        final worldId = result.value;
-        final indexed = await _rebuildIndex(worldId);
-        if (!mounted) return;
-        await ref
-            .read(settingsRepositoryProvider)
-            .set(SettingsKeys.lastOpenedWorld, worldId);
-        if (!mounted) return;
-        _notify(indexed
-            ? context.l10n.worldImported
-            : context.l10n.searchIndexFailed);
-        context.go(Routes.home(worldId));
-      });
+  Future<void> _importArchive() =>
+      _run(() async => importWorldArchive(context, ref));
 
   /// Rebuilds a world's search index after its rows were replaced;
   /// false when it failed (the world itself is intact).

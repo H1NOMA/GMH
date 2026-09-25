@@ -11,6 +11,7 @@ import '../../app/theme/gmh_theme.dart';
 import '../../domain/models/world.dart';
 import '../../domain/repositories/repositories.dart';
 import '../shell/ui_providers.dart';
+import 'import_world.dart';
 import 'world_editor_dialog.dart';
 
 /// Entry screen: pick, create or import a world.
@@ -124,15 +125,7 @@ class WorldPickerScreen extends ConsumerWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium),
-                                  subtitle: Text(
-                                    world.description.isEmpty
-                                        ? context.l10n.worldEdited(
-                                            localizedTimeAgo(
-                                                context, world.updatedAt))
-                                        : world.description,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  subtitle: _WorldMeta(world: world),
                                   trailing: PopupMenuButton<String>(
                                     tooltip: context.l10n.worldActions,
                                     onSelected: (action) => switch (action) {
@@ -167,11 +160,51 @@ class WorldPickerScreen extends ConsumerWidget {
                   icon: const Icon(Icons.add),
                   label: Text(context.l10n.createNewWorld),
                 ),
+                const SizedBox(height: 8),
+                // A world from another device or a backup file.
+                OutlinedButton.icon(
+                  onPressed: () => importWorldArchive(context, ref),
+                  icon: const Icon(Icons.file_open_outlined),
+                  label: Text(context.l10n.importArchiveTitle),
+                ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Description (when set) and a meta line: setting, size, last edit.
+class _WorldMeta extends ConsumerWidget {
+  final World world;
+  const _WorldMeta({required this.world});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final counts =
+        ref.watch(entityCountsProvider(world.id)).valueOrNull ?? const {};
+    final total = counts.values.fold(0, (a, b) => a + b);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (world.description.isNotEmpty)
+          Text(world.description,
+              maxLines: 2, overflow: TextOverflow.ellipsis),
+        const SizedBox(height: 2),
+        Text(
+          [
+            world.style.localizedName(context),
+            context.l10n.entriesCount(total),
+            context.l10n
+                .worldEdited(localizedTimeAgo(context, world.updatedAt)),
+          ].join(' · '),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 11.5, color: GmhColors.parchmentFaint),
+        ),
+      ],
     );
   }
 }
