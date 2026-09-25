@@ -15,6 +15,7 @@ import '../categories/category_ui.dart';
 import '../tags/tag_manager_sheet.dart';
 import '../categories/manage_categories_sheet.dart';
 import '../../app/tools.dart';
+import 'command_palette.dart';
 import 'history_buttons.dart';
 import 'tab_strip.dart';
 import 'ui_providers.dart';
@@ -164,6 +165,40 @@ class _Sidebar extends ConsumerWidget {
                   Icon(Icons.unfold_more,
                       size: 18, color: GmhColors.parchmentDim),
                 ],
+              ),
+            ),
+          ),
+          // Quick jump: the command palette for mouse users (Ctrl+P).
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () => showCommandPalette(context,
+                  worldId: worldId, appRef: ref),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: GmhColors.border),
+                  color: GmhColors.background,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.bolt, size: 16, color: GmhColors.parchmentDim),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(context.l10n.paletteTitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 12.5, color: GmhColors.parchmentDim)),
+                    ),
+                    Text('Ctrl+P',
+                        style: TextStyle(
+                            fontSize: 11, color: GmhColors.parchmentFaint)),
+                  ],
+                ),
               ),
             ),
           ),

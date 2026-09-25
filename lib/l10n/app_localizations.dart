@@ -3991,6 +3991,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'How it was rolled'**
   String get tablesWhy;
+
+  /// No description provided for @paletteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to an entry, a section or a tool, or run a command…'**
+  String get paletteHint;
+
+  /// No description provided for @paletteCommands.
+  ///
+  /// In en, this message translates to:
+  /// **'Commands'**
+  String get paletteCommands;
+
+  /// No description provided for @paletteEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries'**
+  String get paletteEntries;
+
+  /// No description provided for @paletteNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches'**
+  String get paletteNoMatches;
+
+  /// No description provided for @paletteToggleTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch light / dark theme'**
+  String get paletteToggleTheme;
+
+  /// No description provided for @paletteOpenInTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to {name}'**
+  String paletteOpenInTab(String name);
+
+  /// No description provided for @paletteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Command palette'**
+  String get paletteTitle;
 }
 
 class _AppLocalizationsDelegate

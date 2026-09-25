@@ -1185,5 +1185,19 @@
     }
   },
   "tablesPreviewRoll": "Try a roll",
-  "tablesWhy": "How it was rolled"
+  "tablesWhy": "How it was rolled",
+  "paletteHint": "Jump to an entry, a section or a tool, or run a command…",
+  "paletteCommands": "Commands",
+  "paletteEntries": "Entries",
+  "paletteNoMatches": "Nothing matches",
+  "paletteToggleTheme": "Switch light / dark theme",
+  "paletteOpenInTab": "Go to {name}",
+  "@paletteOpenInTab": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "paletteTitle": "Command palette"
 }

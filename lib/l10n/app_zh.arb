@@ -647,5 +647,12 @@
   "tablesAddDepsBody": "“{name}”会在这些表上掷骰。缺少它们时，结果中会出现警告标记。",
   "tablesAddedCount": "{count, plural, other{已添加 {count} 个表}}",
   "tablesPreviewRoll": "试掷一次",
-  "tablesWhy": "掷骰过程"
+  "tablesWhy": "掷骰过程",
+  "paletteHint": "跳转到条目、分区或工具，或执行命令……",
+  "paletteCommands": "命令",
+  "paletteEntries": "条目",
+  "paletteNoMatches": "无匹配结果",
+  "paletteToggleTheme": "切换浅色 / 深色主题",
+  "paletteOpenInTab": "前往 {name}",
+  "paletteTitle": "命令面板"
 }

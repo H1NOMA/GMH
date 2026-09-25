@@ -2292,4 +2292,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tablesWhy => 'Как получен результат';
+
+  @override
+  String get paletteHint =>
+      'Перейти к записи, разделу или инструменту, или выполнить команду…';
+
+  @override
+  String get paletteCommands => 'Команды';
+
+  @override
+  String get paletteEntries => 'Записи';
+
+  @override
+  String get paletteNoMatches => 'Ничего не найдено';
+
+  @override
+  String get paletteToggleTheme => 'Переключить светлую / тёмную тему';
+
+  @override
+  String paletteOpenInTab(String name) {
+    return 'Перейти: $name';
+  }
+
+  @override
+  String get paletteTitle => 'Палитра команд';
 }

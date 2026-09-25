@@ -2192,4 +2192,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tablesWhy => '掷骰过程';
+
+  @override
+  String get paletteHint => '跳转到条目、分区或工具，或执行命令……';
+
+  @override
+  String get paletteCommands => '命令';
+
+  @override
+  String get paletteEntries => '条目';
+
+  @override
+  String get paletteNoMatches => '无匹配结果';
+
+  @override
+  String get paletteToggleTheme => '切换浅色 / 深色主题';
+
+  @override
+  String paletteOpenInTab(String name) {
+    return '前往 $name';
+  }
+
+  @override
+  String get paletteTitle => '命令面板';
 }

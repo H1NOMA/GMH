@@ -2267,4 +2267,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tablesWhy => 'How it was rolled';
+
+  @override
+  String get paletteHint =>
+      'Jump to an entry, a section or a tool, or run a command…';
+
+  @override
+  String get paletteCommands => 'Commands';
+
+  @override
+  String get paletteEntries => 'Entries';
+
+  @override
+  String get paletteNoMatches => 'Nothing matches';
+
+  @override
+  String get paletteToggleTheme => 'Switch light / dark theme';
+
+  @override
+  String paletteOpenInTab(String name) {
+    return 'Go to $name';
+  }
+
+  @override
+  String get paletteTitle => 'Command palette';
 }

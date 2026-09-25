@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/search/search_screen.dart';
+import '../features/shell/command_palette.dart';
 import '../features/shell/pause_menu.dart';
 import '../features/shell/workspace_tabs.dart';
 
@@ -52,6 +53,10 @@ class _NewTabIntent extends Intent {
 class _CycleTabIntent extends Intent {
   final int delta;
   const _CycleTabIntent(this.delta);
+}
+
+class _PaletteIntent extends Intent {
+  const _PaletteIntent();
 }
 
 
@@ -195,6 +200,13 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             const _NewTabIntent(),
         const SingleActivator(LogicalKeyboardKey.tab, control: true):
             const _CycleTabIntent(1),
+        // Command palette, as in VS Code / Obsidian.
+        const SingleActivator(LogicalKeyboardKey.keyP, control: true):
+            const _PaletteIntent(),
+        const SingleActivator(LogicalKeyboardKey.keyP, meta: true):
+            const _PaletteIntent(),
+        const SingleActivator(LogicalKeyboardKey.keyP,
+            control: true, shift: true): const _PaletteIntent(),
         const SingleActivator(LogicalKeyboardKey.tab,
             control: true, shift: true): const _CycleTabIntent(-1),
       },
@@ -222,6 +234,15 @@ class _GmhAppState extends ConsumerState<GmhApp> {
             onInvoke: (_) => _withWorld((worldId) => ref
                 .read(workspaceTabsProvider.notifier)
                 .openInNewTab(Routes.home(worldId)))),
+        _PaletteIntent: _PageAction<_PaletteIntent>(
+            modalOpen: _modalOpen,
+            onInvoke: (_) => _withWorld((worldId) {
+                  final context =
+                      _router.routerDelegate.navigatorKey.currentContext;
+                  if (context == null) return;
+                  unawaited(showCommandPalette(context,
+                      worldId: worldId, appRef: ref));
+                })),
         _CycleTabIntent: _PageAction<_CycleTabIntent>(
             modalOpen: _modalOpen,
             onInvoke: (intent) => ref

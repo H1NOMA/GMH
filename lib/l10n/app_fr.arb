@@ -647,5 +647,12 @@
   "tablesAddDepsBody": "« {name} » lance sur ces tables. Sans elles, ses résultats afficheront un avertissement.",
   "tablesAddedCount": "{count, plural, =1{1 table ajoutée} other{{count} tables ajoutées}}",
   "tablesPreviewRoll": "Essayer un lancer",
-  "tablesWhy": "Détail du tirage"
+  "tablesWhy": "Détail du tirage",
+  "paletteHint": "Aller à une entrée, une section ou un outil, ou lancer une commande…",
+  "paletteCommands": "Commandes",
+  "paletteEntries": "Entrées",
+  "paletteNoMatches": "Aucun résultat",
+  "paletteToggleTheme": "Basculer thème clair / sombre",
+  "paletteOpenInTab": "Aller à {name}",
+  "paletteTitle": "Palette de commandes"
 }

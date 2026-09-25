@@ -647,5 +647,12 @@
   "tablesAddDepsBody": "«{name}» бросает по этим таблицам. Без них в результатах появятся предупреждения.",
   "tablesAddedCount": "{count, plural, =1{Добавлена 1 таблица} few{Добавлено {count} таблицы} many{Добавлено {count} таблиц} other{Добавлено {count} таблицы}}",
   "tablesPreviewRoll": "Пробный бросок",
-  "tablesWhy": "Как получен результат"
+  "tablesWhy": "Как получен результат",
+  "paletteHint": "Перейти к записи, разделу или инструменту, или выполнить команду…",
+  "paletteCommands": "Команды",
+  "paletteEntries": "Записи",
+  "paletteNoMatches": "Ничего не найдено",
+  "paletteToggleTheme": "Переключить светлую / тёмную тему",
+  "paletteOpenInTab": "Перейти: {name}",
+  "paletteTitle": "Палитра команд"
 }

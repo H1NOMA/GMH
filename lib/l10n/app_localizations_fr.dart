@@ -2279,4 +2279,28 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tablesWhy => 'Détail du tirage';
+
+  @override
+  String get paletteHint =>
+      'Aller à une entrée, une section ou un outil, ou lancer une commande…';
+
+  @override
+  String get paletteCommands => 'Commandes';
+
+  @override
+  String get paletteEntries => 'Entrées';
+
+  @override
+  String get paletteNoMatches => 'Aucun résultat';
+
+  @override
+  String get paletteToggleTheme => 'Basculer thème clair / sombre';
+
+  @override
+  String paletteOpenInTab(String name) {
+    return 'Aller à $name';
+  }
+
+  @override
+  String get paletteTitle => 'Palette de commandes';
 }

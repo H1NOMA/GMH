@@ -2278,4 +2278,28 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tablesWhy => 'So wurde gewürfelt';
+
+  @override
+  String get paletteHint =>
+      'Zu einem Eintrag, Bereich oder Werkzeug springen oder einen Befehl ausführen…';
+
+  @override
+  String get paletteCommands => 'Befehle';
+
+  @override
+  String get paletteEntries => 'Einträge';
+
+  @override
+  String get paletteNoMatches => 'Keine Treffer';
+
+  @override
+  String get paletteToggleTheme => 'Hell / dunkel umschalten';
+
+  @override
+  String paletteOpenInTab(String name) {
+    return 'Gehe zu $name';
+  }
+
+  @override
+  String get paletteTitle => 'Befehlspalette';
 }

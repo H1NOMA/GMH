@@ -647,5 +647,12 @@
   "tablesAddDepsBody": "„{name}“ würfelt auf diesen Tabellen. Ohne sie zeigen die Ergebnisse ein Warnzeichen.",
   "tablesAddedCount": "{count, plural, =1{1 Tabelle hinzugefügt} other{{count} Tabellen hinzugefügt}}",
   "tablesPreviewRoll": "Probewurf",
-  "tablesWhy": "So wurde gewürfelt"
+  "tablesWhy": "So wurde gewürfelt",
+  "paletteHint": "Zu einem Eintrag, Bereich oder Werkzeug springen oder einen Befehl ausführen…",
+  "paletteCommands": "Befehle",
+  "paletteEntries": "Einträge",
+  "paletteNoMatches": "Keine Treffer",
+  "paletteToggleTheme": "Hell / dunkel umschalten",
+  "paletteOpenInTab": "Gehe zu {name}",
+  "paletteTitle": "Befehlspalette"
 }
