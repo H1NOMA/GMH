@@ -36,7 +36,8 @@ class EntityGridCard extends ConsumerWidget {
     // freshly imported archive still looks like a gallery. The gallery
     // stream is only subscribed when there is no cover — a 200-tile grid
     // must not hold 200 live watch queries just in case.
-    final imageId = entity.coverMediaId ??
+    final imageId =
+        entity.coverMediaId ??
         (ref.watch(galleryProvider(entity.id)).valueOrNull ?? [])
             .where((e) => isImageMime(e.media.mimeType))
             .map((e) => e.media.id)
@@ -44,82 +45,93 @@ class EntityGridCard extends ConsumerWidget {
 
     return Card(
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          ref.read(searchRepositoryProvider).recordOpened(entity.id);
-          context.go(Routes.entity(worldId, entity.id));
-        },
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (imageId == null)
-              ColoredBox(
-                color: color.withValues(alpha: 0.10),
-                child: Center(
-                  child:
-                      Icon(icon, size: 38, color: color.withValues(alpha: 0.7)),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (imageId == null)
+            ColoredBox(
+              color: color.withValues(alpha: 0.10),
+              child: Center(
+                child: Icon(
+                  icon,
+                  size: 38,
+                  color: color.withValues(alpha: 0.7),
                 ),
-              )
-            else
-              _MediaImage(mediaId: imageId, fallbackIcon: icon, color: color),
-            // Name (and summary when there is room) over a bottom gradient,
-            // readable on any photo.
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(10, 22, 10, 8),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Color(0xC7000000)],
+              ),
+            )
+          else
+            _MediaImage(mediaId: imageId, fallbackIcon: icon, color: color),
+          // Name (and summary when there is room) over a bottom gradient,
+          // readable on any photo.
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(10, 22, 10, 8),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Color(0xC7000000)],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    entity.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Color(0xFFF2F2F2),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                  if (entity.summary.isNotEmpty)
                     Text(
-                      entity.name,
-                      maxLines: 2,
+                      entity.summary,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Color(0xFFF2F2F2),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        height: 1.2,
+                        color: Color(0xB8FFFFFF),
+                        fontSize: 10.5,
                       ),
                     ),
-                    if (entity.summary.isNotEmpty)
-                      Text(
-                        entity.summary,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: Color(0xB8FFFFFF), fontSize: 10.5),
-                      ),
-                  ],
-                ),
+                ],
               ),
             ),
-            if (entity.isFavorite)
-              Positioned(
-                top: 6,
-                right: 6,
-                child: Container(
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.45),
-                    shape: BoxShape.circle,
-                  ),
-                  child:
-                      Icon(Icons.star, size: 13, color: GmhColors.ember),
+          ),
+          if (entity.isFavorite)
+            Positioned(
+              top: 6,
+              right: 6,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.45),
+                  shape: BoxShape.circle,
                 ),
+                child: Icon(Icons.star, size: 13, color: GmhColors.ember),
               ),
-          ],
-        ),
+            ),
+          // The ink layer sits above the photo: an InkWell under an
+          // opaque image paints its hover and splash where no one sees.
+          Positioned.fill(
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                onTap: () {
+                  ref.read(searchRepositoryProvider).recordOpened(entity.id);
+                  context.go(Routes.entity(worldId, entity.id));
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -147,8 +159,11 @@ class _MediaImage extends ConsumerWidget {
           return ColoredBox(
             color: color.withValues(alpha: 0.10),
             child: Center(
-              child: Icon(fallbackIcon,
-                  size: 38, color: color.withValues(alpha: 0.7)),
+              child: Icon(
+                fallbackIcon,
+                size: 38,
+                color: color.withValues(alpha: 0.7),
+              ),
             ),
           );
         }
@@ -159,8 +174,10 @@ class _MediaImage extends ConsumerWidget {
           errorBuilder: (_, _, _) => ColoredBox(
             color: color.withValues(alpha: 0.10),
             child: Center(
-              child: Icon(Icons.broken_image_outlined,
-                  color: GmhColors.parchmentFaint),
+              child: Icon(
+                Icons.broken_image_outlined,
+                color: GmhColors.parchmentFaint,
+              ),
             ),
           ),
         );

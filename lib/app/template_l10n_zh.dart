@@ -299,4 +299,8 @@ const templateZh = <String, String>{
   'e.g. 500 gp': '例如：500 金币',
   'e.g. 7, regains 1d6+1 at dawn': '例如：7 点，黎明时恢复 1d6+1 点',
 
+  // Custom kind and badge prefixes.
+  'Type / Subtype': '类型 / 子类型',
+  'Related Entries': '相关条目',
+  'CR': '挑战等级',
 };

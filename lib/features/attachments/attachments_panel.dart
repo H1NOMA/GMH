@@ -140,13 +140,18 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
         if (widget.showFiles && files.isNotEmpty) ...[
           const SizedBox(height: 8),
           // Files use the same gallery-style grid as images.
-          GridView.count(
-            crossAxisCount: 2,
+          GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 1.55,
+            // Fixed height, not an aspect ratio: in the 290px side panel
+            // a ratio left ~80px for an icon row and two text lines.
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              mainAxisExtent:
+                  50 + 46 * MediaQuery.textScalerOf(context).scale(1),
+            ),
             children: [
               for (final entry in files)
                 _FileTile(

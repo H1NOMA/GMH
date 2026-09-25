@@ -63,7 +63,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
       appBar: AppBar(
         leading: historyLeading(),
         leadingWidth: kHistoryLeadingWidth,
-        title: Text(context.l10n.campaignsTitle),
+        title: Text(EntityKind.campaign.localizedPlural(context)),
         actions: [
           if (selected != null)
             Padding(

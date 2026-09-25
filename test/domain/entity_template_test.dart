@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gmh/app/template_l10n.dart';
 import 'package:gmh/core/utils/ids.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/domain/models/link.dart';
@@ -113,5 +114,25 @@ void main() {
     expect(parseEntityRef('not-a-ref'), isNull);
     expect(parseEntityRef(null), isNull);
     expect(parseEntityRef('entity:'), isNull);
+  });
+
+  test('every template term is translated for Russian and Chinese', () {
+    final terms = <String>{};
+    for (final k in EntityKind.values) {
+      for (final section in EntityTemplates.of(k).sections) {
+        terms.add(section.title);
+        for (final f in section.fields) {
+          terms.add(f.label);
+          if (f.hint.isNotEmpty) terms.add(f.hint);
+          terms.addAll(f.options);
+        }
+      }
+    }
+    // Scripts differ from English, so an untranslated term is exactly one
+    // that comes back unchanged.
+    for (final lang in ['ru', 'zh']) {
+      expect([for (final t in terms) if (trTemplateFor(lang, t) == t) t],
+          isEmpty, reason: lang);
+    }
   });
 }

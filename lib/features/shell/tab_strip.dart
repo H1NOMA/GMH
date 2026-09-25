@@ -168,7 +168,7 @@ class _WorkspaceTab extends ConsumerWidget {
       return (Icons.hub_outlined, l.navGraphShort);
     }
     if (location.contains('/campaigns')) {
-      return (Icons.map_outlined, l.navCampaigns);
+      return (Icons.map_outlined, EntityKind.campaign.localizedPlural(context));
     }
     if (location.contains('/settings')) {
       return (Icons.settings_outlined, l.navSettingsShort);

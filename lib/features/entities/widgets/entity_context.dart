@@ -40,8 +40,9 @@ const _positiveValues = {'Alive', 'Active', 'Completed'};
 const _negativeValues = {'Dead', 'Failed', 'Abandoned'};
 
 /// Labels that benefit from a prefix so a bare number reads correctly.
+/// Values are template terms (translated at render time).
 const _prefixedKeys = {
-  'challenge': 'CR ',
+  'challenge': 'CR',
   'chapterNumber': '№',
 };
 
@@ -88,7 +89,13 @@ List<ContextBadge> contextBadges(
             ? GmhColors.danger
             : GmhColors.parchmentDim;
     badges.add(ContextBadge(
-        '${_prefixedKeys[key] ?? ''}${trTemplate(context, text)}', color));
+        switch (_prefixedKeys[key]) {
+          null => trTemplate(context, text),
+          '№' => '№${trTemplate(context, text)}',
+          final prefix =>
+            '${trTemplate(context, prefix)} ${trTemplate(context, text)}',
+        },
+        color));
   }
   return badges;
 }

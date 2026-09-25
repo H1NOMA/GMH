@@ -74,8 +74,9 @@ Color _ensureContrast(Color color, Color against, double min, Color toward) {
 
 /// Derives a full [GmhPalette] from a handful of genre colors, enforcing
 /// the contrast floors the whole UI relies on:
-///  * body text >= 7:1 on the background, dim text >= 4.5:1, faint
-///    labels >= 3.2:1 on every surface tone;
+///  * body text >= 7:1 on the background, dim text >= 6:1, faint labels
+///    >= 4.5:1 (AA for the small 10.5–12px captions they are used for) on
+///    every surface tone;
 ///  * accent (links, chips, icons) >= 4.5:1 on surfaces, and its "on"
 ///    color >= 4.5:1 on the accent itself.
 GmhPalette derivePalette({
@@ -95,9 +96,9 @@ GmhPalette derivePalette({
   // The strictest surface for text contrast checks.
   final worstSurface = dark ? high : high;
   final body = _ensureContrast(text, background, 7, ink);
-  final dim = _ensureContrast(_mix(body, background, 0.3), worstSurface, 4.5, body);
+  final dim = _ensureContrast(_mix(body, background, 0.3), worstSurface, 6, body);
   final faint =
-      _ensureContrast(_mix(body, background, 0.5), worstSurface, 3.2, body);
+      _ensureContrast(_mix(body, background, 0.5), worstSurface, 4.5, body);
   final ember = _ensureContrast(accent, worstSurface, 4.5, ink);
   final emberBright = dark
       ? _ensureContrast(_mix(ember, Colors.white, 0.35), worstSurface, 4.5, ink)

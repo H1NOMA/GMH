@@ -91,9 +91,12 @@ void main() {
           expect(contrastRatio(p.parchment, p.surfaceHigh),
               greaterThanOrEqualTo(4.5), reason: 'body text on raised');
           expect(contrastRatio(p.parchmentDim, p.surfaceHigh),
-              greaterThanOrEqualTo(4.5), reason: 'dim text');
+              greaterThanOrEqualTo(6), reason: 'dim text');
           expect(contrastRatio(p.parchmentFaint, p.surfaceHigh),
-              greaterThanOrEqualTo(3.0), reason: 'faint labels');
+              greaterThanOrEqualTo(4.5), reason: 'faint labels (small text)');
+          expect(contrastRatio(p.parchmentFaint, p.surfaceHigh),
+              lessThan(contrastRatio(p.parchmentDim, p.surfaceHigh)),
+              reason: 'faint stays below dim');
           expect(contrastRatio(p.ember, p.surface),
               greaterThanOrEqualTo(3.0), reason: 'accent on surface');
           expect(contrastRatio(p.onEmber, p.ember),
@@ -138,6 +141,20 @@ void main() {
                     '$base -> $c on $bg');
           }
         }
+      }
+    }
+  });
+
+  test('tonal buttons are readable and distinct from primary ones', () {
+    for (final pack in SettingPacks.all) {
+      for (final palette in [pack.dark, pack.light]) {
+        final scheme = GmhTheme.build(palette).colorScheme;
+        expect(
+            contrastRatio(
+                scheme.onSecondaryContainer, scheme.secondaryContainer),
+            greaterThanOrEqualTo(4.5),
+            reason: '${pack.style.name} ${palette.brightness.name}');
+        expect(scheme.secondaryContainer, isNot(scheme.primary));
       }
     }
   });

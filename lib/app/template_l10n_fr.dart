@@ -300,4 +300,8 @@ const templateFr = <String, String>{
   'e.g. 500 gp': 'p. ex. 500 po',
   'e.g. 7, regains 1d6+1 at dawn': 'p. ex. 7, récupère 1d6+1 à l\'aube',
 
+  // Custom kind and badge prefixes.
+  'Type / Subtype': 'Type / sous-type',
+  'Related Entries': 'Entrées liées',
+  'CR': 'FP',
 };

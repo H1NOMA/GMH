@@ -442,48 +442,59 @@ class _AbilityBox extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: GmhColors.border),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10.5,
-                letterSpacing: 1.2,
-                fontWeight: FontWeight.w700,
-                color: GmhColors.parchmentFaint,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              score?.toString() ?? '—',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                fontFamilyFallback: GmhTheme.serifFallback,
-                color: score == null
-                    ? GmhColors.parchmentFaint
-                    : GmhColors.parchment,
-              ),
-            ),
-            if (modifier != null)
-              Container(
-                margin: const EdgeInsets.only(top: 2),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                decoration: BoxDecoration(
-                  color: GmhColors.ember.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  modifier!,
+        // Label + 22px score + modifier pill: at large text scales the
+        // square tile can't hold them, so the content scales down.
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
                   style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w600,
-                    color: GmhColors.emberBright,
+                    fontSize: 10.5,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w700,
+                    color: GmhColors.parchmentFaint,
                   ),
                 ),
-              ),
-          ],
+                const SizedBox(height: 2),
+                Text(
+                  score?.toString() ?? '—',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    fontFamilyFallback: GmhTheme.serifFallback,
+                    color: score == null
+                        ? GmhColors.parchmentFaint
+                        : GmhColors.parchment,
+                  ),
+                ),
+                if (modifier != null)
+                  Container(
+                    margin: const EdgeInsets.only(top: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: GmhColors.ember.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      modifier!,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: GmhColors.emberBright,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

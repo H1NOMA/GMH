@@ -63,8 +63,8 @@ const gmhDarkPalette = GmhPalette(
   arcane: Color(0xFF8E7CC3),
   blood: Color(0xFFA84332),
   parchment: Color(0xFFE8DCC8),
-  parchmentDim: Color(0xFFB3A68F),
-  parchmentFaint: Color(0xFF817662),
+  parchmentDim: Color(0xFFB5A891),
+  parchmentFaint: Color(0xFF9D927E),
   success: Color(0xFF7D9B6A),
   danger: Color(0xFFC4574A),
 );
@@ -85,7 +85,7 @@ const gmhLightPalette = GmhPalette(
   blood: Color(0xFFA84332),
   parchment: Color(0xFF2A2113),
   parchmentDim: Color(0xFF5C5240),
-  parchmentFaint: Color(0xFF8B8069),
+  parchmentFaint: Color(0xFF706651),
   success: Color(0xFF4C7A3D),
   danger: Color(0xFFB33B2E),
 );
@@ -106,8 +106,8 @@ const gmhCyberDarkPalette = GmhPalette(
   arcane: Color(0xFFE05CFF),
   blood: Color(0xFFFF4365),
   parchment: Color(0xFFD7E1F4),
-  parchmentDim: Color(0xFF90A2C6),
-  parchmentFaint: Color(0xFF647496),
+  parchmentDim: Color(0xFF96A7CA),
+  parchmentFaint: Color(0xFF8492B0),
   success: Color(0xFF3DDC97),
   danger: Color(0xFFFF5C64),
 );
@@ -128,8 +128,8 @@ const gmhCyberLightPalette = GmhPalette(
   arcane: Color(0xFF8A2BC9),
   blood: Color(0xFFC42B52),
   parchment: Color(0xFF16223A),
-  parchmentDim: Color(0xFF44557C),
-  parchmentFaint: Color(0xFF7082A6),
+  parchmentDim: Color(0xFF425379),
+  parchmentFaint: Color(0xFF576788),
   success: Color(0xFF1F8A5D),
   danger: Color(0xFFC93A44),
 );
@@ -223,6 +223,11 @@ abstract final class GmhTheme {
       onPrimary: p.onEmber,
       secondary: p.arcane,
       onSecondary: isDark ? const Color(0xFF1A1424) : Colors.white,
+      // Tonal buttons: an ember-tinted chip that reads as secondary next
+      // to the solid primary button.
+      secondaryContainer:
+          Color.alphaBlend(p.ember.withValues(alpha: 0.18), p.surfaceHigh),
+      onSecondaryContainer: p.parchment,
       surface: p.surface,
       onSurface: p.parchment,
       surfaceContainerHighest: p.surfaceHigh,
@@ -343,9 +348,9 @@ abstract final class GmhTheme {
         isDense: true,
       ),
       filledButtonTheme: FilledButtonThemeData(
+        // Colors come from the scheme (primary = ember): setting them here
+        // would paint tonal buttons exactly like primary ones.
         style: FilledButton.styleFrom(
-          backgroundColor: p.ember,
-          foregroundColor: p.onEmber,
           minimumSize: const Size(64, 42),
           padding: const EdgeInsets.symmetric(horizontal: 18),
           shape: RoundedRectangleBorder(

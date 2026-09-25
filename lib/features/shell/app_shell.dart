@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -263,7 +264,7 @@ extension on _Sidebar {
       case 'campaigns':
         return _NavTile(
           icon: Icons.map_outlined,
-          label: context.l10n.navCampaigns,
+          label: EntityKind.campaign.localizedPlural(context),
           selected: section == _Section.campaigns,
           onTap: () => openTab(Routes.campaigns(worldId)),
         );
@@ -323,7 +324,7 @@ extension on _Sidebar {
 
 /// A vertical group whose children reorder by press-and-hold drag
 /// (mouse and touch), like browser tabs.
-class _DraggableGroup extends StatelessWidget {
+class _DraggableGroup extends StatefulWidget {
   final List<String> ids;
   final Widget Function(String id) itemBuilder;
   final void Function(List<String> newOrder) onReorder;
@@ -335,7 +336,24 @@ class _DraggableGroup extends StatelessWidget {
   });
 
   @override
+  State<_DraggableGroup> createState() => _DraggableGroupState();
+}
+
+class _DraggableGroupState extends State<_DraggableGroup> {
+  /// Shown order. A drop applies it at once; without this the list
+  /// snapped back to the old order until the store's stream caught up,
+  /// then jumped.
+  late List<String> _order = widget.ids;
+
+  @override
+  void didUpdateWidget(_DraggableGroup oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(oldWidget.ids, widget.ids)) _order = widget.ids;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final ids = _order;
     return ReorderableListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -344,7 +362,8 @@ class _DraggableGroup extends StatelessWidget {
         final order = [...ids];
         if (newIndex > oldIndex) newIndex--;
         order.insert(newIndex, order.removeAt(oldIndex));
-        onReorder(order);
+        setState(() => _order = order);
+        widget.onReorder(order);
       },
       proxyDecorator: (child, index, animation) => Material(
         color: Colors.transparent,
@@ -360,7 +379,7 @@ class _DraggableGroup extends StatelessWidget {
           ReorderableDelayedDragStartListener(
             key: ValueKey(ids[i]),
             index: i,
-            child: itemBuilder(ids[i]),
+            child: widget.itemBuilder(ids[i]),
           ),
       ],
     );
@@ -629,6 +648,23 @@ class _Rail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final section = _currentSection(context);
+    // Six destinations plus the world and history buttons need ~600px:
+    // on short windows (or large text) the rail scrolls instead of
+    // overflowing.
+    return LayoutBuilder(
+      builder: (context, constraints) => ColoredBox(
+        color: GmhColors.surface,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(child: _rail(context, ref, section)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _rail(BuildContext context, WidgetRef ref, _Section? section) {
     return NavigationRail(
       backgroundColor: GmhColors.surface,
       selectedIndex: section?.index,
@@ -659,7 +695,7 @@ class _Rail extends ConsumerWidget {
             label: Text(context.l10n.navGraphShort)),
         NavigationRailDestination(
             icon: const Icon(Icons.map_outlined),
-            label: Text(context.l10n.navCampaigns)),
+            label: Text(EntityKind.campaign.localizedPlural(context))),
         NavigationRailDestination(
             icon: const Icon(Icons.handyman_outlined),
             label: Text(context.l10n.navTools)),
@@ -700,6 +736,15 @@ class _BottomNav extends StatelessWidget {
                 indicatorColor: _phoneSections.contains(section)
                     ? null
                     : Colors.transparent,
+                // Five localized labels in ~64px slots break mid-word
+                // (German, French, Russian): narrow phones label only the
+                // active section — the rest keep their tooltips — and
+                // no label at all reads as "selected" when none is.
+                labelBehavior: !_phoneSections.contains(section)
+                    ? NavigationDestinationLabelBehavior.alwaysHide
+                    : MediaQuery.sizeOf(context).width < 480
+                        ? NavigationDestinationLabelBehavior.onlyShowSelected
+                        : NavigationDestinationLabelBehavior.alwaysShow,
                 height: 64,
                 onDestinationSelected: (index) =>
                     _goToSection(context, worldId, _phoneSections[index]),
@@ -729,7 +774,7 @@ class _BottomNav extends StatelessWidget {
             icon: const Icon(Icons.search), label: context.l10n.navSearch),
         NavigationDestination(
             icon: const Icon(Icons.map_outlined),
-            label: context.l10n.navCampaigns),
+            label: EntityKind.campaign.localizedPlural(context)),
         NavigationDestination(
             icon: const Icon(Icons.handyman_outlined),
             label: context.l10n.navTools),

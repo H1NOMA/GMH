@@ -341,7 +341,7 @@ class _IdleView extends ConsumerWidget {
             ),
             ActionChip(
               avatar: const Icon(Icons.map_outlined, size: 15),
-              label: Text(context.l10n.navCampaigns),
+              label: Text(EntityKind.campaign.localizedPlural(context)),
               onPressed: () => context.go(Routes.campaigns(worldId)),
             ),
             ActionChip(

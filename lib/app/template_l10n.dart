@@ -335,4 +335,8 @@ const _ru = <String, String>{
   'e.g. 500 gp': 'например, 500 зм',
   'e.g. 7, regains 1d6+1 at dawn': 'например, 7, восстанавливает 1d6+1 на рассвете',
 
+  // Custom kind and badge prefixes.
+  'Type / Subtype': 'Тип / подтип',
+  'Related Entries': 'Связанные записи',
+  'CR': 'ПО',
 };

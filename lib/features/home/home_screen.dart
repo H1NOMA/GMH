@@ -149,7 +149,7 @@ class _CategoryGrid extends ConsumerWidget {
     if (categories.isEmpty) {
       return Card(
         child: InkWell(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(14),
           onTap: () => showManageCategoriesSheet(context, worldId),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -169,26 +169,12 @@ class _CategoryGrid extends ConsumerWidget {
       );
     }
 
-    final width = MediaQuery.sizeOf(context).width;
-    final columns = width > 1400
-        ? 5
-        : width > 1000
-            ? 4
-            : width > 640
-                ? 3
-                : 2;
-    return GridView.count(
-      crossAxisCount: columns,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      childAspectRatio: 2.4,
+    return _TileGrid(
       children: [
         for (final category in categories)
           Card(
             child: InkWell(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               onTap: () =>
                   context.go(Routes.browseCategory(worldId, category.id)),
               child: Padding(
@@ -236,26 +222,12 @@ class _KindGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final columns = width > 1400
-        ? 5
-        : width > 1000
-            ? 4
-            : width > 640
-                ? 3
-                : 2;
-    return GridView.count(
-      crossAxisCount: columns,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      childAspectRatio: 2.4,
+    return _TileGrid(
       children: [
         for (final kind in kinds)
           Card(
             child: InkWell(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               onTap: () => context.go(Routes.browse(worldId, kind)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -283,6 +255,35 @@ class _KindGrid extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// Dashboard tile grid: columns follow the width the grid actually gets
+/// (not the window's, which ignores the sidebar), and tile height grows
+/// with the text scale so two lines of large text never overflow.
+class _TileGrid extends StatelessWidget {
+  final List<Widget> children;
+  const _TileGrid({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = (constraints.maxWidth / 210).floor().clamp(2, 6);
+        return GridView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            mainAxisExtent: 30 + 42 * textScale,
+          ),
+          children: children,
+        );
+      },
     );
   }
 }
