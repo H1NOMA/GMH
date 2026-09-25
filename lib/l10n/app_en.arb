@@ -573,5 +573,129 @@
   "toolTimeline": "Timeline",
   "toolTimelineHint": "Events and eras of your world in chronological order.",
   "toolReference": "GM Screen",
-  "toolReferenceHint": "Conditions and quick rules at a glance (SRD 5.2.1)."
+  "toolReferenceHint": "Conditions and quick rules at a glance (SRD 5.2.1).",
+  "diceExpressionLabel": "Dice expression",
+  "diceExpressionHint": "e.g. 2d6+3, 4d6kh3, 1d20!",
+  "diceRollAction": "Roll",
+  "diceLabelHint": "Label (optional)",
+  "diceAdvantage": "Advantage",
+  "diceDisadvantage": "Disadvantage",
+  "diceModifier": "Modifier",
+  "diceDecrease": "Decrease",
+  "diceIncrease": "Increase",
+  "diceQuickHint": "Tap a die to roll it, long-press to add it to the expression.",
+  "dicePresets": "System presets",
+  "diceHistory": "Roll history",
+  "diceHistoryEmpty": "No rolls yet. Every roll is logged here.",
+  "diceClearHistory": "Clear history",
+  "diceClearHistoryTitle": "Clear roll history?",
+  "diceClearHistoryBody": "Every logged roll in this world is deleted.",
+  "diceReroll": "Roll again",
+  "diceCopy": "Copy",
+  "diceCopied": "Copied to clipboard",
+  "diceResultEmpty": "Pick a die or type an expression",
+  "diceDropped": "Dropped",
+  "diceExploded": "Exploded",
+  "diceRerolled": "Rerolled",
+  "diceMoreDice": "+{count} more",
+  "@diceMoreDice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "diceErrorEmpty": "Type a dice expression",
+  "diceErrorTooLong": "The expression is too long",
+  "diceErrorUnexpectedChar": "Unexpected character",
+  "diceErrorUnexpectedEnd": "The expression ends too early",
+  "diceErrorExpectedNumber": "A number is expected here",
+  "diceErrorParen": "Unbalanced parentheses",
+  "diceErrorTooManyDice": "At most 1000 dice per term",
+  "diceErrorBadSides": "Dice need 1 to 10000 sides",
+  "diceErrorTooLarge": "The number is too large",
+  "diceErrorDivisionByZero": "Division by zero",
+  "diceErrorDuplicate": "This modifier is repeated",
+  "diceErrorImpossibleReroll": "That reroll would never stop",
+  "diceErrorLabel": "Close the label with ]",
+  "diceErrorAt": "{message} (position {position})",
+  "@diceErrorAt": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      },
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "dicePresetD20": "d20 check",
+  "dicePresetAbility": "Ability score",
+  "dicePresetCoc": "Call of Cthulhu",
+  "dicePresetPbta": "PbtA move",
+  "dicePresetBlades": "Blades in the Dark",
+  "dicePresetFate": "Fate",
+  "dicePresetYearZero": "Year Zero",
+  "dicePresetSavage": "Savage Worlds",
+  "dicePresetCyberpunk": "Cyberpunk RED",
+  "diceModeNormal": "Normal",
+  "diceDc": "DC (optional)",
+  "diceSkill": "Skill",
+  "diceBonusDice": "Bonus (+) / penalty (−) dice",
+  "diceStat": "Stat",
+  "diceDicePool": "Dice pool",
+  "diceTraitDie": "Trait die",
+  "diceWildDie": "Wild die",
+  "diceStatSkill": "Stat + skill",
+  "diceOutcomeCriticalSuccess": "Critical success",
+  "diceOutcomeCriticalFailure": "Critical failure",
+  "diceOutcomeSuccess": "Success",
+  "diceOutcomeFailure": "Failure",
+  "diceOutcomeRaise": "Success with a raise",
+  "diceOutcomeExtreme": "Extreme success",
+  "diceOutcomeHard": "Hard success",
+  "diceOutcomeRegular": "Regular success",
+  "diceOutcomeFumble": "Fumble",
+  "diceOutcomeMiss": "Miss",
+  "diceOutcomePartial": "Partial success",
+  "diceOutcomeFull": "Full success",
+  "diceFateTerrible": "Terrible",
+  "diceFatePoor": "Poor",
+  "diceFateMediocre": "Mediocre",
+  "diceFateAverage": "Average",
+  "diceFateFair": "Fair",
+  "diceFateGood": "Good",
+  "diceFateGreat": "Great",
+  "diceFateSuperb": "Superb",
+  "diceFateFantastic": "Fantastic",
+  "diceFateEpic": "Epic",
+  "diceFateLegendary": "Legendary",
+  "diceSuccesses": "{count, plural, =0{No successes} one{1 success} other{{count} successes}}",
+  "@diceSuccesses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "diceRollTooltip": "Roll {expression}",
+  "@diceRollTooltip": {
+    "placeholders": {
+      "expression": {
+        "type": "String"
+      }
+    }
+  },
+  "diceRolledSnack": "{expression}: {total}",
+  "@diceRolledSnack": {
+    "placeholders": {
+      "expression": {
+        "type": "String"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "diceQuickRollTitle": "Quick roll"
 }

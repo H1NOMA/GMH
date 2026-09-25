@@ -1191,4 +1191,269 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toolReferenceHint => '状态与速查规则一目了然（SRD 5.2.1）。';
+
+  @override
+  String get diceExpressionLabel => '骰子表达式';
+
+  @override
+  String get diceExpressionHint => '例如 2d6+3、4d6kh3、1d20!';
+
+  @override
+  String get diceRollAction => '掷骰';
+
+  @override
+  String get diceLabelHint => '标签（可选）';
+
+  @override
+  String get diceAdvantage => '优势';
+
+  @override
+  String get diceDisadvantage => '劣势';
+
+  @override
+  String get diceModifier => '修正值';
+
+  @override
+  String get diceDecrease => '减少';
+
+  @override
+  String get diceIncrease => '增加';
+
+  @override
+  String get diceQuickHint => '点按骰子即可掷出，长按可将其加入表达式。';
+
+  @override
+  String get dicePresets => '系统预设';
+
+  @override
+  String get diceHistory => '掷骰记录';
+
+  @override
+  String get diceHistoryEmpty => '还没有掷骰。每次掷骰都会记录在这里。';
+
+  @override
+  String get diceClearHistory => '清空记录';
+
+  @override
+  String get diceClearHistoryTitle => '清空掷骰记录？';
+
+  @override
+  String get diceClearHistoryBody => '此世界中记录的所有掷骰都将被删除。';
+
+  @override
+  String get diceReroll => '再掷一次';
+
+  @override
+  String get diceCopy => '复制';
+
+  @override
+  String get diceCopied => '已复制到剪贴板';
+
+  @override
+  String get diceResultEmpty => '选择一个骰子或输入表达式';
+
+  @override
+  String get diceDropped => '已舍弃';
+
+  @override
+  String get diceExploded => '爆骰';
+
+  @override
+  String get diceRerolled => '已重掷';
+
+  @override
+  String diceMoreDice(int count) {
+    return '还有 $count 个';
+  }
+
+  @override
+  String get diceErrorEmpty => '请输入骰子表达式';
+
+  @override
+  String get diceErrorTooLong => '表达式过长';
+
+  @override
+  String get diceErrorUnexpectedChar => '意外的字符';
+
+  @override
+  String get diceErrorUnexpectedEnd => '表达式不完整';
+
+  @override
+  String get diceErrorExpectedNumber => '此处需要数字';
+
+  @override
+  String get diceErrorParen => '括号不匹配';
+
+  @override
+  String get diceErrorTooManyDice => '每项最多 1000 个骰子';
+
+  @override
+  String get diceErrorBadSides => '骰子面数须在 1 到 10000 之间';
+
+  @override
+  String get diceErrorTooLarge => '数字过大';
+
+  @override
+  String get diceErrorDivisionByZero => '除数为零';
+
+  @override
+  String get diceErrorDuplicate => '修饰符重复';
+
+  @override
+  String get diceErrorImpossibleReroll => '这种重掷永远不会停止';
+
+  @override
+  String get diceErrorLabel => '请用 ] 结束标签';
+
+  @override
+  String diceErrorAt(String message, int position) {
+    return '$message（位置 $position）';
+  }
+
+  @override
+  String get dicePresetD20 => 'd20 检定';
+
+  @override
+  String get dicePresetAbility => '属性值';
+
+  @override
+  String get dicePresetCoc => '克苏鲁的呼唤';
+
+  @override
+  String get dicePresetPbta => 'PbtA 行动';
+
+  @override
+  String get dicePresetBlades => '暗夜刀锋';
+
+  @override
+  String get dicePresetFate => 'Fate';
+
+  @override
+  String get dicePresetYearZero => 'Year Zero';
+
+  @override
+  String get dicePresetSavage => '野蛮世界';
+
+  @override
+  String get dicePresetCyberpunk => 'Cyberpunk RED';
+
+  @override
+  String get diceModeNormal => '普通';
+
+  @override
+  String get diceDc => 'DC（可选）';
+
+  @override
+  String get diceSkill => '技能';
+
+  @override
+  String get diceBonusDice => '奖励骰（+）/ 惩罚骰（−）';
+
+  @override
+  String get diceStat => '属性';
+
+  @override
+  String get diceDicePool => '骰池';
+
+  @override
+  String get diceTraitDie => '特质骰';
+
+  @override
+  String get diceWildDie => '狂野骰';
+
+  @override
+  String get diceStatSkill => '属性 + 技能';
+
+  @override
+  String get diceOutcomeCriticalSuccess => '大成功';
+
+  @override
+  String get diceOutcomeCriticalFailure => '严重失败';
+
+  @override
+  String get diceOutcomeSuccess => '成功';
+
+  @override
+  String get diceOutcomeFailure => '失败';
+
+  @override
+  String get diceOutcomeRaise => '成功并获得加码';
+
+  @override
+  String get diceOutcomeExtreme => '极难成功';
+
+  @override
+  String get diceOutcomeHard => '困难成功';
+
+  @override
+  String get diceOutcomeRegular => '常规成功';
+
+  @override
+  String get diceOutcomeFumble => '大失败';
+
+  @override
+  String get diceOutcomeMiss => '失手';
+
+  @override
+  String get diceOutcomePartial => '部分成功';
+
+  @override
+  String get diceOutcomeFull => '完全成功';
+
+  @override
+  String get diceFateTerrible => '糟糕';
+
+  @override
+  String get diceFatePoor => '差劲';
+
+  @override
+  String get diceFateMediocre => '平庸';
+
+  @override
+  String get diceFateAverage => '一般';
+
+  @override
+  String get diceFateFair => '尚可';
+
+  @override
+  String get diceFateGood => '良好';
+
+  @override
+  String get diceFateGreat => '优秀';
+
+  @override
+  String get diceFateSuperb => '极佳';
+
+  @override
+  String get diceFateFantastic => '惊人';
+
+  @override
+  String get diceFateEpic => '史诗';
+
+  @override
+  String get diceFateLegendary => '传奇';
+
+  @override
+  String diceSuccesses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次成功',
+      zero: '没有成功',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String diceRollTooltip(String expression) {
+    return '掷 $expression';
+  }
+
+  @override
+  String diceRolledSnack(String expression, int total) {
+    return '$expression：$total';
+  }
+
+  @override
+  String get diceQuickRollTitle => '快速掷骰';
 }

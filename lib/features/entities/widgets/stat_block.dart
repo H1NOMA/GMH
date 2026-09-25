@@ -4,6 +4,7 @@ import '../../../app/template_l10n.dart';
 import '../../../app/theme/gmh_theme.dart';
 import '../../../domain/models/entity.dart';
 import '../../../domain/models/entity_kind.dart';
+import '../../tools/dice/dice_inline.dart';
 
 /// Read-only stat card rendered alongside the editable form for spells
 /// (Magic Systems), creatures and items — the classic tabletop stat-block
@@ -85,8 +86,11 @@ class StatBlock extends StatelessWidget {
           TextSpan(
               text: '${trTemplate(context, label)}. ',
               style: const TextStyle(fontWeight: FontWeight.w700)),
+          // Dice expressions ("2d6 + 3") become tappable roll chips.
           TextSpan(
-              text: translateValue ? trTemplate(context, value) : value),
+              children: diceTextSpans(
+                  translateValue ? trTemplate(context, value) : value,
+                  worldId: entity.worldId)),
         ]),
         style: TextStyle(fontSize: 12.5, color: GmhColors.parchment, height: 1.35),
       ),

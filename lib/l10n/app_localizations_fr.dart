@@ -1241,4 +1241,274 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'États et règles rapides en un coup d\'œil (SRD 5.2.1).';
+
+  @override
+  String get diceExpressionLabel => 'Expression de dés';
+
+  @override
+  String get diceExpressionHint => 'ex. 2d6+3, 4d6kh3, 1d20!';
+
+  @override
+  String get diceRollAction => 'Lancer';
+
+  @override
+  String get diceLabelHint => 'Libellé (facultatif)';
+
+  @override
+  String get diceAdvantage => 'Avantage';
+
+  @override
+  String get diceDisadvantage => 'Désavantage';
+
+  @override
+  String get diceModifier => 'Modificateur';
+
+  @override
+  String get diceDecrease => 'Diminuer';
+
+  @override
+  String get diceIncrease => 'Augmenter';
+
+  @override
+  String get diceQuickHint =>
+      'Touchez un dé pour le lancer, appui long pour l’ajouter à l’expression.';
+
+  @override
+  String get dicePresets => 'Systèmes';
+
+  @override
+  String get diceHistory => 'Historique';
+
+  @override
+  String get diceHistoryEmpty =>
+      'Aucun lancer pour l’instant. Chaque lancer est noté ici.';
+
+  @override
+  String get diceClearHistory => 'Effacer l’historique';
+
+  @override
+  String get diceClearHistoryTitle => 'Effacer l’historique des lancers ?';
+
+  @override
+  String get diceClearHistoryBody =>
+      'Tous les lancers enregistrés de ce monde seront supprimés.';
+
+  @override
+  String get diceReroll => 'Relancer';
+
+  @override
+  String get diceCopy => 'Copier';
+
+  @override
+  String get diceCopied => 'Copié dans le presse-papiers';
+
+  @override
+  String get diceResultEmpty => 'Choisissez un dé ou saisissez une expression';
+
+  @override
+  String get diceDropped => 'Écarté';
+
+  @override
+  String get diceExploded => 'Explosé';
+
+  @override
+  String get diceRerolled => 'Relancé';
+
+  @override
+  String diceMoreDice(int count) {
+    return '+$count de plus';
+  }
+
+  @override
+  String get diceErrorEmpty => 'Saisissez une expression de dés';
+
+  @override
+  String get diceErrorTooLong => 'L’expression est trop longue';
+
+  @override
+  String get diceErrorUnexpectedChar => 'Caractère inattendu';
+
+  @override
+  String get diceErrorUnexpectedEnd => 'L’expression s’arrête trop tôt';
+
+  @override
+  String get diceErrorExpectedNumber => 'Un nombre est attendu ici';
+
+  @override
+  String get diceErrorParen => 'Parenthèses non équilibrées';
+
+  @override
+  String get diceErrorTooManyDice => '1000 dés maximum par terme';
+
+  @override
+  String get diceErrorBadSides => 'Un dé doit avoir de 1 à 10000 faces';
+
+  @override
+  String get diceErrorTooLarge => 'Le nombre est trop grand';
+
+  @override
+  String get diceErrorDivisionByZero => 'Division par zéro';
+
+  @override
+  String get diceErrorDuplicate => 'Ce modificateur est répété';
+
+  @override
+  String get diceErrorImpossibleReroll =>
+      'Cette relance ne s’arrêterait jamais';
+
+  @override
+  String get diceErrorLabel => 'Fermez le libellé avec ]';
+
+  @override
+  String diceErrorAt(String message, int position) {
+    return '$message (position $position)';
+  }
+
+  @override
+  String get dicePresetD20 => 'Test d20';
+
+  @override
+  String get dicePresetAbility => 'Caractéristique';
+
+  @override
+  String get dicePresetCoc => 'L’Appel de Cthulhu';
+
+  @override
+  String get dicePresetPbta => 'Action PbtA';
+
+  @override
+  String get dicePresetBlades => 'Blades in the Dark';
+
+  @override
+  String get dicePresetFate => 'Fate';
+
+  @override
+  String get dicePresetYearZero => 'Year Zero';
+
+  @override
+  String get dicePresetSavage => 'Savage Worlds';
+
+  @override
+  String get dicePresetCyberpunk => 'Cyberpunk RED';
+
+  @override
+  String get diceModeNormal => 'Normal';
+
+  @override
+  String get diceDc => 'DD (facultatif)';
+
+  @override
+  String get diceSkill => 'Compétence';
+
+  @override
+  String get diceBonusDice => 'Dés bonus (+) / malus (−)';
+
+  @override
+  String get diceStat => 'Carac.';
+
+  @override
+  String get diceDicePool => 'Réserve de dés';
+
+  @override
+  String get diceTraitDie => 'Dé de trait';
+
+  @override
+  String get diceWildDie => 'Dé joker';
+
+  @override
+  String get diceStatSkill => 'Carac. + compétence';
+
+  @override
+  String get diceOutcomeCriticalSuccess => 'Réussite critique';
+
+  @override
+  String get diceOutcomeCriticalFailure => 'Échec critique';
+
+  @override
+  String get diceOutcomeSuccess => 'Réussite';
+
+  @override
+  String get diceOutcomeFailure => 'Échec';
+
+  @override
+  String get diceOutcomeRaise => 'Réussite avec prouesse';
+
+  @override
+  String get diceOutcomeExtreme => 'Réussite extrême';
+
+  @override
+  String get diceOutcomeHard => 'Réussite majeure';
+
+  @override
+  String get diceOutcomeRegular => 'Réussite ordinaire';
+
+  @override
+  String get diceOutcomeFumble => 'Maladresse';
+
+  @override
+  String get diceOutcomeMiss => 'Échec';
+
+  @override
+  String get diceOutcomePartial => 'Réussite partielle';
+
+  @override
+  String get diceOutcomeFull => 'Réussite totale';
+
+  @override
+  String get diceFateTerrible => 'Terrible';
+
+  @override
+  String get diceFatePoor => 'Médiocre';
+
+  @override
+  String get diceFateMediocre => 'Moyen';
+
+  @override
+  String get diceFateAverage => 'Correct';
+
+  @override
+  String get diceFateFair => 'Honnête';
+
+  @override
+  String get diceFateGood => 'Bon';
+
+  @override
+  String get diceFateGreat => 'Excellent';
+
+  @override
+  String get diceFateSuperb => 'Superbe';
+
+  @override
+  String get diceFateFantastic => 'Fantastique';
+
+  @override
+  String get diceFateEpic => 'Épique';
+
+  @override
+  String get diceFateLegendary => 'Légendaire';
+
+  @override
+  String diceSuccesses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count succès',
+      one: '1 succès',
+      zero: 'Aucun succès',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String diceRollTooltip(String expression) {
+    return 'Lancer $expression';
+  }
+
+  @override
+  String diceRolledSnack(String expression, int total) {
+    return '$expression : $total';
+  }
+
+  @override
+  String get diceQuickRollTitle => 'Lancer rapide';
 }

@@ -1239,4 +1239,276 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'Состояния и быстрые правила под рукой (SRD 5.2.1).';
+
+  @override
+  String get diceExpressionLabel => 'Формула броска';
+
+  @override
+  String get diceExpressionHint => 'напр. 2d6+3, 4d6kh3, 1d20!';
+
+  @override
+  String get diceRollAction => 'Бросить';
+
+  @override
+  String get diceLabelHint => 'Подпись (необязательно)';
+
+  @override
+  String get diceAdvantage => 'Преимущество';
+
+  @override
+  String get diceDisadvantage => 'Помеха';
+
+  @override
+  String get diceModifier => 'Модификатор';
+
+  @override
+  String get diceDecrease => 'Уменьшить';
+
+  @override
+  String get diceIncrease => 'Увеличить';
+
+  @override
+  String get diceQuickHint =>
+      'Нажмите на кубик, чтобы бросить его, или удерживайте, чтобы добавить в формулу.';
+
+  @override
+  String get dicePresets => 'Системы';
+
+  @override
+  String get diceHistory => 'История бросков';
+
+  @override
+  String get diceHistoryEmpty =>
+      'Бросков пока нет. Здесь сохраняется каждый бросок.';
+
+  @override
+  String get diceClearHistory => 'Очистить историю';
+
+  @override
+  String get diceClearHistoryTitle => 'Очистить историю бросков?';
+
+  @override
+  String get diceClearHistoryBody =>
+      'Все сохранённые броски этого мира будут удалены.';
+
+  @override
+  String get diceReroll => 'Бросить снова';
+
+  @override
+  String get diceCopy => 'Копировать';
+
+  @override
+  String get diceCopied => 'Скопировано в буфер обмена';
+
+  @override
+  String get diceResultEmpty => 'Выберите кубик или введите формулу';
+
+  @override
+  String get diceDropped => 'Отброшен';
+
+  @override
+  String get diceExploded => 'Взорвался';
+
+  @override
+  String get diceRerolled => 'Переброшен';
+
+  @override
+  String diceMoreDice(int count) {
+    return 'ещё $count';
+  }
+
+  @override
+  String get diceErrorEmpty => 'Введите формулу броска';
+
+  @override
+  String get diceErrorTooLong => 'Формула слишком длинная';
+
+  @override
+  String get diceErrorUnexpectedChar => 'Неожиданный символ';
+
+  @override
+  String get diceErrorUnexpectedEnd => 'Формула обрывается';
+
+  @override
+  String get diceErrorExpectedNumber => 'Здесь нужно число';
+
+  @override
+  String get diceErrorParen => 'Непарные скобки';
+
+  @override
+  String get diceErrorTooManyDice => 'Не больше 1000 кубиков в группе';
+
+  @override
+  String get diceErrorBadSides => 'У кубика должно быть от 1 до 10000 граней';
+
+  @override
+  String get diceErrorTooLarge => 'Слишком большое число';
+
+  @override
+  String get diceErrorDivisionByZero => 'Деление на ноль';
+
+  @override
+  String get diceErrorDuplicate => 'Модификатор повторяется';
+
+  @override
+  String get diceErrorImpossibleReroll =>
+      'Такой переброс никогда не закончится';
+
+  @override
+  String get diceErrorLabel => 'Закройте подпись скобкой ]';
+
+  @override
+  String diceErrorAt(String message, int position) {
+    return '$message (позиция $position)';
+  }
+
+  @override
+  String get dicePresetD20 => 'Проверка d20';
+
+  @override
+  String get dicePresetAbility => 'Характеристика';
+
+  @override
+  String get dicePresetCoc => 'Зов Ктулху';
+
+  @override
+  String get dicePresetPbta => 'Ход PbtA';
+
+  @override
+  String get dicePresetBlades => 'Клинки во тьме';
+
+  @override
+  String get dicePresetFate => 'Fate';
+
+  @override
+  String get dicePresetYearZero => 'Year Zero';
+
+  @override
+  String get dicePresetSavage => 'Savage Worlds';
+
+  @override
+  String get dicePresetCyberpunk => 'Cyberpunk RED';
+
+  @override
+  String get diceModeNormal => 'Обычный';
+
+  @override
+  String get diceDc => 'СЛ (необязательно)';
+
+  @override
+  String get diceSkill => 'Навык';
+
+  @override
+  String get diceBonusDice => 'Бонусные (+) / штрафные (−) кубики';
+
+  @override
+  String get diceStat => 'Характеристика';
+
+  @override
+  String get diceDicePool => 'Пул кубиков';
+
+  @override
+  String get diceTraitDie => 'Кубик черты';
+
+  @override
+  String get diceWildDie => 'Дикий кубик';
+
+  @override
+  String get diceStatSkill => 'Характеристика + навык';
+
+  @override
+  String get diceOutcomeCriticalSuccess => 'Критический успех';
+
+  @override
+  String get diceOutcomeCriticalFailure => 'Критический провал';
+
+  @override
+  String get diceOutcomeSuccess => 'Успех';
+
+  @override
+  String get diceOutcomeFailure => 'Провал';
+
+  @override
+  String get diceOutcomeRaise => 'Успех с подъёмом';
+
+  @override
+  String get diceOutcomeExtreme => 'Экстремальный успех';
+
+  @override
+  String get diceOutcomeHard => 'Трудный успех';
+
+  @override
+  String get diceOutcomeRegular => 'Обычный успех';
+
+  @override
+  String get diceOutcomeFumble => 'Катастрофа';
+
+  @override
+  String get diceOutcomeMiss => 'Провал';
+
+  @override
+  String get diceOutcomePartial => 'Частичный успех';
+
+  @override
+  String get diceOutcomeFull => 'Полный успех';
+
+  @override
+  String get diceFateTerrible => 'Ужасно';
+
+  @override
+  String get diceFatePoor => 'Плохо';
+
+  @override
+  String get diceFateMediocre => 'Посредственно';
+
+  @override
+  String get diceFateAverage => 'Средне';
+
+  @override
+  String get diceFateFair => 'Неплохо';
+
+  @override
+  String get diceFateGood => 'Хорошо';
+
+  @override
+  String get diceFateGreat => 'Отлично';
+
+  @override
+  String get diceFateSuperb => 'Превосходно';
+
+  @override
+  String get diceFateFantastic => 'Фантастически';
+
+  @override
+  String get diceFateEpic => 'Эпически';
+
+  @override
+  String get diceFateLegendary => 'Легендарно';
+
+  @override
+  String diceSuccesses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count успеха',
+      many: '$count успехов',
+      few: '$count успеха',
+      one: '$count успех',
+      zero: 'Нет успехов',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String diceRollTooltip(String expression) {
+    return 'Бросить $expression';
+  }
+
+  @override
+  String diceRolledSnack(String expression, int total) {
+    return '$expression: $total';
+  }
+
+  @override
+  String get diceQuickRollTitle => 'Быстрый бросок';
 }

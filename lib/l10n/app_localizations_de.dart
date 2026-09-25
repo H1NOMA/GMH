@@ -1239,4 +1239,274 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get toolReferenceHint =>
       'Zustände und Schnellregeln auf einen Blick (SRD 5.2.1).';
+
+  @override
+  String get diceExpressionLabel => 'Würfelausdruck';
+
+  @override
+  String get diceExpressionHint => 'z. B. 2d6+3, 4d6kh3, 1d20!';
+
+  @override
+  String get diceRollAction => 'Würfeln';
+
+  @override
+  String get diceLabelHint => 'Bezeichnung (optional)';
+
+  @override
+  String get diceAdvantage => 'Vorteil';
+
+  @override
+  String get diceDisadvantage => 'Nachteil';
+
+  @override
+  String get diceModifier => 'Modifikator';
+
+  @override
+  String get diceDecrease => 'Verringern';
+
+  @override
+  String get diceIncrease => 'Erhöhen';
+
+  @override
+  String get diceQuickHint =>
+      'Tippen würfelt, langes Drücken fügt den Würfel zum Ausdruck hinzu.';
+
+  @override
+  String get dicePresets => 'Systemvorlagen';
+
+  @override
+  String get diceHistory => 'Wurfverlauf';
+
+  @override
+  String get diceHistoryEmpty =>
+      'Noch keine Würfe. Jeder Wurf wird hier protokolliert.';
+
+  @override
+  String get diceClearHistory => 'Verlauf leeren';
+
+  @override
+  String get diceClearHistoryTitle => 'Wurfverlauf leeren?';
+
+  @override
+  String get diceClearHistoryBody =>
+      'Alle protokollierten Würfe dieser Welt werden gelöscht.';
+
+  @override
+  String get diceReroll => 'Erneut würfeln';
+
+  @override
+  String get diceCopy => 'Kopieren';
+
+  @override
+  String get diceCopied => 'In die Zwischenablage kopiert';
+
+  @override
+  String get diceResultEmpty =>
+      'Wähle einen Würfel oder gib einen Ausdruck ein';
+
+  @override
+  String get diceDropped => 'Verworfen';
+
+  @override
+  String get diceExploded => 'Explodiert';
+
+  @override
+  String get diceRerolled => 'Neu gewürfelt';
+
+  @override
+  String diceMoreDice(int count) {
+    return '+$count weitere';
+  }
+
+  @override
+  String get diceErrorEmpty => 'Gib einen Würfelausdruck ein';
+
+  @override
+  String get diceErrorTooLong => 'Der Ausdruck ist zu lang';
+
+  @override
+  String get diceErrorUnexpectedChar => 'Unerwartetes Zeichen';
+
+  @override
+  String get diceErrorUnexpectedEnd => 'Der Ausdruck endet zu früh';
+
+  @override
+  String get diceErrorExpectedNumber => 'Hier wird eine Zahl erwartet';
+
+  @override
+  String get diceErrorParen => 'Klammern stimmen nicht';
+
+  @override
+  String get diceErrorTooManyDice => 'Höchstens 1000 Würfel pro Term';
+
+  @override
+  String get diceErrorBadSides => 'Würfel brauchen 1 bis 10000 Seiten';
+
+  @override
+  String get diceErrorTooLarge => 'Die Zahl ist zu groß';
+
+  @override
+  String get diceErrorDivisionByZero => 'Division durch null';
+
+  @override
+  String get diceErrorDuplicate => 'Dieser Modifikator ist doppelt';
+
+  @override
+  String get diceErrorImpossibleReroll => 'Dieser Neuwurf würde nie enden';
+
+  @override
+  String get diceErrorLabel => 'Schließe die Bezeichnung mit ]';
+
+  @override
+  String diceErrorAt(String message, int position) {
+    return '$message (Position $position)';
+  }
+
+  @override
+  String get dicePresetD20 => 'd20-Probe';
+
+  @override
+  String get dicePresetAbility => 'Attributswert';
+
+  @override
+  String get dicePresetCoc => 'Cthulhu';
+
+  @override
+  String get dicePresetPbta => 'PbtA-Zug';
+
+  @override
+  String get dicePresetBlades => 'Blades in the Dark';
+
+  @override
+  String get dicePresetFate => 'Fate';
+
+  @override
+  String get dicePresetYearZero => 'Year Zero';
+
+  @override
+  String get dicePresetSavage => 'Savage Worlds';
+
+  @override
+  String get dicePresetCyberpunk => 'Cyberpunk RED';
+
+  @override
+  String get diceModeNormal => 'Normal';
+
+  @override
+  String get diceDc => 'SG (optional)';
+
+  @override
+  String get diceSkill => 'Fertigkeit';
+
+  @override
+  String get diceBonusDice => 'Bonus- (+) / Malus-Würfel (−)';
+
+  @override
+  String get diceStat => 'Wert';
+
+  @override
+  String get diceDicePool => 'Würfelpool';
+
+  @override
+  String get diceTraitDie => 'Eigenschaftswürfel';
+
+  @override
+  String get diceWildDie => 'Wildcard-Würfel';
+
+  @override
+  String get diceStatSkill => 'Wert + Fertigkeit';
+
+  @override
+  String get diceOutcomeCriticalSuccess => 'Kritischer Erfolg';
+
+  @override
+  String get diceOutcomeCriticalFailure => 'Kritischer Fehlschlag';
+
+  @override
+  String get diceOutcomeSuccess => 'Erfolg';
+
+  @override
+  String get diceOutcomeFailure => 'Fehlschlag';
+
+  @override
+  String get diceOutcomeRaise => 'Erfolg mit Steigerung';
+
+  @override
+  String get diceOutcomeExtreme => 'Extremer Erfolg';
+
+  @override
+  String get diceOutcomeHard => 'Schwieriger Erfolg';
+
+  @override
+  String get diceOutcomeRegular => 'Normaler Erfolg';
+
+  @override
+  String get diceOutcomeFumble => 'Patzer';
+
+  @override
+  String get diceOutcomeMiss => 'Fehlschlag';
+
+  @override
+  String get diceOutcomePartial => 'Teilerfolg';
+
+  @override
+  String get diceOutcomeFull => 'Voller Erfolg';
+
+  @override
+  String get diceFateTerrible => 'Katastrophal';
+
+  @override
+  String get diceFatePoor => 'Schwach';
+
+  @override
+  String get diceFateMediocre => 'Mäßig';
+
+  @override
+  String get diceFateAverage => 'Durchschnittlich';
+
+  @override
+  String get diceFateFair => 'Ordentlich';
+
+  @override
+  String get diceFateGood => 'Gut';
+
+  @override
+  String get diceFateGreat => 'Großartig';
+
+  @override
+  String get diceFateSuperb => 'Hervorragend';
+
+  @override
+  String get diceFateFantastic => 'Fantastisch';
+
+  @override
+  String get diceFateEpic => 'Episch';
+
+  @override
+  String get diceFateLegendary => 'Legendär';
+
+  @override
+  String diceSuccesses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erfolge',
+      one: '1 Erfolg',
+      zero: 'Keine Erfolge',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String diceRollTooltip(String expression) {
+    return '$expression würfeln';
+  }
+
+  @override
+  String diceRolledSnack(String expression, int total) {
+    return '$expression: $total';
+  }
+
+  @override
+  String get diceQuickRollTitle => 'Schnellwurf';
 }
