@@ -905,111 +905,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get cyberKindCharacter => 'Runner';
-
-  @override
-  String get cyberKindCharacterPlural => 'Runners';
-
-  @override
-  String get cyberKindLocation => 'Sector';
-
-  @override
-  String get cyberKindLocationPlural => 'Sectors';
-
-  @override
-  String get cyberKindItem => 'Gear';
-
-  @override
-  String get cyberKindItemPlural => 'Gear & Tech';
-
-  @override
-  String get cyberKindCreature => 'Cyberform';
-
-  @override
-  String get cyberKindCreaturePlural => 'Cyberforms';
-
-  @override
-  String get cyberKindFaction => 'Syndicate';
-
-  @override
-  String get cyberKindFactionPlural => 'Corps & Gangs';
-
-  @override
-  String get cyberKindEvent => 'Incident';
-
-  @override
-  String get cyberKindEventPlural => 'Incidents';
-
-  @override
-  String get cyberKindEra => 'Epoch';
-
-  @override
-  String get cyberKindEraPlural => 'Epochs';
-
-  @override
-  String get cyberKindReligion => 'Cult';
-
-  @override
-  String get cyberKindReligionPlural => 'Cults';
-
-  @override
-  String get cyberKindMagicSystem => 'Protocol';
-
-  @override
-  String get cyberKindMagicSystemPlural => 'Protocols';
-
-  @override
-  String get cyberKindTechnology => 'Cyberware';
-
-  @override
-  String get cyberKindTechnologyPlural => 'Cyberware';
-
-  @override
-  String get cyberKindConcept => 'Data Fragment';
-
-  @override
-  String get cyberKindConceptPlural => 'Data Vault';
-
-  @override
-  String get cyberKindLoreDocument => 'Data Shard';
-
-  @override
-  String get cyberKindLoreDocumentPlural => 'Data Shards';
-
-  @override
-  String get cyberKindCampaign => 'Operation';
-
-  @override
-  String get cyberKindCampaignPlural => 'Operations';
-
-  @override
-  String get cyberKindQuest => 'Gig';
-
-  @override
-  String get cyberKindQuestPlural => 'Gigs';
-
-  @override
-  String get cyberKindSession => 'Run';
-
-  @override
-  String get cyberKindSessionPlural => 'Runs';
-
-  @override
   String get worldStyleLabel => 'World style';
-
-  @override
-  String get worldStyleFantasy => 'Fantasy';
-
-  @override
-  String get worldStyleFantasyHint =>
-      'Candle-lit parchment, classic vocabulary: Characters, Locations, Quests';
-
-  @override
-  String get worldStyleCyberpunk => 'Cyberpunk';
-
-  @override
-  String get worldStyleCyberpunkHint =>
-      'Neon chrome and street slang: Runners, Sectors, Gigs';
 
   @override
   String get viewAsGrid => 'Grid view';
@@ -1264,4 +1160,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpFigureCaption => 'Schematic view of the actual screen';
+
+  @override
+  String get editWorldTitle => 'Edit world';
+
+  @override
+  String get worldActions => 'World actions';
+
+  @override
+  String deleteWorldTitle(String name) {
+    return 'Delete “$name”?';
+  }
+
+  @override
+  String get deleteWorldBody =>
+      'Every entry, document, image and campaign in this world is deleted permanently. Existing backup files are kept.';
+
+  @override
+  String get worldSection => 'World';
 }

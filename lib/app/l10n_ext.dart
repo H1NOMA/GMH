@@ -6,6 +6,7 @@ import '../domain/models/entity_kind.dart';
 import '../domain/models/link.dart';
 import '../domain/models/world.dart';
 import '../l10n/app_localizations.dart';
+import 'packs/setting_packs.dart';
 import 'theme/gmh_theme.dart';
 
 export '../l10n/app_localizations.dart';
@@ -16,31 +17,21 @@ extension L10nContext on BuildContext {
 }
 
 /// Localized labels for entity kinds (domain enum stays language-neutral).
-/// Cyberpunk worlds swap the fantasy vocabulary for street slang — Runners,
-/// Sectors, Gigs — driven by the open world's style ([GmhStyle.current]).
+/// The open world's setting pack re-skins them — Runners and Sectors in
+/// cyberpunk, Crew and Waypoints in space opera… — driven by the active
+/// style ([GmhStyle.current]); the base fantasy vocabulary comes from the
+/// ARB files.
 extension EntityKindL10n on EntityKind {
+  String? _packTerm(BuildContext context, String prefix) {
+    if (this == EntityKind.custom) return null;
+    return SettingPacks.of(GmhStyle.current).term(
+        Localizations.localeOf(context).languageCode, '$prefix.$name');
+  }
+
   String localizedLabel(BuildContext context) {
+    final skinned = _packTerm(context, 'k');
+    if (skinned != null) return skinned;
     final l = context.l10n;
-    if (GmhStyle.current == WorldStyle.cyberpunk) {
-      return switch (this) {
-        EntityKind.character => l.cyberKindCharacter,
-        EntityKind.location => l.cyberKindLocation,
-        EntityKind.item => l.cyberKindItem,
-        EntityKind.creature => l.cyberKindCreature,
-        EntityKind.faction => l.cyberKindFaction,
-        EntityKind.event => l.cyberKindEvent,
-        EntityKind.era => l.cyberKindEra,
-        EntityKind.religion => l.cyberKindReligion,
-        EntityKind.magicSystem => l.cyberKindMagicSystem,
-        EntityKind.technology => l.cyberKindTechnology,
-        EntityKind.concept => l.cyberKindConcept,
-        EntityKind.loreDocument => l.cyberKindLoreDocument,
-        EntityKind.campaign => l.cyberKindCampaign,
-        EntityKind.quest => l.cyberKindQuest,
-        EntityKind.session => l.cyberKindSession,
-        EntityKind.custom => l.kindCustomEntry,
-      };
-    }
     return switch (this) {
       EntityKind.character => l.kindCharacter,
       EntityKind.location => l.kindLocation,
@@ -64,27 +55,9 @@ extension EntityKindL10n on EntityKind {
   }
 
   String localizedPlural(BuildContext context) {
+    final skinned = _packTerm(context, 'kp');
+    if (skinned != null) return skinned;
     final l = context.l10n;
-    if (GmhStyle.current == WorldStyle.cyberpunk) {
-      return switch (this) {
-        EntityKind.character => l.cyberKindCharacterPlural,
-        EntityKind.location => l.cyberKindLocationPlural,
-        EntityKind.item => l.cyberKindItemPlural,
-        EntityKind.creature => l.cyberKindCreaturePlural,
-        EntityKind.faction => l.cyberKindFactionPlural,
-        EntityKind.event => l.cyberKindEventPlural,
-        EntityKind.era => l.cyberKindEraPlural,
-        EntityKind.religion => l.cyberKindReligionPlural,
-        EntityKind.magicSystem => l.cyberKindMagicSystemPlural,
-        EntityKind.technology => l.cyberKindTechnologyPlural,
-        EntityKind.concept => l.cyberKindConceptPlural,
-        EntityKind.loreDocument => l.cyberKindLoreDocumentPlural,
-        EntityKind.campaign => l.cyberKindCampaignPlural,
-        EntityKind.quest => l.cyberKindQuestPlural,
-        EntityKind.session => l.cyberKindSessionPlural,
-        EntityKind.custom => l.kindCustomEntry,
-      };
-    }
     return switch (this) {
       EntityKind.character => l.kindCharacterPlural,
       EntityKind.location => l.kindLocationPlural,
@@ -104,6 +77,19 @@ extension EntityKindL10n on EntityKind {
       EntityKind.custom => l.kindCustomEntry,
     };
   }
+}
+
+/// Localized name / one-line hint of a world style (its setting pack).
+extension WorldStyleL10n on WorldStyle {
+  String localizedName(BuildContext context) =>
+      SettingPacks.of(this)
+          .term(Localizations.localeOf(context).languageCode, 'name') ??
+      name;
+
+  String localizedHint(BuildContext context) =>
+      SettingPacks.of(this)
+          .term(Localizations.localeOf(context).languageCode, 'hint') ??
+      '';
 }
 
 /// Localized labels for well-known link roles; custom roles pass through.

@@ -910,111 +910,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get close => 'Закрыть';
 
   @override
-  String get cyberKindCharacter => 'Раннер';
-
-  @override
-  String get cyberKindCharacterPlural => 'Раннеры';
-
-  @override
-  String get cyberKindLocation => 'Сектор';
-
-  @override
-  String get cyberKindLocationPlural => 'Сектора';
-
-  @override
-  String get cyberKindItem => 'Снаряжение';
-
-  @override
-  String get cyberKindItemPlural => 'Снаряжение и тех';
-
-  @override
-  String get cyberKindCreature => 'Киберформа';
-
-  @override
-  String get cyberKindCreaturePlural => 'Киберформы';
-
-  @override
-  String get cyberKindFaction => 'Синдикат';
-
-  @override
-  String get cyberKindFactionPlural => 'Корпорации и банды';
-
-  @override
-  String get cyberKindEvent => 'Инцидент';
-
-  @override
-  String get cyberKindEventPlural => 'Инциденты';
-
-  @override
-  String get cyberKindEra => 'Эпоха';
-
-  @override
-  String get cyberKindEraPlural => 'Эпохи';
-
-  @override
-  String get cyberKindReligion => 'Культ';
-
-  @override
-  String get cyberKindReligionPlural => 'Культы';
-
-  @override
-  String get cyberKindMagicSystem => 'Протокол';
-
-  @override
-  String get cyberKindMagicSystemPlural => 'Протоколы';
-
-  @override
-  String get cyberKindTechnology => 'Кибервэр';
-
-  @override
-  String get cyberKindTechnologyPlural => 'Кибервэр';
-
-  @override
-  String get cyberKindConcept => 'Фрагмент данных';
-
-  @override
-  String get cyberKindConceptPlural => 'Хранилище данных';
-
-  @override
-  String get cyberKindLoreDocument => 'Дата-шард';
-
-  @override
-  String get cyberKindLoreDocumentPlural => 'Дата-шарды';
-
-  @override
-  String get cyberKindCampaign => 'Операция';
-
-  @override
-  String get cyberKindCampaignPlural => 'Операции';
-
-  @override
-  String get cyberKindQuest => 'Заказ';
-
-  @override
-  String get cyberKindQuestPlural => 'Заказы';
-
-  @override
-  String get cyberKindSession => 'Забег';
-
-  @override
-  String get cyberKindSessionPlural => 'Забеги';
-
-  @override
   String get worldStyleLabel => 'Стиль мира';
-
-  @override
-  String get worldStyleFantasy => 'Фэнтези';
-
-  @override
-  String get worldStyleFantasyHint =>
-      'Пергамент при свечах, классические термины: Персонажи, Локации, Квесты';
-
-  @override
-  String get worldStyleCyberpunk => 'Киберпанк';
-
-  @override
-  String get worldStyleCyberpunkHint =>
-      'Неон, хром и уличный сленг: Раннеры, Сектора, Заказы';
 
   @override
   String get viewAsGrid => 'Вид сеткой';
@@ -1270,4 +1166,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get helpFigureCaption => 'Схема реального экрана';
+
+  @override
+  String get editWorldTitle => 'Изменить мир';
+
+  @override
+  String get worldActions => 'Действия с миром';
+
+  @override
+  String deleteWorldTitle(String name) {
+    return 'Удалить «$name»?';
+  }
+
+  @override
+  String get deleteWorldBody =>
+      'Все записи, документы, изображения и кампании этого мира будут удалены безвозвратно. Файлы резервных копий сохранятся.';
+
+  @override
+  String get worldSection => 'Мир';
 }

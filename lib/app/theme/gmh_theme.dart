@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/world.dart';
+import '../packs/setting_packs.dart';
 
 /// GMH design system — a fantasy atmosphere in a modern productivity shell
 /// (Notion/Obsidian/Linear-inspired): soft rounded corners, calm density,
@@ -63,7 +64,7 @@ const gmhDarkPalette = GmhPalette(
   blood: Color(0xFFA84332),
   parchment: Color(0xFFE8DCC8),
   parchmentDim: Color(0xFFB3A68F),
-  parchmentFaint: Color(0xFF7A6F5C),
+  parchmentFaint: Color(0xFF817662),
   success: Color(0xFF7D9B6A),
   danger: Color(0xFFC4574A),
 );
@@ -77,7 +78,7 @@ const gmhLightPalette = GmhPalette(
   surfaceRaised: Color(0xFFFFFFFF),
   surfaceHigh: Color(0xFFEFE7D7),
   border: Color(0xFFDCD2BF),
-  ember: Color(0xFFA8731A),
+  ember: Color(0xFF966617),
   emberBright: Color(0xFF7E5610),
   onEmber: Color(0xFFFFF6E0),
   arcane: Color(0xFF6B54A8),
@@ -106,7 +107,7 @@ const gmhCyberDarkPalette = GmhPalette(
   blood: Color(0xFFFF4365),
   parchment: Color(0xFFD7E1F4),
   parchmentDim: Color(0xFF90A2C6),
-  parchmentFaint: Color(0xFF5A6A8E),
+  parchmentFaint: Color(0xFF647496),
   success: Color(0xFF3DDC97),
   danger: Color(0xFFFF5C64),
 );
@@ -123,12 +124,12 @@ const gmhCyberLightPalette = GmhPalette(
   border: Color(0xFFC3D0E5),
   ember: Color(0xFF067F8C),
   emberBright: Color(0xFF045A64),
-  onEmber: Color(0xFFE7FDFF),
+  onEmber: Color(0xFFEDFEFF),
   arcane: Color(0xFF8A2BC9),
   blood: Color(0xFFC42B52),
   parchment: Color(0xFF16223A),
   parchmentDim: Color(0xFF44557C),
-  parchmentFaint: Color(0xFF7284A8),
+  parchmentFaint: Color(0xFF7082A6),
   success: Color(0xFF1F8A5D),
   danger: Color(0xFFC93A44),
 );
@@ -174,23 +175,11 @@ Color adaptiveAccent(Color base) {
 abstract final class GmhStyle {
   static WorldStyle current = WorldStyle.fantasy;
 
-  static GmhPalette paletteFor(WorldStyle style, Brightness brightness) {
-    final dark = brightness == Brightness.dark;
-    return switch (style) {
-      WorldStyle.fantasy => dark ? gmhDarkPalette : gmhLightPalette,
-      WorldStyle.cyberpunk =>
-        dark ? gmhCyberDarkPalette : gmhCyberLightPalette,
-    };
-  }
+  static GmhPalette paletteFor(WorldStyle style, Brightness brightness) =>
+      SettingPacks.of(style).palette(brightness);
 
-  static ThemeData themeFor(WorldStyle style, Brightness brightness) {
-    final dark = brightness == Brightness.dark;
-    return switch (style) {
-      WorldStyle.fantasy => dark ? GmhTheme.dark() : GmhTheme.light(),
-      WorldStyle.cyberpunk =>
-        dark ? GmhTheme.cyberDark() : GmhTheme.cyberLight(),
-    };
-  }
+  static ThemeData themeFor(WorldStyle style, Brightness brightness) =>
+      GmhTheme.build(paletteFor(style, brightness));
 }
 
 abstract final class GmhTheme {
@@ -201,10 +190,16 @@ abstract final class GmhTheme {
     'serif',
   ];
 
-  static ThemeData dark() => _build(gmhDarkPalette);
-  static ThemeData light() => _build(gmhLightPalette);
-  static ThemeData cyberDark() => _build(gmhCyberDarkPalette);
-  static ThemeData cyberLight() => _build(gmhCyberLightPalette);
+  static ThemeData dark() => build(gmhDarkPalette);
+  static ThemeData light() => build(gmhLightPalette);
+  static ThemeData cyberDark() => build(gmhCyberDarkPalette);
+  static ThemeData cyberLight() => build(gmhCyberLightPalette);
+
+  // ThemeData is expensive to build and palettes are immutable singletons:
+  // cache per palette so switching styles/brightness never rebuilds it.
+  static final Map<GmhPalette, ThemeData> _cache = Map.identity();
+
+  static ThemeData build(GmhPalette p) => _cache[p] ??= _build(p);
 
   static ThemeData _build(GmhPalette p) {
     final isDark = p.brightness == Brightness.dark;
@@ -387,9 +382,18 @@ abstract final class GmhTheme {
             borderRadius: BorderRadius.circular(9)),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: isDark ? p.surfaceHigh : const Color(0xFF322A20),
-        contentTextStyle: const TextStyle(
-            fontFamily: 'Roboto', color: Color(0xFFE8DCC8), fontSize: 13),
+        // Inverse surface: dark ink toast on light palettes, raised
+        // surface on dark ones — always in the active pack's colors.
+        backgroundColor: isDark ? p.surfaceHigh : p.parchment,
+        contentTextStyle: TextStyle(
+            fontFamily: 'Roboto',
+            color: isDark ? p.parchment : p.surface,
+            fontSize: 13),
+        // Undo & co. sit on the inverse surface: light accents need a
+        // lighter tint to stay readable on the dark-ink toast.
+        actionTextColor: isDark
+            ? p.emberBright
+            : Color.lerp(p.ember, Colors.white, 0.55),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12)),
@@ -431,12 +435,14 @@ abstract final class GmhTheme {
       tooltipTheme: TooltipThemeData(
         waitDuration: const Duration(milliseconds: 350),
         decoration: BoxDecoration(
-          color: isDark ? p.surfaceHigh : const Color(0xFF322A20),
+          color: isDark ? p.surfaceHigh : p.parchment,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: p.border),
+          border: Border.all(color: isDark ? p.border : p.parchment),
         ),
-        textStyle: const TextStyle(
-            fontFamily: 'Roboto', fontSize: 12, color: Color(0xFFE8DCC8)),
+        textStyle: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 12,
+            color: isDark ? p.parchment : p.surface),
       ),
       scrollbarTheme: ScrollbarThemeData(
         radius: const Radius.circular(8),

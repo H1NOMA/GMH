@@ -27,6 +27,7 @@ import 'package:gmh/app/providers.dart';
 import 'package:gmh/app/router.dart';
 import 'package:gmh/app/theme_provider.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
+import 'package:gmh/domain/models/world.dart';
 
 import '../support/demo_world.dart';
 
@@ -38,7 +39,11 @@ class _Route {
 
   /// Routes that live in the cyberpunk world (styled variants).
   final bool cyber;
-  const _Route(this.name, this.location, {this.cyber = false});
+
+  /// Routes in the per-pack showcase worlds (full matrix only).
+  final bool pack;
+  const _Route(this.name, this.location,
+      {this.cyber = false, this.pack = false});
 }
 
 String _e(DemoWorld d, String name) => Routes.entity(
@@ -78,6 +83,24 @@ final _routes = <_Route>[
   _Route('cyber:e:character', (d) => _e(d, 'cyber:Vex'), cyber: true),
   _Route('cyber:campaigns', (d) => Routes.campaigns(d.cyberWorldId),
       cyber: true),
+  // Every other setting pack: dashboard, a re-skinned list, a character
+  // page and a creature stat block in the pack's palette and vocabulary.
+  for (final style in WorldStyle.values)
+    if (style != WorldStyle.fantasy && style != WorldStyle.cyberpunk) ...[
+      _Route('pack:${style.name}:home',
+          (d) => Routes.home(d.packWorldIds[style]!), pack: true),
+      _Route('pack:${style.name}:browse',
+          (d) => Routes.browse(d.packWorldIds[style]!, EntityKind.character),
+          pack: true),
+      _Route('pack:${style.name}:e:character',
+          (d) => Routes.entity(
+              d.packWorldIds[style]!, d.packCharacterIds[style]!),
+          pack: true),
+      _Route('pack:${style.name}:e:creature',
+          (d) => Routes.entity(
+              d.packWorldIds[style]!, d.packCreatureIds[style]!),
+          pack: true),
+    ],
 ];
 
 class _Variant {
@@ -101,21 +124,38 @@ class _Variant {
 }
 
 bool _core(_Route r) =>
-    !r.name.startsWith('browse:') || r.name == 'browse:character';
+    !r.pack &&
+    (!r.name.startsWith('browse:') || r.name == 'browse:character');
+
+bool _notPack(_Route r) => !r.pack;
+
+bool _isPack(_Route r) => r.pack;
 
 final _variants = <_Variant>[
-  const _Variant('1280x720 dark en', size: Size(1280, 720)),
+  const _Variant('1280x720 dark en', size: Size(1280, 720), only: _notPack),
   if (_full) ...[
-    const _Variant('1920x1080 dark en', size: Size(1920, 1080)),
+    const _Variant('1280x720 packs dark', size: Size(1280, 720),
+        only: _isPack),
+    const _Variant('1280x720 packs light',
+        size: Size(1280, 720), theme: ThemeMode.light, only: _isPack),
+    const _Variant('1024x640 packs ru',
+        size: Size(1024, 640), locale: Locale('ru'), only: _isPack),
+    const _Variant('1024x640 packs de',
+        size: Size(1024, 640), locale: Locale('de'), only: _isPack),
+    const _Variant('1024x640 zh', size: Size(1024, 640),
+        locale: Locale('zh'), only: _notPack),
+    const _Variant('400x780 phone zh',
+        size: Size(400, 780), locale: Locale('zh'), only: _core),
+    const _Variant('1920x1080 dark en', size: Size(1920, 1080), only: _notPack),
     const _Variant('2560x1440 dark en', size: Size(2560, 1440), only: _core),
-    const _Variant('1024x640 dark en', size: Size(1024, 640)),
-    const _Variant('900x600 rail en', size: Size(900, 600)),
-    const _Variant('400x780 phone en', size: Size(400, 780)),
+    const _Variant('1024x640 dark en', size: Size(1024, 640), only: _notPack),
+    const _Variant('900x600 rail en', size: Size(900, 600), only: _notPack),
+    const _Variant('400x780 phone en', size: Size(400, 780), only: _notPack),
     const _Variant('1280x720 light en',
-        size: Size(1280, 720), theme: ThemeMode.light),
-    const _Variant('1024x640 de', size: Size(1024, 640), locale: Locale('de')),
-    const _Variant('1024x640 ru', size: Size(1024, 640), locale: Locale('ru')),
-    const _Variant('1024x640 fr', size: Size(1024, 640), locale: Locale('fr')),
+        size: Size(1280, 720), theme: ThemeMode.light, only: _notPack),
+    const _Variant('1024x640 de', size: Size(1024, 640), locale: Locale('de'), only: _notPack),
+    const _Variant('1024x640 ru', size: Size(1024, 640), locale: Locale('ru'), only: _notPack),
+    const _Variant('1024x640 fr', size: Size(1024, 640), locale: Locale('fr'), only: _notPack),
     const _Variant('400x780 phone de',
         size: Size(400, 780), locale: Locale('de'), only: _core),
     const _Variant('1280x720 text x1.3',

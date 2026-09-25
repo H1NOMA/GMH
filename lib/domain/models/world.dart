@@ -1,11 +1,20 @@
 import 'package:flutter/foundation.dart';
 
-/// Visual & terminology flavor of a world, chosen at creation time.
-/// Fantasy keeps the classic candle-lit design; cyberpunk switches the whole
-/// app to a neon palette and slang labels (Runners, Sectors, Gigs…).
+/// Visual & terminology flavor of a world (its setting pack), chosen at
+/// creation and changeable later. Each style re-skins the whole app:
+/// palette, icon and the vocabulary for entity kinds and template terms
+/// (see `lib/app/packs/`). Stored by [name], so the ids are stable.
 enum WorldStyle {
   fantasy,
-  cyberpunk;
+  cyberpunk,
+  spaceOpera,
+  gothicHorror,
+  cosmicHorror,
+  postApocalypse,
+  steampunk,
+  urbanFantasy,
+  wildWest,
+  wuxia;
 
   static WorldStyle parse(String? name) =>
       values.firstWhere((s) => s.name == name, orElse: () => fantasy);

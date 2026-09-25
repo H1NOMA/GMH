@@ -8,6 +8,8 @@ import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 
 import '../../app/l10n_ext.dart';
+import '../../app/packs/setting_packs.dart';
+import '../worlds/world_editor_dialog.dart';
 import '../../app/locale_provider.dart';
 import '../../app/theme_provider.dart';
 import '../../app/providers.dart';
@@ -224,6 +226,34 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 60),
           children: [
             if (_busy) const LinearProgressIndicator(minHeight: 2),
+            if (world != null) ...[
+              _SectionCard(
+                title: l.worldSection,
+                children: [
+                  ListTile(
+                    leading: Icon(SettingPacks.of(world.style).icon,
+                        color: GmhColors.ember),
+                    title: Text(world.name),
+                    subtitle: Text(
+                      '${l.worldStyleLabel}: '
+                      '${world.style.localizedName(context)}',
+                    ),
+                    trailing: const Icon(Icons.edit_outlined, size: 18),
+                    onTap: () async {
+                      final draft =
+                          await showWorldEditor(context, initial: world);
+                      if (draft == null) return;
+                      await ref.read(worldRepositoryProvider).updateWorld(
+                          world.copyWith(
+                              name: draft.name,
+                              description: draft.description,
+                              style: draft.style));
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+            ],
             _SectionCard(
               title: l.languageSection,
               children: [

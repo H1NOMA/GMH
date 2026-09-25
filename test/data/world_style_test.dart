@@ -52,7 +52,7 @@ void main() {
   test('unknown style strings fall back to fantasy', () {
     expect(WorldStyle.parse('cyberpunk'), WorldStyle.cyberpunk);
     expect(WorldStyle.parse('fantasy'), WorldStyle.fantasy);
-    expect(WorldStyle.parse('steampunk'), WorldStyle.fantasy);
+    expect(WorldStyle.parse('dieselpunk'), WorldStyle.fantasy);
     expect(WorldStyle.parse(null), WorldStyle.fantasy);
   });
 }

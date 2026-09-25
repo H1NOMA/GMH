@@ -18,11 +18,13 @@ final worldsProvider = StreamProvider<List<World>>(
   (ref) => ref.watch(worldRepositoryProvider).watchWorlds(),
 );
 
-final worldProvider = FutureProvider.family<World?, String>(
-  (ref, worldId) {
-    ref.watch(worldsProvider); // refresh when any world changes
-    return ref.watch(worldRepositoryProvider).getWorld(worldId);
-  },
+/// One world, derived synchronously from the live [worldsProvider] list:
+/// renames and style switches apply on the next frame, and there is no
+/// extra async hop that would paint a cyberpunk world in fantasy colors
+/// for a frame while a per-world query loads.
+final worldProvider = Provider.family<AsyncValue<World?>, String>(
+  (ref, worldId) => ref.watch(worldsProvider).whenData(
+      (worlds) => worlds.where((w) => w.id == worldId).firstOrNull),
 );
 
 typedef EntityListArgs = ({

@@ -887,109 +887,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get close => '关闭';
 
   @override
-  String get cyberKindCharacter => '狂奔者';
-
-  @override
-  String get cyberKindCharacterPlural => '狂奔者';
-
-  @override
-  String get cyberKindLocation => '区块';
-
-  @override
-  String get cyberKindLocationPlural => '区块';
-
-  @override
-  String get cyberKindItem => '装备';
-
-  @override
-  String get cyberKindItemPlural => '装备与科技';
-
-  @override
-  String get cyberKindCreature => '赛博生物';
-
-  @override
-  String get cyberKindCreaturePlural => '赛博生物';
-
-  @override
-  String get cyberKindFaction => '辛迪加';
-
-  @override
-  String get cyberKindFactionPlural => '公司与帮派';
-
-  @override
-  String get cyberKindEvent => '突发事件';
-
-  @override
-  String get cyberKindEventPlural => '突发事件';
-
-  @override
-  String get cyberKindEra => '时代';
-
-  @override
-  String get cyberKindEraPlural => '时代';
-
-  @override
-  String get cyberKindReligion => '教派';
-
-  @override
-  String get cyberKindReligionPlural => '教派';
-
-  @override
-  String get cyberKindMagicSystem => '协议';
-
-  @override
-  String get cyberKindMagicSystemPlural => '协议';
-
-  @override
-  String get cyberKindTechnology => '义体';
-
-  @override
-  String get cyberKindTechnologyPlural => '义体';
-
-  @override
-  String get cyberKindConcept => '数据碎片';
-
-  @override
-  String get cyberKindConceptPlural => '数据保险库';
-
-  @override
-  String get cyberKindLoreDocument => '数据芯片';
-
-  @override
-  String get cyberKindLoreDocumentPlural => '数据芯片';
-
-  @override
-  String get cyberKindCampaign => '行动';
-
-  @override
-  String get cyberKindCampaignPlural => '行动';
-
-  @override
-  String get cyberKindQuest => '委托';
-
-  @override
-  String get cyberKindQuestPlural => '委托';
-
-  @override
-  String get cyberKindSession => '狂奔';
-
-  @override
-  String get cyberKindSessionPlural => '狂奔';
-
-  @override
   String get worldStyleLabel => '世界风格';
-
-  @override
-  String get worldStyleFantasy => '奇幻';
-
-  @override
-  String get worldStyleFantasyHint => '烛光羊皮纸与经典术语：角色、地点、任务';
-
-  @override
-  String get worldStyleCyberpunk => '赛博朋克';
-
-  @override
-  String get worldStyleCyberpunkHint => '霓虹铬光与街头黑话：狂奔者、区块、委托';
 
   @override
   String get viewAsGrid => '网格视图';
@@ -1228,4 +1126,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get helpFigureCaption => '真实界面的示意图';
+
+  @override
+  String get editWorldTitle => '编辑世界';
+
+  @override
+  String get worldActions => '世界操作';
+
+  @override
+  String deleteWorldTitle(String name) {
+    return '删除“$name”？';
+  }
+
+  @override
+  String get deleteWorldBody => '此世界中的所有条目、文档、图片和战役都将被永久删除。已有的备份文件会保留。';
+
+  @override
+  String get worldSection => '世界';
 }

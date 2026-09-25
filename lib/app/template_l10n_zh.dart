@@ -299,10 +299,4 @@ const templateZh = <String, String>{
   'e.g. 500 gp': '例如：500 金币',
   'e.g. 7, regains 1d6+1 at dawn': '例如：7 点，黎明时恢复 1d6+1 点',
 
-  // -------------------------------------- cyberpunk skin terms
-  'Protocol': '协议',
-  'Subsystem': '子系统',
-  'Activation Time': '激活时间',
-  'Requirements': '要求',
-  'Overdrive Actions': '超频动作',
 };

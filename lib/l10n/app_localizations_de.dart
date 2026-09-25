@@ -909,111 +909,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get close => 'Schließen';
 
   @override
-  String get cyberKindCharacter => 'Runner';
-
-  @override
-  String get cyberKindCharacterPlural => 'Runner';
-
-  @override
-  String get cyberKindLocation => 'Sektor';
-
-  @override
-  String get cyberKindLocationPlural => 'Sektoren';
-
-  @override
-  String get cyberKindItem => 'Ausrüstung';
-
-  @override
-  String get cyberKindItemPlural => 'Ausrüstung & Tech';
-
-  @override
-  String get cyberKindCreature => 'Cyberform';
-
-  @override
-  String get cyberKindCreaturePlural => 'Cyberformen';
-
-  @override
-  String get cyberKindFaction => 'Syndikat';
-
-  @override
-  String get cyberKindFactionPlural => 'Konzerne & Gangs';
-
-  @override
-  String get cyberKindEvent => 'Zwischenfall';
-
-  @override
-  String get cyberKindEventPlural => 'Zwischenfälle';
-
-  @override
-  String get cyberKindEra => 'Epoche';
-
-  @override
-  String get cyberKindEraPlural => 'Epochen';
-
-  @override
-  String get cyberKindReligion => 'Kult';
-
-  @override
-  String get cyberKindReligionPlural => 'Kulte';
-
-  @override
-  String get cyberKindMagicSystem => 'Protokoll';
-
-  @override
-  String get cyberKindMagicSystemPlural => 'Protokolle';
-
-  @override
-  String get cyberKindTechnology => 'Cyberware';
-
-  @override
-  String get cyberKindTechnologyPlural => 'Cyberware';
-
-  @override
-  String get cyberKindConcept => 'Datenfragment';
-
-  @override
-  String get cyberKindConceptPlural => 'Datentresor';
-
-  @override
-  String get cyberKindLoreDocument => 'Daten-Splitter';
-
-  @override
-  String get cyberKindLoreDocumentPlural => 'Daten-Splitter';
-
-  @override
-  String get cyberKindCampaign => 'Operation';
-
-  @override
-  String get cyberKindCampaignPlural => 'Operationen';
-
-  @override
-  String get cyberKindQuest => 'Gig';
-
-  @override
-  String get cyberKindQuestPlural => 'Gigs';
-
-  @override
-  String get cyberKindSession => 'Run';
-
-  @override
-  String get cyberKindSessionPlural => 'Runs';
-
-  @override
   String get worldStyleLabel => 'Weltstil';
-
-  @override
-  String get worldStyleFantasy => 'Fantasy';
-
-  @override
-  String get worldStyleFantasyHint =>
-      'Pergament im Kerzenschein, klassisches Vokabular: Charaktere, Orte, Quests';
-
-  @override
-  String get worldStyleCyberpunk => 'Cyberpunk';
-
-  @override
-  String get worldStyleCyberpunkHint =>
-      'Neon, Chrom und Straßenslang: Runner, Sektoren, Gigs';
 
   @override
   String get viewAsGrid => 'Rasteransicht';
@@ -1270,4 +1166,22 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get helpFigureCaption => 'Schematische Ansicht des echten Bildschirms';
+
+  @override
+  String get editWorldTitle => 'Welt bearbeiten';
+
+  @override
+  String get worldActions => 'Weltaktionen';
+
+  @override
+  String deleteWorldTitle(String name) {
+    return '„$name“ löschen?';
+  }
+
+  @override
+  String get deleteWorldBody =>
+      'Alle Einträge, Dokumente, Bilder und Kampagnen dieser Welt werden endgültig gelöscht. Vorhandene Sicherungsdateien bleiben erhalten.';
+
+  @override
+  String get worldSection => 'Welt';
 }

@@ -107,6 +107,13 @@ class DemoWorld {
   /// A user-defined section ("Guilds") with one entry, so screens that
   /// branch on custom categories are covered too.
   late final String guildCategoryId;
+
+  /// One small world per additional setting pack (everything but fantasy
+  /// and the cyberpunk demo): style -> world id, plus the ids of its
+  /// headline character and creature for entity-page coverage.
+  final packWorldIds = <WorldStyle, String>{};
+  final packCharacterIds = <WorldStyle, String>{};
+  final packCreatureIds = <WorldStyle, String>{};
   final byName = <String, Entity>{};
   DemoWorld(this.db, this.vault, this.dir);
 }
@@ -499,6 +506,57 @@ Future<DemoWorld> seedRichWorld() async {
   });
   await settings.set('${SettingsKeys.listViewMode}.${cyber.id}|character',
       'grid');
+
+  // ------------------------------------------- one world per other pack
+  for (final style in WorldStyle.values) {
+    if (style == WorldStyle.fantasy || style == WorldStyle.cyberpunk) {
+      continue;
+    }
+    final w = await worlds.createWorld(
+        name: 'Demo ${style.name}',
+        description: 'Setting-pack showcase',
+        style: style);
+    demo.packWorldIds[style] = w.id;
+    final home = await create(w.id, EntityKind.location, 'Haven ${style.name}',
+        'Where the story starts', cover: true, attributes: {
+      'locationType': 'City',
+      'population': '4,200',
+    });
+    final hero = await create(w.id, EntityKind.character,
+        'Hero of ${style.name}', 'Reluctant protagonist',
+        cover: true, favorite: true, attributes: {
+      'race': 'Human',
+      'characterClass': 'Wanderer',
+      'status': 'Alive',
+      'strength': 12,
+      'dexterity': 15,
+      'homeLocation': entityRefValue(home.id),
+    });
+    demo.packCharacterIds[style] = hero.id;
+    final beast = await create(w.id, EntityKind.creature,
+        'Menace of ${style.name}', 'Something hungry in the dark', attributes: {
+      'size': 'Large',
+      'creatureType': 'Monster',
+      'ac': 14,
+      'hp': '52 (8d10 + 8)',
+      'challenge': '3 (700 XP)',
+      'strength': 17,
+      'actions': 'Bite. Melee Attack: +5, reach 5 ft. Hit: 2d6 + 3.',
+    });
+    demo.packCreatureIds[style] = beast.id;
+    final arc = await create(w.id, EntityKind.campaign, 'First Arc',
+        'Opening chapter', attributes: {'status': 'Active'});
+    await create(w.id, EntityKind.quest, 'The First Job', 'Get paid, stay alive',
+        attributes: {'status': 'Active', 'campaign': entityRefValue(arc.id)});
+    await create(w.id, EntityKind.magicSystem, 'Signature Power',
+        'The genre\'s answer to magic', attributes: {
+      'level': '2nd Level',
+      'school': 'Evocation',
+      'castingTime': '1 action',
+      'components': 'V, S',
+      'duration': '1 minute',
+    });
+  }
 
   return demo;
 }

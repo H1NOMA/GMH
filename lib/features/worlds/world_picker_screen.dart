@@ -5,74 +5,15 @@ import 'package:go_router/go_router.dart';
 import '../../app/l10n_ext.dart';
 import '../../app/providers.dart';
 import '../../app/router.dart';
+import '../../app/packs/setting_packs.dart';
 import '../../app/theme/gmh_theme.dart';
 
 import '../../domain/models/world.dart';
 import '../../domain/repositories/repositories.dart';
 import '../shell/ui_providers.dart';
+import 'world_editor_dialog.dart';
 
 /// Entry screen: pick, create or import a world.
-class _StyleChoice extends StatelessWidget {
-  final String label;
-  final String hint;
-  final IconData icon;
-  final Color accent;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _StyleChoice({
-    required this.label,
-    required this.hint,
-    required this.icon,
-    required this.accent,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected ? accent : GmhColors.border,
-            width: selected ? 1.8 : 1,
-          ),
-          color: selected
-              ? accent.withValues(alpha: 0.08)
-              : Colors.transparent,
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 22, color: accent),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label,
-                      style: const TextStyle(
-                          fontSize: 13.5, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 2),
-                  Text(hint,
-                      style: TextStyle(
-                          fontSize: 11.5, color: GmhColors.parchmentDim)),
-                ],
-              ),
-            ),
-            if (selected) Icon(Icons.check_circle, size: 18, color: accent),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class WorldPickerScreen extends ConsumerWidget {
   const WorldPickerScreen({super.key});
 
@@ -85,97 +26,36 @@ class WorldPickerScreen extends ConsumerWidget {
   }
 
   Future<void> _createWorld(BuildContext context, WidgetRef ref) async {
-    final nameController = TextEditingController();
-    final descriptionController = TextEditingController();
-    var style = WorldStyle.fantasy;
-    ModalRoute<Object?>? dialogRoute;
-    final created = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        dialogRoute ??= ModalRoute.of(context);
-        return StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(context.l10n.createWorldTitle),
-          content: SizedBox(
-            width: 420,
-            child: SingleChildScrollView(
-              child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextField(
-                  controller: nameController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                      labelText: context.l10n.worldNameLabel,
-                      hintText: context.l10n.worldNameHint),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: descriptionController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                      labelText: context.l10n.worldDescriptionLabel),
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(context.l10n.worldStyleLabel,
-                      style: const TextStyle(
-                          fontSize: 12.5, fontWeight: FontWeight.w600)),
-                ),
-                const SizedBox(height: 8),
-                _StyleChoice(
-                  label: context.l10n.worldStyleFantasy,
-                  hint: context.l10n.worldStyleFantasyHint,
-                  icon: Icons.auto_stories,
-                  accent: adaptiveAccent(gmhDarkPalette.ember),
-                  selected: style == WorldStyle.fantasy,
-                  onTap: () =>
-                      setDialogState(() => style = WorldStyle.fantasy),
-                ),
-                const SizedBox(height: 8),
-                _StyleChoice(
-                  label: context.l10n.worldStyleCyberpunk,
-                  hint: context.l10n.worldStyleCyberpunkHint,
-                  icon: Icons.memory,
-                  accent: adaptiveAccent(gmhCyberDarkPalette.ember),
-                  selected: style == WorldStyle.cyberpunk,
-                  onTap: () =>
-                      setDialogState(() => style = WorldStyle.cyberpunk),
-                ),
-              ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(context.l10n.cancel)),
-            FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(context.l10n.create)),
-          ],
-        ),
-      );
-      },
-    );
-    final name = nameController.text.trim();
-    final description = descriptionController.text.trim();
-    // The dialog can still rebuild during its exit transition — release the
-    // controllers only once the route is fully gone.
-    dialogRoute?.completed.whenComplete(() {
-      nameController.dispose();
-      descriptionController.dispose();
-    });
-    if (created != true || name.isEmpty) return;
-
+    final draft = await showWorldEditor(context);
+    if (draft == null) return;
     final world = await ref.read(worldRepositoryProvider).createWorld(
-          name: name,
-          description: description,
-          style: style,
+          name: draft.name,
+          description: draft.description,
+          style: draft.style,
         );
     if (context.mounted) await _openWorld(context, ref, world);
+  }
+
+  Future<void> _editWorld(
+      BuildContext context, WidgetRef ref, World world) async {
+    final draft = await showWorldEditor(context, initial: world);
+    if (draft == null) return;
+    await ref.read(worldRepositoryProvider).updateWorld(world.copyWith(
+          name: draft.name,
+          description: draft.description,
+          style: draft.style,
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
+        ));
+  }
+
+  Future<void> _deleteWorld(
+      BuildContext context, WidgetRef ref, World world) async {
+    if (!await confirmDeleteWorld(context, world)) return;
+    final settings = ref.read(settingsRepositoryProvider);
+    if (await settings.get(SettingsKeys.lastOpenedWorld) == world.id) {
+      await settings.remove(SettingsKeys.lastOpenedWorld);
+    }
+    await ref.read(worldRepositoryProvider).deleteWorld(world.id);
   }
 
   @override
@@ -234,13 +114,11 @@ class WorldPickerScreen extends ConsumerWidget {
                                       const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 6),
                                   leading: Icon(
-                                    world.style == WorldStyle.cyberpunk
-                                        ? Icons.memory
-                                        : Icons.public,
-                                    color:
-                                        world.style == WorldStyle.cyberpunk
-                                            ? adaptiveAccent(gmhCyberDarkPalette.ember)
-                                            : GmhColors.ember,
+                                    SettingPacks.of(world.style).icon,
+                                    color: SettingPacks.of(world.style)
+                                        .palette(
+                                            Theme.of(context).brightness)
+                                        .ember,
                                   ),
                                   title: Text(world.name,
                                       style: Theme.of(context)
@@ -255,7 +133,26 @@ class WorldPickerScreen extends ConsumerWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  trailing: const Icon(Icons.chevron_right),
+                                  trailing: PopupMenuButton<String>(
+                                    tooltip: context.l10n.worldActions,
+                                    onSelected: (action) => switch (action) {
+                                      'edit' =>
+                                        _editWorld(context, ref, world),
+                                      _ => _deleteWorld(context, ref, world),
+                                    },
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                          value: 'edit',
+                                          child: Text(
+                                              context.l10n.editWorldTitle)),
+                                      PopupMenuItem(
+                                        value: 'delete',
+                                        child: Text(context.l10n.delete,
+                                            style: TextStyle(
+                                                color: GmhColors.danger)),
+                                      ),
+                                    ],
+                                  ),
                                   onTap: () =>
                                       _openWorld(context, ref, world),
                                 ),
