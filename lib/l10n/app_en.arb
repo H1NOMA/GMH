@@ -722,5 +722,183 @@
       }
     }
   },
-  "diceQuickRollTitle": "Quick roll"
+  "diceQuickRollTitle": "Quick roll",
+  "combatNewEncounter": "New encounter",
+  "combatEncounterDefaultName": "Encounter {number}",
+  "@combatEncounterDefaultName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "combatEncounterNameLabel": "Encounter name",
+  "combatEmptyTitle": "No encounters yet",
+  "combatEmptyHint": "Plan a fight: add monsters and heroes, check the difficulty, then run it round by round.",
+  "combatRenameTitle": "Rename encounter",
+  "combatDuplicate": "Duplicate",
+  "combatCopyName": "{name} (copy)",
+  "@combatCopyName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatDeleteTitle": "Delete “{name}”?",
+  "@combatDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatDeleteBody": "The encounter and all its combatants are deleted permanently.",
+  "combatStatusPlanning": "Planning",
+  "combatStatusActive": "In combat",
+  "combatStatusFinished": "Finished",
+  "combatRound": "Round {round}",
+  "@combatRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "combatCombatantCount": "{count, plural, =0{No combatants} =1{1 combatant} other{{count} combatants}}",
+  "@combatCombatantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "combatNotFound": "This encounter no longer exists.",
+  "combatAllEncounters": "All encounters",
+  "combatStart": "Start combat",
+  "combatEnd": "End combat",
+  "combatNextTurn": "Next turn",
+  "combatPreviousTurn": "Previous turn",
+  "combatRollInitiative": "Roll initiative",
+  "combatRollInitiativeHint": "Rolls d20 + bonus for every monster; players keep their own values.",
+  "combatTurnOf": "Turn: {name}",
+  "@combatTurnOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatNotStarted": "Combat has not started",
+  "combatAddFromWorld": "Add from world",
+  "combatAddManually": "Add manually",
+  "combatPickTitle": "Add a creature or character",
+  "combatQuantityTitle": "How many “{name}”?",
+  "@combatQuantityTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatNoCombatants": "No combatants yet",
+  "combatNoCombatantsHint": "Add creatures and characters from your world or enter them by hand.",
+  "combatInitiative": "Initiative",
+  "combatInitiativeBonus": "Initiative bonus",
+  "combatArmorClass": "Armor class",
+  "combatAcShort": "AC",
+  "combatHpMax": "Max HP",
+  "combatHpCurrent": "Current HP",
+  "combatHpTemp": "Temp HP",
+  "combatAmountHint": "HP",
+  "combatDamage": "Damage",
+  "combatHeal": "Heal",
+  "combatTemp": "Temp",
+  "combatAddCondition": "Condition",
+  "combatConditionDurationTitle": "Duration: {condition}",
+  "@combatConditionDurationTitle": {
+    "placeholders": {
+      "condition": {
+        "type": "String"
+      }
+    }
+  },
+  "combatConditionRounds": "Rounds (empty = until removed)",
+  "combatRemoveCondition": "Remove condition",
+  "combatConcentration": "Concentration",
+  "combatDefeated": "Defeated",
+  "combatPlayer": "Player character",
+  "combatEdit": "Edit",
+  "combatRemove": "Remove",
+  "combatEditCombatant": "Edit combatant",
+  "combatAddCombatant": "Add combatant",
+  "combatChallenge": "Challenge rating",
+  "combatXp": "XP",
+  "combatQuantity": "Quantity",
+  "combatNotes": "Notes",
+  "combatNotesHint": "Tactics, terrain, loot…",
+  "combatDifficulty": "Difficulty",
+  "combatRules": "Rules",
+  "combatPartyLevels": "Party levels",
+  "combatAddLevel": "Level",
+  "combatLevelChip": "Lv {level}",
+  "@combatLevelChip": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "combatLevelLabel": "Character level (1–20)",
+  "combatMonsterXp": "Monster XP: {xp}",
+  "@combatMonsterXp": {
+    "placeholders": {
+      "xp": {
+        "type": "String"
+      }
+    }
+  },
+  "combatAdjustedXp": "Adjusted XP: {xp} (×{multiplier})",
+  "@combatAdjustedXp": {
+    "placeholders": {
+      "xp": {
+        "type": "String"
+      },
+      "multiplier": {
+        "type": "String"
+      }
+    }
+  },
+  "combatNoParty": "Add the party’s levels to rate this encounter.",
+  "combatRatingTrivial": "Trivial",
+  "combatRatingLow": "Low",
+  "combatRatingModerate": "Moderate",
+  "combatRatingHigh": "High",
+  "combatRatingBeyondHigh": "Beyond high",
+  "combatRatingEasy": "Easy",
+  "combatRatingMedium": "Medium",
+  "combatRatingHard": "Hard",
+  "combatRatingDeadly": "Deadly",
+  "combatConcentrationCheck": "{name}: concentration save DC {dc}",
+  "@combatConcentrationCheck": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "dc": {
+        "type": "int"
+      }
+    }
+  },
+  "combatDefeatedNotice": "{name} is defeated",
+  "@combatDefeatedNotice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatOpenEntry": "Open entry",
+  "combatActions": "Combatant actions",
+  "combatEncounterActions": "Encounter actions"
 }

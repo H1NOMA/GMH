@@ -1566,4 +1566,284 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diceQuickRollTitle => 'Quick roll';
+
+  @override
+  String get combatNewEncounter => 'New encounter';
+
+  @override
+  String combatEncounterDefaultName(int number) {
+    return 'Encounter $number';
+  }
+
+  @override
+  String get combatEncounterNameLabel => 'Encounter name';
+
+  @override
+  String get combatEmptyTitle => 'No encounters yet';
+
+  @override
+  String get combatEmptyHint =>
+      'Plan a fight: add monsters and heroes, check the difficulty, then run it round by round.';
+
+  @override
+  String get combatRenameTitle => 'Rename encounter';
+
+  @override
+  String get combatDuplicate => 'Duplicate';
+
+  @override
+  String combatCopyName(String name) {
+    return '$name (copy)';
+  }
+
+  @override
+  String combatDeleteTitle(String name) {
+    return 'Delete “$name”?';
+  }
+
+  @override
+  String get combatDeleteBody =>
+      'The encounter and all its combatants are deleted permanently.';
+
+  @override
+  String get combatStatusPlanning => 'Planning';
+
+  @override
+  String get combatStatusActive => 'In combat';
+
+  @override
+  String get combatStatusFinished => 'Finished';
+
+  @override
+  String combatRound(int round) {
+    return 'Round $round';
+  }
+
+  @override
+  String combatCombatantCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count combatants',
+      one: '1 combatant',
+      zero: 'No combatants',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get combatNotFound => 'This encounter no longer exists.';
+
+  @override
+  String get combatAllEncounters => 'All encounters';
+
+  @override
+  String get combatStart => 'Start combat';
+
+  @override
+  String get combatEnd => 'End combat';
+
+  @override
+  String get combatNextTurn => 'Next turn';
+
+  @override
+  String get combatPreviousTurn => 'Previous turn';
+
+  @override
+  String get combatRollInitiative => 'Roll initiative';
+
+  @override
+  String get combatRollInitiativeHint =>
+      'Rolls d20 + bonus for every monster; players keep their own values.';
+
+  @override
+  String combatTurnOf(String name) {
+    return 'Turn: $name';
+  }
+
+  @override
+  String get combatNotStarted => 'Combat has not started';
+
+  @override
+  String get combatAddFromWorld => 'Add from world';
+
+  @override
+  String get combatAddManually => 'Add manually';
+
+  @override
+  String get combatPickTitle => 'Add a creature or character';
+
+  @override
+  String combatQuantityTitle(String name) {
+    return 'How many “$name”?';
+  }
+
+  @override
+  String get combatNoCombatants => 'No combatants yet';
+
+  @override
+  String get combatNoCombatantsHint =>
+      'Add creatures and characters from your world or enter them by hand.';
+
+  @override
+  String get combatInitiative => 'Initiative';
+
+  @override
+  String get combatInitiativeBonus => 'Initiative bonus';
+
+  @override
+  String get combatArmorClass => 'Armor class';
+
+  @override
+  String get combatAcShort => 'AC';
+
+  @override
+  String get combatHpMax => 'Max HP';
+
+  @override
+  String get combatHpCurrent => 'Current HP';
+
+  @override
+  String get combatHpTemp => 'Temp HP';
+
+  @override
+  String get combatAmountHint => 'HP';
+
+  @override
+  String get combatDamage => 'Damage';
+
+  @override
+  String get combatHeal => 'Heal';
+
+  @override
+  String get combatTemp => 'Temp';
+
+  @override
+  String get combatAddCondition => 'Condition';
+
+  @override
+  String combatConditionDurationTitle(String condition) {
+    return 'Duration: $condition';
+  }
+
+  @override
+  String get combatConditionRounds => 'Rounds (empty = until removed)';
+
+  @override
+  String get combatRemoveCondition => 'Remove condition';
+
+  @override
+  String get combatConcentration => 'Concentration';
+
+  @override
+  String get combatDefeated => 'Defeated';
+
+  @override
+  String get combatPlayer => 'Player character';
+
+  @override
+  String get combatEdit => 'Edit';
+
+  @override
+  String get combatRemove => 'Remove';
+
+  @override
+  String get combatEditCombatant => 'Edit combatant';
+
+  @override
+  String get combatAddCombatant => 'Add combatant';
+
+  @override
+  String get combatChallenge => 'Challenge rating';
+
+  @override
+  String get combatXp => 'XP';
+
+  @override
+  String get combatQuantity => 'Quantity';
+
+  @override
+  String get combatNotes => 'Notes';
+
+  @override
+  String get combatNotesHint => 'Tactics, terrain, loot…';
+
+  @override
+  String get combatDifficulty => 'Difficulty';
+
+  @override
+  String get combatRules => 'Rules';
+
+  @override
+  String get combatPartyLevels => 'Party levels';
+
+  @override
+  String get combatAddLevel => 'Level';
+
+  @override
+  String combatLevelChip(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String get combatLevelLabel => 'Character level (1–20)';
+
+  @override
+  String combatMonsterXp(String xp) {
+    return 'Monster XP: $xp';
+  }
+
+  @override
+  String combatAdjustedXp(String xp, String multiplier) {
+    return 'Adjusted XP: $xp (×$multiplier)';
+  }
+
+  @override
+  String get combatNoParty => 'Add the party’s levels to rate this encounter.';
+
+  @override
+  String get combatRatingTrivial => 'Trivial';
+
+  @override
+  String get combatRatingLow => 'Low';
+
+  @override
+  String get combatRatingModerate => 'Moderate';
+
+  @override
+  String get combatRatingHigh => 'High';
+
+  @override
+  String get combatRatingBeyondHigh => 'Beyond high';
+
+  @override
+  String get combatRatingEasy => 'Easy';
+
+  @override
+  String get combatRatingMedium => 'Medium';
+
+  @override
+  String get combatRatingHard => 'Hard';
+
+  @override
+  String get combatRatingDeadly => 'Deadly';
+
+  @override
+  String combatConcentrationCheck(String name, int dc) {
+    return '$name: concentration save DC $dc';
+  }
+
+  @override
+  String combatDefeatedNotice(String name) {
+    return '$name is defeated';
+  }
+
+  @override
+  String get combatOpenEntry => 'Open entry';
+
+  @override
+  String get combatActions => 'Combatant actions';
+
+  @override
+  String get combatEncounterActions => 'Encounter actions';
 }
