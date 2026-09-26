@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gmh/app/router.dart';
+import 'package:gmh/data/repositories/world_object_repository_impl.dart';
+import 'package:gmh/domain/maps/game_map.dart';
+import 'package:gmh/domain/maps/map_pin.dart';
+import 'package:gmh/domain/models/world_object.dart';
 
 import '../../support/demo_world.dart';
 import '../../support/visual_routes.dart';
@@ -80,6 +84,76 @@ Future<void> _gmPinEntry(WidgetTester tester) async {
   );
 }
 
+/// Maps added on the fly to a setting-pack world (never audited by
+/// route), so the demo world keeps its data for every other screen:
+/// one whose image file is gone (with a pin) and a blank one without a
+/// scale. Created once per seeded world.
+class _ExtraMaps {
+  final String brokenId;
+  final String brokenPinId;
+  final String unscaledId;
+  const _ExtraMaps(this.brokenId, this.brokenPinId, this.unscaledId);
+}
+
+final _extraMaps = Expando<_ExtraMaps>();
+
+String _extraWorld(DemoWorld d) => d.packWorldIds.values.first;
+
+Future<_ExtraMaps> _ensureExtraMaps(WidgetTester tester, DemoWorld d) async {
+  final existing = _extraMaps[d];
+  if (existing != null) return existing;
+  final worldId = _extraWorld(d);
+  Future<_ExtraMaps> create() async {
+    final objects = WorldObjectRepositoryImpl(d.db);
+    final broken = await objects.create(
+      worldId: worldId,
+      type: WorldObjectTypes.map,
+      name: 'Lost Chart',
+      data: const GameMap(
+        name: 'Lost Chart',
+        mediaId: 'missing-media',
+        width: 880,
+        height: 560,
+      ).toData(),
+    );
+    final pin = await objects.create(
+      worldId: worldId,
+      type: WorldObjectTypes.mapPin,
+      parentId: broken.id,
+      data: const MapPin(x: 0.5, y: 0.45, label: 'Old Lighthouse').toData(),
+    );
+    final unscaled = await objects.create(
+      worldId: worldId,
+      type: WorldObjectTypes.map,
+      name: 'Sketch',
+      data: const GameMap(name: 'Sketch', width: 880, height: 560).toData(),
+    );
+    return _ExtraMaps(broken.id, pin.id, unscaled.id);
+  }
+
+  // Created in the app's zone and pumped until done: awaited inside
+  // runAsync it stalls behind the app's pending database queries.
+  _ExtraMaps? created;
+  create().then((m) => created = m);
+  for (var i = 0; created == null && i < 50; i++) {
+    await settleVisual(tester, 1);
+  }
+  if (created == null) fail('extra maps were not created');
+  _extraMaps[d] = created;
+  await settleVisual(tester, 3);
+  return created!;
+}
+
+/// Opens one of the extra maps from its world's map list.
+Future<void> _openExtraMap(WidgetTester tester, String mapId) =>
+    _tapKey(tester, 'maps-card-$mapId');
+
+Future<void> _measure(WidgetTester tester) async {
+  await _tapKey(tester, 'maps-mode-measure');
+  await _tapCanvas(tester, const Offset(0.2, 0.55));
+  await _tapCanvas(tester, const Offset(0.85, 0.6));
+}
+
 Future<void> _newEvent(WidgetTester tester) =>
     _tapKey(tester, 'timeline-new-event');
 
@@ -109,10 +183,10 @@ final atlasScenarios = <AlignScenario>[
     await _tapKey(tester, 'maps-mode-add');
     await _tapCanvas(tester, const Offset(0.2, 0.55));
   }),
-  AlignScenario('maps:measure', _map, (tester, d) async {
-    await _tapKey(tester, 'maps-mode-measure');
-    await _tapCanvas(tester, const Offset(0.2, 0.55));
-    await _tapCanvas(tester, const Offset(0.85, 0.6));
+  AlignScenario('maps:measure', _map, (tester, d) => _measure(tester)),
+  AlignScenario('maps:measure-rule', _map, (tester, d) async {
+    await _measure(tester);
+    await _tapKey(tester, 'maps-measure-rule');
   }),
   AlignScenario('maps:pin-card', _map,
       (tester, d) => _selectLinkedPin(tester)),
@@ -134,6 +208,31 @@ final atlasScenarios = <AlignScenario>[
   AlignScenario('maps:player-view', _map,
       (tester, d) => _tapKey(tester, 'maps-player-view')),
 
+  // Empty and broken states. The cyberpunk world has no maps or events;
+  // the empty list must run before the extra maps are added.
+  AlignScenario('maps:empty', (d) => Routes.tool(d.cyberWorldId, 'maps'),
+      (tester, d) async {}),
+  AlignScenario('maps:not-found',
+      (d) => Routes.tool(d.worldId, 'maps', 'no-such-map'),
+      (tester, d) async {}),
+  AlignScenario('maps:image-missing',
+      (d) => Routes.tool(_extraWorld(d), 'maps'), (tester, d) async {
+    final maps = await _ensureExtraMaps(tester, d);
+    await _openExtraMap(tester, maps.brokenId);
+  }),
+  AlignScenario('maps:image-missing-pin',
+      (d) => Routes.tool(_extraWorld(d), 'maps'), (tester, d) async {
+    final maps = await _ensureExtraMaps(tester, d);
+    await _openExtraMap(tester, maps.brokenId);
+    await _tapKey(tester, 'maps-pin-${maps.brokenPinId}');
+  }),
+  AlignScenario('maps:measure-no-scale',
+      (d) => Routes.tool(_extraWorld(d), 'maps'), (tester, d) async {
+    final maps = await _ensureExtraMaps(tester, d);
+    await _openExtraMap(tester, maps.unscaledId);
+    await _measure(tester);
+  }),
+
   // Timeline dialogs.
   AlignScenario('timeline:new-event', _timeline,
       (tester, d) => _newEvent(tester)),
@@ -149,6 +248,8 @@ final atlasScenarios = <AlignScenario>[
       tester, 'timeline-set-date-${d.byName['The Bell Falls Silent']!.id}')),
   AlignScenario('timeline:calendar', _timeline,
       (tester, d) => _tapKey(tester, 'timeline-calendar')),
+  AlignScenario('timeline:empty',
+      (d) => Routes.tool(d.cyberWorldId, 'timeline'), (tester, d) async {}),
 
   // GM screen panels.
   AlignScenario('reference:dice-error', _gm,

@@ -539,8 +539,12 @@ class _EntityRow extends StatelessWidget {
         ),
       );
     }
+    // When the buttons wrap onto their own line, the first one's label
+    // starts one button padding in; the entry gets the same inset so both
+    // lines share a left edge.
+    final buttonInset = textButtonInset(context);
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 6, 4, 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       decoration: BoxDecoration(
         color: GmhColors.surfaceHigh,
         borderRadius: BorderRadius.circular(10),
@@ -552,10 +556,11 @@ class _EntityRow extends StatelessWidget {
         runSpacing: 4,
         children: [
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 260),
+            constraints: BoxConstraints(maxWidth: 260 + buttonInset),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(width: buttonInset),
                 Icon(
                   e == null ? Icons.link_off : icon,
                   size: 18,

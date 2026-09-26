@@ -121,3 +121,15 @@ class PinBadge extends StatelessWidget {
     );
   }
 }
+
+/// How far a text button's label starts from its own edge. A button that
+/// sits under text is shifted by this much so its label lines up with it.
+double textButtonInset(BuildContext context) =>
+    Theme.of(context)
+        .textButtonTheme
+        .style
+        ?.padding
+        ?.resolve(const {})
+        ?.resolve(Directionality.of(context))
+        .left ??
+    12;

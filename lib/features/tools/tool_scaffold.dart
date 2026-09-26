@@ -85,11 +85,15 @@ class ToolEmptyState extends StatelessWidget {
               Text(title,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 6),
-              Text(hint,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13, height: 1.4, color: GmhColors.parchmentDim)),
+              if (hint.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(hint,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 13,
+                        height: 1.4,
+                        color: GmhColors.parchmentDim)),
+              ],
               if (action != null) ...[
                 const SizedBox(height: 18),
                 action!,
