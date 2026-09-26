@@ -182,31 +182,43 @@ Future<GameMap?> showMapDetailsDialog(
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: [
-                        SizedBox(
-                          width: 130,
-                          child: number(units, 'maps-scale-units', l.mapsUnitsPerCell),
-                        ),
-                        SizedBox(
-                          width: 130,
-                          child: TextField(
-                            key: const ValueKey('maps-scale-unit-name'),
-                            controller: unitName,
-                            decoration: InputDecoration(
-                              labelText: l.mapsUnitName,
-                              hintText: l.mapsUnitHint,
-                              isDense: true,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        // As many 130px+ fields per line as fit, widened to
+                        // end flush with the fields above.
+                        const gap = 12.0;
+                        final perLine = ((constraints.maxWidth + gap) / (130 + gap))
+                            .floor()
+                            .clamp(1, 3);
+                        final width =
+                            (constraints.maxWidth - gap * (perLine - 1)) / perLine;
+                        return Wrap(
+                          spacing: gap,
+                          runSpacing: gap,
+                          children: [
+                            SizedBox(
+                              width: width,
+                              child: number(units, 'maps-scale-units', l.mapsUnitsPerCell),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 130,
-                          child: number(cellPx, 'maps-scale-cell', l.mapsCellPx),
-                        ),
-                      ],
+                            SizedBox(
+                              width: width,
+                              child: TextField(
+                                key: const ValueKey('maps-scale-unit-name'),
+                                controller: unitName,
+                                decoration: InputDecoration(
+                                  labelText: l.mapsUnitName,
+                                  hintText: l.mapsUnitHint,
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: width,
+                              child: number(cellPx, 'maps-scale-cell', l.mapsCellPx),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     if (!scaleValid()) ...[
                       const SizedBox(height: 8),
@@ -527,8 +539,12 @@ class _EntityRow extends StatelessWidget {
         ),
       );
     }
+    // When the buttons wrap onto their own line, the first one's label
+    // starts one button padding in; the entry gets the same inset so both
+    // lines share a left edge.
+    final buttonInset = textButtonInset(context);
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 6, 4, 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       decoration: BoxDecoration(
         color: GmhColors.surfaceHigh,
         borderRadius: BorderRadius.circular(10),
@@ -540,10 +556,11 @@ class _EntityRow extends StatelessWidget {
         runSpacing: 4,
         children: [
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 260),
+            constraints: BoxConstraints(maxWidth: 260 + buttonInset),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(width: buttonInset),
                 Icon(
                   e == null ? Icons.link_off : icon,
                   size: 18,

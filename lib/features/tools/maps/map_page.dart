@@ -484,10 +484,15 @@ class _MapPageState extends ConsumerState<MapPage> {
                 onDeleted: _toList,
                 extra: [
                   PopupMenuItem(
+                    key: const ValueKey('maps-menu-details'),
                     value: 'details',
                     child: Text(l.mapsEditDetails),
                   ),
-                  PopupMenuItem(value: 'image', child: Text(l.mapsChangeImage)),
+                  PopupMenuItem(
+                    key: const ValueKey('maps-menu-image'),
+                    value: 'image',
+                    child: Text(l.mapsChangeImage),
+                  ),
                 ],
                 onExtra: (action) async {
                   if (action == 'image') {
@@ -656,6 +661,12 @@ class _MapPageState extends ConsumerState<MapPage> {
                     spacing: 8,
                     children: [
                       IconButton.filledTonal(
+                        // Same height as the exit button beside it; icon
+                        // buttons ignore the theme density by default.
+                        style: IconButton.styleFrom(
+                          minimumSize: const Size.square(48),
+                          visualDensity: Theme.of(context).visualDensity,
+                        ),
                         tooltip: l.mapsFit,
                         onPressed: _fitView,
                         icon: const Icon(Icons.fit_screen_outlined),
@@ -732,49 +743,59 @@ class _MapPageState extends ConsumerState<MapPage> {
             : [formatDistance(units), scale!.unitName]
                   .where((s) => s.isNotEmpty)
                   .join(' ');
-        return Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 8,
-          runSpacing: 4,
+        // Clear stays at the end of the line and only the texts wrap, so
+        // it never drops under the distance, out of line with it.
+        return Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              l.mapsDistance(text),
-              key: const ValueKey('maps-measure-result'),
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-            if (scale == null)
-              Text(
-                l.mapsMeasureNoScale,
-                style: TextStyle(fontSize: 12, color: GmhColors.parchmentDim),
-              )
-            else
-              PopupMenuButton<MeasureRule>(
-                key: const ValueKey('maps-measure-rule'),
-                tooltip: l.mapsMeasureRule,
-                initialValue: _rule,
-                onSelected: (r) => setState(() => _rule = r),
-                itemBuilder: (context) => [
-                  for (final r in MeasureRule.values)
-                    PopupMenuItem(value: r, child: Text(measureRuleLabel(l, r))),
-                ],
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          measureRuleLabel(l, _rule),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12.5, color: GmhColors.ember),
+            Flexible(
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  Text(
+                    l.mapsDistance(text),
+                    key: const ValueKey('maps-measure-result'),
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  if (scale == null)
+                    Text(
+                      l.mapsMeasureNoScale,
+                      style: TextStyle(fontSize: 12, color: GmhColors.parchmentDim),
+                    )
+                  else
+                    PopupMenuButton<MeasureRule>(
+                      key: const ValueKey('maps-measure-rule'),
+                      tooltip: l.mapsMeasureRule,
+                      initialValue: _rule,
+                      onSelected: (r) => setState(() => _rule = r),
+                      itemBuilder: (context) => [
+                        for (final r in MeasureRule.values)
+                          PopupMenuItem(value: r, child: Text(measureRuleLabel(l, r))),
+                      ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                measureRuleLabel(l, _rule),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 12.5, color: GmhColors.ember),
+                              ),
+                            ),
+                            Icon(Icons.arrow_drop_down, size: 18, color: GmhColors.ember),
+                          ],
                         ),
                       ),
-                      Icon(Icons.arrow_drop_down, size: 18, color: GmhColors.ember),
-                    ],
-                  ),
-                ),
+                    ),
+                ],
               ),
+            ),
+            const SizedBox(width: 8),
             TextButton(
               key: const ValueKey('maps-measure-clear'),
               onPressed: _clearMeasure,
@@ -994,6 +1015,17 @@ class _MissingImageBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final icon = Icon(Icons.broken_image_outlined, color: GmhColors.danger);
+    final title = Text(
+      l.mapsImageMissing,
+      style: const TextStyle(fontWeight: FontWeight.w600),
+    );
+    final hint = Text(
+      l.mapsImageMissingHint,
+      style: TextStyle(fontSize: 12.5, color: GmhColors.parchmentDim),
+    );
+    final button = TextButton(onPressed: onChange, child: Text(l.mapsChangeImage));
+    final inset = textButtonInset(context);
     return Align(
       alignment: Alignment.bottomCenter,
       child: ConstrainedBox(
@@ -1004,35 +1036,54 @@ class _MissingImageBanner extends StatelessWidget {
           elevation: 2,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 8,
-              runSpacing: 4,
-              children: [
-                Icon(Icons.broken_image_outlined, color: GmhColors.danger),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 380),
-                  child: Column(
+            padding: EdgeInsetsDirectional.fromSTEB(math.max(12, inset), 8, 8, 8),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth >= 440) {
+                  return Row(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        l.mapsImageMissing,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        l.mapsImageMissingHint,
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: GmhColors.parchmentDim,
+                      icon,
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 380),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [title, hint],
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      button,
                     ],
-                  ),
-                ),
-                TextButton(onPressed: onChange, child: Text(l.mapsChangeImage)),
-              ],
+                  );
+                }
+                // Too narrow for one line: the button goes under the text,
+                // pulled back by its padding so its label shares the
+                // text's left edge.
+                final rtl = Directionality.of(context) == TextDirection.rtl;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        icon,
+                        const SizedBox(width: 8),
+                        Expanded(child: title),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    hint,
+                    Transform.translate(
+                      offset: Offset(rtl ? inset : -inset, 0),
+                      child: button,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),

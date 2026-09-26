@@ -8,6 +8,7 @@ import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme/gmh_theme.dart';
+import '../../../core/widgets/field_action_row.dart';
 import '../../../domain/combat/combatant.dart';
 import '../../../domain/combat/encounter.dart';
 import '../../../domain/combat/turn_order.dart';
@@ -98,6 +99,7 @@ class _ReferenceScreenState extends ConsumerState<ReferenceScreen> {
       toolId: 'reference',
       actions: [
         PopupMenuButton<GmPanel>(
+          key: const ValueKey('gm-panels'),
           tooltip: l.gmScreenPanels,
           icon: const Icon(Icons.dashboard_customize_outlined),
           onSelected: (panel) {
@@ -376,6 +378,7 @@ class _PinnedPanel extends ConsumerWidget {
       icon: Icons.push_pin_outlined,
       title: l.gmScreenPinned,
       trailing: IconButton(
+        key: const ValueKey('gm-add-pin'),
         tooltip: l.gmScreenAddPin,
         icon: const Icon(Icons.add, size: 20),
         onPressed: () async {
@@ -540,17 +543,22 @@ class _DicePanelState extends ConsumerState<_DicePanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _expression,
-                  onSubmitted: (_) => _roll(),
-                  decoration: InputDecoration(errorText: _error),
-                ),
+          FieldActionRow(
+            error: _error,
+            field: TextField(
+              key: const ValueKey('gm-dice-expression'),
+              controller: _expression,
+              onSubmitted: (_) => _roll(),
+              decoration: InputDecoration(
+                error: _error == null ? null : FieldActionRow.errorMarker,
               ),
-              const SizedBox(width: 8),
-              FilledButton(onPressed: _roll, child: Text(l.gmScreenRoll)),
+            ),
+            actions: [
+              FilledButton(
+                key: const ValueKey('gm-dice-roll'),
+                onPressed: _roll,
+                child: Text(l.gmScreenRoll),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -654,6 +662,7 @@ class _TablesPanelState extends ConsumerState<_TablesPanel> {
       trailing: unpinned.isEmpty
           ? null
           : PopupMenuButton<String>(
+              key: const ValueKey('gm-add-table'),
               tooltip: l.gmScreenAddTable,
               icon: const Icon(Icons.add, size: 20),
               onSelected: (id) => widget.onChanged(
@@ -663,7 +672,11 @@ class _TablesPanelState extends ConsumerState<_TablesPanel> {
               ),
               itemBuilder: (context) => [
                 for (final t in unpinned)
-                  PopupMenuItem(value: t.id, child: Text(t.name)),
+                  PopupMenuItem(
+                    key: ValueKey('gm-add-table-${t.id}'),
+                    value: t.id,
+                    child: Text(t.name),
+                  ),
               ],
             ),
       child: tables.isEmpty
@@ -693,6 +706,7 @@ class _TablesPanelState extends ConsumerState<_TablesPanel> {
                               ),
                             ),
                             TextButton(
+                              key: ValueKey('gm-table-roll-${table.id}'),
                               onPressed: () {
                                 final roller = TableRoller.forTables(
                                   tables,

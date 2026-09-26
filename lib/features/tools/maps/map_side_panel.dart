@@ -103,6 +103,12 @@ class _MapSidePanelState extends ConsumerState<MapSidePanel> {
                     final pin = visible[i];
                     final entity = entities[pin.entityId];
                     final label = pin.displayLabel(entity?.name);
+                    // Empty when the label already is the entry's name: no
+                    // subtitle then, or the title would sit off-center.
+                    final details = [
+                      if (entity != null && entity.name != label) entity.name,
+                      if (pin.gmOnly) l.mapsPinGmOnly,
+                    ].join(' · ');
                     final color = pinColor(
                       pin.color,
                       entityColor: entity == null
@@ -127,14 +133,10 @@ class _MapSidePanelState extends ConsumerState<MapSidePanel> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      subtitle: entity == null && !pin.gmOnly
+                      subtitle: details.isEmpty
                           ? null
                           : Text(
-                              [
-                                if (entity != null && entity.name != label)
-                                  entity.name,
-                                if (pin.gmOnly) l.mapsPinGmOnly,
-                              ].join(' · '),
+                              details,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),

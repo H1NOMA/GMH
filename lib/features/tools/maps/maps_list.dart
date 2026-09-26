@@ -274,9 +274,18 @@ class MapMenu extends ConsumerWidget {
       onSelected: (action) => _handle(context, ref, action),
       itemBuilder: (context) => [
         ...extra,
-        PopupMenuItem(value: 'rename', child: Text(l.rename)),
-        PopupMenuItem(value: 'duplicate', child: Text(l.mapsDuplicate)),
-        PopupMenuItem(value: 'delete', child: Text(l.delete)),
+        PopupMenuItem(
+          key: const ValueKey('maps-menu-rename'),
+          value: 'rename',
+          child: Text(l.rename)),
+        PopupMenuItem(
+          key: const ValueKey('maps-menu-duplicate'),
+          value: 'duplicate',
+          child: Text(l.mapsDuplicate)),
+        PopupMenuItem(
+          key: const ValueKey('maps-menu-delete'),
+          value: 'delete',
+          child: Text(l.delete)),
       ],
     );
   }
