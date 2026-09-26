@@ -98,6 +98,7 @@ class HomeScreen extends ConsumerWidget {
               Expanded(
                   child: _SectionTitle(context.l10n.homeYourSections)),
               IconButton(
+                key: const ValueKey('home-manage-categories'),
                 tooltip: context.l10n.manageCategories,
                 icon: const Icon(Icons.tune, size: 18),
                 onPressed: () =>
@@ -390,18 +391,21 @@ class _CardColumns extends StatelessWidget {
       }
       final rows = <Widget>[];
       for (var i = 0; i < children.length; i += 2) {
+        // Both cards of a row take the taller one's height.
         rows.add(Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: children[i]),
-              const SizedBox(width: 8),
-              Expanded(
-                  child: i + 1 < children.length
-                      ? children[i + 1]
-                      : const SizedBox.shrink()),
-            ],
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: children[i]),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: i + 1 < children.length
+                        ? children[i + 1]
+                        : const SizedBox.shrink()),
+              ],
+            ),
           ),
         ));
       }

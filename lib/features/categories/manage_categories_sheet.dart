@@ -43,7 +43,9 @@ class _ManageCategories extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 8, 6),
+          // Right inset of the list tiles: the close button shares their
+          // action buttons' column.
+          padding: const EdgeInsets.fromLTRB(20, 16, 14, 6),
           child: Row(
             children: [
               Expanded(
@@ -106,6 +108,7 @@ class _ManageCategories extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
+                            key: ValueKey('category-edit-${category.id}'),
                             tooltip: context.l10n.rename,
                             icon: const Icon(Icons.edit_outlined, size: 17),
                             onPressed: () => showCategoryConstructor(
@@ -113,6 +116,7 @@ class _ManageCategories extends ConsumerWidget {
                                 worldId: worldId, existing: category),
                           ),
                           IconButton(
+                            key: ValueKey('category-delete-${category.id}'),
                             tooltip: context.l10n.deleteCategory,
                             icon: Icon(Icons.delete_outline,
                                 size: 17, color: GmhColors.danger),
@@ -130,6 +134,7 @@ class _ManageCategories extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(12),
           child: FilledButton.icon(
+            key: const ValueKey('categories-new'),
             icon: const Icon(Icons.add, size: 18),
             label: Text(context.l10n.newCategory),
             onPressed: () =>

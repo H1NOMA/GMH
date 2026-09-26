@@ -153,10 +153,14 @@ class WorldPickerScreen extends ConsumerWidget {
                                     },
                                     itemBuilder: (context) => [
                                       PopupMenuItem(
+                                          key: const ValueKey(
+                                              'world-action-edit'),
                                           value: 'edit',
                                           child: Text(
                                               context.l10n.editWorldTitle)),
                                       PopupMenuItem(
+                                        key: const ValueKey(
+                                            'world-action-delete'),
                                         value: 'delete',
                                         child: Text(context.l10n.delete,
                                             style: TextStyle(
@@ -174,6 +178,7 @@ class WorldPickerScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
                 FilledButton.icon(
+                  key: const ValueKey('worlds-create'),
                   onPressed: () => _createWorld(context, ref),
                   icon: const Icon(Icons.add),
                   label: Text(context.l10n.createNewWorld),
