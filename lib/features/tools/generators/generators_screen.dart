@@ -205,7 +205,10 @@ class _GeneratorsScreenState extends ConsumerState<GeneratorsScreen> {
                           alignment: Alignment.topCenter,
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 860),
-                            child: w,
+                            // Full column width, as on narrow screens: the
+                            // empty hint and plain texts would shrink to
+                            // their content and sit off the column's edge.
+                            child: SizedBox(width: double.infinity, child: w),
                           ),
                         ),
                     ],
@@ -388,138 +391,143 @@ class _Options extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final sectionStyle = generatorSectionStyle();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        KeyedSubtree(
-          key: const ValueKey('gen-pack'),
-          child: DropdownButtonFormField<WorldStyle>(
-            key: ValueKey('gen-pack-${style.name}'),
-            value: style,
-            isExpanded: true,
-            decoration: InputDecoration(
-              labelText: l.generatorsPack,
-              isDense: true,
-            ),
-            items: [
-              for (final s in WorldStyle.values)
-                DropdownMenuItem(
-                  value: s,
-                  child: Text(
-                    s == worldStyle
-                        ? l.generatorsPackWorld(s.localizedName(context))
-                        : s.localizedName(context),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-            ],
-            onChanged: (s) =>
-                controller.setStyle(s == null || s == worldStyle ? null : s),
-          ),
-        ),
-        if (state.kind == GeneratorKind.names) ...[
-          const SizedBox(height: 12),
-          DropdownButtonFormField<String?>(
-            key: ValueKey('gen-culture-${style.name}'),
-            value: cultures.any((c) => c.id == state.cultureId)
-                ? state.cultureId
-                : null,
-            isExpanded: true,
-            decoration: InputDecoration(
-              labelText: l.generatorsCulture,
-              isDense: true,
-            ),
-            items: [
-              DropdownMenuItem<String?>(
-                value: null,
-                child: Text(
-                  l.generatorsCultureAny,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+    // Aligned dropdowns open their menus at the field's width with the items
+    // under its value, not 16px out past its edges.
+    return ButtonTheme.fromButtonThemeData(
+      data: ButtonTheme.of(context).copyWith(alignedDropdown: true),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          KeyedSubtree(
+            key: const ValueKey('gen-pack'),
+            child: DropdownButtonFormField<WorldStyle>(
+              key: ValueKey('gen-pack-${style.name}'),
+              value: style,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: l.generatorsPack,
+                isDense: true,
               ),
-              for (final c in cultures)
-                DropdownMenuItem<String?>(
-                  value: c.id,
-                  child: Text(
-                    c.label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-            ],
-            onChanged: controller.setCulture,
-          ),
-          const SizedBox(height: 12),
-          Text(l.generatorsGender.toUpperCase(), style: sectionStyle),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final g in NameGender.values)
-                ChoiceChip(
-                  key: ValueKey('gen-gender-${g.name}'),
-                  label: Text(generatorGenderLabel(l, g)),
-                  selected: state.gender == g,
-                  onSelected: (_) => controller.setGender(g),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 8,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(l.generatorsCount.toUpperCase(), style: sectionStyle),
-                  const SizedBox(width: 4),
-                  IconButton(
-                    key: const ValueKey('gen-count-minus'),
-                    tooltip: '−',
-                    icon: const Icon(Icons.remove, size: 18),
-                    visualDensity: VisualDensity.compact,
-                    onPressed: state.count > 1
-                        ? () => controller.setCount(state.count - 1)
-                        : null,
-                  ),
-                  SizedBox(
-                    width: 28,
+              items: [
+                for (final s in WorldStyle.values)
+                  DropdownMenuItem(
+                    value: s,
                     child: Text(
-                      '${state.count}',
-                      key: const ValueKey('gen-count'),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      s == worldStyle
+                          ? l.generatorsPackWorld(s.localizedName(context))
+                          : s.localizedName(context),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  IconButton(
-                    key: const ValueKey('gen-count-plus'),
-                    tooltip: '+',
-                    icon: const Icon(Icons.add, size: 18),
-                    visualDensity: VisualDensity.compact,
-                    onPressed: state.count < 10
-                        ? () => controller.setCount(state.count + 1)
-                        : null,
-                  ),
-                ],
-              ),
-              FilterChip(
-                key: const ValueKey('gen-epithets'),
-                label: Text(l.generatorsEpithets),
-                selected: state.epithets,
-                onSelected: controller.setEpithets,
-              ),
-            ],
+              ],
+              onChanged: (s) =>
+                  controller.setStyle(s == null || s == worldStyle ? null : s),
+            ),
           ),
+          if (state.kind == GeneratorKind.names) ...[
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String?>(
+              key: ValueKey('gen-culture-${style.name}'),
+              value: cultures.any((c) => c.id == state.cultureId)
+                  ? state.cultureId
+                  : null,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: l.generatorsCulture,
+                isDense: true,
+              ),
+              items: [
+                DropdownMenuItem<String?>(
+                  value: null,
+                  child: Text(
+                    l.generatorsCultureAny,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                for (final c in cultures)
+                  DropdownMenuItem<String?>(
+                    value: c.id,
+                    child: Text(
+                      c.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+              onChanged: controller.setCulture,
+            ),
+            const SizedBox(height: 12),
+            Text(l.generatorsGender.toUpperCase(), style: sectionStyle),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final g in NameGender.values)
+                  ChoiceChip(
+                    key: ValueKey('gen-gender-${g.name}'),
+                    label: Text(generatorGenderLabel(l, g)),
+                    selected: state.gender == g,
+                    onSelected: (_) => controller.setGender(g),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 12,
+              runSpacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l.generatorsCount.toUpperCase(), style: sectionStyle),
+                    const SizedBox(width: 4),
+                    IconButton(
+                      key: const ValueKey('gen-count-minus'),
+                      tooltip: '−',
+                      icon: const Icon(Icons.remove, size: 18),
+                      visualDensity: VisualDensity.compact,
+                      onPressed: state.count > 1
+                          ? () => controller.setCount(state.count - 1)
+                          : null,
+                    ),
+                    SizedBox(
+                      width: 28,
+                      child: Text(
+                        '${state.count}',
+                        key: const ValueKey('gen-count'),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      key: const ValueKey('gen-count-plus'),
+                      tooltip: '+',
+                      icon: const Icon(Icons.add, size: 18),
+                      visualDensity: VisualDensity.compact,
+                      onPressed: state.count < 10
+                          ? () => controller.setCount(state.count + 1)
+                          : null,
+                    ),
+                  ],
+                ),
+                FilterChip(
+                  key: const ValueKey('gen-epithets'),
+                  label: Text(l.generatorsEpithets),
+                  selected: state.epithets,
+                  onSelected: controller.setEpithets,
+                ),
+              ],
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

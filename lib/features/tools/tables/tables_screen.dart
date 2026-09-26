@@ -253,7 +253,7 @@ class _FolderHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(2, 12, 2, 8),
+      padding: const EdgeInsets.only(top: 12, bottom: 8),
       child: Row(
         children: [
           Icon(Icons.folder_outlined, size: 16, color: GmhColors.parchmentDim),
@@ -461,8 +461,16 @@ class TableMenu extends ConsumerWidget {
       onSelected: (action) => _handle(context, ref, action),
       itemBuilder: (context) => [
         ...extra,
-        PopupMenuItem(value: 'duplicate', child: Text(l.tablesDuplicate)),
-        PopupMenuItem(value: 'delete', child: Text(l.delete)),
+        PopupMenuItem(
+          key: const ValueKey('tables-menu-duplicate'),
+          value: 'duplicate',
+          child: Text(l.tablesDuplicate),
+        ),
+        PopupMenuItem(
+          key: const ValueKey('tables-menu-delete'),
+          value: 'delete',
+          child: Text(l.delete),
+        ),
       ],
     );
   }

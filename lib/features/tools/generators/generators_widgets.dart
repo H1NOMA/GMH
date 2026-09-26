@@ -125,49 +125,42 @@ class GeneratorResultCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Icon(
-                  generatorKindIcon(result.kind),
-                  size: 20,
-                  color: GmhColors.ember,
-                ),
+              Icon(
+                generatorKindIcon(result.kind),
+                size: 20,
+                color: GmhColors.ember,
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SelectableText(
-                        title,
-                        key: ValueKey('gen-title-$id'),
-                        style: Theme.of(context).textTheme.titleMedium,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SelectableText(
+                      title,
+                      key: ValueKey('gen-title-$id'),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      [
+                        generatorKindLabel(l, result.kind),
+                        packName,
+                        if (savedEntityId != null) l.generatorsSavedBadge,
+                      ].join('  ·  '),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: GmhColors.parchmentDim,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        [
-                          generatorKindLabel(l, result.kind),
-                          packName,
-                          if (savedEntityId != null) l.generatorsSavedBadge,
-                        ].join('  ·  '),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: GmhColors.parchmentDim,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               if (kept)
                 Padding(
-                  padding: const EdgeInsets.only(top: 12, left: 4),
+                  padding: const EdgeInsets.only(left: 4),
                   child: Icon(Icons.push_pin, size: 16, color: GmhColors.ember),
                 ),
               if (titleKey != null)
@@ -265,11 +258,10 @@ class _FieldRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.symmetric(vertical: 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -539,22 +531,32 @@ class GeneratorSectionHeader extends StatelessWidget {
       children: [
         Icon(icon, size: 18, color: GmhColors.parchmentDim),
         const SizedBox(width: 8),
-        Flexible(
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleSmall,
+        // One flexible child: a Flexible title beside a Spacer would split
+        // the free space with it and leave [trailing] short of the edge.
+        Expanded(
+          child: Row(
+            children: [
+              Flexible(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              if (count > 0) ...[
+                const SizedBox(width: 8),
+                Text(
+                  '$count',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: GmhColors.parchmentFaint,
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
-        if (count > 0) ...[
-          const SizedBox(width: 8),
-          Text(
-            '$count',
-            style: TextStyle(fontSize: 12, color: GmhColors.parchmentFaint),
-          ),
-        ],
-        const Spacer(),
         ?trailing,
       ],
     );

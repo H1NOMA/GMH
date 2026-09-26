@@ -160,7 +160,7 @@ class _TablesLibraryPageState extends ConsumerState<TablesLibraryPage> {
             child: ExpansionTile(
               key: ValueKey('tables-pack-${other.name}-$searching'),
               initiallyExpanded: searching,
-              tilePadding: const EdgeInsets.symmetric(horizontal: 4),
+              tilePadding: EdgeInsets.zero,
               childrenPadding: const EdgeInsets.only(bottom: 8),
               title: _PackHeader(
                 style: other,
@@ -322,6 +322,7 @@ class _LibraryCard extends StatelessWidget {
                 width: double.infinity,
                 child: Wrap(
                   alignment: WrapAlignment.end,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 8,
                   runSpacing: 4,
                   children: [
@@ -420,7 +421,8 @@ class _PreviewDialogState extends ConsumerState<_PreviewDialog> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 3),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
                     children: [
                       SizedBox(
                         width: 56,
