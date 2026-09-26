@@ -161,6 +161,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               decoration: InputDecoration(
                 hintText: context.l10n.searchHint,
                 prefixIcon: const Icon(Icons.search, size: 19),
+                // A 48px slot at every density: its icon then sits on the
+                // icon column of the result cards below.
+                prefixIconConstraints: Theme.of(context)
+                    .visualDensity
+                    .effectiveConstraints(const BoxConstraints(
+                        minWidth: kMinInteractiveDimension,
+                        minHeight: kMinInteractiveDimension))
+                    .copyWith(minWidth: kMinInteractiveDimension),
                 suffixIcon: hasQuery
                     ? IconButton(
                         icon: const Icon(Icons.close, size: 17),
@@ -325,31 +333,38 @@ class _IdleView extends ConsumerWidget {
                   fontWeight: FontWeight.w700,
                   color: GmhColors.parchmentFaint)),
         ),
+        // Shrink-wrapped: padded touch targets would add 16px between
+        // wrapped rows only, against 8px between chips in a row.
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
             ActionChip(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               avatar: const Icon(Icons.add, size: 15),
               label: Text(context.l10n.quickNewEntry),
               onPressed: () => showNewEntityDialog(context, ref, worldId),
             ),
             ActionChip(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               avatar: const Icon(Icons.hub_outlined, size: 15),
               label: Text(context.l10n.quickOpenGraph),
               onPressed: () => context.go(Routes.graph(worldId)),
             ),
             ActionChip(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               avatar: const Icon(Icons.map_outlined, size: 15),
               label: Text(EntityKind.campaign.localizedPlural(context)),
               onPressed: () => context.go(Routes.campaigns(worldId)),
             ),
             ActionChip(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               avatar: const Icon(Icons.sell_outlined, size: 15),
               label: Text(context.l10n.tagManagerTitle),
               onPressed: () => showTagManagerSheet(context, worldId),
             ),
             ActionChip(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               avatar: const Icon(Icons.save_outlined, size: 15),
               label: Text(context.l10n.quickBackupExport),
               onPressed: () => context.go(Routes.settings(worldId)),

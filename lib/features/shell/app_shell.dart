@@ -153,7 +153,8 @@ class _Sidebar extends ConsumerWidget {
           InkWell(
             onTap: () => context.go(Routes.worlds()),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 18, 12, 14),
+              // 14: the globe shares the icon column of the tiles below.
+              padding: const EdgeInsets.fromLTRB(14, 18, 12, 14),
               child: Row(
                 children: [
                   Icon(Icons.public, color: GmhColors.ember, size: 20),
@@ -604,8 +605,10 @@ class _CategoriesSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Same text line, spacing and icon column as the collapsible
+        // section headers above it.
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 18, 6, 0),
+          padding: const EdgeInsets.fromLTRB(16, 14, 8, 4),
           child: Row(
             children: [
               Expanded(
@@ -627,7 +630,7 @@ class _CategoriesSection extends ConsumerWidget {
                   child: Padding(
                     padding: EdgeInsets.all(4),
                     child: Icon(Icons.tune,
-                        size: 15, color: GmhColors.parchmentFaint),
+                        size: 16, color: GmhColors.parchmentFaint),
                   ),
                 ),
               ),
