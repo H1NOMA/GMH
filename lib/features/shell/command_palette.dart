@@ -228,6 +228,15 @@ class _CommandPaletteState extends ConsumerState<_CommandPalette> {
   Widget build(BuildContext context) {
     final items = _items(context);
     final selected = items.isEmpty ? 0 : _selected.clamp(0, items.length - 1);
+    // Item icons share a column with the query field's bolt, and labels
+    // start where the typed text does. The field centers its prefix icon
+    // in a 48px slot that shrinks by 4px per density step, then leaves
+    // 4px before the text; items shift by the same step.
+    final densityShift = Theme.of(context).visualDensity.horizontal * 2;
+    const fieldInset = 10.0;
+    const iconSize = 18.0;
+    final itemPadding = EdgeInsetsDirectional.only(
+        start: fieldInset + 24 - iconSize / 2 + densityShift, end: 14);
 
     return Align(
       alignment: const Alignment(0, -0.6),
@@ -255,13 +264,13 @@ class _CommandPaletteState extends ConsumerState<_CommandPalette> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(fieldInset),
                     child: TextField(
                       controller: _query,
                       autofocus: true,
                       decoration: InputDecoration(
                         hintText: context.l10n.paletteHint,
-                        prefixIcon: const Icon(Icons.bolt, size: 18),
+                        prefixIcon: const Icon(Icons.bolt, size: iconSize),
                       ),
                       onSubmitted: (_) {
                         if (items.isNotEmpty) _run(items[selected]);
@@ -286,11 +295,16 @@ class _CommandPaletteState extends ConsumerState<_CommandPalette> {
                               final item = items[index];
                               return ListTile(
                                 dense: true,
+                                contentPadding: itemPadding,
+                                minLeadingWidth: iconSize,
+                                // Half the slot plus the 4px text gap,
+                                // measured from the icon's center.
+                                horizontalTitleGap: 24 + 4 - iconSize / 2,
                                 selected: index == selected,
                                 selectedTileColor:
                                     GmhColors.ember.withValues(alpha: 0.12),
                                 leading: Icon(item.icon,
-                                    size: 18,
+                                    size: iconSize,
                                     color: item.color ?? GmhColors.parchmentDim),
                                 title: Text(item.label,
                                     maxLines: 1,

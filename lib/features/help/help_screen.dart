@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -127,7 +129,6 @@ class HelpScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: historyLeading(),
         leadingWidth: kHistoryLeadingWidth,
-        titleSpacing: 8,
         title: Row(
           children: [
             const Icon(Icons.help_outline, size: 20),
@@ -179,21 +180,28 @@ class _IntroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Laid out as a tile, like the section headers below it: the text
+    // starts on their text line at every density, and the larger icon is
+    // centered on their icon column (a slot as wide as their icons).
     return Card(
       color: GmhColors.ember.withValues(alpha: 0.09),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.auto_stories_outlined,
+      child: ListTile(
+        titleAlignment: ListTileTitleAlignment.top,
+        minVerticalPadding: 16,
+        leading: SizedBox(
+          width: _SectionCard.iconSize,
+          height: 26,
+          child: OverflowBox(
+            maxWidth: 26,
+            child: Icon(Icons.auto_stories_outlined,
                 size: 26, color: GmhColors.ember),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(text, style: const TextStyle(height: 1.45)),
-            ),
-          ],
+          ),
         ),
+        title: Text(text,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(height: 1.45)),
       ),
     );
   }
@@ -203,12 +211,23 @@ class _SectionCard extends StatelessWidget {
   final _HelpSection section;
   const _SectionCard({required this.section});
 
+  static const iconSize = 21.0;
+  static const _legendFontSize = 12.5;
+  static const _legendLineHeight = 1.4;
+
   @override
   Widget build(BuildContext context) {
+    final legendLineHeight =
+        MediaQuery.textScalerOf(context).scale(_legendFontSize) *
+            _legendLineHeight;
     return Card(
       clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
-        leading: Icon(section.icon, size: 21, color: GmhColors.ember),
+        // Its own storage slot: without one the tile inherits the list's
+        // 'helpScroll' slot and reads the scroll offset back as its
+        // expanded flag once the list has scrolled.
+        key: PageStorageKey<String>('helpSection:${section.icon.codePoint}'),
+        leading: Icon(section.icon, size: iconSize, color: GmhColors.ember),
         title: Text(section.title,
             style: const TextStyle(fontWeight: FontWeight.w600)),
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -271,12 +290,19 @@ class _SectionCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _Marker(number: i + 1, small: true),
+                    // Centered on the first line of its text, whatever
+                    // the text scale.
+                    SizedBox(
+                      height: math.max(18, legendLineHeight),
+                      child: Center(
+                          child: _Marker(number: i + 1, small: true)),
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(section.legend[i],
                           style: const TextStyle(
-                              fontSize: 12.5, height: 1.4)),
+                              fontSize: _legendFontSize,
+                              height: _legendLineHeight)),
                     ),
                   ],
                 ),
@@ -324,21 +350,29 @@ class _Marker extends StatelessWidget {
 class _FigureFrame extends StatelessWidget {
   final Widget child;
   final double aspectRatio;
-  const _FigureFrame({required this.child, this.aspectRatio = 16 / 10});
+
+  /// Floor for narrow screens, where the aspect ratio alone leaves too
+  /// little height for the mock's fixed-size rows.
+  final double minHeight;
+  const _FigureFrame(
+      {required this.child, this.aspectRatio = 16 / 10, this.minHeight = 0});
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: aspectRatio,
-      child: Container(
-        decoration: BoxDecoration(
-          color: GmhColors.background,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: GmhColors.parchmentDim.withValues(alpha: 0.4)),
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: minHeight),
+      child: AspectRatio(
+        aspectRatio: aspectRatio,
+        child: Container(
+          decoration: BoxDecoration(
+            color: GmhColors.background,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color: GmhColors.parchmentDim.withValues(alpha: 0.4)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: child,
         ),
-        clipBehavior: Clip.antiAlias,
-        child: child,
       ),
     );
   }
@@ -398,6 +432,8 @@ class _ShellFigure extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _FigureFrame(
+      // The sidebar mock's rows add up to ~234px.
+      minHeight: 240,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
