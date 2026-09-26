@@ -67,7 +67,7 @@ class AttributeForm extends ConsumerWidget {
       children: [
         for (final section in sections) ...[
           Padding(
-            padding: const EdgeInsets.fromLTRB(2, 14, 2, 8),
+            padding: const EdgeInsets.only(top: 14, bottom: 8),
             child: Text(
               trTemplate(context, section.title).toUpperCase(),
               style: TextStyle(
@@ -638,7 +638,21 @@ class _LabeledGroup extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 11.5, color: GmhColors.parchmentDim)),
               ),
-              if (trailing != null) trailing!,
+              // A group without a button reserves the same slot: the
+              // header keeps one height, so every group's label sits on
+              // the same line and empty and filled groups match.
+              trailing ??
+                  const Visibility(
+                    visible: false,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: IconButton(
+                      onPressed: null,
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(Icons.close, size: 15),
+                    ),
+                  ),
             ],
           ),
           const SizedBox(height: 4),

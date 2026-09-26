@@ -38,7 +38,8 @@ Future<void> showVersionHistorySheet(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              // The list tiles' inset: title and rows share a left edge.
+              padding: const EdgeInsets.fromLTRB(16, 16, 24, 8),
               child: Text(context.l10n.versionHistoryTitle,
                   style: Theme.of(context).textTheme.titleLarge),
             ),

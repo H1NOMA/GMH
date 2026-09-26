@@ -109,6 +109,7 @@ class TagEditor extends ConsumerWidget {
                 ref.read(entityServiceProvider).removeTag(entity.id, tag.id),
           ),
         ActionChip(
+          key: const ValueKey('tag-add'),
           avatar: Icon(Icons.add, size: 14, color: GmhColors.parchmentDim),
           label: Text(
             context.l10n.tagChip,

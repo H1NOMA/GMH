@@ -83,6 +83,9 @@ Future<String?> showNewEntityDialog(
             children: [
               DropdownButtonFormField<_TypeChoice>(
                 value: choice,
+                // Bounded item width: a category row's Flexible name
+                // can't lay out in the unbounded default.
+                isExpanded: true,
                 decoration:
                     InputDecoration(labelText: context.l10n.typeLabel),
                 items: [

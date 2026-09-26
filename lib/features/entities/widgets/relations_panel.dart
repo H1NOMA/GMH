@@ -134,6 +134,7 @@ class RelationsPanel extends ConsumerWidget {
                       color: GmhColors.parchmentFaint)),
             ),
             IconButton(
+              key: const ValueKey('relations-add'),
               tooltip: context.l10n.addRelation,
               icon: const Icon(Icons.add, size: 17),
               visualDensity: VisualDensity.compact,
