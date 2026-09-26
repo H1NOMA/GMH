@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gmh/app/router.dart';
+import 'package:gmh/features/tools/combat/difficulty_panel.dart';
 import 'package:gmh/features/tools/dice/dice_inline.dart';
 import 'package:gmh/features/tools/dice/dice_widgets.dart';
 
@@ -55,10 +56,23 @@ Finder _confirm() => find.descendant(
   matching: find.byWidgetPredicate((w) => w is FilledButton),
 );
 
+/// Same-route scenarios keep the previous one's scroll offset: start the
+/// tracker from the top so the first rows are built.
+Future<void> _scrollToTop(WidgetTester tester) async {
+  for (final s in tester.stateList<ScrollableState>(find.byType(Scrollable))) {
+    if (s.position.axis == Axis.vertical && s.position.pixels > 0) {
+      s.position.jumpTo(0);
+    }
+  }
+  await settleVisual(tester, 2);
+}
+
 /// Combatants sort by initiative: 0 Mira (player), 1 Fog Hound 1
 /// (frightened), 2 Fog Hound 2.
 Future<void> _rowMenu(WidgetTester tester, int index, [String? item]) async {
-  await _tap(tester, _keyed('combat-menu-').at(index));
+  // Resolve the key first: ensureVisible may scroll other rows out.
+  final key = tester.widget(_keyed('combat-menu-').at(index)).key!;
+  await _tap(tester, find.byKey(key));
   if (item != null) await _tap(tester, _menuItem(item));
 }
 
@@ -111,6 +125,16 @@ final playScenarios = <AlignScenario>[
     await _preset(tester, 'savageWorlds');
     await _tap(tester, _confirm());
   }),
+  AlignScenario('dice:copy', _dice, (tester, d) async {
+    await _roll(tester, '2d6+3');
+    // On a phone the history is below the fold and built lazily.
+    final copy = find.byIcon(Icons.copy_outlined);
+    for (var i = 0; i < 12 && copy.evaluate().isEmpty; i++) {
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -250));
+      await settleVisual(tester, 2);
+    }
+    await _tap(tester, copy.first);
+  }),
   AlignScenario('dice:clear-history', _dice, (tester, d) async {
     await _roll(tester, '1d6');
     await _tap(tester, find.byIcon(Icons.delete_sweep_outlined));
@@ -119,6 +143,11 @@ final playScenarios = <AlignScenario>[
     'dice:quick-roll',
     (d) => Routes.entity(d.worldId, d.byName['Harbor Wyrm']!.id),
     (tester, d) => _openQuickRoll(tester),
+  ),
+  AlignScenario(
+    'dice:inline-roll',
+    (d) => Routes.entity(d.worldId, d.byName['Harbor Wyrm']!.id),
+    (tester, d) => _tap(tester, find.byType(DiceInlineChip).first),
   ),
   AlignScenario(
     'dice:quick-roll-result',
@@ -227,9 +256,54 @@ final playScenarios = <AlignScenario>[
     await settleVisual(tester, 2);
     await _tap(tester, add);
   }),
+  AlignScenario('combat:edit-level', _tracker, (tester, d) async {
+    final chip = find.descendant(
+      of: find.byType(DifficultyPanel),
+      matching: find.byType(InputChip),
+    );
+    // Below the fold unless the panel sits beside the list.
+    final list = find.byWidget(
+      tester.widget(
+        find
+            .ancestor(
+              of: _keyed('combatant-').first,
+              matching: find.byType(ListView),
+            )
+            .first,
+      ),
+    );
+    for (var i = 0; i < 12 && chip.evaluate().isEmpty; i++) {
+      await tester.drag(list, const Offset(0, -300));
+      await settleVisual(tester, 2);
+    }
+    await _tap(
+      tester,
+      find.descendant(of: chip.first, matching: find.byType(Text)).first,
+    );
+  }),
+  AlignScenario('combat:damage', _tracker, (tester, d) async {
+    await _scrollToTop(tester);
+    final field = _keyed('combat-amount-').at(1);
+    final id = (tester.widget(field).key! as ValueKey<String>).value.substring(
+      'combat-amount-'.length,
+    );
+    await tester.ensureVisible(field);
+    await tester.pump();
+    await tester.enterText(field, '99');
+    await settleVisual(tester, 3);
+    await _tap(tester, find.byKey(ValueKey('combat-damage-$id')));
+  }),
   AlignScenario('combat:toggles', _tracker, (tester, d) async {
     await _tap(tester, _keyed('combat-concentration-').first);
     await _tap(tester, _keyed('combat-defeated-').at(1));
+  }),
+  AlignScenario('combat:duplicate', _tracker, (tester, d) async {
+    await _scrollToTop(tester);
+    await _rowMenu(tester, 1, 'duplicate');
+  }),
+  AlignScenario('combat:remove', _tracker, (tester, d) async {
+    await _scrollToTop(tester);
+    await _rowMenu(tester, 1, 'remove');
   }),
   AlignScenario(
     'combat:planning',

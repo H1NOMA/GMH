@@ -177,11 +177,20 @@ class _PresetDialogState extends State<_PresetDialog> {
             value: _modifier,
             onChanged: (v) => setState(() => _modifier = v),
           ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l.diceWildDie),
-            value: _wildDie,
-            onChanged: (v) => setState(() => _wildDie = v),
+          // Without the switch's own side padding its track ends flush with
+          // the dialog's content edge, like the actions below.
+          Theme(
+            data: Theme.of(context).copyWith(
+              switchTheme: Theme.of(context)
+                  .switchTheme
+                  .copyWith(padding: EdgeInsets.zero),
+            ),
+            child: SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l.diceWildDie),
+              value: _wildDie,
+              onChanged: (v) => setState(() => _wildDie = v),
+            ),
           ),
         ];
       case DicePresetKind.cyberpunkRed:

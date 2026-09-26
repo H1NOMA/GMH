@@ -248,13 +248,22 @@ Future<Combatant?> showCombatantEditor(BuildContext context,
                     decoration: InputDecoration(labelText: l.nameLabel),
                   ),
                   const SizedBox(height: 4),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    value: isPlayer,
-                    title: Text(l.combatPlayer,
-                        style: const TextStyle(fontSize: 13.5)),
-                    onChanged: (value) =>
-                        setDialogState(() => isPlayer = value),
+                  // Without the switch's own side padding its track ends
+                  // flush with the field borders.
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      switchTheme: Theme.of(context)
+                          .switchTheme
+                          .copyWith(padding: EdgeInsets.zero),
+                    ),
+                    child: SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: isPlayer,
+                      title: Text(l.combatPlayer,
+                          style: const TextStyle(fontSize: 13.5)),
+                      onChanged: (value) =>
+                          setDialogState(() => isPlayer = value),
+                    ),
                   ),
                   pair(
                     numberField(initiative, l.combatInitiative,
