@@ -115,6 +115,9 @@ final contentScenarios = <AlignScenario>[
   AlignScenario('tables:search-empty', _tables, (tester, d) async {
     await _type(tester, find.byKey(const ValueKey('tables-search')), 'zzzz');
   }),
+  AlignScenario('tables:menu', _tables, (tester, d) async {
+    await _tap(tester, _keyed('tables-menu-'), 4);
+  }),
   AlignScenario('tables:delete', _tables, (tester, d) async {
     await _tap(tester, _keyed('tables-menu-'), 4);
     await _tap(tester, find.byKey(const ValueKey('tables-menu-delete')), 4);
@@ -123,6 +126,9 @@ final contentScenarios = <AlignScenario>[
   // One table.
   AlignScenario('tables:edit-details', _table, (tester, d) async {
     await _tap(tester, find.byKey(const ValueKey('tables-edit-details')), 4);
+  }),
+  AlignScenario('tables:page-menu', _table, (tester, d) async {
+    await _tap(tester, find.byKey(ValueKey('tables-menu-${d.tableId}')), 4);
   }),
   AlignScenario('tables:bulk-edit', _table, (tester, d) async {
     await _tap(tester, find.byKey(const ValueKey('tables-bulk-edit')), 4);
@@ -184,6 +190,13 @@ final contentScenarios = <AlignScenario>[
   }),
   AlignScenario('generators:names-options', _generators, (tester, d) async {
     await _pickKind(tester, 'names');
+  }),
+  AlignScenario('generators:pack-menu', _generators, (tester, d) async {
+    await _tap(tester, _keyed('gen-pack-'), 4);
+  }),
+  AlignScenario('generators:culture-menu', _generators, (tester, d) async {
+    await _pickKind(tester, 'names');
+    await _tap(tester, _keyed('gen-culture-'), 4);
   }),
   AlignScenario('generators:names', _generators, (tester, d) async {
     await _pickKind(tester, 'names');

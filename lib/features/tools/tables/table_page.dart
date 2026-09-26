@@ -786,6 +786,9 @@ class _RowEditor extends StatelessWidget {
         decoration: InputDecoration(
           isDense: true,
           hintText: label,
+          // A hint wrapped beside the prefix would outgrow the box and lift
+          // the value onto its top border.
+          hintMaxLines: 1,
           prefixText: prefix,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 4,
