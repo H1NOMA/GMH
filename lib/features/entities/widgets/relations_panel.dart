@@ -59,10 +59,14 @@ class RelationsPanel extends ConsumerWidget {
                   children: [
                     Wrap(
                       spacing: 6,
-                      runSpacing: 4,
+                      runSpacing: 6,
                       children: [
                         for (final suggestion in LinkRoles.suggestions)
                           ChoiceChip(
+                            // Padded tap targets would add hidden gaps
+                            // between rows only; keep the grid even.
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                             label: Text(
                                 localizedRoleLabel(context, suggestion),
                                 style: const TextStyle(fontSize: 11.5)),
@@ -134,6 +138,7 @@ class RelationsPanel extends ConsumerWidget {
                       color: GmhColors.parchmentFaint)),
             ),
             IconButton(
+              key: const ValueKey('relations-add'),
               tooltip: context.l10n.addRelation,
               icon: const Icon(Icons.add, size: 17),
               visualDensity: VisualDensity.compact,

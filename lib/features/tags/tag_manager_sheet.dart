@@ -80,8 +80,10 @@ class _TagManagerState extends ConsumerState<_TagManager> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // One 16px inset for every row — title, search, tag rows and the
+        // button — so their left edges and the trailing icons line up.
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 8, 6),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
           child: Row(
             children: [
               Icon(Icons.sell_outlined,
@@ -160,7 +162,7 @@ class _TagManagerState extends ConsumerState<_TagManager> {
         ),
         const Divider(),
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
           child: FilledButton.icon(
             icon: const Icon(Icons.add, size: 18),
             label: Text(l.newTag),
@@ -294,6 +296,8 @@ class _TagManagerState extends ConsumerState<_TagManager> {
                     children: [
                       for (final other in others)
                         ActionChip(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           avatar: CircleAvatar(
                               radius: 5,
                               backgroundColor: Color(other.color)),
@@ -369,6 +373,7 @@ class _TagRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       leading: InkWell(
         onTap: onColor,
         borderRadius: BorderRadius.circular(999),

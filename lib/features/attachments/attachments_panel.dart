@@ -101,6 +101,7 @@ class _AttachmentsPanelState extends ConsumerState<AttachmentsPanel> {
                 onPressed: _pickPhotos,
               ),
             IconButton(
+              key: const ValueKey('attachments-add-files'),
               tooltip: context.l10n.addFiles,
               icon: const Icon(Icons.attach_file, size: 17),
               visualDensity: VisualDensity.compact,
