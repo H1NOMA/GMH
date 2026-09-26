@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gmh/app/nav_state.dart';
+import 'package:gmh/app/providers.dart';
 import 'package:gmh/app/router.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/features/search/search_screen.dart';
@@ -35,9 +39,33 @@ Future<void> _openPalette(WidgetTester tester, [String? query]) async {
   await settleVisual(tester, 4);
 }
 
-WorkspaceTabs _tabs(WidgetTester tester) => ProviderScope.containerOf(
-        tester.element(find.byType(MaterialApp)))
-    .read(workspaceTabsProvider.notifier);
+ProviderContainer _container(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(MaterialApp)));
+
+WorkspaceTabs _tabs(WidgetTester tester) =>
+    _container(tester).read(workspaceTabsProvider.notifier);
+
+/// Waits out real I/O (a backup, a restore) until its snackbar shows, then
+/// lets the snackbar slide in.
+Future<void> _awaitSnackBar(WidgetTester tester) async {
+  for (var i = 0; i < 100 && find.byType(SnackBar).evaluate().isEmpty; i++) {
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)));
+    await tester.pump();
+  }
+  await settleVisual(tester, 4);
+}
+
+/// Scrolls the desktop sidebar to its end; false on phones (no sidebar).
+Future<bool> _sidebarToEnd(WidgetTester tester) async {
+  final list = find.ancestor(
+      of: find.byIcon(Icons.dashboard_outlined).first,
+      matching: find.byType(ListView));
+  if (list.evaluate().isEmpty) return false;
+  await tester.drag(list.first, const Offset(0, -2000));
+  await settleVisual(tester, 3);
+  return true;
+}
 
 /// Several tabs: short and long entry names, a tool and a section page.
 Future<void> _openTabs(WidgetTester tester, DemoWorld d) async {
@@ -106,14 +134,7 @@ final shellScenarios = <AlignScenario>[
 
   // Sidebar scrolled to its end: library kinds and custom categories.
   AlignScenario('shell:sidebar-end', (d) => Routes.home(d.worldId),
-      (tester, d) async {
-    final list = find.ancestor(
-        of: find.byIcon(Icons.dashboard_outlined).first,
-        matching: find.byType(ListView));
-    if (list.evaluate().isEmpty) return; // phones have no sidebar
-    await tester.drag(list.first, const Offset(0, -2000));
-    await settleVisual(tester, 3);
-  }),
+      (tester, d) => _sidebarToEnd(tester)),
 
   // Search: results with snippets, a kind filter on, no matches.
   AlignScenario('search:results', (d) => Routes.search(d.worldId),
@@ -139,6 +160,18 @@ final shellScenarios = <AlignScenario>[
     await _tap(tester, find.byType(PopupMenuItem<String>).first);
     await settleVisual(tester, 6);
     await _tap(tester, find.byIcon(Icons.filter_list));
+  }),
+  // Every kind hidden: the empty-graph message.
+  AlignScenario('graph:empty', (d) => Routes.graph(d.worldId),
+      (tester, d) async {
+    final filter = find.byIcon(Icons.filter_list);
+    await _tap(tester, filter);
+    final count = find.byType(PopupMenuItem<String>).evaluate().length;
+    for (var i = 0; i < count; i++) {
+      if (i > 0) await _tap(tester, filter);
+      await _tap(tester, find.byType(PopupMenuItem<String>).at(i));
+      await settleVisual(tester, 6);
+    }
   }),
   AlignScenario(
       'graph:local-filter',
@@ -180,6 +213,12 @@ final shellScenarios = <AlignScenario>[
           _tap(tester, find.byIcon(Icons.delete_forever_outlined).first)),
   AlignScenario('trash:confirm-empty', (d) => Routes.trash(d.worldId),
       (tester, d) => _tap(tester, find.byIcon(Icons.delete_sweep_outlined))),
+  // Restores one of the two demo entries: the restore snackbar.
+  AlignScenario('trash:restored', (d) => Routes.trash(d.worldId),
+      (tester, d) async {
+    await _tap(tester, find.byIcon(Icons.restore_from_trash_outlined).first);
+    await _awaitSnackBar(tester);
+  }),
   // Empties the demo trash for good: keep it after every other trash
   // screen.
   AlignScenario('trash:empty', (d) => Routes.trash(d.worldId),
@@ -190,6 +229,48 @@ final shellScenarios = <AlignScenario>[
         find.descendant(
             of: find.byType(AlertDialog), matching: find.byType(FilledButton)));
     await settleVisual(tester, 6);
+  }),
+
+  // The scenarios below leave recents, a saved backup and collapsed
+  // sidebar sections in the demo world, so they come after the rest.
+
+  // Idle search with recently opened entries under the quick actions.
+  AlignScenario('search:recents', (d) => Routes.search(d.worldId),
+      (tester, d) async {
+    final search = _container(tester).read(searchRepositoryProvider);
+    for (final name in [
+      'Ravenport',
+      'Curse of the Amber Throne',
+      'Wren Six-Fingers',
+    ]) {
+      // The database completes on the test's clock: settle, don't await.
+      unawaited(search.recordOpened(d.byName[name]!.id));
+      await settleVisual(tester, 2);
+    }
+    await settleVisual(tester, 4);
+  }),
+  // Pause menu > Save project: the saved snackbar over the page.
+  AlignScenario('shell:pause-saved', (d) => Routes.home(d.worldId),
+      (tester, d) async {
+    await _shortcut(tester, LogicalKeyboardKey.escape);
+    await _tap(
+        tester,
+        find.descendant(
+            of: find.byType(Dialog),
+            matching: find.byIcon(Icons.save_outlined)));
+    await _awaitSnackBar(tester);
+  }),
+  // Sidebar with the WORLD and LIBRARY sections collapsed, at its end.
+  AlignScenario('shell:sidebar-collapsed', (d) => Routes.home(d.worldId),
+      (tester, d) async {
+    final container = _container(tester);
+    for (final group in ['worldKinds', 'libraryKinds']) {
+      container
+          .read(sidebarCollapsedProvider('${d.worldId}|$group').notifier)
+          .toggle();
+    }
+    await settleVisual(tester, 4);
+    await _sidebarToEnd(tester);
   }),
 
   // Navigation rail (tablet width). Resizes the window for the rest of

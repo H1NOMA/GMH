@@ -32,6 +32,17 @@ class _FocusRequest extends Notifier<int> {
   void request() => state++;
 }
 
+// Result and recent cards share the query field's columns: a 20px icon
+// after the tile's 14px padding centers on the field's 48px icon slot, and
+// the title starts where the typed text does (slot + 4px gap). ListTile
+// widens its title gap by 2px per horizontal density step; that is taken
+// back so the text lines match at every density.
+const _resultIconSize = 20.0;
+
+double _resultTitleGap(BuildContext context) =>
+    kMinInteractiveDimension + 4 - 14 - _resultIconSize -
+    Theme.of(context).visualDensity.horizontal * 2;
+
 class SearchScreen extends ConsumerStatefulWidget {
   final String worldId;
   const SearchScreen({super.key, required this.worldId});
@@ -285,10 +296,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                               return Card(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: ListTile(
+                                  minLeadingWidth: _resultIconSize,
+                                  horizontalTitleGap: _resultTitleGap(context),
                                   leading: Icon(
                                       typeIcon(result.kind,
                                           result.customCategoryId, categories),
-                                      size: 20,
+                                      size: _resultIconSize,
                                       color: typeColor(result.kind,
                                           result.customCategoryId,
                                           categories)),
@@ -385,8 +398,10 @@ class _IdleView extends ConsumerWidget {
             Card(
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
+                minLeadingWidth: _resultIconSize,
+                horizontalTitleGap: _resultTitleGap(context),
                 leading: Icon(entity.kind.icon,
-                    size: 20, color: entity.kind.color),
+                    size: _resultIconSize, color: entity.kind.color),
                 title: Text(entity.name),
                 subtitle: entity.summary.isEmpty
                     ? null

@@ -180,15 +180,23 @@ class _IntroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Laid out as a tile, like the section headers below it: icon and
-    // text start on the same lines as theirs at every density.
+    // Laid out as a tile, like the section headers below it: the text
+    // starts on their text line at every density, and the larger icon is
+    // centered on their icon column (a slot as wide as their icons).
     return Card(
       color: GmhColors.ember.withValues(alpha: 0.09),
       child: ListTile(
         titleAlignment: ListTileTitleAlignment.top,
         minVerticalPadding: 16,
-        leading: Icon(Icons.auto_stories_outlined,
-            size: 24, color: GmhColors.ember),
+        leading: SizedBox(
+          width: _SectionCard.iconSize,
+          height: 26,
+          child: OverflowBox(
+            maxWidth: 26,
+            child: Icon(Icons.auto_stories_outlined,
+                size: 26, color: GmhColors.ember),
+          ),
+        ),
         title: Text(text,
             style: Theme.of(context)
                 .textTheme
@@ -203,6 +211,7 @@ class _SectionCard extends StatelessWidget {
   final _HelpSection section;
   const _SectionCard({required this.section});
 
+  static const iconSize = 21.0;
   static const _legendFontSize = 12.5;
   static const _legendLineHeight = 1.4;
 
@@ -218,7 +227,7 @@ class _SectionCard extends StatelessWidget {
         // 'helpScroll' slot and reads the scroll offset back as its
         // expanded flag once the list has scrolled.
         key: PageStorageKey<String>('helpSection:${section.icon.codePoint}'),
-        leading: Icon(section.icon, size: 21, color: GmhColors.ember),
+        leading: Icon(section.icon, size: iconSize, color: GmhColors.ember),
         title: Text(section.title,
             style: const TextStyle(fontWeight: FontWeight.w600)),
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
