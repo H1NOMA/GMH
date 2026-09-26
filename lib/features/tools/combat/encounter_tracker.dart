@@ -250,7 +250,12 @@ class _TurnBar extends ConsumerWidget {
             IconButton.outlined(
               key: const ValueKey('combat-previous'),
               tooltip: l.combatPreviousTurn,
-              visualDensity: VisualDensity.compact,
+              // As tall as the filled and outlined buttons beside it: their
+              // minimum size, at the theme's density.
+              style: IconButton.styleFrom(
+                minimumSize: const Size.square(42),
+                visualDensity: Theme.of(context).visualDensity,
+              ),
               onPressed: combatants.isEmpty
                   ? null
                   : () => actions.rewindTurn(encounter, combatants),

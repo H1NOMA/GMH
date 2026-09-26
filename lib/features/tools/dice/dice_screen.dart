@@ -340,18 +340,24 @@ class _DiceScreenState extends ConsumerState<DiceScreen> {
               value: _modifier,
               onChanged: (v) => setState(() => _modifier = v),
             ),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 260),
-              child: TextField(
-                controller: _label,
-                decoration: InputDecoration(
-                  hintText: l.diceLabelHint,
-                  isDense: true,
-                  prefixIcon: const Icon(Icons.label_outline, size: 18),
-                ),
+          ],
+        ),
+        // On its own line: beside the shorter chips and stepper the field
+        // would stick out above and below them.
+        const SizedBox(height: 12),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 260),
+            child: TextField(
+              controller: _label,
+              decoration: InputDecoration(
+                hintText: l.diceLabelHint,
+                isDense: true,
+                prefixIcon: const Icon(Icons.label_outline, size: 18),
               ),
             ),
-          ],
+          ),
         ),
         const SizedBox(height: 20),
         Text(l.dicePresets.toUpperCase(), style: sectionStyle),

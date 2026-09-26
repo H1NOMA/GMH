@@ -35,6 +35,10 @@ class CombatantRow extends ConsumerStatefulWidget {
   ConsumerState<CombatantRow> createState() => _CombatantRowState();
 }
 
+const double _initiativeWidth = 56;
+const double _nameGap = 8;
+const double _namePadding = 4;
+
 class _CombatantRowState extends ConsumerState<CombatantRow> {
   final _amount = TextEditingController();
   final _initiative = TextEditingController();
@@ -163,7 +167,9 @@ class _CombatantRowState extends ConsumerState<CombatantRow> {
         padding: const EdgeInsets.fromLTRB(8, 8, 4, 10),
         child: LayoutBuilder(builder: (context, constraints) {
           final compact = constraints.maxWidth < 560;
-          final indent = compact ? 0.0 : 64.0;
+          // Hit points and conditions start where the name text does.
+          final indent =
+              compact ? 0.0 : _initiativeWidth + _nameGap + _namePadding;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -197,7 +203,7 @@ class _CombatantRowState extends ConsumerState<CombatantRow> {
     return Row(
       children: [
         SizedBox(
-          width: 56,
+          width: _initiativeWidth,
           child: Tooltip(
             message: l.combatInitiative,
             child: TextField(
@@ -224,7 +230,7 @@ class _CombatantRowState extends ConsumerState<CombatantRow> {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: _nameGap),
         Expanded(
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
@@ -232,7 +238,8 @@ class _CombatantRowState extends ConsumerState<CombatantRow> {
                 ? () => context.go(Routes.entity(c.worldId, c.entityId!))
                 : null,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: _namePadding, vertical: 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
