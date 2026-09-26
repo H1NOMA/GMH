@@ -112,7 +112,12 @@ class DifficultyPanel extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleSmall),
             ),
-            Flexible(child: DifficultyBadge(result: result)),
+            Flexible(
+              child: Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: DifficultyBadge(result: result),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),

@@ -371,7 +371,7 @@ class DiceStepper extends StatelessWidget {
           Flexible(
             child: Text(
               label,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 13, color: GmhColors.parchmentDim),
             ),
