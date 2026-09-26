@@ -201,7 +201,7 @@ List<ProbeControl> collectControls(WidgetTester tester) {
     var nowInField = insideField;
     var nowInComposite = insideComposite;
 
-    if (type == '_BorderContainer') {
+    if (type == '_BorderContainer' && !_borderless(e)) {
       final box = _firstBox(e);
       add(ControlKind.field, box, box?.parent as RenderBox?,
           _describe(_fieldOwner(e) ?? e, _fieldTypeName(e)));
@@ -243,6 +243,24 @@ List<ProbeControl> collectControls(WidgetTester tester) {
   WidgetsBinding.instance.rootElement?.visitChildElements(
       (e) => visit(e, false, false));
   return controls;
+}
+
+/// Unfilled decorators drawn without a border have no visible box to
+/// line up.
+bool _borderless(Element border) {
+  var none = false;
+  border.visitAncestorElements((a) {
+    final w = a.widget;
+    if (w is InputDecorator) {
+      final d = w.decoration;
+      none = d.isCollapsed == true ||
+          (d.filled == false &&
+              (d.enabledBorder ?? d.border) == InputBorder.none);
+      return false;
+    }
+    return true;
+  });
+  return none;
 }
 
 Element? _fieldOwner(Element border) {
@@ -421,13 +439,17 @@ List<AlignIssue> _labelIssues(
       if (child is! RenderBox || controlCells.contains(child)) return;
       if ((counts[child] ?? 0) > 0) return;
       final paragraphs = <RenderParagraph>[];
+      var editable = false;
       void find(RenderObject r) {
         if (r is RenderParagraph) paragraphs.add(r);
+        if (r is RenderEditable) editable = true;
         r.visitChildren(find);
       }
 
       find(child);
-      if (paragraphs.length != 1) return;
+      // Selectable text renders as an editable: a cell holding one counts
+      // more lines than its paragraphs show.
+      if (editable || paragraphs.length != 1) return;
       final p = paragraphs.single;
       if (!p.hasSize || !p.attached) return;
       final label = ProbeControl(ControlKind.label, p, p,
