@@ -17,6 +17,9 @@ import 'package:gmh/app/providers.dart';
 import 'package:gmh/core/utils/ids.dart';
 import 'package:gmh/data/db/app_database.dart';
 import 'package:gmh/data/storage/media_vault.dart';
+import 'package:gmh/domain/combat/combatant.dart';
+import 'package:gmh/domain/combat/encounter.dart';
+import 'package:gmh/domain/tables/content/table_library.dart';
 import 'package:gmh/domain/models/entity.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 import 'package:gmh/domain/models/world_object.dart';
@@ -113,6 +116,11 @@ class DemoWorld {
 
   /// A map of the harbor region with a few pins (one GM-only).
   late final String mapId;
+
+  /// A fight in progress (round 2, three combatants, one condition) and
+  /// a random table copied from the library.
+  late final String encounterId;
+  late final String tableId;
 
   /// One small world per additional setting pack (everything but fantasy
   /// and the cyberpunk demo): style -> world id, plus the ids of its
@@ -383,6 +391,72 @@ Future<DemoWorld> seedRichWorld() async {
       ).toData(),
     );
   }
+
+  // A fight in progress for the combat tracker and the GM screen.
+  final encounter = await objects.create(
+    worldId: world.id,
+    type: WorldObjectTypes.encounter,
+    name: 'Ambush at the Sunken Bell',
+    data: const Encounter(
+      id: '',
+      worldId: '',
+      name: 'Ambush at the Sunken Bell',
+      status: EncounterStatus.active,
+      round: 2,
+      partyLevels: [3, 3, 4],
+    ).toData(),
+  );
+  demo.encounterId = encounter.id;
+  for (final (i, c) in [
+    Combatant(
+        name: 'Captain Mira Voss',
+        entityId: mira.id,
+        isPlayer: true,
+        initiative: 17,
+        hpMax: 38,
+        hpCurrent: 31,
+        ac: 16),
+    const Combatant(
+        name: 'Fog Hound 1',
+        initiative: 14,
+        hpMax: 22,
+        hpCurrent: 9,
+        ac: 13,
+        cr: '1',
+        xp: 200,
+        conditions: [CombatCondition('frightened', rounds: 2)]),
+    const Combatant(
+        name: 'Fog Hound 2',
+        initiative: 9,
+        hpMax: 22,
+        hpCurrent: 22,
+        ac: 13,
+        cr: '1',
+        xp: 200),
+  ].indexed) {
+    await objects.create(
+      worldId: world.id,
+      type: WorldObjectTypes.combatant,
+      parentId: encounter.id,
+      name: c.name,
+      data: c.toData(),
+      sortOrder: i,
+    );
+  }
+
+  // Random tables from the library (one references the other).
+  final tableIds = <String>[];
+  for (final table in TableLibrary.forStyle(WorldStyle.fantasy).take(2)) {
+    final draft = TableLibrary.materialize(table, 'en', worldId: world.id);
+    final object = await objects.create(
+      worldId: world.id,
+      type: WorldObjectTypes.randomTable,
+      name: draft.name,
+      data: draft.toData(),
+    );
+    tableIds.add(object.id);
+  }
+  demo.tableId = tableIds.first;
 
   // A short history for the timeline: two eras, dated events, one
   // event waiting for a date.

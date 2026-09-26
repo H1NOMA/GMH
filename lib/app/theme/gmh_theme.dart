@@ -223,6 +223,11 @@ abstract final class GmhTheme {
 
   static ThemeData build(GmhPalette p) => _cache[p] ??= _build(p);
 
+  /// Themes capture the platform's density: tests that switch the target
+  /// platform start from fresh ones.
+  @visibleForTesting
+  static void clearCache() => _cache.clear();
+
   static ThemeData _build(GmhPalette p) {
     final isDark = p.brightness == Brightness.dark;
     final scheme = ColorScheme(

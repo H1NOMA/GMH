@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/l10n_ext.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme/gmh_theme.dart';
+import '../../../core/widgets/field_action_row.dart';
 import '../../../domain/dice/dice_engine.dart';
 import '../../../domain/dice/dice_history.dart';
 import '../../../domain/dice/dice_presets.dart';
@@ -262,41 +263,33 @@ class _DiceScreenState extends ConsumerState<DiceScreen> {
       children: [
         DiceResultCard(key: _resultKey, shown: _shown),
         const SizedBox(height: 16),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: TextField(
-                key: const ValueKey('dice-expression'),
-                controller: _expression,
-                focusNode: _expressionFocus,
-                textInputAction: TextInputAction.done,
-                autocorrect: false,
-                enableSuggestions: false,
-                decoration: InputDecoration(
-                  labelText: l.diceExpressionLabel,
-                  hintText: l.diceExpressionHint,
-                  errorText: _error == null ? null : diceErrorText(l, _error!),
-                  errorMaxLines: 2,
-                  prefixIcon: const Icon(Icons.casino_outlined, size: 20),
-                ),
-                onChanged: (_) {
-                  if (_error != null) setState(() => _error = null);
-                },
-                onSubmitted: (_) => _submitExpression(),
-              ),
+        FieldActionRow(
+          error: _error == null ? null : diceErrorText(l, _error!),
+          field: TextField(
+            key: const ValueKey('dice-expression'),
+            controller: _expression,
+            focusNode: _expressionFocus,
+            textInputAction: TextInputAction.done,
+            autocorrect: false,
+            enableSuggestions: false,
+            decoration: InputDecoration(
+              labelText: l.diceExpressionLabel,
+              hintText: l.diceExpressionHint,
+              error: _error == null ? null : FieldActionRow.errorMarker,
+              prefixIcon: const Icon(Icons.casino_outlined, size: 20),
             ),
-            const SizedBox(width: 8),
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: FilledButton(
-                key: const ValueKey('dice-roll'),
-                onPressed: _submitExpression,
-                style: FilledButton.styleFrom(
-                    minimumSize: const Size(64, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 16)),
-                child: Text(l.diceRollAction),
-              ),
+            onChanged: (_) {
+              if (_error != null) setState(() => _error = null);
+            },
+            onSubmitted: (_) => _submitExpression(),
+          ),
+          actions: [
+            FilledButton(
+              key: const ValueKey('dice-roll'),
+              onPressed: _submitExpression,
+              style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16)),
+              child: Text(l.diceRollAction),
             ),
           ],
         ),
