@@ -229,8 +229,8 @@ class _Sidebar extends ConsumerWidget {
                   worldId: worldId,
                   group: 'worldKinds',
                   label: context.l10n.sectionWorld,
-                  child: _kindGroup(
-                      ref, 'worldKinds', EntityKind.worldKinds, counts),
+                  child: _kindGroup(ref, 'worldKinds', EntityKind.worldKinds,
+                      counts, location),
                 ),
                 _CollapsibleSection(
                   worldId: worldId,
@@ -242,8 +242,8 @@ class _Sidebar extends ConsumerWidget {
                   worldId: worldId,
                   group: 'libraryKinds',
                   label: context.l10n.sectionLibrary,
-                  child: _kindGroup(
-                      ref, 'libraryKinds', EntityKind.libraryKinds, counts),
+                  child: _kindGroup(ref, 'libraryKinds',
+                      EntityKind.libraryKinds, counts, location),
                 ),
                 _CategoriesSection(worldId: worldId),
               ],
@@ -353,7 +353,7 @@ extension on _Sidebar {
   }
 
   Widget _kindGroup(WidgetRef ref, String group, List<EntityKind> kinds,
-      Map<EntityKind, int> counts) {
+      Map<EntityKind, int> counts, String location) {
     final byName = {for (final k in kinds) k.name: k};
     return _DraggableGroup(
       ids: applySidebarOrder(
@@ -362,7 +362,11 @@ extension on _Sidebar {
       ),
       itemBuilder: (name) {
         final kind = byName[name]!;
-        return _KindTile(worldId: worldId, kind: kind, count: counts[kind]);
+        return _KindTile(
+            worldId: worldId,
+            kind: kind,
+            count: counts[kind],
+            selected: location.endsWith('/browse/${kind.name}'));
       },
       onReorder: (order) => ref
           .read(sidebarOrderProvider('$worldId|$group').notifier)
@@ -556,17 +560,23 @@ class _NavTile extends StatelessWidget {
   }
 }
 
+/// Sidebar tile of an entry kind. [selected] comes from the shell: while
+/// dragged, the tile is rebuilt in the root overlay, outside any route.
 class _KindTile extends ConsumerWidget {
   final String worldId;
   final EntityKind kind;
   final int? count;
+  final bool selected;
 
-  const _KindTile({required this.worldId, required this.kind, this.count});
+  const _KindTile({
+    required this.worldId,
+    required this.kind,
+    required this.selected,
+    this.count,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final location = GoRouterState.of(context).uri.path;
-    final selected = location.endsWith('/browse/${kind.name}');
     return ListTile(
       leading: Icon(kind.icon,
           size: 19, color: selected ? kind.color : GmhColors.parchmentDim),
