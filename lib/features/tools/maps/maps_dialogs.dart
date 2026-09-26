@@ -182,31 +182,43 @@ Future<GameMap?> showMapDetailsDialog(
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: [
-                        SizedBox(
-                          width: 130,
-                          child: number(units, 'maps-scale-units', l.mapsUnitsPerCell),
-                        ),
-                        SizedBox(
-                          width: 130,
-                          child: TextField(
-                            key: const ValueKey('maps-scale-unit-name'),
-                            controller: unitName,
-                            decoration: InputDecoration(
-                              labelText: l.mapsUnitName,
-                              hintText: l.mapsUnitHint,
-                              isDense: true,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        // As many 130px+ fields per line as fit, widened to
+                        // end flush with the fields above.
+                        const gap = 12.0;
+                        final perLine = ((constraints.maxWidth + gap) / (130 + gap))
+                            .floor()
+                            .clamp(1, 3);
+                        final width =
+                            (constraints.maxWidth - gap * (perLine - 1)) / perLine;
+                        return Wrap(
+                          spacing: gap,
+                          runSpacing: gap,
+                          children: [
+                            SizedBox(
+                              width: width,
+                              child: number(units, 'maps-scale-units', l.mapsUnitsPerCell),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 130,
-                          child: number(cellPx, 'maps-scale-cell', l.mapsCellPx),
-                        ),
-                      ],
+                            SizedBox(
+                              width: width,
+                              child: TextField(
+                                key: const ValueKey('maps-scale-unit-name'),
+                                controller: unitName,
+                                decoration: InputDecoration(
+                                  labelText: l.mapsUnitName,
+                                  hintText: l.mapsUnitHint,
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: width,
+                              child: number(cellPx, 'maps-scale-cell', l.mapsCellPx),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     if (!scaleValid()) ...[
                       const SizedBox(height: 8),

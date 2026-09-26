@@ -484,10 +484,15 @@ class _MapPageState extends ConsumerState<MapPage> {
                 onDeleted: _toList,
                 extra: [
                   PopupMenuItem(
+                    key: const ValueKey('maps-menu-details'),
                     value: 'details',
                     child: Text(l.mapsEditDetails),
                   ),
-                  PopupMenuItem(value: 'image', child: Text(l.mapsChangeImage)),
+                  PopupMenuItem(
+                    key: const ValueKey('maps-menu-image'),
+                    value: 'image',
+                    child: Text(l.mapsChangeImage),
+                  ),
                 ],
                 onExtra: (action) async {
                   if (action == 'image') {
@@ -656,6 +661,12 @@ class _MapPageState extends ConsumerState<MapPage> {
                     spacing: 8,
                     children: [
                       IconButton.filledTonal(
+                        // Same height as the exit button beside it; icon
+                        // buttons ignore the theme density by default.
+                        style: IconButton.styleFrom(
+                          minimumSize: const Size.square(48),
+                          visualDensity: Theme.of(context).visualDensity,
+                        ),
                         tooltip: l.mapsFit,
                         onPressed: _fitView,
                         icon: const Icon(Icons.fit_screen_outlined),

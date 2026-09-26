@@ -69,12 +69,14 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
       toolId: 'timeline',
       actions: [
         IconButton(
+          key: const ValueKey('timeline-calendar'),
           tooltip: l.timelineCalendar,
           icon: const Icon(Icons.calendar_month_outlined),
           onPressed: () => _editCalendar(calendarObject, calendar),
         ),
       ],
       floatingActionButton: FloatingActionButton.extended(
+        key: const ValueKey('timeline-new-event'),
         heroTag: 'timelineNewEvent',
         icon: const Icon(Icons.add),
         label: Text(l.timelineNewEvent),
@@ -271,7 +273,8 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
                     controller: months,
                     minLines: 4,
                     maxLines: 12,
-                    decoration: InputDecoration(labelText: l.timelineMonths),
+                    decoration: InputDecoration(
+                        labelText: l.timelineMonths, alignLabelWithHint: true),
                   ),
                   const SizedBox(height: 12),
                   TextField(
@@ -516,6 +519,7 @@ class _EraSection extends StatelessWidget {
                     ),
                     if (era.start == null)
                       TextButton(
+                        key: ValueKey('timeline-set-date-${era.entity.id}'),
                         onPressed: () => onSetDate(era.entity),
                         child: Text(l.timelineSetDate),
                       ),
@@ -535,6 +539,20 @@ class _EraSection extends StatelessWidget {
       ),
     );
   }
+}
+
+const _cardPadding = EdgeInsets.fromLTRB(12, 10, 6, 10);
+
+/// Height of one line of [style] at the current text scale.
+double _lineHeight(BuildContext context, TextStyle? style) {
+  final painter = TextPainter(
+    text: TextSpan(text: ' ', style: style),
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  final height = painter.height;
+  painter.dispose();
+  return height;
 }
 
 /// One event on the rail: its date on the left (above on narrow
@@ -557,6 +575,7 @@ class _EventTile extends ConsumerWidget {
     final entity = event.entity;
     final date = event.date == null ? null : format(event.date!);
     final color = entity.kind.color;
+    final titleStyle = Theme.of(context).textTheme.titleSmall;
     final card = Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: InkWell(
@@ -566,7 +585,7 @@ class _EventTile extends ConsumerWidget {
           context.go(Routes.entity(worldId, entity.id));
         },
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
+          padding: _cardPadding,
           child: Row(
             children: [
               Expanded(
@@ -576,7 +595,7 @@ class _EventTile extends ConsumerWidget {
                     Text(entity.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall),
+                        style: titleStyle),
                     if (entity.summary.isNotEmpty)
                       Text(entity.summary,
                           maxLines: 2,
@@ -588,6 +607,7 @@ class _EventTile extends ConsumerWidget {
               ),
               if (date == null)
                 TextButton(
+                  key: ValueKey('timeline-set-date-${entity.id}'),
                   onPressed: () => onSetDate(entity),
                   child: Text(context.l10n.timelineSetDate),
                 ),
@@ -613,39 +633,52 @@ class _EventTile extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Starts where the card's text does.
             Padding(
-                padding: const EdgeInsets.only(left: 4, bottom: 2),
+                padding: EdgeInsets.only(left: _cardPadding.left, bottom: 2),
                 child: dateText),
             card,
           ],
         );
       }
+      // The date and the dot sit on the center line of the card's first
+      // title line, whatever the text scale.
+      final titleLine = _lineHeight(context, titleStyle);
+      Widget onTitleLine(Widget child, AlignmentGeometry alignment) => Padding(
+            padding: EdgeInsets.only(top: _cardPadding.top),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: titleLine),
+                child: Align(
+                    alignment: alignment, heightFactor: 1, child: child),
+              ),
+            ),
+          );
       return IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
                 width: 150,
-                child: Padding(
-                    padding: const EdgeInsets.only(top: 14), child: dateText)),
+                child: onTitleLine(dateText, AlignmentDirectional.centerEnd)),
             SizedBox(
               width: 28,
               child: Stack(
-                alignment: Alignment.topCenter,
                 children: [
                   Positioned.fill(
                     child: Center(
                       child: Container(width: 2, color: GmhColors.border),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Container(
+                  onTitleLine(
+                    Container(
                       width: 10,
                       height: 10,
                       decoration:
                           BoxDecoration(color: color, shape: BoxShape.circle),
                     ),
+                    Alignment.center,
                   ),
                 ],
               ),
