@@ -17,9 +17,13 @@ import 'domain/repositories/repositories.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Desktop opens as a borderless fullscreen "game" window; the Escape
-  // pause menu (logo, save, settings, exit) replaces the title bar.
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  // Desktop opens as a borderless window over the whole screen, like a
+  // game; the Escape pause menu (logo, save, settings, exit) replaces the
+  // title bar. On Windows the runner creates that window natively
+  // (windows/runner/win32_window.cpp), so it is right from the first frame.
+  if (Platform.isWindows) {
+    await windowManager.ensureInitialized();
+  } else if (Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     const options = WindowOptions(
       title: "Game Master's Hub",

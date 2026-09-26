@@ -31,10 +31,12 @@ static int g_active_window_count = 0;
 
 using EnableNonClientDpiScaling = BOOL __stdcall(HWND hwnd);
 
-// Scale helper to convert logical scaler values to physical using passed in
-// scale factor
-int Scale(int source, double scale_factor) {
-  return static_cast<int>(source * scale_factor);
+// Full bounds of |monitor| in physical pixels, taskbar included.
+RECT MonitorBounds(HMONITOR monitor) {
+  MONITORINFO info = {};
+  info.cbSize = sizeof(info);
+  GetMonitorInfo(monitor, &info);
+  return info.rcMonitor;
 }
 
 // Dynamically loads the |EnableNonClientDpiScaling| from the User32 module.
@@ -120,25 +122,23 @@ Win32Window::~Win32Window() {
   Destroy();
 }
 
-bool Win32Window::Create(const std::wstring& title,
-                         const Point& origin,
-                         const Size& size) {
+bool Win32Window::Create(const std::wstring& title) {
   Destroy();
 
   const wchar_t* window_class =
       WindowClassRegistrar::GetInstance()->GetWindowClass();
 
-  const POINT target_point = {static_cast<LONG>(origin.x),
-                              static_cast<LONG>(origin.y)};
-  HMONITOR monitor = MonitorFromPoint(target_point, MONITOR_DEFAULTTONEAREST);
-  UINT dpi = FlutterDesktopGetDpiForMonitor(monitor);
-  double scale_factor = dpi / 96.0;
+  // Open on the monitor the app was launched from.
+  POINT cursor = {0, 0};
+  GetCursorPos(&cursor);
+  const RECT bounds =
+      MonitorBounds(MonitorFromPoint(cursor, MONITOR_DEFAULTTOPRIMARY));
 
-  HWND window = CreateWindow(
-      window_class, title.c_str(), WS_OVERLAPPEDWINDOW,
-      Scale(origin.x, scale_factor), Scale(origin.y, scale_factor),
-      Scale(size.width, scale_factor), Scale(size.height, scale_factor),
-      nullptr, nullptr, GetModuleHandle(nullptr), this);
+  HWND window = CreateWindowEx(
+      WS_EX_APPWINDOW, window_class, title.c_str(),
+      WS_POPUP | WS_SYSMENU | WS_MINIMIZEBOX, bounds.left, bounds.top,
+      bounds.right - bounds.left, bounds.bottom - bounds.top, nullptr,
+      nullptr, GetModuleHandle(nullptr), this);
 
   if (!window) {
     return false;
@@ -187,16 +187,12 @@ Win32Window::MessageHandler(HWND hwnd,
       }
       return 0;
 
-    case WM_DPICHANGED: {
-      auto newRectSize = reinterpret_cast<RECT*>(lparam);
-      LONG newWidth = newRectSize->right - newRectSize->left;
-      LONG newHeight = newRectSize->bottom - newRectSize->top;
-
-      SetWindowPos(hwnd, nullptr, newRectSize->left, newRectSize->top, newWidth,
-                   newHeight, SWP_NOZORDER | SWP_NOACTIVATE);
-
+    // A new scale or resolution: keep covering the whole monitor.
+    case WM_DPICHANGED:
+    case WM_DISPLAYCHANGE:
+      FitToMonitor();
       return 0;
-    }
+
     case WM_SIZE: {
       RECT rect = GetClientArea();
       if (child_content_ != nullptr) {
@@ -253,6 +249,14 @@ RECT Win32Window::GetClientArea() {
   RECT frame;
   GetClientRect(window_handle_, &frame);
   return frame;
+}
+
+void Win32Window::FitToMonitor() {
+  const RECT bounds = MonitorBounds(
+      MonitorFromWindow(window_handle_, MONITOR_DEFAULTTONEAREST));
+  SetWindowPos(window_handle_, nullptr, bounds.left, bounds.top,
+               bounds.right - bounds.left, bounds.bottom - bounds.top,
+               SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 HWND Win32Window::GetHandle() {

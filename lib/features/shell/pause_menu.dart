@@ -12,9 +12,9 @@ import '../../app/router.dart';
 import '../../app/theme/gmh_theme.dart';
 import '../../core/utils/save_flush.dart';
 
-/// Game-style pause menu opened with Escape (fullscreen has no title bar,
-/// so this is also the only way to quit): logo, app name, save project,
-/// settings and exit. Escape or a click outside closes it.
+/// Game-style pause menu opened with Escape (the borderless window has no
+/// title bar, so this is also the only way to quit): logo, app name, save
+/// project, settings and exit. Escape or a click outside closes it.
 Future<void> showPauseMenu(BuildContext context, {required String? worldId}) {
   return showDialog<void>(
     context: context,
