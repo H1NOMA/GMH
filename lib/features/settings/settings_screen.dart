@@ -369,6 +369,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 title: l.worldSection,
                 children: [
                   ListTile(
+                    key: const ValueKey('settings-edit-world'),
                     leading: Icon(SettingPacks.of(world.style).icon,
                         color: GmhColors.ember),
                     title: Text(world.name),
@@ -496,6 +497,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: _exportJson,
                 ),
                 ListTile(
+                  key: const ValueKey('settings-export-pdf'),
                   leading: const Icon(Icons.picture_as_pdf_outlined),
                   title: Text(l.exportPdfTitle),
                   subtitle: Text(l.exportPdfSubtitle,
@@ -530,6 +532,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               subtitle: l.backupsSubtitle(GmhConstants.maxAutoBackups),
               children: [
                 ListTile(
+                  key: const ValueKey('settings-backup-now'),
                   leading:
                       Icon(Icons.save_outlined, color: GmhColors.ember),
                   title: Text(l.backupNow),
@@ -545,7 +548,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 else
                   for (final backup in _backups)
                     ListTile(
-                      leading: const Icon(Icons.history, size: 20),
+                      leading: const _LeadingSlot(
+                          child: Icon(Icons.history, size: 20)),
                       title: Text(
                           localizedDateTime(context,
                               backup.modifiedAt.millisecondsSinceEpoch),
@@ -554,6 +558,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           '${(backup.sizeBytes / 1024).toStringAsFixed(0)} KB',
                           style: const TextStyle(fontSize: 11)),
                       trailing: TextButton(
+                        key: ValueKey('settings-restore-${backup.fileName}'),
                         onPressed: () => _restoreBackup(backup),
                         child: Text(l.restore),
                       ),
@@ -578,6 +583,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       style: const TextStyle(fontSize: 11.5)),
                 ),
                 ListTile(
+                  key: const ValueKey('settings-switch-world'),
                   leading: const Icon(Icons.public),
                   title: Text(l.switchWorld),
                   onTap: () => context.go(Routes.worlds()),
@@ -605,15 +611,28 @@ class _LanguageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(
-        selected ? Icons.radio_button_checked : Icons.radio_button_off,
-        size: 19,
-        color: selected ? GmhColors.ember : GmhColors.parchmentDim,
+      leading: _LeadingSlot(
+        child: Icon(
+          selected ? Icons.radio_button_checked : Icons.radio_button_off,
+          size: 19,
+          color: selected ? GmhColors.ember : GmhColors.parchmentDim,
+        ),
       ),
       title: Text(label, style: const TextStyle(fontSize: 13.5)),
       onTap: onTap,
     );
   }
+}
+
+/// Centers a smaller leading icon in the width of a full-size one, so every
+/// icon in a section card sits on one vertical center line.
+class _LeadingSlot extends StatelessWidget {
+  final Widget child;
+  const _LeadingSlot({required this.child});
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+      width: IconTheme.of(context).size ?? 24, child: Center(child: child));
 }
 
 class _SectionCard extends StatelessWidget {

@@ -139,6 +139,7 @@ class _CampaignDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.sizeOf(context).width;
     return PopupMenuButton<String>(
+      key: const ValueKey('campaign-switcher'),
       tooltip: context.l10n.switchCampaign,
       position: PopupMenuPosition.under,
       constraints: BoxConstraints(
@@ -344,6 +345,7 @@ class _CampaignDashboard extends ConsumerWidget {
             // The next session in one click: numbered, dated today,
             // already part of this campaign.
             TextButton.icon(
+              key: const ValueKey('campaigns-new-session'),
               icon: const Icon(Icons.add, size: 18),
               label: Text(context.l10n.newSessionAction),
               onPressed: () async {
@@ -452,7 +454,9 @@ class _QuestBoard extends StatelessWidget {
       children: [
         for (final status in statuses) ...[
           Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 6),
+            // The first group sits the usual header gap below the title.
+            padding: EdgeInsets.only(
+                top: status == statuses.first ? 0 : 8, bottom: 6),
             child: Row(
               children: [
                 Container(

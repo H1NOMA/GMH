@@ -162,6 +162,7 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<FieldType>(
+                  key: const ValueKey('field-type'),
                   value: type,
                   decoration: InputDecoration(labelText: l.fieldTypeLabel),
                   items: [
@@ -286,7 +287,9 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 8, 6),
+          // Right inset matches the content so the close button shares a
+          // center line with the field rows' trailing buttons.
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
           child: Row(
             children: [
               Icon(Icons.handyman_outlined,
@@ -376,8 +379,7 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
               for (final module in CategoryModule.values)
                 SwitchListTile(
                   value: _modules.contains(module),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 4),
+                  contentPadding: EdgeInsets.zero,
                   secondary: Icon(_moduleIcon(module),
                       size: 20,
                       color: _modules.contains(module)
@@ -412,6 +414,7 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
                               color: GmhColors.parchmentFaint)),
                     ),
                     TextButton.icon(
+                      key: const ValueKey('constructor-add-field'),
                       icon: const Icon(Icons.add, size: 16),
                       label: Text(l.addField),
                       onPressed: () => _addOrEditField(),
@@ -443,8 +446,7 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
                       for (var i = 0; i < _fields.length; i++)
                         ListTile(
                           key: ValueKey(_fields[i].key),
-                          contentPadding:
-                              const EdgeInsets.only(left: 4, right: 0),
+                          contentPadding: EdgeInsets.zero,
                           leading: ReorderableDelayedDragStartListener(
                             index: i,
                             child: Icon(Icons.drag_indicator,
@@ -490,7 +492,9 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
         ),
         const Divider(),
         Padding(
-          padding: const EdgeInsets.all(12),
+          // Same side inset as the content, so the buttons end on the
+          // fields' right edge.
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

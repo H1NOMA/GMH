@@ -98,8 +98,13 @@ class HomeScreen extends ConsumerWidget {
               Expanded(
                   child: _SectionTitle(context.l10n.homeYourSections)),
               IconButton(
+                key: const ValueKey('home-manage-categories'),
                 tooltip: context.l10n.manageCategories,
                 icon: const Icon(Icons.tune, size: 18),
+                // Without the padded tap target the row is 40px on every
+                // platform, so the gap below matches the other titles.
+                style: IconButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 onPressed: () =>
                     showManageCategoriesSheet(context, worldId),
               ),
@@ -367,6 +372,9 @@ class _ToolsRow extends StatelessWidget {
             avatar: Icon(tool.icon, size: 16, color: GmhColors.ember),
             label: Text(tool.label(l)),
             tooltip: tool.description(l),
+            // The padded tap target would space wrapped rows further apart
+            // than the chips within a row.
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             onPressed: () => context.go(Routes.tool(worldId, tool.id)),
           ),
       ],
@@ -390,18 +398,21 @@ class _CardColumns extends StatelessWidget {
       }
       final rows = <Widget>[];
       for (var i = 0; i < children.length; i += 2) {
+        // Both cards of a row take the taller one's height.
         rows.add(Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: children[i]),
-              const SizedBox(width: 8),
-              Expanded(
-                  child: i + 1 < children.length
-                      ? children[i + 1]
-                      : const SizedBox.shrink()),
-            ],
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: children[i]),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: i + 1 < children.length
+                        ? children[i + 1]
+                        : const SizedBox.shrink()),
+              ],
+            ),
           ),
         ));
       }

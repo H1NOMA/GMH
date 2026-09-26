@@ -37,6 +37,9 @@ Future<WorldDraft?> showWorldEditor(BuildContext context,
           content: SizedBox(
             width: 540,
             child: SingleChildScrollView(
+              // The name field's floating label rides on its top border;
+              // without room above it the scroll view clips it in half.
+              padding: const EdgeInsets.only(top: 8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -23,21 +23,34 @@ class StylePickerGrid extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       final columns = (constraints.maxWidth / 200).floor().clamp(1, 4);
       const gap = 8.0;
-      final tileWidth =
-          (constraints.maxWidth - gap * (columns - 1)) / columns;
-      return Wrap(
-        spacing: gap,
-        runSpacing: gap,
+      final packs = SettingPacks.all;
+      // Row by row, so tiles side by side share one height even when one
+      // hint wraps to fewer lines than its neighbour's.
+      return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          for (final pack in SettingPacks.all)
-            SizedBox(
-              width: tileWidth,
-              child: _StyleTile(
-                pack: pack,
-                selected: pack.style == selected,
-                onTap: () => onChanged(pack.style),
+          for (var start = 0; start < packs.length; start += columns) ...[
+            if (start > 0) const SizedBox(height: gap),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var i = start; i < start + columns; i++) ...[
+                    if (i > start) const SizedBox(width: gap),
+                    Expanded(
+                      child: i < packs.length
+                          ? _StyleTile(
+                              pack: packs[i],
+                              selected: packs[i].style == selected,
+                              onTap: () => onChanged(packs[i].style),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ],
               ),
             ),
+          ],
         ],
       );
     });
@@ -71,16 +84,22 @@ class _StyleTile extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(11),
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: selected
+                ? accent.withValues(alpha: 0.07)
+                : Colors.transparent,
+          ),
+          // A border in the decoration would inset the content by its
+          // width, so the thicker selected outline would make that tile
+          // taller than its neighbours; painted on top it takes no room.
+          foregroundDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: selected ? accent : GmhColors.border,
               width: selected ? 1.8 : 1,
             ),
-            color: selected
-                ? accent.withValues(alpha: 0.07)
-                : Colors.transparent,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
