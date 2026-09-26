@@ -132,7 +132,9 @@ class _ManageCategories extends ConsumerWidget {
         ),
         const Divider(),
         Padding(
-          padding: const EdgeInsets.all(12),
+          // Same side inset as the title, so the button starts on the line
+          // shared by the title and the rows' drag handles.
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
           child: FilledButton.icon(
             key: const ValueKey('categories-new'),
             icon: const Icon(Icons.add, size: 18),

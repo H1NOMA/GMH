@@ -287,7 +287,9 @@ class _CategoryConstructorState extends ConsumerState<_CategoryConstructor> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 8, 6),
+          // Right inset matches the content so the close button shares a
+          // center line with the field rows' trailing buttons.
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
           child: Row(
             children: [
               Icon(Icons.handyman_outlined,

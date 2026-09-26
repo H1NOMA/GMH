@@ -57,6 +57,116 @@ Future<void> _scrollToEnd<T extends Widget>(WidgetTester tester) async {
   }
 }
 
+ProviderContainer _containerOf(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(Scaffold).first));
+
+// The demo database is shared by every screen of a variant, including
+// other areas' scenarios that run after these. State added here is
+// remembered per demo world and removed by the next scenario of this file.
+final _scratchWorld = Expando<String>();
+final _openedHere = Expando<List<String>>();
+
+/// Runs a database write next to the live app. Awaiting it inside
+/// runAsync would deadlock on the app's own queries, which only make
+/// progress while the fake clock is pumped.
+Future<T> _write<T>(WidgetTester tester, Future<T> Function() body) async {
+  T? result;
+  var done = false;
+  Object? error;
+  body().then((value) {
+    result = value;
+    done = true;
+  }, onError: (Object e) {
+    error = e;
+    done = true;
+  });
+  for (var i = 0; i < 50 && !done; i++) {
+    await settleVisual(tester, 1);
+  }
+  if (error != null) throw error!;
+  if (!done) throw StateError('database write did not finish');
+  return result as T;
+}
+
+Future<void> _cleanUp(WidgetTester tester, DemoWorld d) async {
+  final scratch = _scratchWorld[d];
+  final opened = _openedHere[d];
+  if (scratch == null && opened == null) return;
+  _scratchWorld[d] = null;
+  _openedHere[d] = null;
+  final container = _containerOf(tester);
+  await _write(tester, () async {
+    if (scratch != null) {
+      await container.read(worldRepositoryProvider).deleteWorld(scratch);
+    }
+    for (final id in opened ?? const <String>[]) {
+      await d.db.customStatement(
+          'DELETE FROM recent_items WHERE entity_id = ?', [id]);
+    }
+  });
+  await settleVisual(tester, 2);
+}
+
+/// Runs [act] on a clean demo world: whatever an earlier scenario of this
+/// file added is gone first.
+Future<void> Function(WidgetTester, DemoWorld) _clean(
+        Future<void> Function(WidgetTester tester, DemoWorld d) act) =>
+    (tester, d) async {
+      await _cleanUp(tester, d);
+      await act(tester, d);
+    };
+
+/// Opens [location] in a fresh world with no entries, sections, campaigns
+/// or backups, for the empty states. [withCampaign] adds one campaign
+/// that has no quests and no sessions.
+Future<String> _openEmptyWorld(WidgetTester tester, DemoWorld d,
+    String Function(String worldId) location,
+    {bool withCampaign = false}) async {
+  await _cleanUp(tester, d);
+  final container = _containerOf(tester);
+  final worldId = await _write(tester, () async {
+    final world = await container
+        .read(worldRepositoryProvider)
+        .createWorld(name: 'Empty Reaches');
+    if (withCampaign) {
+      await container.read(entityServiceProvider).create(
+          worldId: world.id,
+          kind: EntityKind.campaign,
+          name: 'The Quiet Road');
+    }
+    return world.id;
+  });
+  _scratchWorld[d] = worldId;
+  GoRouter.of(tester.element(find.byType(Scaffold).first))
+      .go(location(worldId));
+  await settleVisual(tester, 6);
+  return worldId;
+}
+
+/// Marks a few entries as opened, so the dashboard shows its Recent
+/// section with cards of different heights side by side.
+Future<void> _openSomeEntries(WidgetTester tester, DemoWorld d) async {
+  await _cleanUp(tester, d);
+  final ids = [
+    for (final name in const [
+      'Old Tom',
+      'The Sunken Bell',
+      'Seraphine the Ashen',
+      'Tidecaller Trident',
+      'Harbor Council',
+    ])
+      d.byName[name]!.id,
+  ];
+  _openedHere[d] = ids;
+  final search = _containerOf(tester).read(searchRepositoryProvider);
+  await _write(tester, () async {
+    for (final id in ids) {
+      await search.recordOpened(id);
+    }
+  });
+  await settleVisual(tester, 4);
+}
+
 Finder _key(String key) => find.byKey(ValueKey(key));
 
 /// The constructor opens over the category manager: act on the top one.
@@ -139,6 +249,11 @@ Finder get _restore => find.byWidgetPredicate((w) =>
     (w.key! as ValueKey<String>).value.startsWith('settings-restore-'));
 
 final worldsScenarios = <AlignScenario>[
+  for (final scenario in _scenarios)
+    AlignScenario(scenario.name, scenario.location, _clean(scenario.act)),
+];
+
+final _scenarios = <AlignScenario>[
   // World picker.
   AlignScenario('worlds:new', (d) => Routes.worlds(),
       (tester, d) => _tap(tester, _key('worlds-create'))),
@@ -159,7 +274,10 @@ final worldsScenarios = <AlignScenario>[
       (tester, d) =>
           _scrollTo<HomeScreen>(tester, _key('home-manage-categories'))),
   AlignScenario('home:recent', (d) => Routes.home(d.worldId),
-      (tester, d) => _scrollToEnd<HomeScreen>(tester)),
+      (tester, d) async {
+    await _openSomeEntries(tester, d);
+    await _scrollToEnd<HomeScreen>(tester);
+  }),
 
   // Manage categories and the section constructor.
   AlignScenario('categories:manage', (d) => Routes.home(d.worldId),
@@ -215,6 +333,30 @@ final worldsScenarios = <AlignScenario>[
   AlignScenario('campaigns:sessions', (d) => Routes.campaigns(d.worldId),
       (tester, d) =>
           _scrollTo<CampaignsScreen>(tester, _key('campaigns-new-session'))),
+
+  // Empty states, in a world with nothing in it.
+  AlignScenario('home:empty', (d) => Routes.home(d.worldId),
+      (tester, d) async {
+    await _openEmptyWorld(tester, d, Routes.home);
+    await _scrollTo<HomeScreen>(tester, _key('home-manage-categories'));
+  }),
+  AlignScenario('categories:manage-empty', (d) => Routes.home(d.worldId),
+      (tester, d) async {
+    await _openEmptyWorld(tester, d, Routes.home);
+    await _manageCategories(tester);
+  }),
+  AlignScenario('campaigns:empty', (d) => Routes.campaigns(d.worldId),
+      (tester, d) => _openEmptyWorld(tester, d, Routes.campaigns)),
+  AlignScenario('campaigns:empty-campaign', (d) => Routes.campaigns(d.worldId),
+      (tester, d) async {
+    await _openEmptyWorld(tester, d, Routes.campaigns, withCampaign: true);
+    await _scrollTo<CampaignsScreen>(tester, _key('campaigns-new-session'));
+  }),
+  AlignScenario('settings:no-backups', (d) => Routes.settings(d.worldId),
+      (tester, d) async {
+    await _openEmptyWorld(tester, d, Routes.settings);
+    await _scrollTo<SettingsScreen>(tester, _key('settings-backup-now'));
+  }),
 
   // Settings.
   AlignScenario('settings:world-editor', (d) => Routes.settings(d.worldId),
