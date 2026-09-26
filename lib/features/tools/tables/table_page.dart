@@ -392,8 +392,16 @@ class _TablePageState extends ConsumerState<TablePage> {
           table: table,
           onDeleted: _toList,
           extra: [
-            PopupMenuItem(value: 'edit', child: Text(l.tablesEdit)),
-            PopupMenuItem(value: 'text', child: Text(l.tablesBulkEdit)),
+            PopupMenuItem(
+              key: const ValueKey('tables-menu-edit'),
+              value: 'edit',
+              child: Text(l.tablesEdit),
+            ),
+            PopupMenuItem(
+              key: const ValueKey('tables-menu-text'),
+              value: 'text',
+              child: Text(l.tablesBulkEdit),
+            ),
           ],
           onExtra: (action) => action == 'edit' ? _editDetails() : _bulkEdit(),
         ),
@@ -643,7 +651,6 @@ class _Header extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Text(
@@ -756,17 +763,23 @@ class _RowEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    // Beside the row text (wide rows) the number boxes take the text box's
+    // height, however many lines it has, with the value on its first line.
     Widget number(
       TextEditingController c,
       String key,
       String label, {
       String? prefix,
+      bool fill = false,
     }) => SizedBox(
       width: 54,
       child: TextField(
         key: ValueKey(key),
         controller: c,
         textAlign: TextAlign.center,
+        textAlignVertical: fill ? TextAlignVertical.top : null,
+        expands: fill,
+        maxLines: fill ? null : 1,
         keyboardType: const TextInputType.numberWithOptions(signed: true),
         inputFormatters: [_rangeFormatter],
         style: const TextStyle(fontSize: 13.5),
@@ -800,25 +813,57 @@ class _RowEditor extends StatelessWidget {
         ),
       ),
     );
-    final range = <Widget>[
-      if (usesFormula) ...[
-        number(fields.from, 'tables-row-from-$index', l.tablesFrom),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3),
-          child: Text('–', style: TextStyle(color: GmhColors.parchmentDim)),
-        ),
-        number(fields.to, 'tables-row-to-$index', l.tablesTo),
-      ] else
-        Tooltip(
-          message: l.tablesWeight,
-          child: number(
-            fields.weight,
-            'tables-row-weight-$index',
-            l.tablesWeight,
-            prefix: '×',
+    List<Widget> range({bool fill = false}) {
+      if (!usesFormula) {
+        return [
+          Tooltip(
+            message: l.tablesWeight,
+            child: number(
+              fields.weight,
+              'tables-row-weight-$index',
+              l.tablesWeight,
+              prefix: '×',
+              fill: fill,
+            ),
           ),
-        ),
-    ];
+        ];
+      }
+      return [
+        number(fields.from, 'tables-row-from-$index', l.tablesFrom, fill: fill),
+        if (fill)
+          // A borderless box laid out like the number boxes, so the dash
+          // sits on their values' line at any density and text scale.
+          IntrinsicWidth(
+            child: InputDecorator(
+              expands: true,
+              textAlignVertical: TextAlignVertical.top,
+              decoration: const InputDecoration(
+                isDense: true,
+                filled: false,
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 3,
+                  vertical: 10,
+                ),
+              ),
+              child: Text(
+                '–',
+                style: Theme.of(context).textTheme.bodyLarge
+                    ?.merge(const TextStyle(fontSize: 13.5))
+                    .copyWith(color: GmhColors.parchmentDim),
+              ),
+            ),
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Text('–', style: TextStyle(color: GmhColors.parchmentDim)),
+          ),
+        number(fields.to, 'tables-row-to-$index', l.tablesTo, fill: fill),
+      ];
+    }
+
     final text = TextField(
       key: ValueKey('tables-row-text-$index'),
       controller: fields.text,
@@ -863,7 +908,7 @@ class _RowEditor extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(children: [handle, ...range, const Spacer(), delete]),
+                  Row(children: [handle, ...range(), const Spacer(), delete]),
                   const SizedBox(height: 6),
                   Padding(
                     padding: const EdgeInsets.only(left: 6, right: 8),
@@ -875,9 +920,18 @@ class _RowEditor extends StatelessWidget {
             return Row(
               children: [
                 handle,
-                ...range,
-                const SizedBox(width: 8),
-                Expanded(child: text),
+                Expanded(
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ...range(fill: true),
+                        const SizedBox(width: 8),
+                        Expanded(child: text),
+                      ],
+                    ),
+                  ),
+                ),
                 delete,
               ],
             );

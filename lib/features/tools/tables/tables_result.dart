@@ -120,24 +120,27 @@ class TableResultCard extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 4),
-          Wrap(
-            alignment: WrapAlignment.end,
-            spacing: 4,
-            children: [
-              if (onCopy != null)
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              spacing: 4,
+              children: [
+                if (onCopy != null)
+                  TextButton.icon(
+                    key: const ValueKey('tables-result-copy'),
+                    onPressed: onCopy,
+                    icon: const Icon(Icons.copy_outlined, size: 18),
+                    label: Text(l.tablesCopy),
+                  ),
                 TextButton.icon(
-                  key: const ValueKey('tables-result-copy'),
-                  onPressed: onCopy,
-                  icon: const Icon(Icons.copy_outlined, size: 18),
-                  label: Text(l.tablesCopy),
+                  key: const ValueKey('tables-roll-again'),
+                  onPressed: onRollAgain,
+                  icon: const Icon(Icons.replay, size: 18),
+                  label: Text(l.tablesRollAgain),
                 ),
-              TextButton.icon(
-                key: const ValueKey('tables-roll-again'),
-                onPressed: onRollAgain,
-                icon: const Icon(Icons.replay, size: 18),
-                label: Text(l.tablesRollAgain),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -318,7 +321,6 @@ class TableLogTile extends StatelessWidget {
         border: Border.all(color: GmhColors.border),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(

@@ -205,7 +205,10 @@ class _GeneratorsScreenState extends ConsumerState<GeneratorsScreen> {
                           alignment: Alignment.topCenter,
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 860),
-                            child: w,
+                            // Full column width, as on narrow screens: the
+                            // empty hint and plain texts would shrink to
+                            // their content and sit off the column's edge.
+                            child: SizedBox(width: double.infinity, child: w),
                           ),
                         ),
                     ],
