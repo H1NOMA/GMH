@@ -45,7 +45,7 @@ Future<void> showVersionHistorySheet(
             ),
             if (versions.isEmpty)
               Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                 child: Text(context.l10n.versionHistoryEmpty),
               )
             else

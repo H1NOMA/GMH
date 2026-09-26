@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gmh/app/providers.dart';
 import 'package:gmh/app/router.dart';
 import 'package:gmh/domain/models/entity_kind.dart';
 
@@ -112,6 +116,55 @@ Future<void> _attachmentActions(WidgetTester tester) async {
   await settleVisual(tester, 4);
 }
 
+/// The demo world has only image attachments. Adds a text file and a file
+/// without an in-app preview to The Sunken Bell (once per demo world) and
+/// scrolls its side panel to their tiles.
+final _filesSeeded = Expando<bool>();
+const _textFile = 'harbor_rumors.txt';
+const _otherFile = 'bell_tower.zip';
+
+String _sunkenBell(DemoWorld d) => _entry(d, 'The Sunken Bell');
+
+Future<void> _revealFiles(WidgetTester tester, DemoWorld d) async {
+  if (_filesSeeded[d] != true) {
+    _filesSeeded[d] = true;
+    final media = ProviderScope.containerOf(
+      tester.element(find.byType(Scaffold).first),
+    ).read(mediaRepositoryProvider);
+    final entityId = d.byName['The Sunken Bell']!.id;
+    await tester.runAsync(() async {
+      for (final (name, text) in [
+        (_textFile, 'The bell rings at low tide.\nNobody pulls the rope.'),
+        (_otherFile, 'PK'),
+      ]) {
+        final item = await media.import(
+          worldId: d.worldId,
+          fileName: name,
+          bytes: utf8.encode(text),
+        );
+        await media.addToGallery(entityId, item.id);
+      }
+    });
+    await settleVisual(tester, 4);
+  }
+  await _reveal(tester, _ofType('_FileTile'));
+}
+
+Future<void> _openFile(WidgetTester tester, DemoWorld d, String name) async {
+  await _revealFiles(tester, d);
+  await _tap(
+    tester,
+    find.ancestor(of: find.text(name), matching: _ofType('_FileTile')),
+  );
+  // The preview reads the file with real IO before it opens.
+  for (var i = 0; i < 4; i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 50)),
+    );
+    await settleVisual(tester, 2);
+  }
+}
+
 const _profileTabs = [
   'biography',
   'statistics',
@@ -190,6 +243,11 @@ final entriesScenarios = <AlignScenario>[
   AlignScenario(
     'entries:version-history',
     _ravenport,
+    (tester, d) => _tap(tester, find.byIcon(Icons.history)),
+  ),
+  AlignScenario(
+    'entries:version-history-empty',
+    (d) => _entry(d, 'Harbor Council'),
     (tester, d) => _tap(tester, find.byIcon(Icons.history)),
   ),
   AlignScenario(
@@ -283,6 +341,31 @@ final entriesScenarios = <AlignScenario>[
     (tester, d) => _openTagManager(tester),
   ),
   AlignScenario(
+    'entries:tag-sort-menu',
+    (d) => Routes.search(d.worldId),
+    (tester, d) async {
+      await _openTagManager(tester);
+      await _tap(tester, _inDialog(find.byIcon(Icons.sort)));
+    },
+  ),
+  AlignScenario(
+    'entries:tag-no-matches',
+    (d) => Routes.search(d.worldId),
+    (tester, d) async {
+      await _openTagManager(tester);
+      await tester.enterText(_inDialog(find.byType(TextField)), 'zzzz');
+      await settleVisual(tester, 3);
+    },
+  ),
+  AlignScenario(
+    'entries:tag-new',
+    (d) => Routes.search(d.worldId),
+    (tester, d) async {
+      await _openTagManager(tester);
+      await _tap(tester, _inDialog(find.byIcon(Icons.add)));
+    },
+  ),
+  AlignScenario(
     'entries:tag-rename',
     (d) => Routes.search(d.worldId),
     (tester, d) => _tagRowMenu(tester, 'rename'),
@@ -331,6 +414,27 @@ final entriesScenarios = <AlignScenario>[
       ),
     );
   }),
+  AlignScenario('entries:attachment-delete', _mira, (tester, d) async {
+    await _attachmentActions(tester);
+    await _tap(
+      tester,
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byIcon(Icons.delete_outline),
+      ),
+    );
+  }),
+  AlignScenario('entries:attachment-files', _sunkenBell, _revealFiles),
+  AlignScenario(
+    'entries:attachment-text',
+    _sunkenBell,
+    (tester, d) => _openFile(tester, d, _textFile),
+  ),
+  AlignScenario(
+    'entries:attachment-info',
+    _sunkenBell,
+    (tester, d) => _openFile(tester, d, _otherFile),
+  ),
   AlignScenario('entries:image-viewer', _mira, (tester, d) async {
     await _profileTab(tester, 8);
     await _tap(tester, _ofType('_ImageTile'));

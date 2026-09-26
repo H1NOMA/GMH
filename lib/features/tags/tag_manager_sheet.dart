@@ -296,6 +296,8 @@ class _TagManagerState extends ConsumerState<_TagManager> {
                     children: [
                       for (final other in others)
                         ActionChip(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           avatar: CircleAvatar(
                               radius: 5,
                               backgroundColor: Color(other.color)),
